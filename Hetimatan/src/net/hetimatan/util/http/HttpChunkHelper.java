@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream.GetField;
 import java.nio.ByteBuffer;
 
-import net.hetimatan.ky.io.MarkableReader;
+import net.hetimatan.io.file.MarkableReader;
 import net.hetimatan.util.event.EventTaskRunner;
 import net.hetimatan.util.io.ByteArrayBuilder;
 

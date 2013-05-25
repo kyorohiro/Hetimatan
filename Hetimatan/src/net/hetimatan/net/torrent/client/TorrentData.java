@@ -3,10 +3,10 @@ package net.hetimatan.net.torrent.client;
 import java.io.File;
 import java.io.IOException;
 
-import net.hetimatan.ky.io.KyoroFile;
-import net.hetimatan.ky.io.next.KFNextHelper;
-import net.hetimatan.ky.io.next.RACashFile;
-import net.hetimatan.net.torrent.util.MetaFile;
+import net.hetimatan.io.file.KyoroFile;
+import net.hetimatan.io.filen.KFNextHelper;
+import net.hetimatan.io.filen.RACashFile;
+import net.hetimatan.net.torrent.util.metafile.MetaFile;
 import net.hetimatan.util.bitfield.BitField;
 
 

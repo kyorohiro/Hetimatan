@@ -4,11 +4,11 @@ package net.hetimatan.net.http.request;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import net.hetimatan.io.file.KyoroFileForKyoroSocket;
+import net.hetimatan.io.file.MarkableFileReader;
+import net.hetimatan.io.filen.RACashFile;
 import net.hetimatan.io.net.KyoroSelector;
 import net.hetimatan.io.net.KyoroSocket;
-import net.hetimatan.ky.io.KyoroFileForKyoroSocket;
-import net.hetimatan.ky.io.MarkableFileReader;
-import net.hetimatan.ky.io.next.RACashFile;
 import net.hetimatan.util.http.HttpChunkHelper;
 import net.hetimatan.util.http.HttpHeader;
 import net.hetimatan.util.http.HttpResponse;

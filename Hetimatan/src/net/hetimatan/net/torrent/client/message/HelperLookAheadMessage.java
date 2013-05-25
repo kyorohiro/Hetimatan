@@ -2,9 +2,9 @@ package net.hetimatan.net.torrent.client.message;
 
 import java.io.IOException;
 
-import net.hetimatan.ky.io.KyoroFile;
-import net.hetimatan.ky.io.MarkableReader;
-import net.hetimatan.ky.io.MarkableReaderHelper;
+import net.hetimatan.io.file.KyoroFile;
+import net.hetimatan.io.file.MarkableReader;
+import net.hetimatan.io.file.MarkableReaderHelper;
 import net.hetimatan.util.io.ByteArrayBuilder;
 import net.hetimatan.util.url.PercentEncoder;
 

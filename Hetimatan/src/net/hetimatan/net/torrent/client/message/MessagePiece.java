@@ -4,13 +4,13 @@ package net.hetimatan.net.torrent.client.message;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import net.hetimatan.ky.io.KyoroFile;
-import net.hetimatan.ky.io.MarkableFileReader;
-import net.hetimatan.ky.io.MarkableReader;
-import net.hetimatan.ky.io.next.KFNextHelper;
-import net.hetimatan.ky.io.next.RACashFile;
-import net.hetimatan.net.torrent.util.MetaFile;
-import net.hetimatan.util.bencode.BenString;
+import net.hetimatan.io.file.KyoroFile;
+import net.hetimatan.io.file.MarkableFileReader;
+import net.hetimatan.io.file.MarkableReader;
+import net.hetimatan.io.filen.KFNextHelper;
+import net.hetimatan.io.filen.RACashFile;
+import net.hetimatan.net.torrent.util.bencode.BenString;
+import net.hetimatan.net.torrent.util.metafile.MetaFile;
 import net.hetimatan.util.io.ByteArrayBuilder;
 import net.hetimatan.util.url.PercentEncoder;
 

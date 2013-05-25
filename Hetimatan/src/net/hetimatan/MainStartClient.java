@@ -4,8 +4,8 @@ package net.hetimatan;
 import java.io.File;
 
 import net.hetimatan.net.torrent.client.TorrentPeer;
-import net.hetimatan.net.torrent.util.MetaFile;
-import net.hetimatan.net.torrent.util.MetaFileCreater;
+import net.hetimatan.net.torrent.util.metafile.MetaFile;
+import net.hetimatan.net.torrent.util.metafile.MetaFileCreater;
 import net.hetimatan.util.event.EventTask;
 import net.hetimatan.util.event.EventTaskRunner;
 

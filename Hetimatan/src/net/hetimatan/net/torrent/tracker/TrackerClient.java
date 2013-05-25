@@ -7,12 +7,12 @@ import java.net.UnknownHostException;
 import java.util.Iterator;
 import java.util.TreeSet;
 
-import net.hetimatan.ky.io.MarkableFileReader;
-import net.hetimatan.ky.io.next.RACashFile;
+import net.hetimatan.io.file.MarkableFileReader;
+import net.hetimatan.io.filen.RACashFile;
 import net.hetimatan.net.http.HttpGet;
 import net.hetimatan.net.http.request.GetRequesterInter;
 import net.hetimatan.net.http.request.GetResponseInter;
-import net.hetimatan.net.torrent.util.MetaFile;
+import net.hetimatan.net.torrent.util.metafile.MetaFile;
 import net.hetimatan.util.http.HttpObject;
 import net.hetimatan.util.io.ByteArrayBuilder;
 

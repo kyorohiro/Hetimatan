@@ -3,9 +3,9 @@ package net.hetimatan.net.http;
 
 import java.io.IOException;
 
+import net.hetimatan.io.filen.RACashFile;
 import net.hetimatan.io.net.KyoroSelector;
 import net.hetimatan.io.net.KyoroSocket;
-import net.hetimatan.ky.io.next.RACashFile;
 import net.hetimatan.net.http.request.GetRequesterInter;
 import net.hetimatan.net.http.request.GetResponseInter;
 import net.hetimatan.net.http.request.KyoroSocketGetRequester;

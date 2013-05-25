@@ -5,9 +5,9 @@ package net.hetimatan;
 import java.io.File;
 import java.io.IOException;
 
-import net.hetimatan.net.torrent.util.MetaFile;
-import net.hetimatan.net.torrent.util.MetaFileCreater;
-import net.hetimatan.util.bencode.BenString;
+import net.hetimatan.net.torrent.util.bencode.BenString;
+import net.hetimatan.net.torrent.util.metafile.MetaFile;
+import net.hetimatan.net.torrent.util.metafile.MetaFileCreater;
 
 /**
  * 30% complete

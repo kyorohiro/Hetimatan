@@ -5,13 +5,13 @@ import java.lang.ref.WeakReference;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import net.hetimatan.io.file.KyoroFile;
+import net.hetimatan.io.file.KyoroFileForKyoroSocket;
+import net.hetimatan.io.file.MarkableFileReader;
+import net.hetimatan.io.file.MarkableReader;
 import net.hetimatan.io.net.KyoroSelector;
 import net.hetimatan.io.net.KyoroSocket;
 import net.hetimatan.io.net.KyoroSocketOutputStream;
-import net.hetimatan.ky.io.KyoroFile;
-import net.hetimatan.ky.io.KyoroFileForKyoroSocket;
-import net.hetimatan.ky.io.MarkableFileReader;
-import net.hetimatan.ky.io.MarkableReader;
 import net.hetimatan.net.torrent.client._front.TorrentFrontMyInfo;
 import net.hetimatan.net.torrent.client._front.TorrentFrontTargetInfo;
 import net.hetimatan.net.torrent.client.message.HelperLookAheadMessage;

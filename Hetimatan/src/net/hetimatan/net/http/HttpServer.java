@@ -3,12 +3,12 @@ package net.hetimatan.net.http;
 import java.io.IOException;
 import java.util.LinkedList;
 
+import net.hetimatan.io.file.KyoroFile;
+import net.hetimatan.io.filen.RACashFile;
 import net.hetimatan.io.net.KyoroSelector;
 import net.hetimatan.io.net.KyoroServerSocket;
 import net.hetimatan.io.net.KyoroServerSocketImpl;
 import net.hetimatan.io.net.KyoroSocket;
-import net.hetimatan.ky.io.KyoroFile;
-import net.hetimatan.ky.io.next.RACashFile;
 import net.hetimatan.net.http.task.HttpFrontRequestTask;
 import net.hetimatan.net.http.task.HttpServerAcceptTask;
 import net.hetimatan.net.http.task.HttpServerBootTask;

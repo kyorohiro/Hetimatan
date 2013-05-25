@@ -4,8 +4,8 @@ package net.hetimatan.net.torrent.client.message;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import net.hetimatan.ky.io.MarkableReader;
-import net.hetimatan.ky.io.MarkableReaderHelper;
+import net.hetimatan.io.file.MarkableReader;
+import net.hetimatan.io.file.MarkableReaderHelper;
 import net.hetimatan.util.io.ByteArrayBuilder;
 
 public class MessageHave extends TorrentMessage {

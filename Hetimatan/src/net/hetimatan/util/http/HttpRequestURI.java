@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.LinkedList;
 
-import net.hetimatan.ky.io.MarkableReader;
+import net.hetimatan.io.file.MarkableReader;
 
 //http://www.w3.org/Protocols/rfc2616/rfc2616.html
 //Request-URI    = "*" | absoluteURI | abs_path | authority

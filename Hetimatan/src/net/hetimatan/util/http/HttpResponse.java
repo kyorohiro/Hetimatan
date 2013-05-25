@@ -5,9 +5,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.LinkedList;
 
-import net.hetimatan.ky.io.KyoroFile;
-import net.hetimatan.ky.io.MarkableReader;
-import net.hetimatan.ky.io.next.RACashFile;
+import net.hetimatan.io.file.KyoroFile;
+import net.hetimatan.io.file.MarkableReader;
+import net.hetimatan.io.filen.RACashFile;
 
 // http://www.studyinghttp.net/cgi-bin/rfc.cgi?2616
 //http://www.w3.org/Protocols/rfc2616/rfc2616.html

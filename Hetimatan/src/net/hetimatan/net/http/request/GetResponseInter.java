@@ -5,7 +5,7 @@ package net.hetimatan.net.http.request;
 import java.io.IOException;
 import java.net.Socket;
 
-import net.hetimatan.ky.io.next.RACashFile;
+import net.hetimatan.io.filen.RACashFile;
 
 public interface GetResponseInter {
 	public int getVFOffset() ;

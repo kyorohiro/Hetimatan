@@ -4,7 +4,7 @@ package net.hetimatan.net.torrent.client.message;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import net.hetimatan.ky.io.MarkableReader;
+import net.hetimatan.io.file.MarkableReader;
 import net.hetimatan.util.bitfield.BitField;
 import net.hetimatan.util.io.ByteArrayBuilder;
 import net.hetimatan.util.url.PercentEncoder;

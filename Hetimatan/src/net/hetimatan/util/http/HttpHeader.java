@@ -4,9 +4,9 @@ package net.hetimatan.util.http;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import net.hetimatan.ky.io.MarkableFileReader;
-import net.hetimatan.ky.io.MarkableReader;
-import net.hetimatan.ky.io.next.RACashFile;
+import net.hetimatan.io.file.MarkableFileReader;
+import net.hetimatan.io.file.MarkableReader;
+import net.hetimatan.io.filen.RACashFile;
 
 // KEY ":" VALUE CRLF
 public class HttpHeader extends HttpObject {

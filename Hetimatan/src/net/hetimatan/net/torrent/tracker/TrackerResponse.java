@@ -7,14 +7,14 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.LinkedList;
 
-import net.hetimatan.ky.io.MarkableReader;
+import net.hetimatan.io.file.MarkableReader;
 import net.hetimatan.net.torrent.tracker.db.TrackerData;
 import net.hetimatan.net.torrent.tracker.db.TrackerPeerInfo;
-import net.hetimatan.util.bencode.BenDiction;
-import net.hetimatan.util.bencode.BenInteger;
-import net.hetimatan.util.bencode.BenList;
-import net.hetimatan.util.bencode.BenObject;
-import net.hetimatan.util.bencode.BenString;
+import net.hetimatan.net.torrent.util.bencode.BenDiction;
+import net.hetimatan.net.torrent.util.bencode.BenInteger;
+import net.hetimatan.net.torrent.util.bencode.BenList;
+import net.hetimatan.net.torrent.util.bencode.BenObject;
+import net.hetimatan.net.torrent.util.bencode.BenString;
 import net.hetimatan.util.http.HttpObject;
 import net.hetimatan.util.io.ByteArrayBuilder;
 

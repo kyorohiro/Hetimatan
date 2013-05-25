@@ -6,8 +6,8 @@ import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-import net.hetimatan.ky.io.MarkableReader;
-import net.hetimatan.ky.io.next.RACashFile;
+import net.hetimatan.io.file.MarkableReader;
+import net.hetimatan.io.filen.RACashFile;
 import net.hetimatan.util.io.ByteArrayBuilder;
 
 public abstract class HttpObject {
