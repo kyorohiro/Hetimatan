@@ -1,9 +1,12 @@
 package info.kyorohiro.raider.util.http;
 
-import info.kyorohiro.helloworld.io.MarkableFileReader;
-import info.kyorohiro.helloworld.io.next.RACashFile;
 
 import java.io.IOException;
+
+import net.hetimatan.io.file.MarkableFileReader;
+import net.hetimatan.io.filen.RACashFile;
+import net.hetimatan.util.http.HttpRequestLine;
+import net.hetimatan.util.http.HttpResponse;
 import junit.framework.TestCase;
 
 public class TestForHttpResponse extends TestCase {

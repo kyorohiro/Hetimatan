@@ -2,8 +2,8 @@ package info.kyorohiro.raider.util;
 
 import java.io.IOException;
 
-import info.kyorohiro.helloworld.io.KyoroFile;
-import info.kyorohiro.raider.util.url.PercentEncoder;
+import net.hetimatan.io.file.KyoroFile;
+import net.hetimatan.util.url.PercentEncoder;
 import junit.framework.TestCase;
 
 public class TestUtil {

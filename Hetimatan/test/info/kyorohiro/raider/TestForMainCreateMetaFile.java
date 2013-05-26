@@ -4,8 +4,9 @@ package info.kyorohiro.raider;
 import java.io.File;
 import java.io.IOException;
 
-import info.kyorohiro.raider.net.torrent.util.MetaFile;
-import info.kyorohiro.raider.net.torrent.util.MetaFileCreater;
+import net.hetimatan.MainCreateTorrentFile;
+import net.hetimatan.net.torrent.util.metafile.MetaFile;
+import net.hetimatan.net.torrent.util.metafile.MetaFileCreater;
 import junit.framework.TestCase;
 
 public class TestForMainCreateMetaFile extends TestCase {

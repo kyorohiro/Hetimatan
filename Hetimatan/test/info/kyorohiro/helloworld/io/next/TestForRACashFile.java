@@ -1,6 +1,8 @@
 package info.kyorohiro.helloworld.io.next;
 
 import java.io.IOException;
+
+import net.hetimatan.io.filen.RACashFile;
 import junit.framework.TestCase;
 
 public class TestForRACashFile extends TestCase {

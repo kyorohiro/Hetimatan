@@ -1,8 +1,9 @@
 package info.kyorohiro.helloworld.io;
 
-import info.kyorohiro.helloworld.io.next.RACashFile;
-
 import java.io.IOException;
+
+import net.hetimatan.io.file.MarkableFileReader;
+import net.hetimatan.io.filen.RACashFile;
 
 import junit.framework.TestCase;
 

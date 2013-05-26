@@ -3,10 +3,11 @@ package info.kyorohiro.raider.util.torrent;
 import java.io.File;
 import java.io.IOException;
 
-import info.kyorohiro.helloworld.io.next.RACashFile;
-import info.kyorohiro.raider.net.torrent.util.MetaFile;
-import info.kyorohiro.raider.net.torrent.util.MetaFileCreater;
-import info.kyorohiro.raider.util.bencode.BenString;
+import net.hetimatan.io.filen.RACashFile;
+import net.hetimatan.net.torrent.util.bencode.BenString;
+import net.hetimatan.net.torrent.util.metafile.MetaFile;
+import net.hetimatan.net.torrent.util.metafile.MetaFileCreater;
+
 import junit.framework.TestCase;
 
 public class TestForMetaFile extends TestCase {

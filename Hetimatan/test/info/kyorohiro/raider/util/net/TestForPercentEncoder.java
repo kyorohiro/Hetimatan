@@ -3,7 +3,7 @@ package info.kyorohiro.raider.util.net;
 
 import java.io.IOException;
 
-import info.kyorohiro.raider.util.url.PercentEncoder;
+import net.hetimatan.util.url.PercentEncoder;
 import junit.framework.TestCase;
 
 public class TestForPercentEncoder extends TestCase {

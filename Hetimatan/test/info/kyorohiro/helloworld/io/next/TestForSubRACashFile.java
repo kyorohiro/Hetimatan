@@ -3,6 +3,9 @@ package info.kyorohiro.helloworld.io.next;
 import java.io.IOException;
 import java.util.Random;
 
+import net.hetimatan.io.filen.AccessorFile;
+import net.hetimatan.io.filen.RACashFile;
+
 import junit.framework.TestCase;
 
 public class TestForSubRACashFile extends TestCase {

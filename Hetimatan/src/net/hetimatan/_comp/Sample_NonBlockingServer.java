@@ -1,4 +1,4 @@
-package net.hetimatan.comp;
+package net.hetimatan._comp;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;

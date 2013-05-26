@@ -1,7 +1,7 @@
 package info.kyorohiro.raider.net.torrent.client;
 
-import info.kyorohiro.raider.net.torrent.client._front.TorrentFrontTargetInfo;
-import info.kyorohiro.raider.net.torrent.util.piece.PieceInfo;
+import net.hetimatan.net.torrent.client._front.TorrentFrontTargetInfo;
+import net.hetimatan.net.torrent.util.piece.PieceInfo;
 import junit.framework.TestCase;
 
 public class TestForTorrentInfo extends TestCase  {

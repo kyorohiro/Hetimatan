@@ -3,7 +3,8 @@ package info.kyorohiro.helloworld.util.arraybuilder;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-import info.kyorohiro.raider.util.io.ByteArrayBuilder;
+import net.hetimatan.util.io.ByteArrayBuilder;
+
 import junit.framework.TestCase;
 
 public class TestForByteArrayBuilder extends TestCase {

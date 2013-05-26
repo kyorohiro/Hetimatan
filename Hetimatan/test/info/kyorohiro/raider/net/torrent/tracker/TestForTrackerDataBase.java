@@ -2,13 +2,17 @@ package info.kyorohiro.raider.net.torrent.tracker;
 
 import java.io.IOException;
 
-import info.kyorohiro.helloworld.io.MarkableFileReader;
-import info.kyorohiro.raider.net.torrent.client.TorrentPeer;
-import info.kyorohiro.raider.net.torrent.tracker.db.TrackerDB;
-import info.kyorohiro.raider.net.torrent.tracker.db.TrackerPeerInfo;
-import info.kyorohiro.raider.net.torrent.util.MetaFile;
-import info.kyorohiro.raider.util.bencode.BenString;
-import info.kyorohiro.raider.util.http.HttpRequestURI;
+import net.hetimatan.io.file.MarkableFileReader;
+import net.hetimatan.net.torrent.client.TorrentPeer;
+import net.hetimatan.net.torrent.tracker.TrackerRequest;
+import net.hetimatan.net.torrent.tracker.TrackerResponse;
+import net.hetimatan.net.torrent.tracker.TrackerServer;
+import net.hetimatan.net.torrent.tracker.db.TrackerDB;
+import net.hetimatan.net.torrent.tracker.db.TrackerData;
+import net.hetimatan.net.torrent.tracker.db.TrackerPeerInfo;
+import net.hetimatan.net.torrent.util.bencode.BenString;
+import net.hetimatan.net.torrent.util.metafile.MetaFile;
+import net.hetimatan.util.http.HttpRequestURI;
 import junit.framework.TestCase;
 
 public class TestForTrackerDataBase extends TestCase {

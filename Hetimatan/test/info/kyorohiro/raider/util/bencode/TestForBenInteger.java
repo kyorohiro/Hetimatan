@@ -3,10 +3,10 @@ package info.kyorohiro.raider.util.bencode;
 import java.io.File;
 import java.io.IOException;
 
-import info.kyorohiro.helloworld.io.MarkableFileReader;
-import info.kyorohiro.helloworld.io.next.RACashFile;
-import info.kyorohiro.raider.util.bencode.BenInteger;
-import info.kyorohiro.raider.util.bencode.BenObject;
+import net.hetimatan.io.file.MarkableFileReader;
+import net.hetimatan.io.filen.RACashFile;
+import net.hetimatan.net.torrent.util.bencode.BenInteger;
+import net.hetimatan.net.torrent.util.bencode.BenObject;
 import junit.framework.TestCase;
 
 public class TestForBenInteger extends TestCase {

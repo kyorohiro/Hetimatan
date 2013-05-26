@@ -1,16 +1,18 @@
 package info.kyorohiro.raider.net.torrent.client.message;
 
-import java.io.IOException;
-
-import javax.xml.crypto.dsig.keyinfo.KeyName;
-
-import junit.framework.TestCase;
-
-import info.kyorohiro.helloworld.io.MarkableFileReader;
-import info.kyorohiro.helloworld.io.next.KFNextHelper;
-import info.kyorohiro.helloworld.io.next.RACashFile;
 import info.kyorohiro.raider.util.TestUtil;
-import info.kyorohiro.raider.util.io.ByteArrayBuilder;
+import java.io.IOException;
+import junit.framework.TestCase;
+import net.hetimatan.io.file.MarkableFileReader;
+import net.hetimatan.io.filen.KFNextHelper;
+import net.hetimatan.io.filen.RACashFile;
+import net.hetimatan.net.torrent.client.message.MessageBitField;
+import net.hetimatan.net.torrent.client.message.MessageCancel;
+import net.hetimatan.net.torrent.client.message.MessageChoke;
+import net.hetimatan.net.torrent.client.message.MessageHandShake;
+import net.hetimatan.net.torrent.client.message.TorrentMessage;
+import net.hetimatan.util.io.ByteArrayBuilder;
+
 
 public class TestForMessageHandShake extends TestCase {
 

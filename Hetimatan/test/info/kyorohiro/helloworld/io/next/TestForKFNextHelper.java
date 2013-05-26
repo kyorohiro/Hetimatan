@@ -6,6 +6,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 
+import net.hetimatan.io.filen.KFNextHelper;
+import net.hetimatan.io.filen.RACashFile;
+
 import junit.framework.TestCase;
 
 public class TestForKFNextHelper extends TestCase {
