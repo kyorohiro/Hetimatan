@@ -26,7 +26,8 @@ public class MediaClient extends Application {
 //		String mpath = "http://download.oracle.com/otndocs/products/javafx/oow2010-2.flv";
 		//mpath = "file:///c:/a/h264.mp4";
 //		String mpath = "file:///c:/a/a.flv";
-		String mpath = "file:///c:/a/c.mp4";
+//		String mpath = "file:///c:/a/c.mp4";
+		String mpath = "http://127.0.0.1:8888/a.flv";
 		
 		Media media = new Media(mpath);
 		MediaPlayer player = new MediaPlayer(media);
