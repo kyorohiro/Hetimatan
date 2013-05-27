@@ -37,7 +37,7 @@ public class MessageSendTask extends EventTask {
 		}
 		super.action();
 		int len = (int)mData.length();
-		if (len<mBufferSize) {
+		if (len>mBufferSize) {
 			len = mBufferSize;
 		}
 		if (mBuffer == null) {
@@ -48,10 +48,13 @@ public class MessageSendTask extends EventTask {
 
 		byte[] buffer = mBuffer.getBuffer();
 		len = mData.read(buffer, 0, len);
-		if (len<0) {return;}
+		if (len<0) {
+			if(Log.ON) {Log.v("MessageSendTask", "-e");}
+			nextAction(mNext);
+			return;}
 		int wrlen = mSocket.write(buffer, 0, len);
 		if (wrlen<0) {return;}
-		mData.seek(mData.getFilePointer()-(len-wrlen));
+//		mData.seek(mData.getFilePointer()-(len-wrlen));
 		if (mData.getFilePointer()<mData.length()) {
 			if(Log.ON) {Log.v("MessageSendTask", "n");}
 			nextAction(this);

@@ -1,9 +1,13 @@
 package info.kyorohiro.helloworld.io;
 
 import java.io.IOException;
+import java.util.Random;
 
+import net.hetimatan.io.file.KyoroFile;
 import net.hetimatan.io.file.KyoroFileForFiles;
+import net.hetimatan.io.filen.ByteKyoroFile;
 import net.hetimatan.io.filen.RACashFile;
+import net.hetimatan.util.io.ByteArrayBuilder;
 
 import junit.framework.TestCase;
 
@@ -74,4 +78,48 @@ public class TestForKyoroFileForFiles extends TestCase {
 			kff.close();
 		}
 	}
+
+	public void testTwo001_ByteKyoroFile() throws IOException {
+		KyoroFile[] files = new KyoroFile[2];
+		ByteArrayBuilder s0 = new ByteArrayBuilder();
+		s0.append("ab".getBytes());
+		files[0] = new ByteKyoroFile(s0);
+		files[1] = new RACashFile("cdefgh".getBytes());
+		KyoroFileForFiles kff = new KyoroFileForFiles(files);
+		byte[] buffer = new byte[4];
+		{
+			int len = kff.read(buffer);
+			assertEquals(4, len);
+			assertEquals("abcd", new String(buffer, 0, len));
+		}
+		{
+			int len = kff.read(buffer);
+			assertEquals(4, len);
+			assertEquals("efgh", new String(buffer, 0, len));
+		}
+
+	}
+
+	public void testOne003() throws IOException {
+		byte[] testdata = new byte[4*256*1024-1];
+		Random ra = new Random();
+		for (int i=0;i<testdata.length;i++) {
+			testdata[i] = (byte)(ra.nextInt()%128);
+		}
+
+		RACashFile[] files = new RACashFile[1];
+		files[0] = new RACashFile(testdata);
+		KyoroFileForFiles kff = new KyoroFileForFiles(files);
+		byte[] buffer = new byte[1024];
+
+		int j=0;
+		do {
+			kff.read(buffer);
+			for(int i=0;i<1024&&j<testdata.length;i++) {
+				assertEquals(testdata[j], buffer[i]);
+				j++;
+			}
+		} while(j<testdata.length);
+	}
+
 }

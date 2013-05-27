@@ -22,6 +22,7 @@ public class MediaServer extends HttpServer {
 		}
 	}
 	
+	@Override
 	public ByteArrayBuilder createHeader(KyoroSocket socket, HttpRequestURI uri, KyoroFile responce) throws IOException {
 		
 		String rangeHeader = uri.getHeaderValue("Range");
@@ -41,7 +42,7 @@ public class MediaServer extends HttpServer {
 
 	@Override
 	public KyoroFile createResponse(KyoroSocket socket, HttpRequestURI uri) throws IOException {
-		return mFile;
+		return new RACashFile(new File("../../d.mp4"), 16*1024, 4);//mFile;
 	}
 	
 	public static MediaServer sServer = null;

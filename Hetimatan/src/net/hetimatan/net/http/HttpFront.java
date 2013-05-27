@@ -93,6 +93,7 @@ public class HttpFront {
 	private MessageSendTask mtask = null;
 	public void doResponse() throws IOException {
 		if(Log.ON){Log.v(TAG, "HttpFront#doRespose");}
+		/*
 		HttpFront info = this;
 		HttpServer server = mServer.get();
 		if(info == null || server == null) {
@@ -100,16 +101,53 @@ public class HttpFront {
 		} 
 		KyoroFile responce = server.createResponse(info.mSocket, info.mUri);
 		ByteArrayBuilder builder = server.createHeader(info.mSocket, info.mUri, responce);
-		KyoroFile[] files = new KyoroFile[2];
-		files[0] = new ByteKyoroFile(builder);
-		files[1] = responce;
+//		KyoroFile[] files = new KyoroFile[2];
+		KyoroFile[] files = new KyoroFile[1];
+//		files[0] = new ByteKyoroFile(builder);
+//		files[0].seek(0);
+		files[0] = responce;
+		files[0].seek(0);
 		KyoroFileForFiles kfiles = new KyoroFileForFiles(files);
-		MessageSendTask task = new MessageSendTask(server.getEventRunner(), mSocket, kfiles);
-		server.getEventRunner().pushWork(task);
-		task.nextAction(new HttpFrontCloseTask(this, server.getEventRunner()));
-		mtask = task;
+		kfiles.seek(0);
 
-		/*
+		int len = 0;
+		int t = 0;
+		ByteArrayBuilder bufferFromThread = EventTaskRunner.getByteArrayBuilder();
+		bufferFromThread.setBufferLength(1024);
+		byte[] buffer = new byte[512];//bufferFromThread.getBuffer();
+		kfiles.seek(0);
+		mSocket.write(builder.getBuffer(), 0, builder.length());
+
+	//	int tt = 0;
+	//	KyoroFile ff = server.createResponse(info.mSocket, info.mUri);
+	//	byte[] bb = new byte[512];
+		do {
+			t = kfiles.read(buffer);
+//			tt = ff.read(bb);
+//			if(t != tt) {
+//				System.out.println("------#-------"+t+"="+tt);
+//			}
+//			t = responce.read(buffer);
+			if(t<0) {
+				break;
+			}
+			if(t>0) {
+				mSocket.write(buffer, 0, t);
+			}
+			len += t;
+			System.out.println("="+len+"/"+responce.length());
+		} while(len<kfiles.length());
+*/
+//		/*
+		if(Log.ON){Log.v(TAG, "HttpFront#doRespose");}
+		HttpFront info = this;
+		HttpServer server = mServer.get();
+		if(info == null || server == null) {
+			return;
+		} 
+		KyoroFile responce = server.createResponse(info.mSocket, info.mUri);
+		ByteArrayBuilder builder = server.createHeader(info.mSocket, info.mUri, responce);
+
 		if(responce.length()<1024) {
 			builder.append(KFNextHelper.newBinary(responce));
 			// まとめて送信するのが良い
@@ -137,7 +175,7 @@ public class HttpFront {
 			} while(len<responce.length());
 		}
 		close();
-		*/
+	//	*/
 	}
 
 	public void action() throws Throwable {
