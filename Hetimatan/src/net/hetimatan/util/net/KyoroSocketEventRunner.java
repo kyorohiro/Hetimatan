@@ -36,18 +36,10 @@ public class KyoroSocketEventRunner extends EventTaskRunnerImple {
 		}
 
 		waitBySelectable(timeout);
-	//	if(mLoopTask == null) {
-	//		Log.v(TAG, "start select");
-	//		mLoopTask = new SelctorLoopTask(this);
-	//		mLoopTask.nextAction(mLoopTask);
-	//		pushWork(mLoopTask);
-	//	} else {
-	//			waitBySelectable();
-	//	}
 	}
 
 	public void waitBySelectable(int timeout) throws IOException, InterruptedException {
-		Log.v(TAG, "waitBySelectable "+numOfWork());
+		if(Log.ON){Log.v(TAG, "waitBySelectable "+numOfWork());}
 		if(numOfWork() == 0) {
 			if(timeout<0) {
 				mSelector.select(5000);//todo you test at 10000

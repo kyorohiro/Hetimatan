@@ -7,7 +7,7 @@ import net.hetimatan.io.filen.RACashFile;
 
 
 public class Log {
-	public static final boolean ON = true;//false;//true;//false;//true;//alse;//false;//false; 
+	public static final boolean ON = false;//true;//false;//true;//false;//true;//alse;//false;//false; 
 	public static final long start = System.nanoTime();
     public static final int  MODE_STDOUT = 1;
     public static final int  MODE_FILE = 2;
