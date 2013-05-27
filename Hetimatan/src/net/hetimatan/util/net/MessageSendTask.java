@@ -60,6 +60,7 @@ public class MessageSendTask extends EventTask {
 			nextAction(this);
 		} else {
 			if(Log.ON) {Log.v("MessageSendTask", "e");}
+//			mSocket.close();
 			nextAction(mNext);
 		}
 

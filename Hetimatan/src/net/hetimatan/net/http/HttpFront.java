@@ -112,6 +112,46 @@ public class HttpFront {
 		server.getEventRunner().pushWork(task);
 	}
 
+/*
+	public void doResponse() throws IOException {
+		if(Log.ON){Log.v(TAG, "HttpFront#doRespose");}
+		HttpFront info = this;
+		HttpServer server = mServer.get();
+		if(info == null || server == null) {
+			return;
+		} 
+		KyoroFile responce = server.createResponse(info.mSocket, info.mUri);
+		ByteArrayBuilder builder = server.createHeader(info.mSocket, info.mUri, responce);
+
+		if(responce.length()<1024) {
+			builder.append(KFNextHelper.newBinary(responce));
+			// まとめて送信するのが良い
+			if(Log.ON){Log.v(TAG, ">>"+ new String(builder.getBuffer(), 0, builder.length())+"[EOF]");}
+			mSocket.write(builder.getBuffer(), 0, builder.length());
+		} else {
+			if(Log.ON){Log.v(TAG, ">>"+ new String(builder.getBuffer(), 0, builder.length())+"[EOF]");}
+			mSocket.write(builder.getBuffer(), 0, builder.length());
+			responce.seek(0);
+			int len = 0;
+			int t = 0;
+			ByteArrayBuilder bufferFromThread = EventTaskRunner.getByteArrayBuilder();
+			bufferFromThread.setBufferLength(1024);
+			byte[] buffer = bufferFromThread.getBuffer();
+			do {
+				t = responce.read(buffer);
+				if(t<0) {
+					break;
+				}
+				if(t>0) {
+					mSocket.write(buffer, 0, t);
+				}
+				len += t;
+				//System.out.println("="+len+"/"+responce.length());
+			} while(len<responce.length());
+		}
+		close();
+	}
+//*/
 	public void action() throws Throwable {
 		if(Log.ON){Log.v(TAG, "HttpServer#doRequestTask()");}
 		if(!isOkToParseHeader()){return;}
