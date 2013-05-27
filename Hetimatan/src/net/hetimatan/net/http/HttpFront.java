@@ -1,10 +1,7 @@
 package net.hetimatan.net.http;
 
-
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
-import java.sql.NClob;
 import java.util.LinkedList;
 
 import net.hetimatan.io.file.KyoroFile;
@@ -12,7 +9,6 @@ import net.hetimatan.io.file.KyoroFileForKyoroSocket;
 import net.hetimatan.io.file.MarkableFileReader;
 import net.hetimatan.io.file.MarkableReader;
 import net.hetimatan.io.filen.KFNextHelper;
-import net.hetimatan.io.net.KyoroSelectable;
 import net.hetimatan.io.net.KyoroSelector;
 import net.hetimatan.io.net.KyoroSocket;
 import net.hetimatan.util.event.EventTask;
@@ -22,7 +18,6 @@ import net.hetimatan.util.http.HttpRequestURI;
 import net.hetimatan.util.io.ByteArrayBuilder;
 import net.hetimatan.util.log.Log;
 import net.hetimatan.util.net.KyoroSocketEventRunner;
-import net.hetimatan.util.url.PercentEncoder;
 
 public class HttpFront {
 	public static final String TAG = "HttpFront";
@@ -110,7 +105,7 @@ public class HttpFront {
 			responce.seek(0);
 			int len = 0;
 			int t = 0;
-			System.out.println("="+len+"/"+responce.length());
+			//System.out.println("="+len+"/"+responce.length());
 			byte[] buffer = new byte[1024];
 			do {
 				t = responce.read(buffer);
@@ -121,10 +116,10 @@ public class HttpFront {
 					mSocket.write(buffer, 0, t);
 				}
 				len += t;
-				System.out.println("="+len+"/"+responce.length());
+				//System.out.println("="+len+"/"+responce.length());
 			} while(len<responce.length());
 		}
-		System.out.println("=");
+		//System.out.println("=");
 		close();
 	}
 

@@ -7,6 +7,7 @@ import net.hetimatan.io.file.KyoroFile;
 import net.hetimatan.io.filen.RACashFile;
 import net.hetimatan.io.net.KyoroSocket;
 import net.hetimatan.net.http.HttpServer;
+import net.hetimatan.util.http.HttpObjectHelper;
 import net.hetimatan.util.http.HttpRequestURI;
 import net.hetimatan.util.io.ByteArrayBuilder;
 
@@ -20,11 +21,14 @@ public class MediaServer extends HttpServer {
 			e.printStackTrace();
 		}
 	}
-
+	
 	public ByteArrayBuilder createHeader(KyoroSocket socket, HttpRequestURI uri, KyoroFile responce) throws IOException {
 		
-		String range = uri.getHeaderValue("Range");
-		
+		String rangeHeader = uri.getHeaderValue("Range");
+		long[] range = new long[0];
+		if(rangeHeader != null && rangeHeader.length() != 0) {
+			range = HttpObjectHelper.getRange(rangeHeader);
+		}
 		ByteArrayBuilder builder = new ByteArrayBuilder();
 		builder.append(("HTTP/1.1 200 OK\r\n").getBytes());
 		builder.append(("Content-Length: "+responce.length()+"\r\n").getBytes());
