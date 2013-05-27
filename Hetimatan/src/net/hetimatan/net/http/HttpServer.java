@@ -12,7 +12,6 @@ import net.hetimatan.io.net.KyoroSocket;
 import net.hetimatan.net.http.task.HttpFrontRequestTask;
 import net.hetimatan.net.http.task.HttpServerAcceptTask;
 import net.hetimatan.net.http.task.HttpServerBootTask;
-import net.hetimatan.net.http.task.HttpServerWaitAcceptableTask;
 import net.hetimatan.util.event.EventTaskRunner;
 import net.hetimatan.util.http.HttpRequestURI;
 import net.hetimatan.util.io.ByteArrayBuilder;
@@ -27,7 +26,6 @@ public class HttpServer {
 	public static final String TAG = "HttpServer";
 
 	private LinkedList<HttpFront> mClientInfos = new LinkedList<HttpFront>();
-	private HttpServerWaitAcceptableTask mWaitByAcceptable = null;
 	private HttpServerAcceptTask mAcceptTask = null;
 	private int mPort = 8080;
 
@@ -36,16 +34,23 @@ public class HttpServer {
 	private KyoroServerSocket mServerSocket = null;
 	private KyoroSelector mSelector = null;
 
-	public void waitAndDispatchMessage(int timeout) throws IOException {
-		if(Log.ON){Log.v(TAG, "wait");}
-		mSelector.select(timeout);
-		while(mSelector.next()) {
-			if(!mSelector.getCurrentSocket().startEventTask()) {
-				if(Log.ON){Log.v(TAG,"Wearning not task");}
-			}
+	public void startServer(KyoroSocketEventRunner requestRunner) {
+		if(Log.ON){Log.v(TAG, "HttpServer#startServer()");}
+
+		if (requestRunner != null) {
+			mRequestRunner = requestRunner;
+		} else {
+			mMyReqRunner = true;
+			mRequestRunner = new KyoroSocketEventRunner();
 		}
+
+		mRequestRunner.waitIsSelect(true);
+		HttpServerBootTask boot = new HttpServerBootTask(this, mRequestRunner);
+		boot.nextAction(null);
+		mSelector = mRequestRunner.getSelector();
+		mRequestRunner.start(boot);
 	}
-	
+
 	public void close() {
 		if(Log.ON){Log.v(TAG, "close()");}
 		try {
@@ -75,23 +80,6 @@ public class HttpServer {
 
 	public void setPort(int port) {
 		mPort = port;
-	}
-
-	public void startServer(KyoroSocketEventRunner requestRunner) {
-		if(Log.ON){Log.v(TAG, "HttpServer#doStart()");}
-
-		if (requestRunner != null) {
-			mRequestRunner = requestRunner;
-		} else {
-			mMyReqRunner = true;
-			mRequestRunner = new KyoroSocketEventRunner();
-		}
-
-		mRequestRunner.waitIsSelect(true);
-		HttpServerBootTask boot = new HttpServerBootTask(this, mRequestRunner);
-		boot.nextAction(null);
-		mSelector = mRequestRunner.getSelector();
-		mRequestRunner.start(boot);
 	}
 
 	public void removeList(HttpFront front) {

@@ -12,6 +12,7 @@ import net.hetimatan.io.filen.KFNextHelper;
 import net.hetimatan.io.net.KyoroSelector;
 import net.hetimatan.io.net.KyoroSocket;
 import net.hetimatan.util.event.EventTask;
+import net.hetimatan.util.event.EventTaskRunner;
 import net.hetimatan.util.http.HttpChunkHelper;
 import net.hetimatan.util.http.HttpObject;
 import net.hetimatan.util.http.HttpRequestURI;
@@ -105,8 +106,9 @@ public class HttpFront {
 			responce.seek(0);
 			int len = 0;
 			int t = 0;
-			//System.out.println("="+len+"/"+responce.length());
-			byte[] buffer = new byte[1024];
+			ByteArrayBuilder bufferFromThread = EventTaskRunner.getByteArrayBuilder();
+			bufferFromThread.setBufferLength(1024);
+			byte[] buffer = bufferFromThread.getBuffer();
 			do {
 				t = responce.read(buffer);
 				if(t<0) {
@@ -125,8 +127,7 @@ public class HttpFront {
 
 	public void action() throws Throwable {
 		if(Log.ON){Log.v(TAG, "HttpServer#doRequestTask()");}
-		while(!isOkToParseHeader()){
-			Thread.yield();Thread.sleep(0);}
+		if(!isOkToParseHeader()){return;}
 		parseHeader();
 		doResponse();
 	}
@@ -148,6 +149,5 @@ public class HttpFront {
 		mMyTask = null;
 		mKFKSocket = null;
 		mSocket = null;
-		if(Log.ON){Log.v(TAG, "--3--");}
 	}
 }
