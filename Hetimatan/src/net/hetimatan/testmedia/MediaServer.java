@@ -42,7 +42,7 @@ public class MediaServer extends HttpServer {
 	}
 
 	@Override
-	public KyoroFile createResponse(KyoroSocket socket, HttpRequestURI uri) throws IOException {
+	public KyoroFile createContent(KyoroSocket socket, HttpRequestURI uri) throws IOException {
 		return KFNextHelper.subSequence(mFile, 0, mFile.length());
 //		Rnew RACashFile(new File("../../d.mp4"), 16*1024, 4);//mFile;
 	}

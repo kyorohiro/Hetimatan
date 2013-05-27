@@ -52,7 +52,7 @@ public class TrackerServer extends HttpServer {
 
 
 	@Override
-	public KyoroFile createResponse(KyoroSocket socket, HttpRequestURI uri) throws IOException {
+	public KyoroFile createContent(KyoroSocket socket, HttpRequestURI uri) throws IOException {
 		try {
 			System.out.println("#request#"+uri.getLine().toString()+"#");
 			if (!containHash(uri)) {

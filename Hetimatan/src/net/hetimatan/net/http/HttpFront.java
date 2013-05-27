@@ -98,14 +98,7 @@ public class HttpFront {
 		if(info == null || server == null) {
 			return;
 		} 
-		KyoroFile responce = server.createResponse(info.mSocket, info.mUri);
-		ByteArrayBuilder builder = server.createHeader(info.mSocket, info.mUri, responce);
-		KyoroFile[] files = new KyoroFile[2];
-		files[0] = new ByteKyoroFile(builder);
-		files[0].seek(0);
-		files[1] = responce;
-		files[1].seek(0);
-		KyoroFileForFiles kfiles = new KyoroFileForFiles(files);
+		KyoroFile kfiles = server.createResponse(this, info.mSocket, info.mUri);
 		kfiles.seek(0);
 		MessageSendTask task = new MessageSendTask(server.getEventRunner(),info.mSocket, kfiles);
 		task.nextAction(new HttpFrontCloseTask(this, server.getEventRunner()));

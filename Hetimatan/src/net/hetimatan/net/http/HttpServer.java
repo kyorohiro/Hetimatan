@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.LinkedList;
 
 import net.hetimatan.io.file.KyoroFile;
+import net.hetimatan.io.file.KyoroFileForFiles;
+import net.hetimatan.io.filen.ByteKyoroFile;
 import net.hetimatan.io.filen.RACashFile;
 import net.hetimatan.io.net.KyoroSelector;
 import net.hetimatan.io.net.KyoroServerSocket;
@@ -138,9 +140,22 @@ public class HttpServer {
 		}
 	}
 
+
+	public KyoroFile createResponse(HttpFront front, KyoroSocket socket, HttpRequestURI uri) throws IOException {
+		KyoroFile responce = createContent(socket, uri);
+		ByteArrayBuilder builder = createHeader(socket, uri, responce);
+		KyoroFile[] files = new KyoroFile[2];
+		files[0] = new ByteKyoroFile(builder);
+		files[0].seek(0);
+		files[1] = responce;
+		files[1].seek(0);
+		KyoroFileForFiles kfiles = new KyoroFileForFiles(files);
+		kfiles.seek(0);
+		return kfiles;
+	}
 	//
 	// this method is overrided
-	public KyoroFile createResponse(KyoroSocket socket, HttpRequestURI uri) throws IOException {
+	public KyoroFile createContent(KyoroSocket socket, HttpRequestURI uri) throws IOException {
 		if(Log.ON){Log.v(TAG, "HttpServer#createResponse");}
 		try {
 			return new RACashFile("hello world".getBytes());
