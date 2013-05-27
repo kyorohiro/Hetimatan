@@ -22,6 +22,9 @@ public class MediaServer extends HttpServer {
 	}
 
 	public ByteArrayBuilder createHeader(KyoroSocket socket, HttpRequestURI uri, KyoroFile responce) throws IOException {
+		
+		String range = uri.getHeaderValue("Range");
+		
 		ByteArrayBuilder builder = new ByteArrayBuilder();
 		builder.append(("HTTP/1.1 200 OK\r\n").getBytes());
 		builder.append(("Content-Length: "+responce.length()+"\r\n").getBytes());
