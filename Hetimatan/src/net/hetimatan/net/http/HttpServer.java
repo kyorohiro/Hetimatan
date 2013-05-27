@@ -15,6 +15,7 @@ import net.hetimatan.net.http.task.HttpServerBootTask;
 import net.hetimatan.net.http.task.HttpServerWaitAcceptableTask;
 import net.hetimatan.util.event.EventTaskRunner;
 import net.hetimatan.util.http.HttpRequestURI;
+import net.hetimatan.util.io.ByteArrayBuilder;
 import net.hetimatan.util.log.Log;
 import net.hetimatan.util.net.KyoroSocketEventRunner;
 
@@ -131,6 +132,23 @@ public class HttpServer {
 		mClientInfos.addLast(info);
 	}
 
+
+	//
+	// this method is overrided
+	public ByteArrayBuilder createHeader(KyoroSocket socket, HttpRequestURI uri, KyoroFile responce) throws IOException {
+		if(Log.ON){Log.v(TAG, "HttpServer#createHeader");}
+		try {
+			ByteArrayBuilder builder = new ByteArrayBuilder();
+			builder.append(("HTTP/1.1 200 OK\r\n").getBytes());
+			builder.append(("Content-Length: "+responce.length()+"\r\n").getBytes());
+			builder.append(("Content-Type: text/plain\r\n").getBytes());
+			builder.append(("Connection: close\r\n").getBytes());
+			builder.append(("\r\n").getBytes());
+			return builder;
+		} finally {
+			if(Log.ON){Log.v(TAG, "/HttpServer#createHeader");}
+		}
+	}
 
 	//
 	// this method is overrided

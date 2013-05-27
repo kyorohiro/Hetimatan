@@ -17,6 +17,7 @@ import net.hetimatan.io.net.KyoroSelector;
 import net.hetimatan.io.net.KyoroSocket;
 import net.hetimatan.util.event.EventTask;
 import net.hetimatan.util.http.HttpChunkHelper;
+import net.hetimatan.util.http.HttpObject;
 import net.hetimatan.util.http.HttpRequestURI;
 import net.hetimatan.util.io.ByteArrayBuilder;
 import net.hetimatan.util.log.Log;
@@ -85,6 +86,7 @@ public class HttpFront {
 		if(Log.ON){Log.v(TAG, "HttpFront#parseHeader()");}
 //		mCurrentReader.setBlockOn(true);
 		this.mUri = HttpRequestURI.decode(mCurrentReader);
+		if(Log.ON){Log.v(TAG, HttpObject.createEncode(mUri));};		
 		if(Log.ON){Log.v(TAG, "HttpFront#/parseHeader()");};
 	}
 
@@ -96,17 +98,33 @@ public class HttpFront {
 			return;
 		} 
 		KyoroFile responce = server.createResponse(info.mSocket, info.mUri);
-		ByteArrayBuilder builder = new ByteArrayBuilder();
-		builder.append(("HTTP/1.1 200 OK\r\n").getBytes());
-		builder.append(("Content-Length: "+responce.length()+"\r\n").getBytes());
-		builder.append(("Content-Type: text/plain\r\n").getBytes());
-		builder.append(("\r\n").getBytes());
-		builder.append(KFNextHelper.newBinary(responce));
-
-		// まとめて送信するのが良い
-		Log.v(TAG, ">>"+ new String(builder.getBuffer(), 0, builder.length())+"[EOF]");
-		if(Log.ON){Log.v(TAG, "--1--");}
-		mSocket.write(builder.getBuffer(), 0, builder.length());
+		ByteArrayBuilder builder = server.createHeader(info.mSocket, info.mUri, responce);
+		if(responce.length()<1024) {
+			builder.append(KFNextHelper.newBinary(responce));
+			// まとめて送信するのが良い
+			if(Log.ON){Log.v(TAG, ">>"+ new String(builder.getBuffer(), 0, builder.length())+"[EOF]");}
+			mSocket.write(builder.getBuffer(), 0, builder.length());
+		} else {
+			if(Log.ON){Log.v(TAG, ">>"+ new String(builder.getBuffer(), 0, builder.length())+"[EOF]");}
+			mSocket.write(builder.getBuffer(), 0, builder.length());
+			responce.seek(0);
+			int len = 0;
+			int t = 0;
+			System.out.println("="+len+"/"+responce.length());
+			byte[] buffer = new byte[1024];
+			do {
+				t = responce.read(buffer);
+				if(t<0) {
+					break;
+				}
+				if(t>0) {
+					mSocket.write(buffer, 0, t);
+				}
+				len += t;
+				System.out.println("="+len+"/"+responce.length());
+			} while(len<responce.length());
+		}
+		System.out.println("=");
 		close();
 	}
 

@@ -8,22 +8,33 @@ import net.hetimatan.io.filen.RACashFile;
 import net.hetimatan.io.net.KyoroSocket;
 import net.hetimatan.net.http.HttpServer;
 import net.hetimatan.util.http.HttpRequestURI;
+import net.hetimatan.util.io.ByteArrayBuilder;
 
 public class MediaServer extends HttpServer {
 
 	private RACashFile mFile = null;
 	public MediaServer() { 
 		try {
-			mFile = new RACashFile(new File("../../c.mp4"), 16*1024, 4);
+			mFile = new RACashFile(new File("../../d.mp4"), 16*1024, 4);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
+	public ByteArrayBuilder createHeader(KyoroSocket socket, HttpRequestURI uri, KyoroFile responce) throws IOException {
+		ByteArrayBuilder builder = new ByteArrayBuilder();
+		builder.append(("HTTP/1.1 200 OK\r\n").getBytes());
+		builder.append(("Content-Length: "+responce.length()+"\r\n").getBytes());
+		builder.append(("Accept-Ranges: bytes\r\n").getBytes());
+		builder.append(("Connection: close\r\n").getBytes());
+		builder.append(("Content-Type: video/mp4\r\n").getBytes());
+		builder.append(("\r\n").getBytes());
+		return builder;
+	}
+
 	@Override
 	public KyoroFile createResponse(KyoroSocket socket, HttpRequestURI uri) throws IOException {
 		return mFile;
-		//super.createResponse(socket, uri);
 	}
 	
 	public static MediaServer sServer = null;

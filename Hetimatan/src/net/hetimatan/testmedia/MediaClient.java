@@ -27,7 +27,8 @@ public class MediaClient extends Application {
 		//mpath = "file:///c:/a/h264.mp4";
 //		String mpath = "file:///c:/a/a.flv";
 //		String mpath = "file:///c:/a/c.mp4";
-		String mpath = "http://127.0.0.1:8888/a.flv";
+//		String mpath = "http://etc.dounokouno.com/testmovie/h264/testmovie-480x272.mp4";//
+		String mpath = "http://127.0.0.1:8888/a.mp4";
 		
 		Media media = new Media(mpath);
 		MediaPlayer player = new MediaPlayer(media);
