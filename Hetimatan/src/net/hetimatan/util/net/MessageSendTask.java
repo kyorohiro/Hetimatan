@@ -24,7 +24,6 @@ public class MessageSendTask extends EventTask {
 		mBufferSize = size;
 	}
 
-
 	@Override
 	public boolean isKeep() {
 		return mIsKeep;

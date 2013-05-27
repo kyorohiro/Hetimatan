@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import net.hetimatan.io.file.KyoroFile;
+import net.hetimatan.io.filen.KFNextHelper;
 import net.hetimatan.io.filen.RACashFile;
 import net.hetimatan.io.net.KyoroSocket;
 import net.hetimatan.net.http.HttpServer;
@@ -42,7 +43,8 @@ public class MediaServer extends HttpServer {
 
 	@Override
 	public KyoroFile createResponse(KyoroSocket socket, HttpRequestURI uri) throws IOException {
-		return new RACashFile(new File("../../d.mp4"), 16*1024, 4);//mFile;
+		return KFNextHelper.subSequence(mFile, 0, mFile.length());
+//		Rnew RACashFile(new File("../../d.mp4"), 16*1024, 4);//mFile;
 	}
 	
 	public static MediaServer sServer = null;
