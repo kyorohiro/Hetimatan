@@ -15,6 +15,10 @@ public abstract class EventTask implements Runnable {
 		mRunner = new WeakReference<EventTaskRunner>(runner);
 	}
 
+	public boolean isKeep() {
+		return false;
+	}
+
 	@Override
 	public final void run() {
 		try {
@@ -22,7 +26,9 @@ public abstract class EventTask implements Runnable {
 			action();
 			//if(Log.ON){Log.v("a","/action");}
 			EventTaskRunner runner = mRunner.get();
-			if(runner != null&&mNextAction != null) {
+			if (isKeep()) {
+				mRunner.get().start(this);				
+			} else if(runner != null&&mNextAction != null) {
 				mRunner.get().start(mNextAction);	
 			} 
 		} catch(Throwable t) {

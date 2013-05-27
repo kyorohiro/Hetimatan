@@ -12,7 +12,7 @@ public class MessageSendTask extends EventTask {
 	private int mBufferSize = 512;
 	private KyoroFile mData = null;
 	private KyoroSocket mSocket = null;
-	private ByteArrayBuilder mBuffer = null;
+	private boolean mIsKeep = false;
 
 	public MessageSendTask(EventTaskRunner runner, KyoroSocket socket, KyoroFile data) {
 		super(runner);
@@ -24,46 +24,34 @@ public class MessageSendTask extends EventTask {
 		mBufferSize = size;
 	}
 
-	public void setCash(ByteArrayBuilder builder) {
-		mBuffer = builder;
+
+	@Override
+	public boolean isKeep() {
+		return mIsKeep;
 	}
 
-	private EventTask mNext = null;
 	@Override
 	public void action() throws Throwable {
 		if(Log.ON) {Log.v("MessageSendTask", "acrion");}
-		if(mNext == null) {
-			mNext = nextAction();
-		}
+		mIsKeep = false;
 		super.action();
 		int len = (int)mData.length();
 		if (len>mBufferSize) {
 			len = mBufferSize;
 		}
-		if (mBuffer == null) {
-			mBuffer = new ByteArrayBuilder(len);
-		} else {
-			mBuffer.setBufferLength(len);
-		}
-
-		byte[] buffer = mBuffer.getBuffer();
+		ByteArrayBuilder bufferBase = KyoroSocketEventRunner.getByteArrayBuilder();
+		bufferBase.setBufferLength(len);
+		byte[] buffer = bufferBase.getBuffer();
 		len = mData.read(buffer, 0, len);
 		if (len<0) {
-			if(Log.ON) {Log.v("MessageSendTask", "-e");}
-			nextAction(mNext);
-			return;}
+			return;
+		}
 		int wrlen = mSocket.write(buffer, 0, len);
 		if (wrlen<0) {return;}
-//		mData.seek(mData.getFilePointer()-(len-wrlen));
+		mData.seek(mData.getFilePointer()-(len-wrlen));
 		if (mData.getFilePointer()<mData.length()) {
-			if(Log.ON) {Log.v("MessageSendTask", "n");}
-			nextAction(this);
-		} else {
-			if(Log.ON) {Log.v("MessageSendTask", "e");}
-//			mSocket.close();
-			nextAction(mNext);
+			mIsKeep = true;
 		}
-
 	}
 	
 }
