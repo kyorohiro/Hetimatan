@@ -20,7 +20,7 @@ public class MainStartTracker {
 			server = new TrackerServer();
 			server.setPort(TrackerServer.DEFAULT_TRACKER_PORT);
 			argsToMetafile(server, args);
-			server.doStart(null);
+			server.startServer(null);
 			while (true) {
 				int v = System.in.read();
 				if (v == -1) {

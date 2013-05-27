@@ -31,10 +31,10 @@ public class HttpServer {
 	private HttpServerAcceptTask mAcceptTask = null;
 	private int mPort = 8080;
 
-	private EventTaskRunner mRequestRunner = null;
+	private KyoroSocketEventRunner mRequestRunner = null;
 	private boolean mMyReqRunner = false;
 	private KyoroServerSocket mServerSocket = null;
-	private KyoroSelector mSelector = new KyoroSelector();
+	private KyoroSelector mSelector = null;
 
 	public void waitAndDispatchMessage(int timeout) throws IOException {
 		if(Log.ON){Log.v(TAG, "wait");}
@@ -77,7 +77,7 @@ public class HttpServer {
 		mPort = port;
 	}
 
-	public void doStart(KyoroSocketEventRunner requestRunner) {
+	public void startServer(KyoroSocketEventRunner requestRunner) {
 		if(Log.ON){Log.v(TAG, "HttpServer#doStart()");}
 
 		if (requestRunner != null) {
@@ -87,11 +87,10 @@ public class HttpServer {
 			mRequestRunner = new KyoroSocketEventRunner();
 		}
 
+		mRequestRunner.waitIsSelect(true);
 		HttpServerBootTask boot = new HttpServerBootTask(this, mRequestRunner);
-		mWaitByAcceptable = new HttpServerWaitAcceptableTask(this, mRequestRunner);
-		boot
-		.nextAction(mWaitByAcceptable)
-		.nextAction(mWaitByAcceptable);
+		boot.nextAction(null);
+		mSelector = mRequestRunner.getSelector();
 		mRequestRunner.start(boot);
 	}
 
@@ -121,6 +120,7 @@ public class HttpServer {
 	//
 	// AcceptTrackerTask call
 	public void accept() throws IOException {
+		if(Log.ON){Log.v(TAG, "HttpServer#accept():");}
 		KyoroSocket socket = mServerSocket.accept();
 		socket.regist(mSelector, KyoroSelector.READ);
 		HttpFront info = new HttpFront(this, socket);

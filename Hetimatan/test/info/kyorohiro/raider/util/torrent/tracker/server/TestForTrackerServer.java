@@ -30,7 +30,7 @@ public class TestForTrackerServer extends TestCase {
 		try {
 			server = new TrackerServer();
 			server.setPort(TrackerServer.DEFAULT_TRACKER_PORT);
-			server.doStart(null);
+			server.startServer(null);
 
 			while(!server.isBinded()){Thread.yield();}
 			// create request 
@@ -63,7 +63,7 @@ public class TestForTrackerServer extends TestCase {
 		try {
 			server = new TrackerServer();
 			server.setPort(TrackerServer.DEFAULT_TRACKER_PORT);
-			server.doStart(null);
+			server.startServer(null);
 			server.addData(serverHash);
 			while(!server.isBinded()){Thread.yield();}
 
@@ -108,7 +108,7 @@ public class TestForTrackerServer extends TestCase {
 		try {
 			server = new TrackerServer();
 			server.setPort(TrackerServer.DEFAULT_TRACKER_PORT);
-			server.doStart(null);
+			server.startServer(null);
 			server.addData(serverHash);
 			while(!server.isBinded()){Thread.yield();}
 
@@ -168,7 +168,7 @@ public class TestForTrackerServer extends TestCase {
 		try {
 			server = new TrackerServer();
 			server.setPort(TrackerServer.DEFAULT_TRACKER_PORT);
-			server.doStart(null);
+			server.startServer(null);
 			server.addData(serverHash);
 			while(!server.isBinded()){Thread.yield();}
 

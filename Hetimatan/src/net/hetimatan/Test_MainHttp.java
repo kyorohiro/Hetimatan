@@ -28,7 +28,7 @@ public class Test_MainHttp {
 		{
 			HttpServer server = new HttpServer();
 			server.setPort(6881);
-			server.doStart(null);
+			server.startServer(null);
 			sServer = server;
 		}
 	}

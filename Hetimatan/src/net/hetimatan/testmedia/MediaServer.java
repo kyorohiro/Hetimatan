@@ -48,7 +48,7 @@ public class MediaServer extends HttpServer {
 	public static void main(String[] args) {
 		MediaServer server = new MediaServer();
 		server.setPort(8888);
-		server.doStart(null);
+		server.startServer(null);
 		sServer = server;
 	}
 }
