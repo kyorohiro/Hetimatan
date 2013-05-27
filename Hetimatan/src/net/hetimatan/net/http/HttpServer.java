@@ -155,4 +155,8 @@ public class HttpServer {
 		}
 		return mServerSocket.isBinded();
 	}
+
+	public KyoroSocketEventRunner getEventRunner() {
+		return mRequestRunner;
+	}
 }

@@ -5,12 +5,15 @@ import java.lang.ref.WeakReference;
 import java.util.LinkedList;
 
 import net.hetimatan.io.file.KyoroFile;
+import net.hetimatan.io.file.KyoroFileForFiles;
 import net.hetimatan.io.file.KyoroFileForKyoroSocket;
 import net.hetimatan.io.file.MarkableFileReader;
 import net.hetimatan.io.file.MarkableReader;
+import net.hetimatan.io.filen.ByteKyoroFile;
 import net.hetimatan.io.filen.KFNextHelper;
 import net.hetimatan.io.net.KyoroSelector;
 import net.hetimatan.io.net.KyoroSocket;
+import net.hetimatan.net.http.task.HttpFrontCloseTask;
 import net.hetimatan.util.event.EventTask;
 import net.hetimatan.util.event.EventTaskRunner;
 import net.hetimatan.util.http.HttpChunkHelper;
@@ -19,6 +22,7 @@ import net.hetimatan.util.http.HttpRequestURI;
 import net.hetimatan.util.io.ByteArrayBuilder;
 import net.hetimatan.util.log.Log;
 import net.hetimatan.util.net.KyoroSocketEventRunner;
+import net.hetimatan.util.net.MessageSendTask;
 
 public class HttpFront {
 	public static final String TAG = "HttpFront";
@@ -86,6 +90,7 @@ public class HttpFront {
 		if(Log.ON){Log.v(TAG, "HttpFront#/parseHeader()");};
 	}
 
+	private MessageSendTask mtask = null;
 	public void doResponse() throws IOException {
 		if(Log.ON){Log.v(TAG, "HttpFront#doRespose");}
 		HttpFront info = this;
@@ -95,6 +100,16 @@ public class HttpFront {
 		} 
 		KyoroFile responce = server.createResponse(info.mSocket, info.mUri);
 		ByteArrayBuilder builder = server.createHeader(info.mSocket, info.mUri, responce);
+		KyoroFile[] files = new KyoroFile[2];
+		files[0] = new ByteKyoroFile(builder);
+		files[1] = responce;
+		KyoroFileForFiles kfiles = new KyoroFileForFiles(files);
+		MessageSendTask task = new MessageSendTask(server.getEventRunner(), mSocket, kfiles);
+		server.getEventRunner().pushWork(task);
+		task.nextAction(new HttpFrontCloseTask(this, server.getEventRunner()));
+		mtask = task;
+
+		/*
 		if(responce.length()<1024) {
 			builder.append(KFNextHelper.newBinary(responce));
 			// まとめて送信するのが良い
@@ -121,8 +136,8 @@ public class HttpFront {
 				//System.out.println("="+len+"/"+responce.length());
 			} while(len<responce.length());
 		}
-		//System.out.println("=");
 		close();
+		*/
 	}
 
 	public void action() throws Throwable {

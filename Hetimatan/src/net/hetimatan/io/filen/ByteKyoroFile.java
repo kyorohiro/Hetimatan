@@ -21,6 +21,11 @@ public class ByteKyoroFile implements KyoroFile, KyoroByteOutput {
 		this(256, Integer.MAX_VALUE);
 	}
 
+	public ByteKyoroFile(ByteArrayBuilder buffer) {
+		mLimit = Integer.MAX_VALUE;
+		mBuffer = buffer;
+	}
+
 	public ByteKyoroFile(int size, int limit) {
 		mLimit = limit;
 		mBuffer = new ByteArrayBuilder(size);		

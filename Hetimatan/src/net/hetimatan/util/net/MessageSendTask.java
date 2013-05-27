@@ -5,6 +5,7 @@ import net.hetimatan.io.net.KyoroSocket;
 import net.hetimatan.util.event.EventTask;
 import net.hetimatan.util.event.EventTaskRunner;
 import net.hetimatan.util.io.ByteArrayBuilder;
+import net.hetimatan.util.log.Log;
 
 
 public class MessageSendTask extends EventTask {
@@ -27,8 +28,13 @@ public class MessageSendTask extends EventTask {
 		mBuffer = builder;
 	}
 
+	private EventTask mNext = null;
 	@Override
 	public void action() throws Throwable {
+		if(Log.ON) {Log.v("MessageSendTask", "acrion");}
+		if(mNext == null) {
+			mNext = nextAction();
+		}
 		super.action();
 		int len = (int)mData.length();
 		if (len<mBufferSize) {
@@ -47,8 +53,13 @@ public class MessageSendTask extends EventTask {
 		if (wrlen<0) {return;}
 		mData.seek(mData.getFilePointer()-(len-wrlen));
 		if (mData.getFilePointer()<mData.length()) {
+			if(Log.ON) {Log.v("MessageSendTask", "n");}
 			nextAction(this);
+		} else {
+			if(Log.ON) {Log.v("MessageSendTask", "e");}
+			nextAction(mNext);
 		}
+
 	}
 	
 }

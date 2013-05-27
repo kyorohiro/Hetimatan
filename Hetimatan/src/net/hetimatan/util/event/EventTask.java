@@ -38,6 +38,10 @@ public abstract class EventTask implements Runnable {
 		;
 	}
 
+	public final EventTask nextAction() {
+		return mNextAction;
+	}
+
 	public final EventTask nextAction(EventTask task) {
 		mNextAction = task;
 		return task;
