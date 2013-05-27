@@ -9,7 +9,7 @@ import net.hetimatan.io.file.MarkableFileReader;
 import net.hetimatan.io.filen.RACashFile;
 import net.hetimatan.io.net.KyoroSelector;
 import net.hetimatan.io.net.KyoroSocket;
-import net.hetimatan.util.http.HttpChunkHelper;
+import net.hetimatan.util.http.LookaheadHttpHeader;
 import net.hetimatan.util.http.HttpHeader;
 import net.hetimatan.util.http.HttpResponse;
 
@@ -17,8 +17,8 @@ public class KyoroSocketGetResponse implements GetResponseInter {
 	private RACashFile mVF = null;
 	private int mVfOffset = 0;
 	private KyoroSocket mSocket = null;
-	private HttpChunkHelper mHeaderChunk = null;
-	private HttpChunkHelper mBodyChunk = null;
+	private LookaheadHttpHeader mHeaderChunk = null;
+	private LookaheadHttpHeader mBodyChunk = null;
 	private KyoroFileForKyoroSocket mBase = null;
 	private MarkableFileReader mReader = new MarkableFileReader(mBase, 512);
 	private long mContentLength = Integer.MAX_VALUE;
@@ -61,9 +61,9 @@ public class KyoroSocketGetResponse implements GetResponseInter {
 		boolean prev = mReader.setBlockOn(false);
 		try {
 			if(mHeaderChunk == null) {
-				mHeaderChunk = new HttpChunkHelper(mReader, Integer.MAX_VALUE);
+				mHeaderChunk = new LookaheadHttpHeader(mReader, Integer.MAX_VALUE);
 			}
-			return HttpChunkHelper.readByEndOfHeader(mHeaderChunk, mReader);
+			return LookaheadHttpHeader.readByEndOfHeader(mHeaderChunk, mReader);
 		} finally {
 			mReader.setBlockOn(prev);
 		}
@@ -73,8 +73,8 @@ public class KyoroSocketGetResponse implements GetResponseInter {
 	public boolean bodyIsReadable() throws IOException {
 		boolean prev = mReader.setBlockOn(false);
 		try {
-			mBodyChunk = new HttpChunkHelper(mReader, (int)mContentLength);
-			return HttpChunkHelper.readByEndOfHeader(mBodyChunk, mReader);
+			mBodyChunk = new LookaheadHttpHeader(mReader, (int)mContentLength);
+			return LookaheadHttpHeader.readByEndOfHeader(mBodyChunk, mReader);
 		} finally {
 			mReader.setBlockOn(prev);
 		}

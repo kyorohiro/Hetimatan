@@ -2,15 +2,12 @@ package net.hetimatan.util.http;
 
 
 import java.io.IOException;
-import java.io.ObjectInputStream.GetField;
-import java.nio.ByteBuffer;
-
 import net.hetimatan.io.file.MarkableReader;
 import net.hetimatan.util.event.EventTaskRunner;
 import net.hetimatan.util.io.ByteArrayBuilder;
 
 @Deprecated
-public class HttpChunkHelper {
+public class LookaheadHttpHeader {
 	public static final int EOF = 0;
 	public static final int CRLF = 1;
 	public static final int KEEP = 2;
@@ -19,7 +16,7 @@ public class HttpChunkHelper {
 	private long mMax = 0;
 	private int[] mCrlfCheck = new int[] { -1, '\n', '\n' };
 
-	public HttpChunkHelper(MarkableReader reader, int size) throws IOException {
+	public LookaheadHttpHeader(MarkableReader reader, int size) throws IOException {
 		mCurrentReader = reader;
 		mStart = reader.getFilePointer();
 		mMax = size;
@@ -94,12 +91,12 @@ public class HttpChunkHelper {
 	}
 
 	public static boolean readByEndOfHeader(
-			HttpChunkHelper headerChunk, MarkableReader currentReader) throws IOException {
+			LookaheadHttpHeader headerChunk, MarkableReader currentReader) throws IOException {
 		if (headerChunk == null) {return true;}
 		int ret = headerChunk.readByEndOfHeader(true);
-		if(ret == HttpChunkHelper.CRLF || ret == HttpChunkHelper.EOF) {
+		if(ret == LookaheadHttpHeader.CRLF || ret == LookaheadHttpHeader.EOF) {
 			return true;
-		} else if(ret == HttpChunkHelper.KEEP) {
+		} else if(ret == LookaheadHttpHeader.KEEP) {
 			return false;
 		} else {
 			return false;
