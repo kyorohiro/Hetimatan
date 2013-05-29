@@ -1,4 +1,4 @@
-package net.hetimatan.testmedia;
+package net.hetimatan.net.media;
 
 
 import javafx.application.Application;

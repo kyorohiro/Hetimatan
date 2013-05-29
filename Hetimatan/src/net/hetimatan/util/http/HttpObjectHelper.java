@@ -1,7 +1,17 @@
 package net.hetimatan.util.http;
 
+import net.hetimatan.net.torrent.util.piece.PieceInfoList;
+
 public class HttpObjectHelper {
 	private static long[] sdef = {0, Long.MAX_VALUE};
+	public static PieceInfoList getRangeList(String range) {
+		long[] v= getRange(range);
+		PieceInfoList list = new PieceInfoList();
+		for(int i=0;i+1<v.length;i+=2) {
+			list.append(v[i], v[i+1]);
+		}
+		return list;
+	}
 	public static long[] getRange(String range) {
 		range = range.replaceAll("\\r\\n\\s\\t", "");
 		if(range == null|| range.length() == 0){return sdef;}
