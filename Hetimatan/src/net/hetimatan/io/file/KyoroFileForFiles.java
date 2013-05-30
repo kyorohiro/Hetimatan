@@ -72,6 +72,10 @@ public class KyoroFileForFiles implements KyoroFile {
 			len = mChunk.length;
 			if (length - added < len) {
 				len = length - added;
+				//todo add
+				if(len<=0) {
+					break;
+				}
 			}
 
 			len = mFiles[mCurrentFile].read(mChunk);

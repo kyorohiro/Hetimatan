@@ -22,7 +22,9 @@ public class MediaServer extends HttpServer {
 	private RACashFile mFile = null;
 	public MediaServer() { 
 		try {
-			mFile = new RACashFile(new File("../../d.mp4"), 16*1024, 4);
+			mFile = new RACashFile(
+					new File("../../h264.mp4"), 16*1024, 4);
+//					new File("../../d.mp4"), 16*1024, 4);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -51,7 +53,7 @@ public class MediaServer extends HttpServer {
 	}
 
 
-
+/*
 	@Override
 	public KyoroFile createResponse(HttpFront front, KyoroSocket socket, HttpRequestURI uri) throws IOException {
 		String rangeHeader = uri.getHeaderValue("Range");
@@ -69,7 +71,7 @@ public class MediaServer extends HttpServer {
 			return createRangeResponse(list, front, socket, uri);
 		}
 	}
-
+*/
 	public KyoroFile createRangeResponse(PieceInfoList list, HttpFront front, KyoroSocket socket, HttpRequestURI uri) throws IOException {
 		int length = 5;
 		if(length > list.size()) {length = list.size();}
