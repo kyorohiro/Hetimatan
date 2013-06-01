@@ -21,7 +21,16 @@ public class KyoroSocketOutputStream extends OutputStream {
 
 	@Override
 	public void write(byte[] b, int off, int len) throws IOException {
-		mSocket.write(b, off, len);
+		int writedOneshot = 0;
+		int writedAll = 0;
+		do {
+			writedOneshot = mSocket.write(b, off+writedAll, len-writedAll);
+			if(writedOneshot<0) {
+				break;
+			}
+			writedAll += writedOneshot;
+			System.out.println("##"+writedAll+"/"+len);
+		} while(writedAll<len);
 		vi += len-off;
 	}
 

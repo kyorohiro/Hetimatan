@@ -39,7 +39,9 @@ public class KyoroSocketEventRunner extends EventTaskRunnerImple {
 		//if(
 		waitBySelectable(timeout);///) {
 			//
+		if(numOfWork() != 0) {
 			pushWork(mOneShot);
+		}
 		//}
 	}
 
