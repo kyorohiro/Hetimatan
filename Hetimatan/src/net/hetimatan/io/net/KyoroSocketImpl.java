@@ -86,11 +86,16 @@ public class KyoroSocketImpl extends KyoroSocket {
 		src.flip();
 		int ret =0;
 		do {
-			///System.out.println("---------write--###");
+	//		System.out.println("---------write--###");
 			ret = mSocketChannel.write(src);
-			///System.out.println("/---------write--###");
+		///	System.out.println("/---------write--###");
 			if(ret<0) {
 				mIsEOF = true;
+				break;
+			}
+			//
+			// todo kiyo
+			if(ret==0) {
 				break;
 			}
 		}while(src.position()<src.limit());

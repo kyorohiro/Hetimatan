@@ -2,6 +2,8 @@ package net.hetimatan.util.net;
 
 import java.io.IOException;
 
+import com.sun.corba.se.pept.transport.Selector;
+
 import net.hetimatan.io.net.KyoroSelector;
 import net.hetimatan.util.event.EventTask;
 import net.hetimatan.util.event.EventTaskRunner;
@@ -34,11 +36,14 @@ public class KyoroSocketEventRunner extends EventTaskRunnerImple {
 			super.waitPlus(timeout);
 			return;
 		}
-
-		waitBySelectable(timeout);
+		//if(
+		waitBySelectable(timeout);///) {
+			//
+			pushWork(mOneShot);
+		//}
 	}
 
-	public void waitBySelectable(int timeout) throws IOException, InterruptedException {
+	public boolean waitBySelectable(int timeout) throws IOException, InterruptedException {
 		if(Log.ON){Log.v(TAG, "waitBySelectable "+numOfWork());}
 		if(numOfWork() == 0) {
 			if(timeout<0) {
@@ -49,11 +54,14 @@ public class KyoroSocketEventRunner extends EventTaskRunnerImple {
 		} else {
 			mSelector.select(0);			
 		}
+		boolean ret = false;
 		while(mSelector.next()) {
+			ret = true;
 			if(!mSelector.getCurrentSocket().startEventTask()) {
 			//	if(Log.ON){Log.v(TAG,"Wearning not task");}
 			}
 		}
+		return ret;
 	}
 
 	@Override
@@ -77,6 +85,7 @@ public class KyoroSocketEventRunner extends EventTaskRunnerImple {
 		}
 	}
 
+	private SelctorLoopTask mOneShot = new SelctorLoopTask(this);
 	public static class SelctorLoopTask extends EventTask {
 		public SelctorLoopTask(KyoroSocketEventRunner runner) {
 			super(runner);
@@ -87,7 +96,11 @@ public class KyoroSocketEventRunner extends EventTaskRunnerImple {
 			super.action();
 			EventTaskRunner runner = getRunner();
 			if(runner != null) {
-				((KyoroSocketEventRunner)runner).waitBySelectable(-1);
+				if(getRunner().numOfWork()!=0){
+					if(((KyoroSocketEventRunner)runner).waitBySelectable(0)){
+					}
+					((KyoroSocketEventRunner)runner).pushWork(this);
+				}
 			}
 		}
 	}

@@ -11,7 +11,6 @@ import net.hetimatan.io.filen.RACashFile;
 import net.hetimatan.io.net.KyoroSocket;
 import net.hetimatan.net.http.HttpFront;
 import net.hetimatan.net.http.HttpServer;
-import net.hetimatan.net.torrent.util.piece.PieceInfo;
 import net.hetimatan.net.torrent.util.piece.PieceInfoList;
 import net.hetimatan.util.http.HttpObjectHelper;
 import net.hetimatan.util.http.HttpRequestURI;
@@ -24,7 +23,6 @@ public class MediaServer extends HttpServer {
 		try {
 			mFile = new RACashFile(
 					new File("../../h264.mp4"), 16*1024, 4);
-//					new File("../../d.mp4"), 16*1024, 4);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -35,7 +33,7 @@ public class MediaServer extends HttpServer {
 		String rangeHeader = uri.getHeaderValue("Range");
 		long[] range = new long[0];
 		if(rangeHeader != null && rangeHeader.length() != 0) {
-			range = HttpObjectHelper.getRange(rangeHeader);
+			range = HttpObjectHelper.getRange(rangeHeader, mFile.length());
 		}
 		ByteArrayBuilder builder = new ByteArrayBuilder();
 		builder.append(("HTTP/1.1 200 OK\r\n").getBytes());
@@ -52,26 +50,24 @@ public class MediaServer extends HttpServer {
 		return KFNextHelper.subSequence(mFile, 0, mFile.length());
 	}
 
-
-/*
 	@Override
 	public KyoroFile createResponse(HttpFront front, KyoroSocket socket, HttpRequestURI uri) throws IOException {
 		String rangeHeader = uri.getHeaderValue("Range");
 		boolean isRange = false;
 		PieceInfoList list = null;
 		if(rangeHeader != null && rangeHeader.length() != 0) {
-			list = HttpObjectHelper.getRangeList(rangeHeader);
+			list = HttpObjectHelper.getRangeList(rangeHeader,mFile.length());
 			if(list.size()>0) {
 				isRange = true;
 			}
 		}
-		if(!isRange) {
+//		if(!isRange) {
 			return super.createResponse(front, socket, uri);
-		} else {
-			return createRangeResponse(list, front, socket, uri);
-		}
+//		} else {
+//			return createRangeResponse(list, front, socket, uri);
+//		}
 	}
-*/
+
 	public KyoroFile createRangeResponse(PieceInfoList list, HttpFront front, KyoroSocket socket, HttpRequestURI uri) throws IOException {
 		int length = 5;
 		if(length > list.size()) {length = list.size();}
