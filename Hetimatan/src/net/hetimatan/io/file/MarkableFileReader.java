@@ -11,7 +11,7 @@ import javax.management.MXBean;
 import net.hetimatan.io.filen.RACashFile;
 
 public class MarkableFileReader implements MarkableReader {
-	public static final int TIMEOUT = 5000; 
+	public static final int TIMEOUT = 30000; 
 	private KyoroFile mFile = null;
 	private long mFilePointer = 0;
 

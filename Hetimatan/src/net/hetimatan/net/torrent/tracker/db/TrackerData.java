@@ -79,14 +79,15 @@ public class TrackerData {
 	public int getPeerInfoAtRamdom(TrackerPeerInfo[] outputInfos) {
 		int outputLength = 0;
 		int size = mInfos.size();
+		Set<String> keys = mInfos.keySet();
 		if(size<outputInfos.length) {
 			for (int i = 0; i < size; i++) {
-				outputInfos[i] = mInfos.get(i);
+				outputInfos[i] = mInfos.get(keys.toArray()[i]);
 				outputLength++;
 			}		
 		} else {
 			for (int i = 0; i < size; i++) {
-				outputInfos[i] = mInfos.get(mRand.nextInt(size));
+				outputInfos[i] = mInfos.get(keys.toArray()[mRand.nextInt(size)]);
 				outputLength++;
 			}			
 		}
