@@ -2,8 +2,11 @@ package net.hetimatan.net.torrent.tracker.db;
 
 
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
+import java.util.Random;
+import java.util.Set;
 
 import net.hetimatan.net.torrent.tracker.TrackerRequest;
 import net.hetimatan.util.http.HttpObject;
@@ -12,24 +15,26 @@ import net.hetimatan.util.http.HttpRequestURI;
 @Deprecated
 public class TrackerData {
 
-	private byte[] mInfoHash = null;
-
-	// ↓ is need test or rewrite
-	private LinkedHashMap<String, TrackerPeerInfo> mInfos = new LinkedHashMap<String, TrackerPeerInfo>();
-	private LinkedList<TrackerPeerInfo> mShuffledInfoCashForResponse = new LinkedList<TrackerPeerInfo>();
 
 	private boolean isUpdated = false;
 	private int mComplete = 0;
 	private int mIncomplete = 0;
+	private byte[] mInfoHash = null;
+	// ↓ is need test or rewrite
+	private LinkedHashMap<String, TrackerPeerInfo> mInfos = new LinkedHashMap<String, TrackerPeerInfo>();
+
 	private void update() {
-		int num = 0;
-		for(TrackerPeerInfo info:mShuffledInfoCashForResponse) {
+		int completed = 0;
+		Iterator<String> keys = mInfos.keySet().iterator();
+		while(keys.hasNext()) {
+			String key = keys.next();
+			TrackerPeerInfo info = mInfos.get(key);
 			if(info.isComplete()) {
-				num++;
+				completed++;
 			}
 		}
-		mComplete = num;
-		mIncomplete = mShuffledInfoCashForResponse.size()-mComplete;
+		mComplete = completed;
+		mIncomplete = mInfos.size()-mComplete;
 	}
 
 	public int getComplete() {
@@ -60,7 +65,6 @@ public class TrackerData {
 
 	public void removePeerInfo(TrackerPeerInfo peerInfo) {
 		mInfos.remove(peerInfo);
-		mShuffledInfoCashForResponse.remove(peerInfo);
 	}
 
 	public boolean cotains(String peerId) {
@@ -68,19 +72,23 @@ public class TrackerData {
 	}
 
 	public void putPeerInfo(TrackerPeerInfo peerInfo) {
-		if (cotains(peerInfo.getPeerId())) {
-			mShuffledInfoCashForResponse.remove(peerInfo);
-		}
-		mShuffledInfoCashForResponse.add(peerInfo);
 		mInfos.put(peerInfo.getPeerId(), peerInfo);
 	}
 
+	private Random mRand = new Random();
 	public int getPeerInfoAtRamdom(TrackerPeerInfo[] outputInfos) {
 		int outputLength = 0;
-		Collections.shuffle(mShuffledInfoCashForResponse);
-		for (int i = 0; i < outputInfos.length && i < mShuffledInfoCashForResponse.size(); i++) {
-			outputInfos[i] = mShuffledInfoCashForResponse.get(i);
-			outputLength++;
+		int size = mInfos.size();
+		if(size<outputInfos.length) {
+			for (int i = 0; i < size; i++) {
+				outputInfos[i] = mInfos.get(i);
+				outputLength++;
+			}		
+		} else {
+			for (int i = 0; i < size; i++) {
+				outputInfos[i] = mInfos.get(mRand.nextInt(size));
+				outputLength++;
+			}			
 		}
 		return outputLength;
 	}
