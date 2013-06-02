@@ -49,6 +49,23 @@ public class TrackerData {
 		return mIncomplete;
 	}
 
+	public int numOfPeerInfo() {
+		return mInfos.size();
+	}
+
+	public String getKeyPeerInfo(int index) {
+		Object[] obs = mInfos.keySet().toArray();
+		if(obs == null){ return "";}
+		if(index<obs.length) {
+			Object ob = obs[index];
+			if(ob != null) {
+				return ob.toString();
+			}
+		}
+		return "";
+	}
+
+	
 	public TrackerData(byte[] infoHash) {
 		mInfoHash = infoHash;
 	}

@@ -2,11 +2,12 @@ package net.hetimatan.net.torrent.tracker.db;
 
 
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 
 import net.hetimatan.util.url.PercentEncoder;
 
-@Deprecated
+
 public class TrackerDB {
 	public LinkedHashMap<String, TrackerData> mManagedDatas = new LinkedHashMap<String, TrackerData>();
 	private PercentEncoder mEncoder = new PercentEncoder();
@@ -17,6 +18,21 @@ public class TrackerDB {
 		} else {
 			return null;			
 		}
+	}
+
+	public int numOfTrackerData() {
+		return mManagedDatas.size();
+	}
+
+	public String getInfoHash(int index) {
+		Object[] ob = mManagedDatas.keySet().toArray();
+		if(index<ob.length) {
+			Object ret = ob[index];
+			if(ret != null) {
+				return ret.toString();
+			}
+		}
+		return "";
 	}
 
 	public void addManagedData(byte[] infoHashAsByte) {

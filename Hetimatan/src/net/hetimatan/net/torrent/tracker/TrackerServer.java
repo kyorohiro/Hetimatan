@@ -24,6 +24,8 @@ public class TrackerServer extends HttpServer {
 	public static final int DEFAULT_TRACKER_PORT      = 6969;
 	public static final String MESSAGE_UNMANAGED_DATA = "your ainfo_hash is unmanaged";
 	public static final String MESSAGE_WRONG_REQUEST  = "your request is wrong";
+
+	private StatusCheck mObserver = null;
 	private TrackerDB mDB = new TrackerDB();
 
 	public static KyoroFile newMessageWrongRequest() throws IOException {
@@ -32,6 +34,9 @@ public class TrackerServer extends HttpServer {
 		return new RACashFile(BenObject.createEncode(diction));
 	}
 
+	public TrackerDB getTrackerDB() {
+		return mDB;
+	}
 
 	public void addData(byte[] infoHash) {
 		PercentEncoder encoder = new PercentEncoder();
@@ -50,7 +55,6 @@ public class TrackerServer extends HttpServer {
 		String infoHash = geturi.getValue(TrackerRequest.KEY_INFO_HASH);
 		return mDB.isManaged(infoHash);
 	}
-
 
 	@Override
 	public KyoroFile createContent(KyoroSocket socket, HttpRequestURI uri) throws IOException {
@@ -73,7 +77,6 @@ public class TrackerServer extends HttpServer {
 		}
 	}
 
-	private StatusCheck mObserver = null;
 	public synchronized void setStatusCheck(StatusCheck observer) {
 		mObserver = observer;
 	}

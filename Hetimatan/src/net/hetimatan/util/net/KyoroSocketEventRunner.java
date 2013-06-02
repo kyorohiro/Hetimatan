@@ -49,7 +49,7 @@ public class KyoroSocketEventRunner extends EventTaskRunnerImple {
 		if(Log.ON){Log.v(TAG, "waitBySelectable "+numOfWork());}
 		if(numOfWork() == 0) {
 			if(timeout<0) {
-				mSelector.select(5000);//todo you test at 10000
+				mSelector.select(15000);//todo you test at 10000
 			} else {
 				mSelector.select(timeout);
 			}
