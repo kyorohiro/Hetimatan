@@ -13,6 +13,7 @@ import net.hetimatan.net.torrent.util.bencode.BenDiction;
 import net.hetimatan.net.torrent.util.bencode.BenObject;
 import net.hetimatan.net.torrent.util.bencode.BenString;
 import net.hetimatan.net.torrent.util.metafile.MetaFile;
+import net.hetimatan.util.event.SingleTaskRunner;
 import net.hetimatan.util.http.HttpGetRequestUri;
 import net.hetimatan.util.http.HttpRequestLine;
 import net.hetimatan.util.http.HttpRequestURI;
@@ -64,6 +65,7 @@ public class TrackerServer extends HttpServer {
 			trackerData.putPeerInfo(peerInfo);
 
 			BenDiction diction = TrackerResponse.createResponce(trackerData, peerInfo, request.getCompact());
+			kickObserver();
 			return new RACashFile(BenObject.createEncode(diction));
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -71,5 +73,18 @@ public class TrackerServer extends HttpServer {
 		}
 	}
 
+	private StatusCheck mObserver = null;
+	public synchronized void setStatusCheck(StatusCheck observer) {
+		mObserver = observer;
+	}
 
+	public synchronized void kickObserver() {
+		if(mObserver != null) {
+			mObserver.onUpdate(this);
+		}
+	}
+
+	public interface StatusCheck {
+		void onUpdate(TrackerServer server);
+	}
 }

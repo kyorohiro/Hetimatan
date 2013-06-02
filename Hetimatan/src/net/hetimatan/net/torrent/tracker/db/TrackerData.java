@@ -12,15 +12,13 @@ import net.hetimatan.net.torrent.tracker.TrackerRequest;
 import net.hetimatan.util.http.HttpObject;
 import net.hetimatan.util.http.HttpRequestURI;
 
-@Deprecated
 public class TrackerData {
-
 
 	private boolean isUpdated = false;
 	private int mComplete = 0;
 	private int mIncomplete = 0;
 	private byte[] mInfoHash = null;
-	// ↓ is need test or rewrite
+	private Random mRand = new Random();
 	private LinkedHashMap<String, TrackerPeerInfo> mInfos = new LinkedHashMap<String, TrackerPeerInfo>();
 
 	private void update() {
@@ -75,7 +73,6 @@ public class TrackerData {
 		mInfos.put(peerInfo.getPeerId(), peerInfo);
 	}
 
-	private Random mRand = new Random();
 	public int getPeerInfoAtRamdom(TrackerPeerInfo[] outputInfos) {
 		int outputLength = 0;
 		int size = mInfos.size();
@@ -89,7 +86,7 @@ public class TrackerData {
 			for (int i = 0; i < size; i++) {
 				outputInfos[i] = mInfos.get(keys.toArray()[mRand.nextInt(size)]);
 				outputLength++;
-			}			
+			}
 		}
 		return outputLength;
 	}
