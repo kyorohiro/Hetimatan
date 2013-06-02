@@ -29,7 +29,10 @@ public class TorrentChokeScenario implements TorrentFront.EventListener {
 	}
 
 
-
+	public void upadte() {
+		TorrentPeer peer = mUploadTargetPeer.get();
+		if(peer == null) {return;}
+	}
 	/*
 	 * except myself's peer send message to me.
 	 */

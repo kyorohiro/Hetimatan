@@ -3,9 +3,8 @@ package net.hetimatan.net.torrent.client;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.InetAddress;
+import java.lang.ref.WeakReference;
 import java.net.URISyntaxException;
-import java.nio.channels.SocketChannel;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -20,7 +19,6 @@ import net.hetimatan.io.net.KyoroSocketImpl;
 import net.hetimatan.net.torrent.client.scenario.TorrentPieceScenario;
 import net.hetimatan.net.torrent.client.scenario.TorrentRequestScenario;
 import net.hetimatan.net.torrent.client.scenario.task.ScenarioFinTracker;
-import net.hetimatan.net.torrent.client.task.TorrentFrontShakeHandTask;
 import net.hetimatan.net.torrent.client.task.TorrentPeerAcceptTask;
 import net.hetimatan.net.torrent.client.task.TorrentPeerBootTask;
 import net.hetimatan.net.torrent.tracker.TrackerClient;
@@ -28,8 +26,6 @@ import net.hetimatan.net.torrent.tracker.TrackerClient.Peer;
 import net.hetimatan.net.torrent.util.metafile.MetaFile;
 import net.hetimatan.util.event.EventTask;
 import net.hetimatan.util.event.EventTaskRunner;
-import net.hetimatan.util.event.EventTaskRunnerImple;
-import net.hetimatan.util.log.Log;
 import net.hetimatan.util.net.KyoroSocketEventRunner;
 import net.hetimatan.util.url.PercentEncoder;
 
@@ -54,7 +50,7 @@ public class TorrentPeer {
 	private TorrentRequestScenario mRequestScenario = null;
 	private KyoroSelector mAcceptSelector       = null;
 	private TorrentPeerAcceptTask mAcceptTask   = null;
-
+	private LinkedList<WeakReference<Peer>> mOptimusUnchokePeer = new LinkedList<>();
 
 	public TorrentPeer(MetaFile metafile, String peerId) throws URISyntaxException, IOException {
 		mTrackerClient = new TrackerClient(metafile, peerId);
@@ -68,6 +64,13 @@ public class TorrentPeer {
 		return mAcceptSelector;
 	}
 
+
+	public void updateOptimusUnchokePeer() {
+		int len = mOptimusUnchokePeer.size();
+		for(int i=0;i<len;i++) {
+			WeakReference<Peer> peer = mOptimusUnchokePeer.get(i);
+		}
+	}
 
 	public void setMasterFile(File[] master) throws IOException {
 		mData.setMaster(master);
