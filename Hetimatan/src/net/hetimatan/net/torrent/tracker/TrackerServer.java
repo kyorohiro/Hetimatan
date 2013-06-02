@@ -63,6 +63,7 @@ public class TrackerServer extends HttpServer {
 			if (!containHash(uri)) {
 				return newMessageWrongRequest();
 			}
+
 			TrackerRequest request = TrackerRequest.decode(uri);
 			TrackerData trackerData = mDB.getManagedData(mDB.convertInfoHashForRaider(request.getInfoHash()));
 			TrackerPeerInfo peerInfo = trackerData.updatePeerInfo(uri, socket.getHost(), socket.getPort());

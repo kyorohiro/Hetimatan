@@ -87,7 +87,9 @@ public class TrackerData {
 	}
 
 	public void putPeerInfo(TrackerPeerInfo peerInfo) {
-		mInfos.put(peerInfo.getPeerId(), peerInfo);
+		if(peerInfo.getPeerId().length() != 0) {
+			mInfos.put(peerInfo.getPeerId(), peerInfo);
+		}
 	}
 
 	public int getPeerInfoAtRamdom(TrackerPeerInfo[] outputInfos) {

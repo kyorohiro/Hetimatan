@@ -62,11 +62,14 @@ public class PeerMonitorApp extends Application implements TrackerServer.StatusC
 		for(int i=0;i<len;i++) {
 			String infoHashAsRaider = db.getInfoHash(i);
 			TrackerData data = db.getManagedData(infoHashAsRaider);
-			builder.append(""+infoHashAsRaider+":"+data.getComplete()+","+data.getIncomplete()+"\r\n");
+			builder.append(""+infoHashAsRaider+"\r\n");
+			builder.append("  "+data.getComplete()+","+data.getIncomplete()+"\r\n");
 			int jlen = data.numOfPeerInfo();
 			for(int j=0;j<jlen;j++) {
 				TrackerPeerInfo info = data.getPeerInfo(data.getKeyPeerInfo(j));
-				builder.append("__" + info.getIP()+"\r\n");
+				builder.append("   * " + info.getIP()+":"+info.getPort()+",["+info.getPeerId()+"]\r\n");
+				builder.append("       " + info.isComplete()+":"+info.getLeft()+":\r\n");
+				builder.append("       " + info.getDownloaded()+":" + info.getUploaded()+"\r\n");
 			}
 		}
 		mInfo.setText(builder.toString());
