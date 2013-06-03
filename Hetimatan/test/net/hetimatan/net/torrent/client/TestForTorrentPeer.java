@@ -18,7 +18,8 @@ public class TestForTorrentPeer extends TestCase {
 		testPeer.startTask(null);
 
 		TorrentPeer compe = new TorrentPeer(metainfo, TorrentPeer.createPeerId());
-		compe
+		compe.boot();
+		compe.startConnect(peer);
 	}
 
 }

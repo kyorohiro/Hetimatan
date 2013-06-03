@@ -7,10 +7,10 @@ import net.hetimatan.net.torrent.client.TorrentPeer;
 import net.hetimatan.util.event.EventTask;
 import net.hetimatan.util.event.EventTaskRunner;
 
-public class TorrentPeerBootTask extends EventTask {
+public class TorrentPeerStartTracker extends EventTask {
 	private WeakReference<TorrentPeer> mServer = null;
 
-	public TorrentPeerBootTask(TorrentPeer httpServer, EventTaskRunner runner) {
+	public TorrentPeerStartTracker(TorrentPeer httpServer, EventTaskRunner runner) {
 		super(runner);
 		mServer = new WeakReference<TorrentPeer>(httpServer);
 	}
@@ -18,6 +18,6 @@ public class TorrentPeerBootTask extends EventTask {
 	@Override
 	public void action() throws Throwable {
 		TorrentPeer server = mServer.get();
-		server.boot();
+		server.startTracker();
 	}
 }

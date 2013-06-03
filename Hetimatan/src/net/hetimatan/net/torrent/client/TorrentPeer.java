@@ -21,6 +21,7 @@ import net.hetimatan.net.torrent.client.scenario.TorrentRequestScenario;
 import net.hetimatan.net.torrent.client.scenario.task.ScenarioFinTracker;
 import net.hetimatan.net.torrent.client.task.TorrentPeerAcceptTask;
 import net.hetimatan.net.torrent.client.task.TorrentPeerBootTask;
+import net.hetimatan.net.torrent.client.task.TorrentPeerStartTracker;
 import net.hetimatan.net.torrent.tracker.TrackerClient;
 import net.hetimatan.net.torrent.tracker.TrackerClient.Peer;
 import net.hetimatan.net.torrent.util.metafile.MetaFile;
@@ -122,8 +123,14 @@ public class TorrentPeer {
 		runner.waitIsSelect(true);//todo
 		mAcceptSelector = runner.getSelector();
 		TorrentPeerBootTask bootTask = new TorrentPeerBootTask(this, runner);
+		bootTask.nextAction(new TorrentPeerStartTracker(this, runner));
 		runner.start(bootTask);
 		return runner; 
+	}
+
+	public void startTracker() {
+		ScenarioFinTracker request = new ScenarioFinTracker(mPieceScenario, mMasterRunner);
+		mTrackerClient.startTask(mMasterRunner, request);		
 	}
 
 	public void boot() throws IOException {
@@ -137,10 +144,6 @@ public class TorrentPeer {
 				serverSocket.bind(mPort);
 				mServerSocket = serverSocket;
 				mTrackerClient.setClientPort(mPort);
-				{
-					ScenarioFinTracker request = new ScenarioFinTracker(mPieceScenario, mMasterRunner);
-					mTrackerClient.startTask(mMasterRunner, request);
-				}
 				return;
 			} catch(IOException e) {}
 			mPort++;
