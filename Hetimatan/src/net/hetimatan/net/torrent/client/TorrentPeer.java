@@ -100,6 +100,15 @@ public class TorrentPeer {
 
 	public void updateOptimusUnchokePeer() {
 		int len = mOptimusUnchokePeer.size();
+		int unchokerNum = mSetting.getNumOfUnchoker();
+		int nn = mFrontList.size();
+		Random r = new Random();
+		if (len<unchokerNum) {
+		} else {
+			int index = r.nextInt(nn);
+			Peer peer = getFrontPeer(index);
+			
+		}
 		for(int i=0;i<len;i++) {
 			WeakReference<Peer> peer = mOptimusUnchokePeer.get(i);
 		}
