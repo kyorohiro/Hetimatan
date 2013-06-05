@@ -66,7 +66,7 @@ public class TorrentPieceScenario implements TorrentFront.EventListener {
 		}
 	}
 
-	/*
+	/**
 	 * except myself's peer send message to me.
 	 */
 	@Override
@@ -96,6 +96,5 @@ public class TorrentPieceScenario implements TorrentFront.EventListener {
 	 		peer.startConnect(targetPeer);
 	 	}
 	 	client.clearPeer32();
-	 	peer.showTrackerFront();
 	}
 }
