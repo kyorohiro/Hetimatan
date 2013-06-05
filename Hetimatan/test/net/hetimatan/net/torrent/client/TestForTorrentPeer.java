@@ -30,7 +30,13 @@ public class TestForTorrentPeer extends TestCase {
 		front.sendBitfield();
 		front.uncoke();
 		
-		assertEquals(1,testPeer.numOfFront());
+		assertEquals(1, testPeer.numOfFront());
+		assertEquals(false, testPeer.getTorrentFront(testPeer.getFrontPeer(0)).getTargetInfo().mTargetChoked);
+
+		front.choke();
+		assertEquals(1, testPeer.numOfFront());
+		assertEquals(true, testPeer.getTorrentFront(testPeer.getFrontPeer(0)).getTargetInfo().mTargetChoked);
+
 	}
 
 }
