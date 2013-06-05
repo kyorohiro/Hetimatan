@@ -16,6 +16,7 @@ import net.hetimatan.io.net.KyoroServerSocket;
 import net.hetimatan.io.net.KyoroServerSocketImpl;
 import net.hetimatan.io.net.KyoroSocket;
 import net.hetimatan.io.net.KyoroSocketImpl;
+import net.hetimatan.net.torrent.client._peer.TorrentPeerSetting;
 import net.hetimatan.net.torrent.client.message.TorrentMessage;
 import net.hetimatan.net.torrent.client.scenario.TorrentPieceScenario;
 import net.hetimatan.net.torrent.client.scenario.TorrentRequestScenario;
@@ -46,13 +47,14 @@ public class TorrentPeer {
 	private TorrentData mData                   = null; 
 	private MetaFile mMetaFile                  = null;
 
-	private KyoroSocketEventRunner mMasterRunner       = null;//new EventTaskRunnerImple();
-	private TorrentPieceScenario mPieceScenario = null;
+	private TorrentPeerSetting mSetting = new TorrentPeerSetting();
+	private KyoroSocketEventRunner mMasterRunner    = null;//new EventTaskRunnerImple();
+	private TorrentPieceScenario mPieceScenario     = null;
 	private TorrentRequestScenario mRequestScenario = null;
-	private KyoroSelector mAcceptSelector       = null;
-	private TorrentPeerAcceptTask mAcceptTask   = null;
+	private KyoroSelector mAcceptSelector           = null;
+	private TorrentPeerAcceptTask mAcceptTask       = null;
 	private LinkedList<WeakReference<Peer>> mOptimusUnchokePeer = new LinkedList<>();
-	private LinkedHashMap<Peer, TorrentFront> mFrontList = new LinkedHashMap<TrackerClient.Peer, TorrentFront>();
+	private LinkedHashMap<Peer, TorrentFront> mFrontList        = new LinkedHashMap<TrackerClient.Peer, TorrentFront>();
 
 	
 	public TorrentPeer(MetaFile metafile, String peerId) throws URISyntaxException, IOException {
