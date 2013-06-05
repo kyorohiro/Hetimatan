@@ -21,6 +21,7 @@ import net.hetimatan.net.torrent.client.message.MessageChoke;
 import net.hetimatan.net.torrent.client.message.MessageHandShake;
 import net.hetimatan.net.torrent.client.message.MessageHave;
 import net.hetimatan.net.torrent.client.message.MessageInterested;
+import net.hetimatan.net.torrent.client.message.MessageKeepAlive;
 import net.hetimatan.net.torrent.client.message.MessageNotInterested;
 import net.hetimatan.net.torrent.client.message.MessageNull;
 import net.hetimatan.net.torrent.client.message.MessagePiece;
@@ -240,6 +241,14 @@ public class TorrentFront {
 		TorrentHistory.get().pushSend(this, message);
 	}
 
+	public void keepAlive() throws IOException {
+		if(Log.ON){Log.v(TAG, "TorrentFrontTask#keepAlive");}
+		MessageKeepAlive keepAlive = new MessageKeepAlive();
+		keepAlive.encode(mOutput);
+		mOutput.flush();
+		TorrentHistory.get().pushSend(this, keepAlive);
+	}
+
 	public void choke() throws IOException {
 		if(Log.ON){Log.v(TAG, "TorrentFrontTask#choke");}
 		MessageChoke message = new MessageChoke();
@@ -332,7 +341,12 @@ public class TorrentFront {
 //		}
 	}
 
-	
+
+	private TorrentMessage mLastMessage = null;
+	public TorrentMessage getReceivedLastMessage() {
+		return mLastMessage;
+	}
+
 	public void onReceiveMessage(HelperLookAheadMessage messageBase) throws IOException {
 		if(Log.ON){Log.v(TAG, "distribute:"+messageBase.getMessageId());}
 		TorrentMessage message = null;
@@ -413,9 +427,9 @@ public class TorrentFront {
 		}
 
 		if (null != message) {
+			mLastMessage = message;
 			dispatch(message);
 		}
-		
 		TorrentPeer peer = mTorrentPeer.get();
 		if(peer != null) {
 			TorrentHistory.get().pushReceive(this, message);

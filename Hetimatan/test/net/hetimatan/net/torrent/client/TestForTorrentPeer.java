@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 import net.hetimatan.io.filen.KFNextHelper;
+import net.hetimatan.net.torrent.client.message.TorrentMessage;
 import net.hetimatan.net.torrent.tracker.TrackerClient.Peer;
 import net.hetimatan.net.torrent.util.metafile.MetaFile;
 import net.hetimatan.net.torrent.util.metafile.MetaFileCreater;
@@ -34,6 +35,13 @@ public class TestForTorrentPeer extends TestCase {
 		assertEquals(false, testPeer.getTorrentFront(testPeer.getFrontPeer(0)).getTargetInfo().mTargetChoked);
 
 		front.choke();
+
+		{
+			TorrentMessage last = null;
+			do{
+				last = testPeer.getTorrentFront(testPeer.getFrontPeer(0)).getReceivedLastMessage();
+			} while(last==null||last.getType() != TorrentMessage.SIGN_CHOKE);
+		}
 		assertEquals(1, testPeer.numOfFront());
 		assertEquals(true, testPeer.getTorrentFront(testPeer.getFrontPeer(0)).getTargetInfo().mTargetChoked);
 
