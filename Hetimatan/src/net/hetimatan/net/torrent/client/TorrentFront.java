@@ -437,6 +437,22 @@ public class TorrentFront {
 		}
 	}
 
+
+
+	public boolean waitMessage(byte sign, int timeout) {
+		TorrentMessage last = null;
+		long start = System.currentTimeMillis();
+		do{
+			last = getReceivedLastMessage();
+			if(timeout<(System.currentTimeMillis()-start)) {
+				return false;
+			}
+			Thread.yield();
+		} while(last==null||last.getType() != sign);
+		return true;
+	}
+
+
 	private LinkedList<WeakReference<EventListener>> mObservers = 
 			new LinkedList<WeakReference<EventListener>>();
 	public void addObserverAtWeak(EventListener observer) {

@@ -36,12 +36,8 @@ public class TestForTorrentPeer extends TestCase {
 
 		front.choke();
 
-		{
-			TorrentMessage last = null;
-			do{
-				last = testPeer.getTorrentFront(testPeer.getFrontPeer(0)).getReceivedLastMessage();
-			} while(last==null||last.getType() != TorrentMessage.SIGN_CHOKE);
-		}
+		testPeer.getTorrentFront(testPeer.getFrontPeer(0))
+		.waitMessage(TorrentMessage.SIGN_CHOKE, 3000);
 		assertEquals(1, testPeer.numOfFront());
 		assertEquals(true, testPeer.getTorrentFront(testPeer.getFrontPeer(0)).getTargetInfo().mTargetChoked);
 

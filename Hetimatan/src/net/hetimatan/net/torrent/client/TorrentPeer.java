@@ -16,6 +16,7 @@ import net.hetimatan.io.net.KyoroServerSocket;
 import net.hetimatan.io.net.KyoroServerSocketImpl;
 import net.hetimatan.io.net.KyoroSocket;
 import net.hetimatan.io.net.KyoroSocketImpl;
+import net.hetimatan.net.torrent.client.message.TorrentMessage;
 import net.hetimatan.net.torrent.client.scenario.TorrentPieceScenario;
 import net.hetimatan.net.torrent.client.scenario.TorrentRequestScenario;
 import net.hetimatan.net.torrent.client.scenario.task.ScenarioFinTracker;
@@ -267,8 +268,6 @@ public class TorrentPeer {
 		}
 		return ret;
 	}
-
-
 
 
 	// peerid is random 20 byte string.  
