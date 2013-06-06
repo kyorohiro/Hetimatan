@@ -53,7 +53,7 @@ public class TorrentPeer {
 	private TorrentRequestScenario mRequestScenario = null;
 	private KyoroSelector mAcceptSelector           = null;
 	private TorrentPeerAcceptTask mAcceptTask       = null;
-	private LinkedList<WeakReference<Peer>> mOptimusUnchokePeer = new LinkedList<>();
+	private LinkedList<Peer> mOptimusUnchokePeer = new LinkedList<>();
 	private LinkedHashMap<Peer, TorrentFront> mFrontList        = new LinkedHashMap<TrackerClient.Peer, TorrentFront>();
 
 	
@@ -104,13 +104,22 @@ public class TorrentPeer {
 		int nn = mFrontList.size();
 		Random r = new Random();
 		if (len<unchokerNum) {
-		} else {
 			int index = r.nextInt(nn);
-			Peer peer = getFrontPeer(index);
-			
-		}
-		for(int i=0;i<len;i++) {
-			WeakReference<Peer> peer = mOptimusUnchokePeer.get(i);
+			for(int i=0;i<nn;i++) {
+				Peer peer = getFrontPeer(index);
+				if(!mOptimusUnchokePeer.contains(peer)) {
+					mOptimusUnchokePeer.add(peer);
+				}
+			}
+		} else {
+			int add = r.nextInt(nn);
+			int rm = r.nextInt(len);
+			Peer peer1 = getFrontPeer(add);
+			Peer peer2 = mOptimusUnchokePeer.get(rm);
+			if(!peer1.equals(peer2)) {
+				mOptimusUnchokePeer.remove(rm);
+				mOptimusUnchokePeer.add(peer1);
+			}
 		}
 	}
 
