@@ -79,7 +79,7 @@ public class TrackerData {
 	}
 
 	public void removePeerInfo(TrackerPeerInfo peerInfo) {
-		mInfos.remove(peerInfo);
+		mInfos.remove(peerInfo.getPeerId());
 	}
 
 	public boolean cotains(String peerId) {
