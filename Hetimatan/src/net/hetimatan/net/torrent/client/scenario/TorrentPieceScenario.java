@@ -49,15 +49,12 @@ public class TorrentPieceScenario implements TorrentFront.EventListener {
 		int existLen = mScenarioList.size();
 		int newLen =  4-existLen;
 		if(newLen<0) {return;}
-
-		TorrentFront[] front = new TorrentFront[newLen];
-		int len = peer.getFront(0, front);//todo 0
-		
 		boolean have = false;
-		for(int i=0;i<len;i++) {
-			TorrentFront f = front[i];
+		for(int i=0;i<peer.numOfFront();i++) {
+			TorrentFront f = peer.getTorrentFront(i);
+			if(f == null){continue;}
 			if(f != null&&f.haveTargetRequest()) {
-				sendPiece(front[i]);
+				sendPiece(f);
 				have = true;
 			}
 		}

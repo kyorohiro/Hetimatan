@@ -103,9 +103,9 @@ public class TorrentPeer {
 		int unchokerNum = mSetting.getNumOfUnchoker();
 		int nn = mFrontList.size();
 		Random r = new Random();
-		System.out.println("+++#+++++++++"+mOptimusUnchokePeer.size());
-		System.out.println("+++#+++++++++"+len);
-		System.out.println("+++#+++++++++"+unchokerNum);
+//		System.out.println("+++#+++++++++"+mOptimusUnchokePeer.size());
+//		System.out.println("+++#+++++++++"+len);
+//		System.out.println("+++#+++++++++"+unchokerNum);
 		if (len<=unchokerNum) {
 			int index = r.nextInt(nn);
 			for(int i=0;i<nn;i++) {
@@ -115,7 +115,7 @@ public class TorrentPeer {
 					TorrentFront front = getTorrentFront(peer);
 					try {
 						front.uncoke();
-						System.out.println("+++#un");
+//						System.out.println("+++#un");
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
@@ -131,22 +131,22 @@ public class TorrentPeer {
 				try {
 					TorrentFront front = getTorrentFront(peer2);
 					front.choke();
-					System.out.println("+++#c");
+//					System.out.println("+++#c");
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 
 				mOptimusUnchokePeer.add(peer1);
-				System.out.println("+++#ch");
+//				System.out.println("+++#ch");
 				
 				try {
 					TorrentFront front = getTorrentFront(peer1);
 					front.uncoke();
-					System.out.println("+++#un");
+//					System.out.println("+++#un");
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				System.out.println("++++++++++++"+mOptimusUnchokePeer.size());
+//				System.out.println("++++++++++++"+mOptimusUnchokePeer.size());
 			}
 		}
 	}
@@ -286,7 +286,12 @@ public class TorrentPeer {
 		return mFrontList.size();
 	}	
 
+	public TorrentFront getTorrentFront(int i) {
+		Peer key = getFrontPeer(i);
+		return getTorrentFront(key);
+	}
 	public TorrentFront getTorrentFront(Peer peer) {
+		if(peer == null) {return null;}
 		return mFrontList.get(peer);
 	}
 
@@ -298,29 +303,6 @@ public class TorrentPeer {
 			return null;
 		}
 	}
-
-	@Deprecated
-	public synchronized int getFront(int index, TorrentFront[] out) {
-		int len = out.length;
-		if(len>mFrontList.size()) {
-			len=mFrontList.size();
-		}
-		int ret = len-index;
-		if(ret<=0) {
-			return 0;
-		}
-		Set<Peer> keys = mFrontList.keySet();
-		Iterator<Peer> ki = keys.iterator();
-		for(int i=index;ki.hasNext();i++) {
-			if(i<out.length) {//todo
-			out[i] = mFrontList.get(ki.next());
-			} else {
-				break;
-			}
-		}
-		return ret;
-	}
-
 
 	// peerid is random 20 byte string.  
 	// the first character in the peer-id is PEERID_HEAD

@@ -47,11 +47,12 @@ public class TestForTorrentPeer extends TestCase {
 	}
 
 
-	@Deprecated
 	public void testChoker() throws IOException, URISyntaxException, InterruptedException {
 		File metafile = new File("./testdata/1m_a.txt.torrent");
 		MetaFile metainfo = MetaFileCreater.createFromTorrentFile(metafile);
 		TorrentPeer testPeer = new TorrentPeer(metainfo, TorrentPeer.createPeerId());
+		File[] f = new File[1];f[0] = new File("./testdata/1mb/1m_a.txt");
+		testPeer.setMasterFile(f);
 		testPeer.startTask(null);
 		while(!testPeer.isBooted()){Thread.sleep(0);Thread.yield();}
 
@@ -117,6 +118,12 @@ public class TestForTorrentPeer extends TestCase {
 		front004.uncoke();
 		front005.uncoke();
 
+		front001.startReceliver();
+		front002.startReceliver();
+		front003.startReceliver();
+		front004.startReceliver();
+		front005.startReceliver();
+
 		assertEquals(5, testPeer.numOfFront());
 		testPeer.getTorrentFront(testPeer.getFrontPeer(0)).waitMessage(TorrentMessage.SIGN_UNCHOKE, 3000);
 		testPeer.getTorrentFront(testPeer.getFrontPeer(1)).waitMessage(TorrentMessage.SIGN_UNCHOKE, 3000);
@@ -129,14 +136,23 @@ public class TestForTorrentPeer extends TestCase {
 		assertEquals(false, testPeer.getTorrentFront(testPeer.getFrontPeer(3)).getTargetInfo().mTargetChoked);
 		assertEquals(false, testPeer.getTorrentFront(testPeer.getFrontPeer(4)).getTargetInfo().mTargetChoked);
 
-		Thread.sleep(2000);
 
+		testPeer.updateOptimusUnchokePeer();
+		Thread.sleep(1000);
 		int num = 0;
 		for(int i=0;i<5;i++) {
 			if(testPeer.getTorrentFront(testPeer.getFrontPeer(i)).getMyInfo().mChoked) {
 				num++;
 			}
 		}
+		Thread.sleep(1000);
+		int ss = 0;
+		if(front001.getTargetInfo().mTargetChoked) {ss++;}
+		if(front002.getTargetInfo().mTargetChoked) {ss++;}
+		if(front003.getTargetInfo().mTargetChoked) {ss++;}
+		if(front004.getTargetInfo().mTargetChoked) {ss++;}
+		if(front005.getTargetInfo().mTargetChoked) {ss++;}
+		assertEquals(1, ss);
 		assertEquals(1, num);
 
 		testPeer.close();

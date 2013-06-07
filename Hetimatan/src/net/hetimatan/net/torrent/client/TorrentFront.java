@@ -429,8 +429,8 @@ public class TorrentFront {
 		}
 
 		if (null != message) {
-			mLastMessage = message;
 			dispatch(message);
+			mLastMessage = message;
 		}
 		TorrentPeer peer = mTorrentPeer.get();
 		if(peer != null) {
