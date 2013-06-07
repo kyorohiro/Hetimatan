@@ -21,7 +21,8 @@ public class TorrentFrontShakeHandTask extends EventTask {
 		front.sendShakehand();
 		front.shakehand();
 		front.sendBitfield();
-		front.uncoke();
+//		front.uncoke();
+		front.choke();
 		if(mTorrentFront.get().getTorrentPeer().isSeeder()) {
 			front.notinterest();
 		} else {

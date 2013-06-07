@@ -42,6 +42,8 @@ public class TestForTorrentPeer extends TestCase {
 		assertEquals(1, testPeer.numOfFront());
 		assertEquals(true, testPeer.getTorrentFront(testPeer.getFrontPeer(0)).getTargetInfo().mTargetChoked);
 
+		testPeer.close();
+		compe.close();
 	}
 
 
@@ -116,8 +118,34 @@ public class TestForTorrentPeer extends TestCase {
 		front005.uncoke();
 
 		assertEquals(5, testPeer.numOfFront());
-//		testPeer.getTorrentFront(testPeer.getFrontPeer(0)).waitMessage(TorrentMessage.SIGN_UNCHOKE, 3000);
-//		assertEquals(false, testPeer.getTorrentFront(testPeer.getFrontPeer(0)).getTargetInfo().mTargetChoked);
+		testPeer.getTorrentFront(testPeer.getFrontPeer(0)).waitMessage(TorrentMessage.SIGN_UNCHOKE, 3000);
+		testPeer.getTorrentFront(testPeer.getFrontPeer(1)).waitMessage(TorrentMessage.SIGN_UNCHOKE, 3000);
+		testPeer.getTorrentFront(testPeer.getFrontPeer(2)).waitMessage(TorrentMessage.SIGN_UNCHOKE, 3000);
+		testPeer.getTorrentFront(testPeer.getFrontPeer(3)).waitMessage(TorrentMessage.SIGN_UNCHOKE, 3000);
+		testPeer.getTorrentFront(testPeer.getFrontPeer(4)).waitMessage(TorrentMessage.SIGN_UNCHOKE, 3000);
+		assertEquals(false, testPeer.getTorrentFront(testPeer.getFrontPeer(0)).getTargetInfo().mTargetChoked);
+		assertEquals(false, testPeer.getTorrentFront(testPeer.getFrontPeer(1)).getTargetInfo().mTargetChoked);
+		assertEquals(false, testPeer.getTorrentFront(testPeer.getFrontPeer(2)).getTargetInfo().mTargetChoked);
+		assertEquals(false, testPeer.getTorrentFront(testPeer.getFrontPeer(3)).getTargetInfo().mTargetChoked);
+		assertEquals(false, testPeer.getTorrentFront(testPeer.getFrontPeer(4)).getTargetInfo().mTargetChoked);
+
+		Thread.sleep(2000);
+
+		int num = 0;
+		for(int i=0;i<5;i++) {
+			if(testPeer.getTorrentFront(testPeer.getFrontPeer(i)).getMyInfo().mChoked) {
+				num++;
+			}
+		}
+		assertEquals(1, num);
+
+		testPeer.close();
+		compe001.close();
+		compe002.close();
+		compe003.close();
+		compe004.close();
+		compe005.close();
+
 	}
 
 }

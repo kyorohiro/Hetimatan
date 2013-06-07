@@ -53,8 +53,8 @@ public class TorrentPeer {
 	private TorrentRequestScenario mRequestScenario = null;
 	private KyoroSelector mAcceptSelector           = null;
 	private TorrentPeerAcceptTask mAcceptTask       = null;
-	private LinkedList<Peer> mOptimusUnchokePeer = new LinkedList<>();
-	private LinkedHashMap<Peer, TorrentFront> mFrontList        = new LinkedHashMap<TrackerClient.Peer, TorrentFront>();
+	private LinkedList<Peer> mOptimusUnchokePeer    = new LinkedList<>();
+	private LinkedHashMap<Peer, TorrentFront> mFrontList = new LinkedHashMap<TrackerClient.Peer, TorrentFront>();
 
 	
 	public TorrentPeer(MetaFile metafile, String peerId) throws URISyntaxException, IOException {
@@ -103,12 +103,22 @@ public class TorrentPeer {
 		int unchokerNum = mSetting.getNumOfUnchoker();
 		int nn = mFrontList.size();
 		Random r = new Random();
-		if (len<unchokerNum) {
+		System.out.println("+++#+++++++++"+mOptimusUnchokePeer.size());
+		System.out.println("+++#+++++++++"+len);
+		System.out.println("+++#+++++++++"+unchokerNum);
+		if (len<=unchokerNum) {
 			int index = r.nextInt(nn);
 			for(int i=0;i<nn;i++) {
 				Peer peer = getFrontPeer(index);
 				if(!mOptimusUnchokePeer.contains(peer)) {
 					mOptimusUnchokePeer.add(peer);
+					TorrentFront front = getTorrentFront(peer);
+					try {
+						front.uncoke();
+						System.out.println("+++#un");
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 				}
 			}
 		} else {
@@ -118,7 +128,25 @@ public class TorrentPeer {
 			Peer peer2 = mOptimusUnchokePeer.get(rm);
 			if(!peer1.equals(peer2)) {
 				mOptimusUnchokePeer.remove(rm);
+				try {
+					TorrentFront front = getTorrentFront(peer2);
+					front.choke();
+					System.out.println("+++#c");
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+
 				mOptimusUnchokePeer.add(peer1);
+				System.out.println("+++#ch");
+				
+				try {
+					TorrentFront front = getTorrentFront(peer1);
+					front.uncoke();
+					System.out.println("+++#un");
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				System.out.println("++++++++++++"+mOptimusUnchokePeer.size());
 			}
 		}
 	}
@@ -284,7 +312,11 @@ public class TorrentPeer {
 		Set<Peer> keys = mFrontList.keySet();
 		Iterator<Peer> ki = keys.iterator();
 		for(int i=index;ki.hasNext();i++) {
+			if(i<out.length) {//todo
 			out[i] = mFrontList.get(ki.next());
+			} else {
+				break;
+			}
 		}
 		return ret;
 	}

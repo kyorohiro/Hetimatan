@@ -99,6 +99,9 @@ public class TorrentFront {
 		return mTorrentPeer.get();
 	}
 
+	public TorrentFrontMyInfo getMyInfo() {
+		return mMyInfo;
+	}
 	public TorrentFrontTargetInfo getTargetInfo() {
 		return mTargetInfo;
 	}
@@ -161,7 +164,6 @@ public class TorrentFront {
 		mRequestTask = new TorrentFrontRequestTask(this, peer.getClientRunner());
 		peer.getClientRunner().pushWork(mRequestTask);
 	}
-
 
 	public void close() throws IOException {
 		if(Log.ON){Log.v(TAG, "close");}
