@@ -28,6 +28,7 @@ import net.hetimatan.net.torrent.client.message.MessagePiece;
 import net.hetimatan.net.torrent.client.message.MessageRequest;
 import net.hetimatan.net.torrent.client.message.MessageUnchoke;
 import net.hetimatan.net.torrent.client.message.TorrentMessage;
+import net.hetimatan.net.torrent.client.task.TorrentFrontChokerTask;
 import net.hetimatan.net.torrent.client.task.TorrentFrontCloseTask;
 import net.hetimatan.net.torrent.client.task.TorrentFrontConnectionTask;
 import net.hetimatan.net.torrent.client.task.TorrentFrontInterestTask;
@@ -35,6 +36,7 @@ import net.hetimatan.net.torrent.client.task.TorrentFrontNotInterestTask;
 import net.hetimatan.net.torrent.client.task.TorrentFrontReceiverTask;
 import net.hetimatan.net.torrent.client.task.TorrentFrontRequestTask;
 import net.hetimatan.net.torrent.client.task.TorrentFrontShakeHandTask;
+import net.hetimatan.net.torrent.tracker.TrackerClient.Peer;
 import net.hetimatan.net.torrent.util.piece.PieceInfo;
 import net.hetimatan.util.bitfield.BitField;
 import net.hetimatan.util.event.EventTaskRunner;
@@ -63,6 +65,8 @@ public class TorrentFront {
 	private TorrentFrontNotInterestTask mNotInterestTask = null;
 	private TorrentFrontRequestTask mRequestTask = null;
 	
+	private Peer mPeer = null;
+
 	public int mTodoCurrentRequestIndex = 0;
 
 	public TorrentFront(TorrentPeer peer, KyoroSocket socket) throws IOException {
@@ -77,6 +81,15 @@ public class TorrentFront {
 		mTargetInfo.mTargetBitField = new BitField(peer.getNumOfPieces());
 		mTargetInfo.mTargetBitField.zeroClear();
 		mMyInfo = new TorrentFrontMyInfo();
+		mPeer = new Peer(socket.getHost(), socket.getPort());
+	}
+
+	public void setPeer(Peer peer) {
+		mPeer = peer;
+	}
+
+	public Peer getPeer() {
+		return mPeer;
 	}
 
 	public BitField relativeBitfield() {
@@ -163,6 +176,17 @@ public class TorrentFront {
 		if(Log.ON){Log.v(TAG, "startDownload");}
 		mRequestTask = new TorrentFrontRequestTask(this, peer.getClientRunner());
 		peer.getClientRunner().pushWork(mRequestTask);
+	}
+
+	private TorrentFrontChokerTask mChokerTask = null;
+	public void startChoker(boolean isChoke) throws IOException {
+		TorrentPeer peer = mTorrentPeer.get();
+		if(peer == null) {return;}
+		if(mChokerTask == null) {
+			mChokerTask = new TorrentFrontChokerTask(this, peer.getClientRunner(), isChoke);
+		}
+		mChokerTask.isChoke(isChoke);
+		peer.getClientRunner().pushWork(mChokerTask);
 	}
 
 	public void close() throws IOException {

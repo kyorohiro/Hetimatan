@@ -68,12 +68,6 @@ public class TestForTorrentPeer extends TestCase {
 		compe005.boot();
 
 		Peer peer = new Peer("127.0.0.1", testPeer.getServerPort());
-		Peer peer001 = new Peer("127.0.0.1", compe001.getServerPort());
-		Peer peer002 = new Peer("127.0.0.1", compe002.getServerPort());
-		Peer peer003 = new Peer("127.0.0.1", compe003.getServerPort());
-		Peer peer004 = new Peer("127.0.0.1", compe004.getServerPort());
-		Peer peer005 = new Peer("127.0.0.1", compe005.getServerPort());
-
 		TorrentFront front001 = compe001.createFront(peer);
 		TorrentFront front002 = compe002.createFront(peer);
 		TorrentFront front003 = compe003.createFront(peer);
@@ -136,23 +130,14 @@ public class TestForTorrentPeer extends TestCase {
 		assertEquals(false, testPeer.getTorrentFront(testPeer.getFrontPeer(3)).getTargetInfo().mTargetChoked);
 		assertEquals(false, testPeer.getTorrentFront(testPeer.getFrontPeer(4)).getTargetInfo().mTargetChoked);
 
-
-		testPeer.updateOptimusUnchokePeer();
-		Thread.sleep(1000);
+//		testPeer.updateOptimusUnchokePeer();
+//		Thread.sleep(3000);
 		int num = 0;
 		for(int i=0;i<5;i++) {
 			if(testPeer.getTorrentFront(testPeer.getFrontPeer(i)).getMyInfo().mChoked) {
 				num++;
 			}
 		}
-		Thread.sleep(1000);
-		int ss = 0;
-		if(front001.getTargetInfo().mTargetChoked) {ss++;}
-		if(front002.getTargetInfo().mTargetChoked) {ss++;}
-		if(front003.getTargetInfo().mTargetChoked) {ss++;}
-		if(front004.getTargetInfo().mTargetChoked) {ss++;}
-		if(front005.getTargetInfo().mTargetChoked) {ss++;}
-		assertEquals(1, ss);
 		assertEquals(1, num);
 
 		testPeer.close();

@@ -3,9 +3,7 @@ package net.hetimatan.net.torrent.client;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.ref.WeakReference;
 import java.net.URISyntaxException;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Random;
@@ -16,8 +14,8 @@ import net.hetimatan.io.net.KyoroServerSocket;
 import net.hetimatan.io.net.KyoroServerSocketImpl;
 import net.hetimatan.io.net.KyoroSocket;
 import net.hetimatan.io.net.KyoroSocketImpl;
+import net.hetimatan.net.torrent.client._peer.TorrentPeerChoker;
 import net.hetimatan.net.torrent.client._peer.TorrentPeerSetting;
-import net.hetimatan.net.torrent.client.message.TorrentMessage;
 import net.hetimatan.net.torrent.client.scenario.TorrentPieceScenario;
 import net.hetimatan.net.torrent.client.scenario.TorrentRequestScenario;
 import net.hetimatan.net.torrent.client.scenario.task.ScenarioFinTracker;
@@ -48,6 +46,7 @@ public class TorrentPeer {
 	private MetaFile mMetaFile                  = null;
 
 	private TorrentPeerSetting mSetting = new TorrentPeerSetting();
+	private TorrentPeerChoker mChoker = null;
 	private KyoroSocketEventRunner mMasterRunner    = null;//new EventTaskRunnerImple();
 	private TorrentPieceScenario mPieceScenario     = null;
 	private TorrentRequestScenario mRequestScenario = null;
@@ -63,6 +62,7 @@ public class TorrentPeer {
 		mMetaFile = metafile;
 		mPieceScenario = new TorrentPieceScenario(this);
 		mRequestScenario = new TorrentRequestScenario(this);
+		mChoker = new TorrentPeerChoker(this);
 	}
 
 	public void startTracker() {
@@ -98,56 +98,19 @@ public class TorrentPeer {
 		return mAcceptSelector;
 	}
 
-	public void updateOptimusUnchokePeer() {
-		int len = mOptimusUnchokePeer.size();
-		int unchokerNum = mSetting.getNumOfUnchoker();
-		int nn = mFrontList.size();
-		Random r = new Random();
-//		System.out.println("+++#+++++++++"+mOptimusUnchokePeer.size());
-//		System.out.println("+++#+++++++++"+len);
-//		System.out.println("+++#+++++++++"+unchokerNum);
-		if (len<=unchokerNum) {
-			int index = r.nextInt(nn);
-			for(int i=0;i<nn;i++) {
-				Peer peer = getFrontPeer(index);
-				if(!mOptimusUnchokePeer.contains(peer)) {
-					mOptimusUnchokePeer.add(peer);
-					TorrentFront front = getTorrentFront(peer);
-					try {
-						front.uncoke();
-//						System.out.println("+++#un");
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-		} else {
-			int add = r.nextInt(nn);
-			int rm = r.nextInt(len);
-			Peer peer1 = getFrontPeer(add);
-			Peer peer2 = mOptimusUnchokePeer.get(rm);
-			if(!peer1.equals(peer2)) {
-				mOptimusUnchokePeer.remove(rm);
-				try {
-					TorrentFront front = getTorrentFront(peer2);
-					front.choke();
-//					System.out.println("+++#c");
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+	public TorrentPeerSetting getSetting() {
+		return mSetting;
+	}
 
-				mOptimusUnchokePeer.add(peer1);
-//				System.out.println("+++#ch");
-				
-				try {
-					TorrentFront front = getTorrentFront(peer1);
-					front.uncoke();
-//					System.out.println("+++#un");
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-//				System.out.println("++++++++++++"+mOptimusUnchokePeer.size());
-			}
+	public void updateOptimusUnchokePeer(TorrentFront front) throws IOException {
+		mChoker.onStartTorrentFront(front);
+	}
+
+	public void updateOptimusUnchokePeer() {
+		try {
+			mChoker.updateOptimusUnchokePeer();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -240,6 +203,12 @@ public class TorrentPeer {
 
 	public TorrentFront createFront(Peer peer) throws IOException {
 		KyoroSocketImpl s = new KyoroSocketImpl();
+		TorrentFront front = createFront(s);
+		front.setPeer(peer);
+		return front;
+	}
+
+	public TorrentFront createFront(KyoroSocket s) throws IOException {
 		TorrentFront front = new TorrentFront(this, s);
 		return front;
 	}

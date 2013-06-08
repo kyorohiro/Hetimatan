@@ -3,6 +3,7 @@ package net.hetimatan.net.torrent.client.task;
 import java.lang.ref.WeakReference;
 
 import net.hetimatan.net.torrent.client.TorrentFront;
+import net.hetimatan.net.torrent.client.TorrentPeer;
 import net.hetimatan.util.event.EventTask;
 import net.hetimatan.util.event.EventTaskRunner;
 
@@ -22,7 +23,11 @@ public class TorrentFrontShakeHandTask extends EventTask {
 		front.shakehand();
 		front.sendBitfield();
 //		front.uncoke();
-		front.choke();
+//		front.choke();
+
+		TorrentPeer peer =  front.getTorrentPeer();
+		if(peer != null) { peer.updateOptimusUnchokePeer(front);}
+
 		if(mTorrentFront.get().getTorrentPeer().isSeeder()) {
 			front.notinterest();
 		} else {

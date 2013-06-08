@@ -33,10 +33,13 @@ public class TorrentRequestScenario implements TorrentFront.EventListener {
 	public void onReceiveMessage(TorrentFront front, TorrentMessage message) {
 	 	TorrentPeer peer = mUploadTargetPeer.get();
 		if(peer == null) {return;}
-		if(message.getType() == TorrentMessage.SIGN_BITFIELD) {
-			peer.updateOptimusUnchokePeer();
-		}
-		else if(
+		//if(message.getType() == TorrentMessage.SIGN_BITFIELD) {
+			//if(peer.numOfFront()<peer.getSetting().getNumOfUnchoker()) {
+			//	peer.updateOptimusUnchokePeer();
+			//}
+		//}
+		//else
+		if(
 		message.getType()==TorrentMessage.SIGN_PIECE||
 		message.getType()==TorrentMessage.SIGN_UNCHOKE) {
 			TorrentData data = peer.getTorrentData();
