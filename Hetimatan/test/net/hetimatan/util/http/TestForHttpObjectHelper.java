@@ -5,6 +5,7 @@ import junit.framework.TestCase;
 
 public class TestForHttpObjectHelper extends TestCase {
 
+	@Deprecated
 	public void testHttpHeaderRange() {
 		{
 			String input = "0-1";
@@ -27,14 +28,14 @@ public class TestForHttpObjectHelper extends TestCase {
 
 		{
 			String input = "1-";
-			long[] expect = {1, Long.MAX_VALUE};
+			long[] expect = {1, Long.MAX_VALUE-1};
 			long[] output = HttpObjectHelper.getRange(input);
 			TestUtil.assertArrayEquals(this, "", expect, output);
 		}
 
 		{
 			String input = "-";
-			long[] expect = {0,Long.MAX_VALUE};
+			long[] expect = {0,Long.MAX_VALUE-1};
 			long[] output = HttpObjectHelper.getRange(input);
 			TestUtil.assertArrayEquals(this, "", expect, output);
 		}
@@ -48,7 +49,7 @@ public class TestForHttpObjectHelper extends TestCase {
 
 		{
 			String input = "a-0";
-			long[] expect = {0,Long.MAX_VALUE};
+			long[] expect = {0,Long.MAX_VALUE-1};
 			long[] output = HttpObjectHelper.getRange(input);
 			TestUtil.assertArrayEquals(this, "", expect, output);
 		}

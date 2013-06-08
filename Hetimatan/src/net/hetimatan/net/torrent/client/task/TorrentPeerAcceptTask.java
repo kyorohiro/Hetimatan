@@ -20,7 +20,5 @@ public class TorrentPeerAcceptTask extends EventTask {
 	public void action() throws Throwable {
 		TorrentPeer server = mServer.get();
 		server.accept();
-//		nextAction(this);
-//		Thread.sleep(10);
 	}
 }

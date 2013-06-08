@@ -6,10 +6,8 @@ import java.lang.ref.WeakReference;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import net.hetimatan.net.torrent.client.TorrentData;
 import net.hetimatan.net.torrent.client.TorrentFront;
 import net.hetimatan.net.torrent.client.TorrentPeer;
-import net.hetimatan.net.torrent.client.TorrentFront.EventListener;
 import net.hetimatan.net.torrent.client.message.TorrentMessage;
 import net.hetimatan.net.torrent.client.scenario.task.ScenarioSeeder;
 import net.hetimatan.net.torrent.client.scenario.task.ScenarioSendPieceTask;

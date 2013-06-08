@@ -67,8 +67,6 @@ public class TorrentFront {
 	
 	private Peer mPeer = null;
 
-	public int mTodoCurrentRequestIndex = 0;
-
 	public TorrentFront(TorrentPeer peer, KyoroSocket socket) throws IOException {
 		mSocket = socket;
 		mTargetInfo = new TorrentFrontTargetInfo(peer.getPieceLength());
@@ -308,8 +306,11 @@ public class TorrentFront {
 
 	public void sendRequest() throws IOException {
 		if(Log.ON){Log.v(TAG, "TorrentFront#sendRequest() ");}
+		TorrentPeer peer = mTorrentPeer.get();
+		if(peer==null){return;}
+		int index = peer.getNextRequestPiece();
 		int pieceLength = mTargetInfo.getPieceLength();
-		MessageRequest request = new MessageRequest(mTodoCurrentRequestIndex, 0, pieceLength);
+		MessageRequest request = new MessageRequest(index, 0, pieceLength);
 		request.encode(mOutput);
 		if(Log.ON){Log.v(TAG, "/TorrentFront#sendRequest() ");}
 	}

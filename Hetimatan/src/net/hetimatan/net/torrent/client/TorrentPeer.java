@@ -84,7 +84,8 @@ public class TorrentPeer {
 	}
 
 	public void startConnect(Peer peer) throws IOException {
-		if(!contain(peer)) {return;}
+		if(contain(peer)) {return;}
+//		if(!contain(peer)) {return;}
 		TorrentFront front = createFront(peer);
 		if(addTorrentFront(peer, front)){
 			TorrentHistory.get().pushMessage("TorrentPeer#connect()"+peer.toString()+"\n");
@@ -283,5 +284,10 @@ public class TorrentPeer {
 		System.arraycopy(PEERID_HEAD.getBytes(), 0, peerId, 0, 8);
 		PercentEncoder encoder = new PercentEncoder();
 		return encoder.encode(peerId);
+	}
+
+	public int mTodoCurrentRequestIndex = 0;
+	public int getNextRequestPiece() {
+		return mTodoCurrentRequestIndex++;
 	}
 }
