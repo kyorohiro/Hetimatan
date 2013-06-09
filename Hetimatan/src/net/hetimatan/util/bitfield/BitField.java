@@ -1,11 +1,14 @@
 package net.hetimatan.util.bitfield;
 
+import java.util.Random;
+
 import net.hetimatan.util.url.PercentEncoder;
 
 
 public class BitField {
 	private byte[] mBitfield = new byte[0];
 	private int mBitsize = 0;
+	private Random mR = null;
 	public static final int[] BIT = {0xFF, 0x80, 0xC0, 0xE0, 0xF0, 0xF8, 0xFC, 0xFE};
 	
 	public static BitField relative(BitField ina, BitField inb, BitField out) {
@@ -27,6 +30,7 @@ public class BitField {
 	}
 
 	public BitField(int bitsize) {
+		mR = new Random(System.currentTimeMillis());
 		mBitsize = bitsize;
 		int byteSize = bitsize/8;
 		if((bitsize%8)!=0) {
@@ -34,6 +38,15 @@ public class BitField {
 		}
 		mBitfield = new byte[byteSize];
 		oneClear();
+	}
+
+	@Deprecated
+	public int getPieceAtRandom() {
+		int byteLength  = lengthPerByte();
+		int ia = mR.nextInt(byteLength);
+		int ib = mR.nextInt(8);
+	//	isAllOnPerByte(number)
+		return 0;
 	}
 
 	public boolean isAllOff() {
@@ -99,7 +112,7 @@ public class BitField {
 		int chunk = number/8;
 		int pos = number%8;
 		// 8 0, 7 1, 3 3 7 7 
-		if(mBitfield == null || chunk>=mBitfield.length) {
+		if(mBitfield == null || chunk>=mBitfield.length||number>=lengthPerBit()) {
 			return;
 		}
 
@@ -124,6 +137,28 @@ public class BitField {
 			return true;
 		} else {
 			return false;
+		}
+	}
+
+	public boolean isAllOnPerByte(int number) {
+		int len = lengthPerByte();
+		int last = lengthPerBit()%8;
+
+		if(number>=len) {
+			return false;
+		}
+		if(number<(len-1)) {
+			if((0xFF&mBitfield[number]) == 0xFF) {
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			if((0xFF&mBitfield[number]) == (0xFF&BIT[last])) {
+				return true;
+			} else {
+				return false;
+			}
 		}
 	}
 

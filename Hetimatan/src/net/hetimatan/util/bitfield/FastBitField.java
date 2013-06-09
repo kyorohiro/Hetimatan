@@ -1,15 +1,28 @@
 package net.hetimatan.util.bitfield;
 
+import java.util.Random;
+
 public class FastBitField extends BitField {
 
 	private BitField mIndex = null;
+	private Random mR = null;
 	public FastBitField(int bitsize) {
 		super(bitsize);
+		mR = new Random(System.currentTimeMillis());
 		int indexBitsize = bitsize/(8*8);
 		if(bitsize!=0) {
 			indexBitsize+=1;
 		}
 		mIndex = new BitField(indexBitsize);
+	}
+
+
+	@Deprecated
+	public int getPieceAtRandom() {
+		int bitLength  = mIndex.lengthPerBit();
+		int inedx = mR.nextInt(bitLength);
+		
+		return 0;
 	}
 
 	@Override

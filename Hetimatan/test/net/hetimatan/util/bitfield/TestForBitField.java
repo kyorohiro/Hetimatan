@@ -82,4 +82,47 @@ public class TestForBitField extends TestCase {
 		assertEquals(0xFC, 0xFF&bitfield.getBinary()[8]);
 	}
 
+	public void test_isAllOnPerByte() {
+		BitField bitfield = newBitField(20);
+		assertEquals(true, bitfield.isAllOnPerByte(0));
+		assertEquals(true, bitfield.isAllOnPerByte(1));
+		assertEquals(true, bitfield.isAllOnPerByte(2));
+		bitfield.zeroClear();
+		assertEquals(false, bitfield.isAllOnPerByte(0));
+		assertEquals(false, bitfield.isAllOnPerByte(1));
+		assertEquals(false, bitfield.isAllOnPerByte(2));
+		bitfield.isOn(0, true);
+		assertEquals(false, bitfield.isAllOnPerByte(0));
+		assertEquals(false, bitfield.isAllOnPerByte(1));
+		assertEquals(false, bitfield.isAllOnPerByte(2));
+		for(int i=0;i<8;i++) {
+			bitfield.isOn(0+i, true);
+		}
+		assertEquals(true, bitfield.isAllOnPerByte(0));
+		assertEquals(false, bitfield.isAllOnPerByte(1));
+		assertEquals(false, bitfield.isAllOnPerByte(2));
+		
+		bitfield.isOn(10, true);
+		assertEquals(true, bitfield.isAllOnPerByte(0));
+		assertEquals(false, bitfield.isAllOnPerByte(1));
+		assertEquals(false, bitfield.isAllOnPerByte(2));
+		for(int i=0;i<8;i++) {
+			bitfield.isOn(8+i, true);
+		}
+		assertEquals(true, bitfield.isAllOnPerByte(0));
+		assertEquals(true, bitfield.isAllOnPerByte(1));
+		assertEquals(false, bitfield.isAllOnPerByte(2));
+
+		bitfield.isOn(19, true);
+		assertEquals(true, bitfield.isAllOnPerByte(0));
+		assertEquals(true, bitfield.isAllOnPerByte(1));
+		assertEquals(false, bitfield.isAllOnPerByte(2));
+		for(int i=0;i<8;i++) {
+			bitfield.isOn(16+i, true);
+		}
+		assertEquals(true, bitfield.isAllOnPerByte(0));
+		assertEquals(true, bitfield.isAllOnPerByte(1));
+		assertEquals(true, bitfield.isAllOnPerByte(2));
+
+	}
 }
