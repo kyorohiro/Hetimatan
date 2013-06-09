@@ -40,13 +40,48 @@ public class BitField {
 		oneClear();
 	}
 
-	@Deprecated
+
 	public int getPieceAtRandom() {
 		int byteLength  = lengthPerByte();
+		if(byteLength<=0) {
+			return -1;
+		}
 		int ia = mR.nextInt(byteLength);
-		int ib = mR.nextInt(8);
-	//	isAllOnPerByte(number)
-		return 0;
+		boolean f = false;
+		for(int i=ia;i<byteLength;i++) {
+			if(!isAllOnPerByte(i)) {
+				f = true;break;
+			}
+		}
+		if(!f) {
+			for(int i=ia;i>=0;i--) {
+				if(!isAllOnPerByte(i)) {
+					f = true;break;
+				}
+			}
+		}
+		if(!f) {
+			return -1;
+		}
+
+		int rn = 8;
+		if(rn>(lengthPerBit()-ia*8)){
+			rn =(lengthPerBit()-ia*8); 
+		}
+//		System.out.println("rn="+rn);
+		int ib = mR.nextInt(rn);
+//		System.out.println("rn="+rn+","+ib);
+//		ib=1;
+		if(!isOn(ia*8+ib)) {
+			return ia*8+ib;
+		}
+		f= false;
+		for(int i=0;i<8&&(ia*8+i)<lengthPerBit();i++) {
+			if(!isOn(ia*8+i)) {
+				return (ia*8+i);
+			}			
+		}
+		return -1;
 	}
 
 	public boolean isAllOff() {
@@ -122,6 +157,7 @@ public class BitField {
 			mBitfield[chunk] = (byte)(v|value);
 		} else {
 			value = value^0xFFFFFFFF;
+//			value = value^0xFFFF;
 			mBitfield[chunk] = (byte)(v&value);
 		}
 	}

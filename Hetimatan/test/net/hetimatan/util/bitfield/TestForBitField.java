@@ -123,6 +123,29 @@ public class TestForBitField extends TestCase {
 		assertEquals(true, bitfield.isAllOnPerByte(0));
 		assertEquals(true, bitfield.isAllOnPerByte(1));
 		assertEquals(true, bitfield.isAllOnPerByte(2));
+	}
 
+	public void test_getPieceAtRandom() {
+		{
+			BitField field = new BitField(0);
+			assertEquals(-1, field.getPieceAtRandom());
+		}
+		{
+			BitField field = new BitField(1);
+			assertEquals(-1, field.getPieceAtRandom());
+			field.isOn(0, false);
+			assertEquals(0, field.getPieceAtRandom());
+		}
+
+		{
+			BitField field = new BitField(3);
+			assertEquals(-1, field.getPieceAtRandom());
+			field.isOn(1, false);
+			assertEquals(1, field.getPieceAtRandom());
+			field.isOn(2, true);
+			int i = field.getPieceAtRandom();
+			assertEquals(true, (i==2||i==1?true:false));
+
+		}
 	}
 }
