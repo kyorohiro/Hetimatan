@@ -108,7 +108,7 @@ public class BitField {
 			mBitfield[chunk] = (byte)(v|value);
 		} else {
 			value = value^0xFFFFFFFF;
-			mBitfield[chunk] = (byte)(   v&value);
+			mBitfield[chunk] = (byte)(v&value);
 		}
 	}
 

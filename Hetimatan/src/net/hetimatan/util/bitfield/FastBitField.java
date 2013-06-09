@@ -14,7 +14,7 @@ public class FastBitField extends BitField {
 
 	@Override
 	public boolean isAllOff() {
-		return mIndex.isAllOff();
+		return super.isAllOff();
 	}
 
 	@Override
