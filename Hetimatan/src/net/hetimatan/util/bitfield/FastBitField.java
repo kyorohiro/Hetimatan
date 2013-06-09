@@ -6,7 +6,7 @@ public class FastBitField extends BitField {
 	public FastBitField(int bitsize) {
 		super(bitsize);
 		int indexBitsize = bitsize/(8*8);
-		if(indexBitsize==0&&bitsize!=0) {
+		if(bitsize!=0) {
 			indexBitsize+=1;
 		}
 		mIndex = new BitField(indexBitsize);
@@ -59,4 +59,7 @@ public class FastBitField extends BitField {
 		}
 	}
 
+	public BitField getIndex() {
+		return mIndex;
+	}
 }
