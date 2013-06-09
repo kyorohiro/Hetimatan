@@ -25,6 +25,29 @@ public class TestForBitField extends TestCase {
 		assertEquals(false, bitfield.isAllOff());
 		assertEquals(true, bitfield.isAllOn());
 		assertEquals(0x80, 0xFF&bitfield.getBinary()[0]);
+		
+		assertEquals(true, bitfield.isOn(0));
+		bitfield.isOn(0, false);
+		assertEquals(false, bitfield.isOn(0));
+		bitfield.oneClear();
+		assertEquals(true, bitfield.isOn(0));
+		assertEquals(0x80, 0xFF&bitfield.getBinary()[0]);
+
+		bitfield.zeroClear();
+		assertEquals(false, bitfield.isOn(0));
+		assertEquals(0x00, 0xFF&bitfield.getBinary()[0]);
 	}
-	
+
+	public void test_bitsizeIsNine() {
+		BitField bitfield = newBitField(9);
+		assertEquals(2, bitfield.getBinary().length);
+		assertEquals(9, bitfield.lengthPerBit());
+		assertEquals(2, bitfield.lengthPerByte());
+		assertEquals(false, bitfield.isAllOff());
+		assertEquals(true, bitfield.isAllOn());
+		assertEquals(0xFF, 0xFF&bitfield.getBinary()[0]);
+		assertEquals(0x80, 0xFF&bitfield.getBinary()[1]);
+	}
+
+
 }

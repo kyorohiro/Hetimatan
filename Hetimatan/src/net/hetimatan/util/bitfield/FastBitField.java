@@ -5,7 +5,11 @@ public class FastBitField extends BitField {
 	private BitField mIndex = null;
 	public FastBitField(int bitsize) {
 		super(bitsize);
-		mIndex = new BitField(bitsize/(8*8));
+		int indexBitsize = bitsize/(8*8);
+		if(indexBitsize==0&&bitsize!=0) {
+			indexBitsize+=1;
+		}
+		mIndex = new BitField(indexBitsize);
 	}
 
 	@Override
@@ -21,7 +25,9 @@ public class FastBitField extends BitField {
 	@Override
 	public void oneClear() {
 		super.oneClear();
-		mIndex.oneClear();
+		if(mIndex != null) {
+			mIndex.oneClear();
+		}
 	}
 
 	@Override
