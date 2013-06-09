@@ -33,6 +33,7 @@ public class FastBitField extends BitField {
 	@Override
 	public void setBitfield(byte[] bitfield) {
 		super.setBitfield(bitfield);
+		
 	}
 
 	@Override
