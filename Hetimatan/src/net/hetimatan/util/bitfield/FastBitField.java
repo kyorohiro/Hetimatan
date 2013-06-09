@@ -39,7 +39,23 @@ public class FastBitField extends BitField {
 	@Override
 	public void setBitfield(byte[] bitfield) {
 		super.setBitfield(bitfield);
-		
+		for(int number=0;number<bitfield.length;number+=8) {
+			int superIndexPerByte = number/(8);
+			int index = number/(8*8);
+			boolean o = false;
+			for(int i=0;i<8&&(superIndexPerByte+i)<bitfield.length;i++) {
+				if(bitfield[superIndexPerByte+i] != 0) {
+					mIndex.isOn(index, true);
+					o=true;
+					break;
+				}
+			}
+			if(o) {
+				mIndex.isOn(index, true);
+			} else {
+				mIndex.isOn(index, false);				
+			}
+		}
 	}
 
 	@Override
@@ -51,9 +67,15 @@ public class FastBitField extends BitField {
 			mIndex.isOn(index, on);
 		} else {
 			byte[] buffer = super.getBinary();
-			if(buffer[superIndexPerByte] != 0) {
-				mIndex.isOn(index, true);
-			} else {
+			boolean o = false;
+			for(int i=0;i<8&&(superIndexPerByte+i)<buffer.length;i++) {
+				if(buffer[superIndexPerByte+i] != 0) {
+					mIndex.isOn(index, true);
+					o=true;
+					break;
+				}
+			}
+			if(!o) {
 				mIndex.isOn(index, false);
 			}
 		}

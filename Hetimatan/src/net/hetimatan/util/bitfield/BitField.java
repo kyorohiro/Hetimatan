@@ -36,18 +36,6 @@ public class BitField {
 		oneClear();
 	}
 
-	public void oneClear() {
-		int bitsize = mBitsize;
-		int byteSize = bitsize/8;
-		if((bitsize%8)!=0) {byteSize+=1;}
-		for(int i=0;i<mBitfield.length;i++) {
-			mBitfield[i] = (byte)0xFF;
-		}
-		if(mBitfield.length!=0) {
-			mBitfield[byteSize-1]= (byte)(BIT[bitsize%8]&0xFF);
-		}
-	}
-
 	public boolean isAllOff() {
 		int len =lengthPerBit();
 		for(int i=0;i<len;i++) {
@@ -66,6 +54,19 @@ public class BitField {
 			}
 		}
 		return true;
+	}
+
+
+	public void oneClear() {
+		int bitsize = mBitsize;
+		int byteSize = bitsize/8;
+		if((bitsize%8)!=0) {byteSize+=1;}
+		for(int i=0;i<mBitfield.length;i++) {
+			mBitfield[i] = (byte)0xFF;
+		}
+		if(mBitfield.length!=0) {
+			mBitfield[byteSize-1]= (byte)(BIT[bitsize%8]&0xFF);
+		}
 	}
 
 	public void zeroClear() {
