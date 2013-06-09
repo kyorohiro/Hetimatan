@@ -22,6 +22,29 @@ public class TorrentPeerChoker {
 		
 	}
 
+	public void updateOptimusUnchokePeer() throws IOException {
+		TorrentPeer torrentPeer = mOwner.get();if(torrentPeer == null) {return;}
+		TorrentPeerSetting mSetting = torrentPeer.getSetting();
+		int numOfUnchokerNow = mOptimusUnchokePeer.size();
+		int maxOfUnchoker = mSetting.getNumOfUnchoker();
+		int numOfFront = torrentPeer.numOfFront();
+		Random r = new Random();
+		if (numOfUnchokerNow>maxOfUnchoker) {
+			int add = r.nextInt(numOfFront);
+			int rm = r.nextInt(numOfUnchokerNow);
+			Peer peer1 = torrentPeer.getFrontPeer(add);
+			Peer peer2 = mOptimusUnchokePeer.get(rm);
+			if(!peer1.equals(peer2)) {
+				mOptimusUnchokePeer.remove(rm);
+				TorrentFront front = torrentPeer.getTorrentFront(peer2);
+				__choke(front);
+				mOptimusUnchokePeer.add(peer1);				
+				front = torrentPeer.getTorrentFront(peer1);
+				__unchoke(front);
+			}
+		}
+	}
+
 	public void onStartTorrentFront(TorrentFront front) throws IOException {
 		TorrentPeer torrentPeer = mOwner.get();if(torrentPeer == null) {return;}
 		TorrentPeerSetting mSetting = torrentPeer.getSetting();
@@ -56,31 +79,5 @@ public class TorrentPeerChoker {
 			//}
 		}		
 	}
-
-	public void updateOptimusUnchokePeer() throws IOException {
-		TorrentPeer torrentPeer = mOwner.get();if(torrentPeer == null) {return;}
-		TorrentPeerSetting mSetting = torrentPeer.getSetting();
-		int numOfUnchokerNow = mOptimusUnchokePeer.size();
-		int maxOfUnchoker = mSetting.getNumOfUnchoker();
-		int numOfFront = torrentPeer.numOfFront();
-		Random r = new Random();
-		if (numOfUnchokerNow<=maxOfUnchoker) {
-			// none
-		} else {
-			int add = r.nextInt(numOfFront);
-			int rm = r.nextInt(numOfUnchokerNow);
-			Peer peer1 = torrentPeer.getFrontPeer(add);
-			Peer peer2 = mOptimusUnchokePeer.get(rm);
-			if(!peer1.equals(peer2)) {
-				mOptimusUnchokePeer.remove(rm);
-				TorrentFront front = torrentPeer.getTorrentFront(peer2);
-				__choke(front);
-				mOptimusUnchokePeer.add(peer1);				
-				front = torrentPeer.getTorrentFront(peer1);
-				__unchoke(front);
-			}
-		}
-	}
-
 	
 }

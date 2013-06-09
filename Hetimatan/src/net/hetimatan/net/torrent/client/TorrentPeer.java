@@ -15,6 +15,7 @@ import net.hetimatan.io.net.KyoroServerSocketImpl;
 import net.hetimatan.io.net.KyoroSocket;
 import net.hetimatan.io.net.KyoroSocketImpl;
 import net.hetimatan.net.torrent.client._peer.TorrentPeerChoker;
+import net.hetimatan.net.torrent.client._peer.TorrentPeerRequester;
 import net.hetimatan.net.torrent.client._peer.TorrentPeerSetting;
 import net.hetimatan.net.torrent.client.scenario.TorrentPieceScenario;
 import net.hetimatan.net.torrent.client.scenario.TorrentRequestScenario;
@@ -286,8 +287,8 @@ public class TorrentPeer {
 		return encoder.encode(peerId);
 	}
 
-	public int mTodoCurrentRequestIndex = 0;
+	private TorrentPeerRequester mRequester = new TorrentPeerRequester(this);
 	public int getNextRequestPiece() {
-		return mTodoCurrentRequestIndex++;
+		return mRequester.nextPieceId();
 	}
 }
