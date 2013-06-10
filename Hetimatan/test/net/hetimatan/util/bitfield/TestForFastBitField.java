@@ -41,4 +41,48 @@ public class TestForFastBitField extends TestForBitField {
 
 	}
 
+	public void testfast_setBitField() {
+		{
+			FastBitField fbit = new FastBitField(1);
+			byte[] bitfield = new byte[]{(byte)0xFF};
+			fbit.setBitfield(bitfield);
+			assertEquals(true, fbit.getIndex().isAllOn());			
+		}
+		{
+			FastBitField fbit = new FastBitField(1);
+			byte[] bitfield = new byte[]{(byte)0xFE};
+			fbit.setBitfield(bitfield);
+			assertEquals(false, fbit.getIndex().isAllOn());			
+		}
+		{
+			FastBitField fbit = new FastBitField(8*8);
+			byte[] bitfield = new byte[]{
+					(byte)0xFF,(byte)0xFF,(byte)0xFF,(byte)0xFF,
+					(byte)0xFF,(byte)0xFF,(byte)0xFF,(byte)0xFF};
+			fbit.setBitfield(bitfield);
+			assertEquals(true, fbit.getIndex().isAllOn());	
+		}
+		{
+			FastBitField fbit = new FastBitField(8*8);
+			byte[] bitfield = new byte[] {
+					(byte)0xFF,(byte)0xFE,(byte)0xFF,(byte)0xFF,
+					(byte)0xFF,(byte)0xFF,(byte)0xFF,(byte)0xFF};
+			fbit.setBitfield(bitfield);
+			assertEquals(false, fbit.getIndex().isAllOn());	
+			assertEquals(1, fbit.getIndex().lengthPerBit());	
+		}
+
+		{
+			FastBitField fbit = new FastBitField(8*8*3);
+			byte[] bitfield = new byte[] {
+					(byte)0xFF,(byte)0xFE,(byte)0xFF,(byte)0xFF,
+					(byte)0xFF,(byte)0xFF,(byte)0xFF,(byte)0xFF};
+			fbit.setBitfield(bitfield);
+			assertEquals(false, fbit.getIndex().isAllOn());	
+			assertEquals(false, fbit.getIndex().isOn(0));
+			assertEquals(true, fbit.getIndex().isOn(1));
+			assertEquals(true, fbit.getIndex().isOn(2));
+			assertEquals(3, fbit.getIndex().lengthPerBit());	
+		}
+	}
 }

@@ -6,10 +6,13 @@ import net.hetimatan.util.url.PercentEncoder;
 
 
 public class BitField {
+	public static final int[] BIT = {0xFF, 0x80, 0xC0, 0xE0, 0xF0, 0xF8, 0xFC, 0xFE};
+
 	private byte[] mBitfield = new byte[0];
 	private int mBitsize = 0;
 	private Random mR = null;
-	public static final int[] BIT = {0xFF, 0x80, 0xC0, 0xE0, 0xF0, 0xF8, 0xFC, 0xFE};
+	private int[] mShuffleList= new int[]{0,1,2,3,4,5,6,7};
+
 	
 	public static BitField relative(BitField ina, BitField inb, BitField out) {
 		if(out == null) {
@@ -68,16 +71,14 @@ public class BitField {
 		return getPieceAtRandomPerByte(ia);
 	}
 
-
-	private int[] mShuffleList= new int[]{0,1,2,3,4,5,6,7};
-	private void shuffle() {
+	protected void shuffle(int[] shufflelist) {
 		int tmp1 = 0;
 		int tmp2 = 0;
 		for(int i=0;i<8;i++) {
 			tmp1 = mR.nextInt(8);
-			tmp2 = mShuffleList[i];
-			mShuffleList[i] = mShuffleList[tmp1];
-			mShuffleList[tmp1] = tmp2;
+			tmp2 = shufflelist[i];
+			shufflelist[i] = shufflelist[tmp1];
+			shufflelist[tmp1] = tmp2;
 		}
 	}
 	public int getPieceAtRandomPerByte(int numPerByte) {
@@ -85,7 +86,7 @@ public class BitField {
 		if(byteLength<=0) {
 			return -1;
 		}
-		shuffle();
+		shuffle(mShuffleList);
 
 		int rn = 8;
 		if(rn>(lengthPerBit()-numPerByte*8)){
@@ -172,7 +173,6 @@ public class BitField {
 			mBitfield[chunk] = (byte)(v|value);
 		} else {
 			value = value^0xFFFFFFFF;
-//			value = value^0xFFFF;
 			mBitfield[chunk] = (byte)(v&value);
 		}
 	}
