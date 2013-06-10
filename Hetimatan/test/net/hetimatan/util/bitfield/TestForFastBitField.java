@@ -29,7 +29,7 @@ public class TestForFastBitField extends TestForBitField {
 		bitfield.isOn(67, false);
 		bitfield.isOn(66, false);
 		bitfield.isOn(65, false);
-		assertEquals(true, index.isOn(1));
+		assertEquals(false, index.isOn(1));
 		bitfield.isOn(64, false);
 
 		assertEquals(true, index.isOn(0));
@@ -37,7 +37,7 @@ public class TestForFastBitField extends TestForBitField {
 		
 		bitfield.isOn(67, true);
 		assertEquals(true, index.isOn(0));
-		assertEquals(true, index.isOn(1));
+		assertEquals(false, index.isOn(1));
 
 	}
 

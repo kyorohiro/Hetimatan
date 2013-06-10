@@ -40,7 +40,6 @@ public class BitField {
 		oneClear();
 	}
 
-
 	public int getPieceAtRandom() {
 		int byteLength  = lengthPerByte();
 		if(byteLength<=0) {
@@ -50,12 +49,14 @@ public class BitField {
 		boolean f = false;
 		for(int i=ia;i<byteLength;i++) {
 			if(!isAllOnPerByte(i)) {
+				ia = i;
 				f = true;break;
 			}
 		}
 		if(!f) {
 			for(int i=ia;i>=0;i--) {
 				if(!isAllOnPerByte(i)) {
+					ia = i;
 					f = true;break;
 				}
 			}
@@ -64,21 +65,35 @@ public class BitField {
 			return -1;
 		}
 
+		return getPieceAtRandomPerByte(ia);
+	}
+
+
+	private int[] mShuffleList= new int[]{0,1,2,3,4,5,6,7};
+	private void shuffle() {
+		int tmp1 = 0;
+		int tmp2 = 0;
+		for(int i=0;i<8;i++) {
+			tmp1 = mR.nextInt(8);
+			tmp2 = mShuffleList[i];
+			mShuffleList[i] = mShuffleList[tmp1];
+			mShuffleList[tmp1] = tmp2;
+		}
+	}
+	public int getPieceAtRandomPerByte(int numPerByte) {
+		int byteLength  = lengthPerByte();
+		if(byteLength<=0) {
+			return -1;
+		}
+		shuffle();
+
 		int rn = 8;
-		if(rn>(lengthPerBit()-ia*8)){
-			rn =(lengthPerBit()-ia*8); 
+		if(rn>(lengthPerBit()-numPerByte*8)){
+			rn =(lengthPerBit()-numPerByte*8); 
 		}
-//		System.out.println("rn="+rn);
-		int ib = mR.nextInt(rn);
-//		System.out.println("rn="+rn+","+ib);
-//		ib=1;
-		if(!isOn(ia*8+ib)) {
-			return ia*8+ib;
-		}
-		f= false;
-		for(int i=0;i<8&&(ia*8+i)<lengthPerBit();i++) {
-			if(!isOn(ia*8+i)) {
-				return (ia*8+i);
+		for(int i=0;i<8;i++) {
+			if((numPerByte*8+mShuffleList[i])<lengthPerBit()&&!isOn(numPerByte*8+mShuffleList[i])) {
+				return (numPerByte*8+mShuffleList[i]);
 			}			
 		}
 		return -1;
