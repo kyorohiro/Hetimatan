@@ -43,8 +43,8 @@ public class FastBitField extends BitField {
 	public void setBitfield(byte[] bitfield) {
 		super.setBitfield(bitfield);
 		for(int number=0;number<bitfield.length;number+=8) {
-			int superIndexPerByte = number/(8);
-			int index = number/(8*8);
+			int superIndexPerByte = number;///(8);
+			int index = number/8;//(8*8);
 			boolean o = false;
 			for(int i=0;i<8&&(superIndexPerByte+i)<bitfield.length;i++) {
 				if((0xFF&bitfield[superIndexPerByte+i]) != 0xFF) {
