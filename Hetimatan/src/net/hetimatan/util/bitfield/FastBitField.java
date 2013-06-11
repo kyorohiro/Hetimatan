@@ -14,7 +14,6 @@ public class FastBitField extends BitField {
 		mIndex = new BitField(indexBitsize);
 	}
 
-
 	@Override
 	public boolean isAllOff() {
 		return super.isAllOff();
@@ -42,6 +41,12 @@ public class FastBitField extends BitField {
 	@Override
 	public void setBitfield(byte[] bitfield) {
 		super.setBitfield(bitfield);
+		update();
+	}
+	@Override
+	public void update() {
+		super.update();
+		byte[] bitfield = getBinary();
 		for(int number=0;number<bitfield.length;number+=8) {
 			int superIndexPerByte = number;///(8);
 			int index = number/8;//(8*8);
@@ -61,10 +66,15 @@ public class FastBitField extends BitField {
 		}
 	}
 
+	@Override
 	public int getPieceAtRandom() {
 		int index = mIndex.getPieceAtRandom()*8;
 		if(index <0) {return -1;}
 		shuffle(mShuffleList);
+		return getPieceAtRandomPer8Byte(index);
+	}
+
+	public int getPieceAtRandomPer8Byte(int index) {
 		byte[] buffer = getBinary();
 		int v = buffer.length-index;
 		if(v>8) {v=8;}

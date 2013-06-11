@@ -29,9 +29,11 @@ public class BitField {
 		for(int i=0;i<len;i++) {
 			out.mBitfield[i] = (byte)(0xFF&ina.mBitfield[i]&(~inb.mBitfield[i]));
 		}
+		out.update();
 		return out;
 	}
 
+	public void update(){}
 	public BitField(int bitsize) {
 		mR = new Random(System.currentTimeMillis());
 		mBitsize = bitsize;
