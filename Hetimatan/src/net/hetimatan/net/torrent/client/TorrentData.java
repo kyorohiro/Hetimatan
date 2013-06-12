@@ -12,6 +12,8 @@ import net.hetimatan.util.bitfield.BitField;
 
 public class TorrentData {
 	private BitField mStockedDataInfo = null;
+	private BitField mRequestDataInfo = null;
+
 	private String mInfoHash = "_";
 	private RACashFile mCash = null;
 	private int mPieceLength =0;
@@ -21,7 +23,11 @@ public class TorrentData {
 	public TorrentData(MetaFile file) throws IOException{//(int pieceLength) {
 		int numOfPiece = file.numOfPiece();
 		mPieceLength =(int)file.getPieceLength();
+
+		//
 		mStockedDataInfo = new BitField(numOfPiece);
+		mRequestDataInfo = new BitField(numOfPiece);
+
 		mInfoHash = file.getInfoSha1AsPercentString();
 		File dir = getPieceDir();
 		dir.mkdirs();
@@ -31,6 +37,7 @@ public class TorrentData {
 			mDataLength += l;
 		}
 		mStockedDataInfo.zeroClear();
+		mRequestDataInfo.zeroClear();
 	}
 
 	public boolean isComplete() {
@@ -51,6 +58,7 @@ public class TorrentData {
 		try {
 			KFNextHelper.xcopy(srcs, mCash);
 			mStockedDataInfo.oneClear();
+			mRequestDataInfo.oneClear();
 			mCash.syncWrite();
 		} finally {
 			for(File f: srcs) {
@@ -61,6 +69,10 @@ public class TorrentData {
 	}
 
 	public BitField getStockedDataInfo() {
+		return mStockedDataInfo;
+	}
+
+	public BitField getRequestedDataInfo() {
 		return mStockedDataInfo;
 	}
 
@@ -77,8 +89,13 @@ public class TorrentData {
 		content.seek(0);
 		KFNextHelper.copy(content, mCash);
 		mStockedDataInfo.isOn(index, true);
+		mRequestDataInfo.isOn(index, true);
 		//following code is for test
 		mCash.syncWrite();
+	}
+
+	public void setRequest(int index) {
+		mRequestDataInfo.isOn(index, true);		
 	}
 
 	public File getPieceDir() {

@@ -8,7 +8,7 @@ import net.hetimatan.util.bitfield.BitField;
 
 public class TorrentPeerRequester {
 	private WeakReference<TorrentPeer> mOwner = null;
-	private int mTodoCurrentRequestIndex = 0;
+//	private int mTodoCurrentRequestIndex = 0;
 
 	public TorrentPeerRequester(TorrentPeer peer) {
 		mOwner = new WeakReference<TorrentPeer>(peer);
@@ -17,7 +17,9 @@ public class TorrentPeerRequester {
 	public int nextPieceId() {
 		TorrentPeer peer = mOwner.get();
 		TorrentData data = peer.getTorrentData();
-		BitField bitfield = data.getStockedDataInfo();
-		return mTodoCurrentRequestIndex++;
+		BitField bitfield = data.getRequestedDataInfo();
+		int nextId = bitfield.getPieceAtRandom();
+		data.setRequest(nextId);
+		return nextId;//mTodoCurrentRequestIndex++;
 	}
 }
