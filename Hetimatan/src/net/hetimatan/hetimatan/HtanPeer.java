@@ -33,6 +33,15 @@ public class HtanPeer {
 		mRunner = mPeer.startTask(null);
 	}
 
+	public void stop() {
+		if(mPeer != null) {
+			mPeer.close();
+		}
+		if(mRunner != null) {
+			mRunner.close();
+		}
+	}
+
 	private boolean easyCheck() {
 		if(mTorrentFile == null) {return false;}
 		if(!mTorrentFile.exists()) {return false;}
