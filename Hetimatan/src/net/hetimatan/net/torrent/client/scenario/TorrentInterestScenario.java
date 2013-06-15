@@ -6,6 +6,7 @@ import java.util.LinkedList;
 
 import net.hetimatan.net.torrent.client.TorrentFront;
 import net.hetimatan.net.torrent.client.TorrentPeer;
+import net.hetimatan.net.torrent.client.message.MessageHave;
 import net.hetimatan.net.torrent.client.message.TorrentMessage;
 import net.hetimatan.net.torrent.client.scenario.task.ScenarioSendPieceTask;
 import net.hetimatan.util.bitfield.BitField;
@@ -36,6 +37,13 @@ public class TorrentInterestScenario implements TorrentFront.EventListener {
 				front.startInterest();
 			} else {
 				front.startNotInterest();				
+			}
+		}
+		if(message.getType() == TorrentMessage.SIGN_HAVE) {
+			int index = ((MessageHave)message).getIndex();
+			BitField stocked = peer.getTorrentData().getStockedDataInfo();
+			if(!stocked.isOn(index)) {
+				front.startInterest();
 			}
 		}
 	}

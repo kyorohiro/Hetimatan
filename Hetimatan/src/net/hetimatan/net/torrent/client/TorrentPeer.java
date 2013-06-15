@@ -17,7 +17,7 @@ import net.hetimatan.io.net.KyoroSocketImpl;
 import net.hetimatan.net.torrent.client._peer.TorrentPeerChoker;
 import net.hetimatan.net.torrent.client._peer.TorrentPeerRequester;
 import net.hetimatan.net.torrent.client._peer.TorrentPeerSetting;
-import net.hetimatan.net.torrent.client.scenario.TorrentPieceScenario;
+import net.hetimatan.net.torrent.client._peer.TorrentPeerPiecer;
 import net.hetimatan.net.torrent.client.scenario.TorrentRequestScenario;
 import net.hetimatan.net.torrent.client.scenario.task.ScenarioFinTracker;
 import net.hetimatan.net.torrent.client.task.TorrentPeerAcceptTask;
@@ -49,8 +49,8 @@ public class TorrentPeer {
 	private TorrentPeerSetting mSetting = new TorrentPeerSetting();
 	private TorrentPeerChoker mChoker = null;
 	private KyoroSocketEventRunner mMasterRunner    = null;//new EventTaskRunnerImple();
-	private TorrentPieceScenario mPieceScenario     = null;
-	private TorrentRequestScenario mRequestScenario = null;
+	private TorrentPeerPiecer mPieceScenario     = null;
+//	private TorrentRequestScenario mRequestScenario = null;
 	private KyoroSelector mAcceptSelector           = null;
 	private TorrentPeerAcceptTask mAcceptTask       = null;
 	private LinkedList<Peer> mOptimusUnchokePeer    = new LinkedList<>();
@@ -61,8 +61,8 @@ public class TorrentPeer {
 		mTrackerClient = new TrackerClient(metafile, peerId);
 		mData = new TorrentData(metafile);
 		mMetaFile = metafile;
-		mPieceScenario = new TorrentPieceScenario(this);
-		mRequestScenario = new TorrentRequestScenario(this);
+		mPieceScenario = new TorrentPeerPiecer(this);
+//		mRequestScenario = new TorrentRequestScenario(this);
 		mChoker = new TorrentPeerChoker(this);
 	}
 
@@ -92,7 +92,7 @@ public class TorrentPeer {
 			TorrentHistory.get().pushMessage("TorrentPeer#connect()"+peer.toString()+"\n");
 			front.startConnect(peer.getHostName(), peer.getPort());
 			front.addObserverAtWeak(mPieceScenario);
-			front.addObserverAtWeak(mRequestScenario);
+			front.addObserverAtWeak(mRequester);//RequestScenario);
 		}
 	}
 
@@ -197,7 +197,7 @@ public class TorrentPeer {
 			TorrentHistory.get().pushMessage("TorrentPeer#accepted()\n");
 			TorrentFront front = new TorrentFront(this, socket);
 			front.addObserverAtWeak(mPieceScenario);
-			front.addObserverAtWeak(mRequestScenario);
+			front.addObserverAtWeak(mRequester);//mRequestScenario);
 			addTorrentFront(front);
 			front.startConnectForAccept();
 		}

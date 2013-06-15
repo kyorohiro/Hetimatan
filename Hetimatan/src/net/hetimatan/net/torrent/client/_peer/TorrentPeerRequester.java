@@ -1,12 +1,15 @@
 package net.hetimatan.net.torrent.client._peer;
 
+import java.io.IOException;
 import java.lang.ref.WeakReference;
 
 import net.hetimatan.net.torrent.client.TorrentData;
+import net.hetimatan.net.torrent.client.TorrentFront;
 import net.hetimatan.net.torrent.client.TorrentPeer;
+import net.hetimatan.net.torrent.client.message.TorrentMessage;
 import net.hetimatan.util.bitfield.BitField;
 
-public class TorrentPeerRequester {
+public class TorrentPeerRequester implements TorrentFront.EventListener {
 	private WeakReference<TorrentPeer> mOwner = null;
 //	private int mTodoCurrentRequestIndex = 0;
 
@@ -21,5 +24,25 @@ public class TorrentPeerRequester {
 		int nextId = bitfield.getPieceAtRandom();
 		data.setRequest(nextId);
 		return nextId;//mTodoCurrentRequestIndex++;
+	}
+
+	/*
+	 * except myself's peer send message to me.
+	 */
+	@Override
+	public void onReceiveMessage(TorrentFront front, TorrentMessage message) {
+	 	TorrentPeer peer = mOwner.get();
+		if(peer == null) {return;}
+		if(
+		message.getType()==TorrentMessage.SIGN_PIECE||
+		message.getType()==TorrentMessage.SIGN_UNCHOKE) {
+			if(!peer.isSeeder()) {
+				try {
+					front.startDownload();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 }

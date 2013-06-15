@@ -1,4 +1,4 @@
-package net.hetimatan.net.torrent.client.scenario;
+package net.hetimatan.net.torrent.client._peer;
 
 
 import java.io.IOException;
@@ -17,13 +17,13 @@ import net.hetimatan.net.torrent.tracker.TrackerClient.Peer;
 //
 // uploaad
 // 
-public class TorrentPieceScenario implements TorrentFront.EventListener {
+public class TorrentPeerPiecer implements TorrentFront.EventListener {
 
 	private WeakReference<TorrentPeer> mUploadTargetPeer = null;
 	private LinkedList<ScenarioSendPieceTask> mScenarioList = new LinkedList<ScenarioSendPieceTask>();
 	private ScenarioSeeder mSeederTask = null;
 
-	public TorrentPieceScenario(TorrentPeer peer) {
+	public TorrentPeerPiecer(TorrentPeer peer) {
 		mUploadTargetPeer = new WeakReference<TorrentPeer>(peer);
 		mSeederTask = new ScenarioSeeder(this, peer.getClientRunner());
 	}
