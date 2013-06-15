@@ -28,7 +28,9 @@ public abstract class EventTaskRunner {
 		}
 	}
 
-//	private static WeakHashMap<Thread, EventTaskRunner> mMap = new WeakHashMap<Thread, EventTaskRunner>();
+	public boolean isAlive() {return true;}
+
+	//	private static WeakHashMap<Thread, EventTaskRunner> mMap = new WeakHashMap<Thread, EventTaskRunner>();
 	private static HashMap<Thread, EventTaskRunner> mMap = new HashMap<Thread, EventTaskRunner>();
 	public static synchronized void putWorker(Thread th, EventTaskRunner runner) {
 		mMap.put(th, runner);

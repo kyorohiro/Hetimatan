@@ -18,7 +18,6 @@ import net.hetimatan.net.torrent.client._peer.TorrentPeerChoker;
 import net.hetimatan.net.torrent.client._peer.TorrentPeerRequester;
 import net.hetimatan.net.torrent.client._peer.TorrentPeerSetting;
 import net.hetimatan.net.torrent.client._peer.TorrentPeerPiecer;
-import net.hetimatan.net.torrent.client.scenario.TorrentRequestScenario;
 import net.hetimatan.net.torrent.client.scenario.task.ScenarioFinTracker;
 import net.hetimatan.net.torrent.client.task.TorrentPeerAcceptTask;
 import net.hetimatan.net.torrent.client.task.TorrentPeerBootTask;
@@ -48,9 +47,8 @@ public class TorrentPeer {
 
 	private TorrentPeerSetting mSetting = new TorrentPeerSetting();
 	private TorrentPeerChoker mChoker = null;
-	private KyoroSocketEventRunner mMasterRunner    = null;//new EventTaskRunnerImple();
+	private KyoroSocketEventRunner mMasterRunner    = null;
 	private TorrentPeerPiecer mPieceScenario     = null;
-//	private TorrentRequestScenario mRequestScenario = null;
 	private KyoroSelector mAcceptSelector           = null;
 	private TorrentPeerAcceptTask mAcceptTask       = null;
 	private LinkedList<Peer> mOptimusUnchokePeer    = new LinkedList<>();

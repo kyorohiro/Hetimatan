@@ -22,6 +22,12 @@ public class EventTaskRunnerImple extends EventTaskRunner {
 	public EventTaskRunnerImple() {
 	}
 
+	@Override
+	public boolean isAlive() {
+		if(mRunner == null) {return false;}
+		return mRunner.isAlive();
+	}
+
 	public synchronized void pushWork(EventTask task) {
 		start(task);
 	}

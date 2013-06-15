@@ -12,11 +12,14 @@ import net.hetimatan.util.event.EventTaskRunner;
 
 public class MainStartClient {
 
+	public static TorrentPeer sPeer= null;
+
 	public static void main(String[] args) {
-		try { start(args);
+		try {
+			start(args);
 		} catch (Throwable e) { e.printStackTrace(); }
 	}
-	public static TorrentPeer sPeer= null;
+
 	public static void start(String[] args) throws Throwable {
 		String metafileAsString = args[0];
 		File metaFile = new File(metafileAsString);

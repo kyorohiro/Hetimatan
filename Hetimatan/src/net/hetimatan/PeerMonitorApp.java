@@ -1,4 +1,4 @@
-package net.hetimatan.testmonitor;
+package net.hetimatan;
 
 
 import java.io.File;
