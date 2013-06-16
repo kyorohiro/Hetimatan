@@ -19,14 +19,14 @@ public class TrackerData {
 	private int mIncomplete = 0;
 	private byte[] mInfoHash = null;
 	private Random mRand = new Random();
-	private LinkedHashMap<String, TrackerPeerInfo> mInfos = new LinkedHashMap<String, TrackerPeerInfo>();
+	private LinkedHashMap<String, TrackerDatam> mInfos = new LinkedHashMap<String, TrackerDatam>();
 
 	private void update() {
 		int completed = 0;
 		Iterator<String> keys = mInfos.keySet().iterator();
 		while(keys.hasNext()) {
 			String key = keys.next();
-			TrackerPeerInfo info = mInfos.get(key);
+			TrackerDatam info = mInfos.get(key);
 			if(info.isComplete()) {
 				completed++;
 			}
@@ -78,7 +78,7 @@ public class TrackerData {
 		removePeerInfo(mInfos.get(trackerId));
 	}
 
-	public void removePeerInfo(TrackerPeerInfo peerInfo) {
+	public void removePeerInfo(TrackerDatam peerInfo) {
 		mInfos.remove(peerInfo.getPeerId());
 	}
 
@@ -86,13 +86,13 @@ public class TrackerData {
 		return mInfos.containsKey(peerId);
 	}
 
-	public void putPeerInfo(TrackerPeerInfo peerInfo) {
+	public void putPeerInfo(TrackerDatam peerInfo) {
 		if(peerInfo.getPeerId().length() != 0) {
 			mInfos.put(peerInfo.getPeerId(), peerInfo);
 		}
 	}
 
-	public int getPeerInfoAtRamdom(TrackerPeerInfo[] outputInfos) {
+	public int getPeerInfoAtRamdom(TrackerDatam[] outputInfos) {
 		int outputLength = 0;
 		int size = mInfos.size();
 		Set<String> keys = mInfos.keySet();
@@ -110,7 +110,7 @@ public class TrackerData {
 		return outputLength;
 	}
 
-	public TrackerPeerInfo getPeerInfo(String peerId) {
+	public TrackerDatam getPeerInfo(String peerId) {
 		if(cotains(peerId)) {
 			return mInfos.get(peerId);
 		} else {
@@ -118,14 +118,14 @@ public class TrackerData {
 		}
 	}
 
-	public TrackerPeerInfo updatePeerInfo(HttpRequestURI uri, String ip, int port) {
+	public TrackerDatam updatePeerInfo(HttpRequestURI uri, String ip, int port) {
 		isUpdated=true;
 		String peerId = HttpObject.parseString(uri.getLine().getRequestURI().getValue(TrackerRequest.KEY_PEER_ID),"");
 		if(peerId != null&&!peerId.equals("")&&cotains(peerId)){
-			TrackerPeerInfo peerInfo = getPeerInfo(peerId);
-			return TrackerPeerInfo.updatePeerInfo(peerInfo, uri, ip, port);		
+			TrackerDatam peerInfo = getPeerInfo(peerId);
+			return TrackerDatam.updatePeerInfo(peerInfo, uri, ip, port);		
 		} else {
-			TrackerPeerInfo peerInfo = TrackerPeerInfo.createPeerInfo(uri, ip, port);
+			TrackerDatam peerInfo = TrackerDatam.createPeerInfo(uri, ip, port);
 			return peerInfo;
 		}
 	}

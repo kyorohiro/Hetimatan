@@ -9,7 +9,7 @@ import java.util.LinkedList;
 
 import net.hetimatan.io.file.MarkableReader;
 import net.hetimatan.net.torrent.tracker.db.TrackerData;
-import net.hetimatan.net.torrent.tracker.db.TrackerPeerInfo;
+import net.hetimatan.net.torrent.tracker.db.TrackerDatam;
 import net.hetimatan.net.torrent.util.bencode.BenDiction;
 import net.hetimatan.net.torrent.util.bencode.BenInteger;
 import net.hetimatan.net.torrent.util.bencode.BenList;
@@ -199,8 +199,8 @@ public class TrackerResponse {
 	}
 
 
-	public static BenDiction createResponce(TrackerData data, TrackerPeerInfo info, int compact) {
-		TrackerPeerInfo[] peerInfos = new TrackerPeerInfo[50];// default response peer's size
+	public static BenDiction createResponce(TrackerData data, TrackerDatam info, int compact) {
+		TrackerDatam[] peerInfos = new TrackerDatam[50];// default response peer's size
 		int len = data.getPeerInfoAtRamdom(peerInfos);
 
 		BenDiction diction  = new BenDiction();

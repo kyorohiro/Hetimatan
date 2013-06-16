@@ -8,7 +8,7 @@ import net.hetimatan.util.http.HttpRequestLine;
 import net.hetimatan.util.http.HttpRequestURI;
 
 @Deprecated
-public class TrackerPeerInfo {
+public class TrackerDatam {
 	private String mInfoHash = "";
 	private String mPeerId = "";
 	private String mKey = "";
@@ -20,7 +20,7 @@ public class TrackerPeerInfo {
 	private String mEvent = TrackerRequest.EVENT_STARTED;
 	private String mIp = "127.0.0.1";
 
-	private TrackerPeerInfo() {}
+	private TrackerDatam() {}
 
 	public String getInfoHash() {
 		return mInfoHash;
@@ -74,13 +74,13 @@ public class TrackerPeerInfo {
 		mTrackerId = trackerId;
 	}
 
-	public static TrackerPeerInfo createPeerInfo(HttpRequestURI uri, String ip, int port) {
-		TrackerPeerInfo peerInfo = new TrackerPeerInfo();
+	public static TrackerDatam createPeerInfo(HttpRequestURI uri, String ip, int port) {
+		TrackerDatam peerInfo = new TrackerDatam();
 		updatePeerInfo(peerInfo, uri, ip, port);
 		return peerInfo;
 	}
 
-	public static TrackerPeerInfo updatePeerInfo(TrackerPeerInfo peerInfo, HttpRequestURI uri, String ip, int port) {
+	public static TrackerDatam updatePeerInfo(TrackerDatam peerInfo, HttpRequestURI uri, String ip, int port) {
 		HttpRequestLine line   = uri.getLine();
 		HttpGetRequestUri path = line.getRequestURI();
 		peerInfo.mDownloaded = HttpObject.parseInt(path.getValue(TrackerRequest.KEY_DOWNLOADED), peerInfo.mDownloaded);

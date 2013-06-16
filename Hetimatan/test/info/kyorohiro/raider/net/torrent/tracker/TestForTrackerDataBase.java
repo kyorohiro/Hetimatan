@@ -9,7 +9,7 @@ import net.hetimatan.net.torrent.tracker.TrackerResponse;
 import net.hetimatan.net.torrent.tracker.TrackerServer;
 import net.hetimatan.net.torrent.tracker.db.TrackerDB;
 import net.hetimatan.net.torrent.tracker.db.TrackerData;
-import net.hetimatan.net.torrent.tracker.db.TrackerPeerInfo;
+import net.hetimatan.net.torrent.tracker.db.TrackerDatam;
 import net.hetimatan.net.torrent.util.bencode.BenString;
 import net.hetimatan.net.torrent.util.metafile.MetaFile;
 import net.hetimatan.util.http.HttpRequestURI;
@@ -37,7 +37,7 @@ public class TestForTrackerDataBase extends TestCase {
 		.putValue(TrackerRequest.KEY_PEER_ID, peerId)
 		.putValue(TrackerRequest.KEY_PORT, "6868");
 
-		TrackerPeerInfo peerinfo = TrackerPeerInfo.createPeerInfo(uri, "127.0.0.1",6868);
+		TrackerDatam peerinfo = TrackerDatam.createPeerInfo(uri, "127.0.0.1",6868);
 
 		assertEquals(1, peerinfo.getDownloaded());
 		assertEquals(2, peerinfo.getUploaded());

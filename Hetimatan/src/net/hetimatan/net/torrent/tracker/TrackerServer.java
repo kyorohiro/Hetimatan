@@ -8,7 +8,7 @@ import net.hetimatan.io.net.KyoroSocket;
 import net.hetimatan.net.http.HttpServer;
 import net.hetimatan.net.torrent.tracker.db.TrackerDB;
 import net.hetimatan.net.torrent.tracker.db.TrackerData;
-import net.hetimatan.net.torrent.tracker.db.TrackerPeerInfo;
+import net.hetimatan.net.torrent.tracker.db.TrackerDatam;
 import net.hetimatan.net.torrent.util.bencode.BenDiction;
 import net.hetimatan.net.torrent.util.bencode.BenObject;
 import net.hetimatan.net.torrent.util.bencode.BenString;
@@ -66,7 +66,7 @@ public class TrackerServer extends HttpServer {
 
 			TrackerRequest request = TrackerRequest.decode(uri);
 			TrackerData trackerData = mDB.getManagedData(mDB.convertInfoHashForRaider(request.getInfoHash()));
-			TrackerPeerInfo peerInfo = trackerData.updatePeerInfo(uri, socket.getHost(), socket.getPort());
+			TrackerDatam peerInfo = trackerData.updatePeerInfo(uri, socket.getHost(), socket.getPort());
 			trackerData.putPeerInfo(peerInfo);
 
 			BenDiction diction = TrackerResponse.createResponce(trackerData, peerInfo, request.getCompact());

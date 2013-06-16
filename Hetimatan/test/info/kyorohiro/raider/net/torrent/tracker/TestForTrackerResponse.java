@@ -8,7 +8,7 @@ import net.hetimatan.net.torrent.client.TorrentPeer;
 import net.hetimatan.net.torrent.tracker.TrackerRequest;
 import net.hetimatan.net.torrent.tracker.TrackerResponse;
 import net.hetimatan.net.torrent.tracker.db.TrackerData;
-import net.hetimatan.net.torrent.tracker.db.TrackerPeerInfo;
+import net.hetimatan.net.torrent.tracker.db.TrackerDatam;
 import net.hetimatan.net.torrent.util.bencode.BenDiction;
 import net.hetimatan.net.torrent.util.bencode.BenObject;
 import net.hetimatan.net.torrent.util.bencode.BenString;
@@ -28,7 +28,7 @@ public class TestForTrackerResponse extends TestCase {
 				.createInfoSHA1(new MarkableFileReader(infoHashAsBytes));
 		TrackerData data = new TrackerData(infoHash.toByte());
 		{
-			TrackerPeerInfo info = createPeerInfo(infoHashAsBytes);
+			TrackerDatam info = createPeerInfo(infoHashAsBytes);
 			BenDiction response = TrackerResponse.createResponce(data, info, 1);
 			assertEquals(1800, response.getBenValue(TrackerResponse.KEY_INTERVAL).toInteger());
 			assertEquals(BenObject.TYPE_STRI, response.getBenValue(TrackerResponse.KEY_PEERS).getType());
@@ -36,7 +36,7 @@ public class TestForTrackerResponse extends TestCase {
 			show(response.getBenValue(TrackerResponse.KEY_PEERS).toByte());
 		}
 		{
-			TrackerPeerInfo info = createPeerInfo(infoHashAsBytes);
+			TrackerDatam info = createPeerInfo(infoHashAsBytes);
 			data.putPeerInfo(info);
 
 			byte[] expected = {127, 0, 0, 1, 26, -44};
@@ -49,7 +49,7 @@ public class TestForTrackerResponse extends TestCase {
 		}
 
 		{
-			TrackerPeerInfo info = createPeerInfo(infoHashAsBytes);
+			TrackerDatam info = createPeerInfo(infoHashAsBytes);
 			data.putPeerInfo(info);
 
 			byte[] expected = {127, 0, 0, 1, 26, -44, 127, 0, 0, 1, 26, -44};
@@ -69,7 +69,7 @@ public class TestForTrackerResponse extends TestCase {
 				.createInfoSHA1(new MarkableFileReader(infoHashAsBytes));
 		TrackerData data = new TrackerData(infoHash.toByte());
 		{
-			TrackerPeerInfo info = createPeerInfo(infoHashAsBytes);
+			TrackerDatam info = createPeerInfo(infoHashAsBytes);
 			BenDiction response = TrackerResponse.createResponce(data, info, 0);
 			assertEquals(1800, response.getBenValue(TrackerResponse.KEY_INTERVAL).toInteger());
 			assertEquals(BenObject.TYPE_LIST, response.getBenValue(TrackerResponse.KEY_PEERS).getType());
@@ -77,7 +77,7 @@ public class TestForTrackerResponse extends TestCase {
 //			show(response.getBenValue(TrackerResponse.KEY_PEERS).toByte());
 		}
 		{
-			TrackerPeerInfo info = createPeerInfo(infoHashAsBytes);
+			TrackerDatam info = createPeerInfo(infoHashAsBytes);
 			data.putPeerInfo(info);
 
 			byte[] expected = {127, 0, 0, 1, 26, -44};
@@ -102,8 +102,8 @@ public class TestForTrackerResponse extends TestCase {
 				.createInfoSHA1(new MarkableFileReader(infoHashAsBytes));
 		TrackerData data = new TrackerData(infoHash.toByte());
 		{
-			TrackerPeerInfo info001 = createPeerInfo(infoHashAsBytes);
-			TrackerPeerInfo info002 = createPeerInfo(infoHashAsBytes);
+			TrackerDatam info001 = createPeerInfo(infoHashAsBytes);
+			TrackerDatam info002 = createPeerInfo(infoHashAsBytes);
 //			PeerInfo info = createPeerInfo(infoHashAsBytes);
 			data.putPeerInfo(info001);
 			data.putPeerInfo(info002);
@@ -156,7 +156,7 @@ public class TestForTrackerResponse extends TestCase {
 		System.out.println("#"+builder.toString());
 	}
 
-	public TrackerPeerInfo createPeerInfo(byte[] targetFileContent) throws IOException {
+	public TrackerDatam createPeerInfo(byte[] targetFileContent) throws IOException {
 		String targetFileHash = MetaFile
 				.createPieces(new MarkableFileReader(targetFileContent))
 				.toPercentString();
@@ -171,7 +171,7 @@ public class TestForTrackerResponse extends TestCase {
 		.putValue(TrackerRequest.KEY_PEER_ID, peerId)
 		.putValue(TrackerRequest.KEY_PORT, ""+6868);
 
-		TrackerPeerInfo peerinfo = TrackerPeerInfo.createPeerInfo(uri, "127.0.0.1",6868);
+		TrackerDatam peerinfo = TrackerDatam.createPeerInfo(uri, "127.0.0.1",6868);
 		
 		return peerinfo;
 	}

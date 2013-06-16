@@ -7,7 +7,7 @@ import java.io.IOException;
 import net.hetimatan.net.torrent.tracker.TrackerServer;
 import net.hetimatan.net.torrent.tracker.db.TrackerDB;
 import net.hetimatan.net.torrent.tracker.db.TrackerData;
-import net.hetimatan.net.torrent.tracker.db.TrackerPeerInfo;
+import net.hetimatan.net.torrent.tracker.db.TrackerDatam;
 import net.hetimatan.net.torrent.util.metafile.MetaFile;
 import net.hetimatan.net.torrent.util.metafile.MetaFileCreater;
 import javafx.application.Application;
@@ -66,7 +66,7 @@ public class PeerMonitorApp extends Application implements TrackerServer.StatusC
 			builder.append("  "+data.getComplete()+","+data.getIncomplete()+"\r\n");
 			int jlen = data.numOfPeerInfo();
 			for(int j=0;j<jlen;j++) {
-				TrackerPeerInfo info = data.getPeerInfo(data.getKeyPeerInfo(j));
+				TrackerDatam info = data.getPeerInfo(data.getKeyPeerInfo(j));
 				builder.append("   * " + info.getIP()+":"+info.getPort()+",["+info.getPeerId()+"]\r\n");
 				builder.append("       " + info.isComplete()+":"+info.getLeft()+":\r\n");
 				builder.append("       " + info.getDownloaded()+":" + info.getUploaded()+"\r\n");
