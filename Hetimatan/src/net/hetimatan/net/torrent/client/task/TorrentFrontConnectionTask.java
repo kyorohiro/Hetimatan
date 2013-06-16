@@ -1,5 +1,6 @@
 package net.hetimatan.net.torrent.client.task;
 
+import java.io.IOException;
 import java.lang.ref.WeakReference;
 
 import net.hetimatan.net.torrent.client.TorrentFront;
@@ -12,6 +13,9 @@ public class TorrentFrontConnectionTask extends EventTask {
 	private WeakReference<TorrentFront> mTorrentFront = null;
 	private String mHost = "";
 	private int mPort = 0;
+	private boolean mIsCon = false;
+	private boolean mIsKeep = false;
+
 	public TorrentFrontConnectionTask(
 			TorrentFront front, EventTaskRunner runner,
 			String host, int port) {
@@ -21,20 +25,24 @@ public class TorrentFrontConnectionTask extends EventTask {
 		mTorrentFront = new WeakReference<TorrentFront>(front);
 	}
 
-	private boolean isCon = false;
 	@Override
 	public void action() throws Throwable {
 		TorrentFront front = mTorrentFront.get();
-		if(!isCon) {
+		if(!mIsCon) {
 			front.connect(mHost, mPort);
-			isCon = true;
+			mIsCon = true;
 		}
 
 		if(front.isConnect()) {
-			front.startConnectForAccept();
-			nextAction(null);
+			mIsKeep = false;
 		} else {
-			nextAction(this);
+			mIsKeep = true;
 		}
 	}
+
+	@Override
+	public boolean isKeep() {
+		return mIsKeep;
+	}
+	
 }

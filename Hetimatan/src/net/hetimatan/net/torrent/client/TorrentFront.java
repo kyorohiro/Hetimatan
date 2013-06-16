@@ -127,6 +127,8 @@ public class TorrentFront {
 	public void startConnect(String host, int port) throws IOException {
 		if(Log.ON){Log.v(TAG, "start connection task");}
 		mConnection = new TorrentFrontConnectionTask(this, mTorrentPeer.get().getClientRunner(), host, port);
+		mStartTask = new TorrentFrontShakeHandTask(this, mTorrentPeer.get().getClientRunner());
+		mConnection.nextAction(mStartTask);
 		mTorrentPeer.get().getClientRunner().start(mConnection);
 	}
 
