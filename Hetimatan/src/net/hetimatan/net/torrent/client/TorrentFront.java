@@ -74,7 +74,6 @@ public class TorrentFront {
 		kf.setSelector(peer.getSelector());
 		mReader = new MarkableFileReader(kf, 512);
 		mOutput = new KyoroSocketOutputStream(socket);
-		//SocketAddress ad = 
 		mTorrentPeer = new WeakReference<TorrentPeer>(peer);
 		mTargetInfo.mTargetBitField = new BitField(peer.getNumOfPieces());
 		mTargetInfo.mTargetBitField.zeroClear();

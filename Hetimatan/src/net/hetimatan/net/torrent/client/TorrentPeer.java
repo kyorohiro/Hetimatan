@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.Random;
 import java.util.Set;
 
@@ -38,21 +37,35 @@ public class TorrentPeer {
 	public static final int TORRENT_PORT_BEGIN  = 6881;
 	public static final int TORRENT_PORT_END    = 6889;
 
+
+	private KyoroServerSocket mServerSocket     = null;
+	private LinkedHashMap<TrackerPeerInfo, TorrentFront> mFrontList = new LinkedHashMap<TrackerPeerInfo, TorrentFront>();
+	private KyoroSocketEventRunner mMasterRunner    = null;
+	private KyoroSelector mAcceptSelector           = null;
+
+	// ---
+	// property
+	//
 	private int mPort                           = TORRENT_PORT_BEGIN;
 	private boolean mIsBooted = false;
-	private TrackerClient mTrackerClient        = null;
-	private KyoroServerSocket mServerSocket     = null;
-	private TorrentData mData                   = null; 
-	private MetaFile mMetaFile                  = null;
+	private long mDownloaded = 0;
+	private long mUploaded = 0;
 
+	// ---
+	// this class's delefation
+	//
+	private MetaFile mMetaFile                  = null;
+	private TorrentData mData                   = null; 
+	private TrackerClient mTrackerClient        = null;
 	private TorrentPeerSetting mSetting = new TorrentPeerSetting();
 	private TorrentPeerChoker mChoker = null;
-	private KyoroSocketEventRunner mMasterRunner    = null;
+	private TorrentPeerRequester mRequester = new TorrentPeerRequester(this);
 	private TorrentPeerPiecer mPieceScenario     = null;
-	private KyoroSelector mAcceptSelector           = null;
+
+	// ---
+	// task
+	//
 	private TorrentPeerAcceptTask mAcceptTask       = null;
-	private LinkedList<TrackerPeerInfo> mOptimusUnchokePeer    = new LinkedList<>();
-	private LinkedHashMap<TrackerPeerInfo, TorrentFront> mFrontList = new LinkedHashMap<TrackerPeerInfo, TorrentFront>();
 
 	
 	public TorrentPeer(MetaFile metafile, String peerId) throws URISyntaxException, IOException {
@@ -60,12 +73,9 @@ public class TorrentPeer {
 		mData = new TorrentData(metafile);
 		mMetaFile = metafile;
 		mPieceScenario = new TorrentPeerPiecer(this);
-//		mRequestScenario = new TorrentRequestScenario(this);
 		mChoker = new TorrentPeerChoker(this);
 	}
 
-	private long mDownloaded = 0;
-	private long mUploaded = 0;
 	public void addDownloaded(int downloaded) {
 		mDownloaded += downloaded;
 	}
@@ -95,7 +105,6 @@ public class TorrentPeer {
 
 	public void startConnect(TrackerPeerInfo peer) throws IOException {
 		if(contain(peer)) {return;}
-//		if(!contain(peer)) {return;}
 		TorrentFront front = createFront(peer);
 		if(addTorrentFront(peer, front)){
 			TorrentHistory.get().pushMessage("TorrentPeer#connect()"+peer.toString()+"\n");
@@ -296,7 +305,6 @@ public class TorrentPeer {
 		return encoder.encode(peerId);
 	}
 
-	private TorrentPeerRequester mRequester = new TorrentPeerRequester(this);
 	public int getNextRequestPiece() {
 		return mRequester.nextPieceId();
 	}

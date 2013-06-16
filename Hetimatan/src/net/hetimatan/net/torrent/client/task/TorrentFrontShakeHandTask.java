@@ -22,8 +22,6 @@ public class TorrentFrontShakeHandTask extends EventTask {
 		front.sendShakehand();
 		front.shakehand();
 		front.sendBitfield();
-//		front.uncoke();
-//		front.choke();
 
 		TorrentPeer peer =  front.getTorrentPeer();
 		if(peer != null) { peer.updateOptimusUnchokePeer(front);}
