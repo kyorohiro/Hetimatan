@@ -44,6 +44,7 @@ public class KyoroSelector {
 	}
 
 	public int select(int timeout) throws IOException {
+
 		Selector selector = getSelector();
 		if(selector == null) {
 			return 0;
@@ -94,6 +95,12 @@ public class KyoroSelector {
 
 	public void wakeup() {
 		mSelector.wakeup();
+		try {
+			//todo
+			mSelector.selectNow();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public int getkey() {

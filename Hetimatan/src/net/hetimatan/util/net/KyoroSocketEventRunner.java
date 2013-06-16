@@ -45,7 +45,28 @@ public class KyoroSocketEventRunner extends EventTaskRunnerImple {
 		//}
 	}
 
+	private boolean mIsSelecting = false;
+	@Override
+	public void kickWorker() {
+		if(!mWaitIsSelect) {
+			super.kickWorker();
+		}else {
+			synchronized (this){
+			if(mSelector != null){// &&mIsSelecting == true) {
+				//Thread.interrupted();
+				if(!currentThreadIsMine()) {
+					mSelector.wakeup();
+				}
+				//mSelector.	
+			}
+			}
+		}
+	}
+
 	public boolean waitBySelectable(int timeout) throws IOException, InterruptedException {
+		synchronized (this){
+		mIsSelecting = true;
+		}
 		if(Log.ON){Log.v(TAG, "waitBySelectable "+numOfWork());}
 		if(numOfWork() == 0) {
 			if(timeout<0) {
@@ -62,6 +83,9 @@ public class KyoroSocketEventRunner extends EventTaskRunnerImple {
 			if(!mSelector.getCurrentSocket().startEventTask()) {
 			//	if(Log.ON){Log.v(TAG,"Wearning not task");}
 			}
+		}
+		synchronized (this){
+		mIsSelecting = false;
 		}
 		return ret;
 	}

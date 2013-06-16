@@ -11,6 +11,8 @@ import net.hetimatan.net.torrent.tracker.TrackerPeerInfo;
 import net.hetimatan.net.torrent.tracker.TrackerServer.StatusCheck;
 import net.hetimatan.net.torrent.util.metafile.MetaFile;
 import net.hetimatan.net.torrent.util.metafile.MetaFileCreater;
+import net.hetimatan.util.event.CloseTask;
+import net.hetimatan.util.event.EventTask;
 import net.hetimatan.util.event.EventTaskRunner;
 
 public class HtanPeer {
@@ -45,7 +47,9 @@ public class HtanPeer {
 			mPeer.close();
 		}
 		if(mRunner != null) {
-			mRunner.close();
+			EventTask task = new CloseTask(mRunner, null);
+			mRunner.pushWork(task);
+//			mRunner.close();
 		}
 	}
 
@@ -80,9 +84,10 @@ public class HtanPeer {
 		public void onUpdate(TrackerClient client) {
 			Iterator<TrackerPeerInfo> infos = client.getPeer32();
 			StringBuilder b = new StringBuilder();
+			b.append("[tracker info]"+"--"+"\r\n");
 			while(infos.hasNext()) {
 				TrackerPeerInfo info = infos.next();
-				b.append(info.getHostName()+"\r\n");
+				b.append(info.getHostName()+":"+info.getPort()+"\r\n");
 			}
 			mTrackerStatus = b.toString();
 			kickObserver();

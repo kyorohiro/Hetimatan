@@ -3,7 +3,6 @@ package net.hetimatan.net.torrent.tracker;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.UnknownHostException;
 import java.util.Iterator;
 import java.util.TreeSet;
 
@@ -12,10 +11,7 @@ import net.hetimatan.io.filen.RACashFile;
 import net.hetimatan.net.http.HttpGet;
 import net.hetimatan.net.http.request.GetRequesterInter;
 import net.hetimatan.net.http.request.GetResponseInter;
-import net.hetimatan.net.torrent.tracker.TrackerServer.StatusCheck;
 import net.hetimatan.net.torrent.util.metafile.MetaFile;
-import net.hetimatan.util.http.HttpObject;
-import net.hetimatan.util.io.ByteArrayBuilder;
 
 
 public class TrackerClient extends HttpGet {
@@ -34,6 +30,12 @@ public class TrackerClient extends HttpGet {
 		.putHeaderUserAgent("Raider/1.0")
 		;
 		setMetaFile(metafile);
+	}
+
+	public void update(String event, long downloaded, long uploaded) {
+		mRequest.putEvent(event);
+		mRequest.putDownloaded(downloaded);
+		mRequest.putUploaded(uploaded);
 	}
 
 	public void updateStatus(long downloaded, long lefted, long uploaded) {

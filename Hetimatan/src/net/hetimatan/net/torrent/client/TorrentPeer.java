@@ -64,8 +64,19 @@ public class TorrentPeer {
 		mChoker = new TorrentPeerChoker(this);
 	}
 
-	public void startTracker() {
+	private long mDownloaded = 0;
+	private long mUploaded = 0;
+	public void addDownloaded(int downloaded) {
+		mDownloaded += downloaded;
+	}
+
+	public void addUploaded(int uploaded) {
+		mUploaded += uploaded;
+	}
+	
+	public void startTracker(String event) {
 		ScenarioFinTracker request = new ScenarioFinTracker(mPieceScenario, mMasterRunner);
+		mTrackerClient.update(event, mDownloaded, mUploaded);
 		mTrackerClient.startTask(mMasterRunner, request);		
 	}
 

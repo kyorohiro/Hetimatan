@@ -4,6 +4,7 @@ package net.hetimatan.net.torrent.client.task;
 import java.lang.ref.WeakReference;
 
 import net.hetimatan.net.torrent.client.TorrentPeer;
+import net.hetimatan.net.torrent.tracker.TrackerRequest;
 import net.hetimatan.util.event.EventTask;
 import net.hetimatan.util.event.EventTaskRunner;
 
@@ -18,6 +19,6 @@ public class TorrentPeerStartTracker extends EventTask {
 	@Override
 	public void action() throws Throwable {
 		TorrentPeer server = mServer.get();
-		server.startTracker();
+		server.startTracker(TrackerRequest.EVENT_STARTED);
 	}
 }

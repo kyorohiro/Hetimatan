@@ -68,6 +68,14 @@ public class SingleTaskRunner {
 	}
 
 
+	public synchronized boolean currentThreaddIsMime() {
+		if(Thread.currentThread() == mTaskRunner) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	public synchronized void updateTask() {
 		log("done 1");
 		if(mNextTask != null) {

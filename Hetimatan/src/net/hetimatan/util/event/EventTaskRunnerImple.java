@@ -19,6 +19,10 @@ public class EventTaskRunnerImple extends EventTaskRunner {
 
 	private Worker mWorker = null;
 
+	public boolean currentThreadIsMine() {
+		return mRunner.currentThreaddIsMime();
+	}
+
 	public EventTaskRunnerImple() {
 	}
 
@@ -82,7 +86,8 @@ public class EventTaskRunnerImple extends EventTaskRunner {
 			mRunner = new SingleTaskRunner();
 			mRunner.startTask(mWorker = new Worker(this));
 		} else if(mWorker != null){
-			mWorker.kick();
+			//mWorker.kick();
+			kickWorker();
 		}
 	}
 
@@ -94,11 +99,13 @@ public class EventTaskRunnerImple extends EventTaskRunner {
 		mWorker.kick();
 	}
 
-	public void waitPlus(int time) throws InterruptedException, IOException {
+	public synchronized void waitPlus(int time) throws InterruptedException, IOException {
 		if(time<0) {
-			Thread.sleep(10000);
+			//Thread.sleep(10000);
+			wait(10000);
 		} else {
-			Thread.sleep(time);			
+			wait(time);
+			//Thread.sleep(time);			
 		}
 	}
 
@@ -121,16 +128,19 @@ public class EventTaskRunnerImple extends EventTaskRunner {
 			putWorker(Thread.currentThread(), mRunner.get());
 			try {
 				while (true) {
+					if(mRunner == null) {break;}
 					EventTaskRunnerImple runner = mRunner.get();
-					if (null == runner) {
+					if (null == runner||runner.mRunner == null) {
 						break;
 					}
 					EventTask task = runner.popWork();
 					if (task == null) {
-						 synchronized(this){
-					//		 if(Log.ON){ Log.v("mm","--wait--");}
-							 runner.waitPlus(runner.updateDeffer());
-						 }
+							synchronized(this){
+								if(!Thread.interrupted()) {
+									//		 if(Log.ON){ Log.v("mm","--wait--");}
+									runner.waitPlus(runner.updateDeffer());
+								} 
+							}
 					} else {
 					//	if(Log.ON){Log.v("mm","--run--");}
 						task.run();
@@ -149,6 +159,7 @@ public class EventTaskRunnerImple extends EventTaskRunner {
 	public void close() {
 		if(Log.ON){Log.v("mm","EventTaskRunner#close");}
 		mRunner.endTask();
+		mRunner = null;
 	}
 
 	@Override
