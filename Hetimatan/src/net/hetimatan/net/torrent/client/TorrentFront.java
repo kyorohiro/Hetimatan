@@ -352,21 +352,18 @@ public class TorrentFront {
 		}
 		mCurrentHelper.read();
 		if(mReader.isEOF()) { close(); }
-//			if(mCurrentHelper.getMessageSize() != -1) {mTorrentPeer.get().getHistory().pushMessage("[receive start]"+mCurrentHelper.myMessageFP()+","+mCurrentHelper.getMessageSize()+"\n");}
 		if(mCurrentHelper.isEnd()) {
 			TorrentHistory.get().pushMessage("[receive end]\n");
 			//mCurrentHelper.printLog();
 			onReceiveMessage(mCurrentHelper);
 			mCurrentHelper.clear(mCurrentHelper.myMessageFP()+mCurrentHelper.getMessageSize()+4);
 		}
-//		if(0<=mReader.isCurLen()) {
 		//
 		if(mReader.length()>mReader.getFilePointer()) {
 			if(!mTorrentPeer.get().getClientRunner().contains(mReceiverTask)) {
 				mTorrentPeer.get().getClientRunner().pushWork(mReceiverTask);
 			}			
 		}
-//		}
 	}
 
 
