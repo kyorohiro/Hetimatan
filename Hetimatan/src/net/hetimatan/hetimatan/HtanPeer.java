@@ -6,8 +6,10 @@ import java.net.URISyntaxException;
 import java.util.Iterator;
 
 import net.hetimatan.net.torrent.client.TorrentPeer;
+import net.hetimatan.net.torrent.client.task.TorrentPeerStopTracker;
 import net.hetimatan.net.torrent.tracker.TrackerClient;
 import net.hetimatan.net.torrent.tracker.TrackerPeerInfo;
+import net.hetimatan.net.torrent.tracker.TrackerRequest;
 import net.hetimatan.net.torrent.tracker.TrackerServer.StatusCheck;
 import net.hetimatan.net.torrent.util.metafile.MetaFile;
 import net.hetimatan.net.torrent.util.metafile.MetaFileCreater;
@@ -47,8 +49,11 @@ public class HtanPeer {
 			mPeer.close();
 		}
 		if(mRunner != null) {
-			EventTask task = new CloseTask(mRunner, null);
-			mRunner.pushWork(task);
+//			EventTask stopTask  = new TorrentPeerStopTracker(mPeer, mRunner);
+			EventTask closeTask = new CloseTask(mRunner, null);
+			//stopTask.nextAction(closeTask);
+			mPeer.startTracker(TrackerRequest.EVENT_STOPPED, closeTask);
+//			mRunner.pushWork(stopTask);
 //			mRunner.close();
 		}
 	}

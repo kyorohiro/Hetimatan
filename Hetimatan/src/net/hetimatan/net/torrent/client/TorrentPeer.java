@@ -83,11 +83,15 @@ public class TorrentPeer {
 	public void addUploaded(int uploaded) {
 		mUploaded += uploaded;
 	}
-	
-	public void startTracker(String event) {
-		ScenarioFinTracker request = new ScenarioFinTracker(mPieceScenario, mMasterRunner);
+
+	public void startTracker(String event, EventTask last) {
+//		startTracker(event, new ScenarioFinTracker(mPieceScenario, mMasterRunner));
 		mTrackerClient.update(event, mDownloaded, mUploaded);
-		mTrackerClient.startTask(mMasterRunner, request);		
+		mTrackerClient.startTask(mMasterRunner, last);
+	}
+
+	public void startTracker(String event) {
+		startTracker(event, new ScenarioFinTracker(mPieceScenario, mMasterRunner));
 	}
 
 	public EventTaskRunner startTask(KyoroSocketEventRunner runner) {
