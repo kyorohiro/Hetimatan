@@ -12,6 +12,7 @@ import net.hetimatan.io.filen.RACashFile;
 import net.hetimatan.net.http.HttpGet;
 import net.hetimatan.net.http.request.GetRequesterInter;
 import net.hetimatan.net.http.request.GetResponseInter;
+import net.hetimatan.net.torrent.tracker.TrackerServer.StatusCheck;
 import net.hetimatan.net.torrent.util.metafile.MetaFile;
 import net.hetimatan.util.http.HttpObject;
 import net.hetimatan.util.io.ByteArrayBuilder;
@@ -134,7 +135,24 @@ public class TrackerClient extends HttpGet {
 		} finally {
 			close();
 		}
+		kickObserver();
 	}
 
+	//
+	// --------------------------------------------
+	//
+	private StatusCheck mObserver = null;
 
+	public synchronized void setStatusCheck(StatusCheck observer) {
+		mObserver = observer;
+	}
+
+	public synchronized void kickObserver() {
+		if(mObserver != null) {
+			mObserver.onUpdate(this);
+		}
+	}
+	public interface StatusCheck {
+		void onUpdate(TrackerClient client);
+	}
 }

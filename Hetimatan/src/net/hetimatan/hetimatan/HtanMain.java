@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
+import net.hetimatan.hetimatan.HtanPeer.StatusCheck;
+
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -38,6 +40,8 @@ public class HtanMain extends Application {
 		root.getChildren().add(mTrackerInfo);
 		buttonSetting();
 		primaryStage.show();
+		
+		mPeer.setStatusCheck(new PeerStatusChecker());
 	}
 
 	@Override
@@ -80,6 +84,13 @@ public class HtanMain extends Application {
 				}
 			}
 		});
+	}
+
+	public class PeerStatusChecker implements StatusCheck {
+		@Override
+		public void onUpdateTracker() {
+			mTrackerInfo.setText(mPeer.getTrackerStatus());
+		}
 	}
 
 	public static void main(String[] args) {
