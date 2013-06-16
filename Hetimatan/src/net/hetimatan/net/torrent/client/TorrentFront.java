@@ -36,7 +36,7 @@ import net.hetimatan.net.torrent.client.task.TorrentFrontNotInterestTask;
 import net.hetimatan.net.torrent.client.task.TorrentFrontReceiverTask;
 import net.hetimatan.net.torrent.client.task.TorrentFrontRequestTask;
 import net.hetimatan.net.torrent.client.task.TorrentFrontShakeHandTask;
-import net.hetimatan.net.torrent.tracker.TrackerClient.Peer;
+import net.hetimatan.net.torrent.tracker.TrackerPeerInfo;
 import net.hetimatan.net.torrent.util.piece.PieceInfo;
 import net.hetimatan.util.bitfield.BitField;
 import net.hetimatan.util.event.EventTaskRunner;
@@ -65,7 +65,7 @@ public class TorrentFront {
 	private TorrentFrontNotInterestTask mNotInterestTask = null;
 	private TorrentFrontRequestTask mRequestTask = null;
 	
-	private Peer mPeer = null;
+	private TrackerPeerInfo mPeer = null;
 
 	public TorrentFront(TorrentPeer peer, KyoroSocket socket) throws IOException {
 		mSocket = socket;
@@ -79,14 +79,14 @@ public class TorrentFront {
 		mTargetInfo.mTargetBitField = new BitField(peer.getNumOfPieces());
 		mTargetInfo.mTargetBitField.zeroClear();
 		mMyInfo = new TorrentFrontMyInfo();
-		mPeer = new Peer(socket.getHost(), socket.getPort());
+		mPeer = new TrackerPeerInfo(socket.getHost(), socket.getPort());
 	}
 
-	public void setPeer(Peer peer) {
+	public void setPeer(TrackerPeerInfo peer) {
 		mPeer = peer;
 	}
 
-	public Peer getPeer() {
+	public TrackerPeerInfo getPeer() {
 		return mPeer;
 	}
 

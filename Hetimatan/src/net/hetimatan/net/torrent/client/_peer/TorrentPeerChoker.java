@@ -7,12 +7,12 @@ import java.util.Random;
 
 import net.hetimatan.net.torrent.client.TorrentFront;
 import net.hetimatan.net.torrent.client.TorrentPeer;
-import net.hetimatan.net.torrent.tracker.TrackerClient.Peer;
+import net.hetimatan.net.torrent.tracker.TrackerPeerInfo;
 
 public class TorrentPeerChoker {
 
 	private WeakReference<TorrentPeer> mOwner = null;
-	private LinkedList<Peer> mOptimusUnchokePeer    = new LinkedList<>();
+	private LinkedList<TrackerPeerInfo> mOptimusUnchokePeer    = new LinkedList<>();
 
 	public TorrentPeerChoker(TorrentPeer owner) {
 		mOwner = new WeakReference<TorrentPeer>(owner);
@@ -32,8 +32,8 @@ public class TorrentPeerChoker {
 		if (numOfUnchokerNow>maxOfUnchoker) {
 			int add = r.nextInt(numOfFront);
 			int rm = r.nextInt(numOfUnchokerNow);
-			Peer peer1 = torrentPeer.getFrontPeer(add);
-			Peer peer2 = mOptimusUnchokePeer.get(rm);
+			TrackerPeerInfo peer1 = torrentPeer.getFrontPeer(add);
+			TrackerPeerInfo peer2 = mOptimusUnchokePeer.get(rm);
 			if(!peer1.equals(peer2)) {
 				mOptimusUnchokePeer.remove(rm);
 				TorrentFront front = torrentPeer.getTorrentFront(peer2);
@@ -60,7 +60,7 @@ public class TorrentPeerChoker {
 	}
 
 	public void __choke(TorrentFront front) throws IOException {
-		Peer peer = front.getPeer();
+		TrackerPeerInfo peer = front.getPeer();
 		if(!mOptimusUnchokePeer.contains(peer)) {
 			mOptimusUnchokePeer.remove(peer);
 		}
@@ -71,7 +71,7 @@ public class TorrentPeerChoker {
 	}
 	
 	public void __unchoke(TorrentFront front) throws IOException {
-		Peer peer = front.getPeer();
+		TrackerPeerInfo peer = front.getPeer();
 		if(!mOptimusUnchokePeer.contains(peer)) {
 			mOptimusUnchokePeer.add(peer);
 			//if(front.getMyInfo().mChoked) {

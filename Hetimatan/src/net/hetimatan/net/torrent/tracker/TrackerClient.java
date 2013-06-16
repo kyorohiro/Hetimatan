@@ -22,7 +22,7 @@ public class TrackerClient extends HttpGet {
 	private MetaFile mMetaFile = null;
 	private int mInterval = 0;
 	private TrackerRequest mRequest = new TrackerRequest();
-	private TreeSet<Peer> mPeers32 = new TreeSet<Peer>();
+	private TreeSet<TrackerPeerInfo> mPeers32 = new TreeSet<TrackerPeerInfo>();
 
 	public TrackerClient(MetaFile metafile, String peerId) throws URISyntaxException, IOException {
 		mRequest = new TrackerRequest();
@@ -75,11 +75,11 @@ public class TrackerClient extends HttpGet {
 	}
 
 	public synchronized void putPeers32(byte[] address, byte[] port) {
-		Peer peer = new Peer(address, port);
+		TrackerPeerInfo peer = new TrackerPeerInfo(address, port);
 		mPeers32.add(peer);
 	}
 
-	public synchronized Iterator<Peer> getPeer32() {
+	public synchronized Iterator<TrackerPeerInfo> getPeer32() {
 		return mPeers32.iterator();
 	}
 
@@ -129,79 +129,12 @@ public class TrackerClient extends HttpGet {
 			System.out.println("@9:warning="+trackerResponse.getWarningMessage());
 			for(int i=0;i<trackerResponse.numOfIp();i++) {
 				System.out.println("@ip["+i+"]="+trackerResponse.getIP(i)+":"+trackerResponse.getPort(i));					
-				mPeers32.add(new Peer(trackerResponse.getIP(i), trackerResponse.getPort(i)));
+				mPeers32.add(new TrackerPeerInfo(trackerResponse.getIP(i), trackerResponse.getPort(i)));
 			}
 		} finally {
 			close();
 		}
 	}
 
-	public static class Peer implements Comparable<Peer> {
-		private byte[] mBuffer = null;
-		public Peer(String host, int port) throws UnknownHostException {
-			this(HttpObject.aton(host), HttpObject.portToB(port));
-		}
 
-		public Peer(byte peer[], byte[] port) {
-			int len = peer.length+port.length;
-			mBuffer = new byte[len];
-			System.arraycopy(peer, 0, mBuffer, 0, peer.length);
-			System.arraycopy(port, 0, mBuffer, peer.length, port.length);
-		}
-
-		@Override
-		public String toString() {
-			return "#"+getHostName()+":"+getPort()+"#";
-		}
-
-		@Override
-		public int hashCode() {
-			return ByteArrayBuilder.parseInt(mBuffer, ByteArrayBuilder.BYTEORDER_BIG_ENDIAN);
-		}
-
-		@Override
-		public boolean equals(Object obj) {
-			if(obj instanceof Peer) {
-				if(0==compareTo((Peer)obj)){
-					return true;
-				} else {
-					return false;
-				}
-			} else {
-				return false;
-			}
-		}
-		@Override
-		public int compareTo(Peer o) {
-			if(mBuffer.length<o.mBuffer.length) {
-				return -1;
-			} else if(mBuffer.length>o.mBuffer.length) {				
-				return 1;
-			}
-			int len = mBuffer.length;
-			for(int i=0;i<len;i++) {
-				if(mBuffer[i]<o.mBuffer[i]) {
-					return -1;
-				} else 	if(mBuffer[i]>o.mBuffer[i]) {
-					return 1;
-				}
-			}
-			return 0;
-		}
-
-		public String getHostName() {
-			byte[] host = new byte[4];
-			byte[] port = new byte[2];
-			System.arraycopy(mBuffer, 0, host, 0, 4);
-			System.arraycopy(mBuffer, 4, port, 0, 2);
-			return HttpObject.ntoa(host);
-		}
-		public int getPort() {
-			byte[] host = new byte[4];
-			byte[] port = new byte[2];
-			System.arraycopy(mBuffer, 0, host, 0, 4);
-			System.arraycopy(mBuffer, 4, port, 0, 2);
-			return HttpObject.bToPort(port);		
-		}
-	}
 }

@@ -6,7 +6,7 @@ import java.net.URISyntaxException;
 
 import net.hetimatan.io.filen.KFNextHelper;
 import net.hetimatan.net.torrent.client.message.TorrentMessage;
-import net.hetimatan.net.torrent.tracker.TrackerClient.Peer;
+import net.hetimatan.net.torrent.tracker.TrackerPeerInfo;
 import net.hetimatan.net.torrent.util.metafile.MetaFile;
 import net.hetimatan.net.torrent.util.metafile.MetaFileCreater;
 import junit.framework.TestCase;
@@ -22,7 +22,7 @@ public class TestForTorrentPeer extends TestCase {
 
 		TorrentPeer compe = new TorrentPeer(metainfo, TorrentPeer.createPeerId());
 		compe.boot();
-		Peer peer = new Peer("127.0.0.1", testPeer.getServerPort());
+		TrackerPeerInfo peer = new TrackerPeerInfo("127.0.0.1", testPeer.getServerPort());
 		TorrentFront front = compe.createFront(peer);
 		front.connect(peer.getHostName(), peer.getPort());
 		while(!front.isConnect()){Thread.sleep(0);Thread.yield();}
@@ -67,7 +67,7 @@ public class TestForTorrentPeer extends TestCase {
 		compe004.boot();
 		compe005.boot();
 
-		Peer peer = new Peer("127.0.0.1", testPeer.getServerPort());
+		TrackerPeerInfo peer = new TrackerPeerInfo("127.0.0.1", testPeer.getServerPort());
 		TorrentFront front001 = compe001.createFront(peer);
 		TorrentFront front002 = compe002.createFront(peer);
 		TorrentFront front003 = compe003.createFront(peer);

@@ -12,7 +12,7 @@ import net.hetimatan.net.torrent.client.message.TorrentMessage;
 import net.hetimatan.net.torrent.client.scenario.task.ScenarioSeeder;
 import net.hetimatan.net.torrent.client.scenario.task.ScenarioSendPieceTask;
 import net.hetimatan.net.torrent.tracker.TrackerClient;
-import net.hetimatan.net.torrent.tracker.TrackerClient.Peer;
+import net.hetimatan.net.torrent.tracker.TrackerPeerInfo;
 
 //
 // uploaad
@@ -85,9 +85,9 @@ public class TorrentPeerPiecer implements TorrentFront.EventListener {
 	 	}
 	 	if(peer == null) {return;}
 	 	TrackerClient client = peer.getTracker();
-	 	Iterator<Peer> peers32 = client.getPeer32();
+	 	Iterator<TrackerPeerInfo> peers32 = client.getPeer32();
 	 	while(peers32.hasNext()) {
-	 		Peer targetPeer = peers32.next();
+	 		TrackerPeerInfo targetPeer = peers32.next();
 	 		peer.startConnect(targetPeer);
 	 	}
 	 	client.clearPeer32();

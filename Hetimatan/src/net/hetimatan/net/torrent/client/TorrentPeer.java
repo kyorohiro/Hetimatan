@@ -23,7 +23,7 @@ import net.hetimatan.net.torrent.client.task.TorrentPeerAcceptTask;
 import net.hetimatan.net.torrent.client.task.TorrentPeerBootTask;
 import net.hetimatan.net.torrent.client.task.TorrentPeerStartTracker;
 import net.hetimatan.net.torrent.tracker.TrackerClient;
-import net.hetimatan.net.torrent.tracker.TrackerClient.Peer;
+import net.hetimatan.net.torrent.tracker.TrackerPeerInfo;
 import net.hetimatan.net.torrent.util.metafile.MetaFile;
 import net.hetimatan.util.event.EventTask;
 import net.hetimatan.util.event.EventTaskRunner;
@@ -51,8 +51,8 @@ public class TorrentPeer {
 	private TorrentPeerPiecer mPieceScenario     = null;
 	private KyoroSelector mAcceptSelector           = null;
 	private TorrentPeerAcceptTask mAcceptTask       = null;
-	private LinkedList<Peer> mOptimusUnchokePeer    = new LinkedList<>();
-	private LinkedHashMap<Peer, TorrentFront> mFrontList = new LinkedHashMap<TrackerClient.Peer, TorrentFront>();
+	private LinkedList<TrackerPeerInfo> mOptimusUnchokePeer    = new LinkedList<>();
+	private LinkedHashMap<TrackerPeerInfo, TorrentFront> mFrontList = new LinkedHashMap<TrackerPeerInfo, TorrentFront>();
 
 	
 	public TorrentPeer(MetaFile metafile, String peerId) throws URISyntaxException, IOException {
@@ -82,7 +82,7 @@ public class TorrentPeer {
 		return runner; 
 	}
 
-	public void startConnect(Peer peer) throws IOException {
+	public void startConnect(TrackerPeerInfo peer) throws IOException {
 		if(contain(peer)) {return;}
 //		if(!contain(peer)) {return;}
 		TorrentFront front = createFront(peer);
@@ -201,7 +201,7 @@ public class TorrentPeer {
 		}
 	}
 
-	public TorrentFront createFront(Peer peer) throws IOException {
+	public TorrentFront createFront(TrackerPeerInfo peer) throws IOException {
 		KyoroSocketImpl s = new KyoroSocketImpl();
 		TorrentFront front = createFront(s);
 		front.setPeer(peer);
@@ -216,16 +216,16 @@ public class TorrentPeer {
 	public boolean addTorrentFront(TorrentFront front) throws IOException {
 		String host = front.getSocket().getHost();
 		int port = front.getSocket().getPort();
-		Peer peer = new Peer(host, port);
+		TrackerPeerInfo peer = new TrackerPeerInfo(host, port);
 		return addTorrentFront(peer, front);
 	}
 
 
-	public boolean contain(Peer peer) {
+	public boolean contain(TrackerPeerInfo peer) {
 		return mFrontList.containsKey(peer);
 	}
 
-	public boolean addTorrentFront(Peer peer, TorrentFront front) throws IOException {
+	public boolean addTorrentFront(TrackerPeerInfo peer, TorrentFront front) throws IOException {
 		if(mFrontList.containsKey(peer)) {
 			return false;
 		} else {
@@ -256,18 +256,18 @@ public class TorrentPeer {
 	}	
 
 	public TorrentFront getTorrentFront(int i) {
-		Peer key = getFrontPeer(i);
+		TrackerPeerInfo key = getFrontPeer(i);
 		return getTorrentFront(key);
 	}
-	public TorrentFront getTorrentFront(Peer peer) {
+	public TorrentFront getTorrentFront(TrackerPeerInfo peer) {
 		if(peer == null) {return null;}
 		return mFrontList.get(peer);
 	}
 
-	public Peer getFrontPeer(int index) {
-		Set<Peer> keys = mFrontList.keySet();
+	public TrackerPeerInfo getFrontPeer(int index) {
+		Set<TrackerPeerInfo> keys = mFrontList.keySet();
 		if(index<keys.size()) {
-			return (Peer)keys.toArray()[index];
+			return (TrackerPeerInfo)keys.toArray()[index];
 		} else {
 			return null;
 		}
