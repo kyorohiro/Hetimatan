@@ -44,16 +44,22 @@ public class KyoroSelector {
 	}
 
 	public int select(int timeout) throws IOException {
-
 		Selector selector = getSelector();
 		if(selector == null) {
 			return 0;
 		}
+		int ret = 0;
+	
 		if(timeout == 0) {
-			return selector.selectNow();
+			ret = selector.selectNow();
 		} else {
-			return selector.select(timeout);
+			ret = selector.select(timeout);
 		}
+		return ret;
+	}
+
+	public synchronized void wakeup() {
+		mSelector.wakeup();
 	}
 
 	public void close() throws IOException {
@@ -93,15 +99,6 @@ public class KyoroSelector {
 		return mCurrentSocket;
 	}
 
-	public void wakeup() {
-		mSelector.wakeup();
-		try {
-			//todo
-			mSelector.selectNow();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
 
 	public int getkey() {
 		try {

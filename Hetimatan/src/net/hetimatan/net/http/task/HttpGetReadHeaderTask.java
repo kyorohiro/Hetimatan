@@ -7,6 +7,7 @@ import java.lang.ref.WeakReference;
 import net.hetimatan.net.http.HttpGet;
 import net.hetimatan.util.event.EventTask;
 import net.hetimatan.util.event.EventTaskRunner;
+import net.hetimatan.util.log.Log;
 
 public class HttpGetReadHeaderTask extends EventTask {
 
@@ -25,8 +26,11 @@ public class HttpGetReadHeaderTask extends EventTask {
 	public void action() throws IOException, InterruptedException {
 		if(!mHeaderIsReadable) {
 			mHeaderIsReadable = mOwner.get().headerIsReadeable();
+			if(Log.ON){Log.v("===", "mHeaderIsReadable="+mHeaderIsReadable);}
 			if(!mHeaderIsReadable) {
 				nextAction(this);
+				//nextAction(null);
+				return;
 			}
 		}
 	

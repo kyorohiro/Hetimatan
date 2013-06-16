@@ -53,11 +53,9 @@ public class KyoroSocketEventRunner extends EventTaskRunnerImple {
 		}else {
 			synchronized (this){
 			if(mSelector != null){// &&mIsSelecting == true) {
-				//Thread.interrupted();
 				if(!currentThreadIsMine()) {
 					mSelector.wakeup();
 				}
-				//mSelector.	
 			}
 			}
 		}
