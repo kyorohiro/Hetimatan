@@ -52,7 +52,7 @@ public class TorrentPeer {
 	private long mUploaded = 0;
 
 	// ---
-	// this class's delefation
+	// this class's delegation
 	//
 	private MetaFile mMetaFile                  = null;
 	private TorrentData mData                   = null; 

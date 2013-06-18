@@ -38,6 +38,10 @@ public class TrackerClient extends HttpGet {
 		mRequest.putUploaded(uploaded);
 	}
 
+	public String getCurrentEvent() {
+		return mRequest.getEvent();
+	}
+
 	public void updateStatus(long downloaded, long lefted, long uploaded) {
 		mRequest
 		.putDownloaded(downloaded)

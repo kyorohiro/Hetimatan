@@ -7,6 +7,7 @@ import net.hetimatan.net.torrent.client.TorrentData;
 import net.hetimatan.net.torrent.client.TorrentFront;
 import net.hetimatan.net.torrent.client.TorrentPeer;
 import net.hetimatan.net.torrent.client.message.TorrentMessage;
+import net.hetimatan.net.torrent.tracker.TrackerRequest;
 import net.hetimatan.util.bitfield.BitField;
 
 public class TorrentPeerRequester implements TorrentFront.EventListener {
@@ -42,7 +43,12 @@ public class TorrentPeerRequester implements TorrentFront.EventListener {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
+			} else {
+				if(!TrackerRequest.EVENT_COMPLETED.equals(peer.getTracker().getCurrentEvent())){
+					peer.startTracker(TrackerRequest.EVENT_COMPLETED);
+				}
 			}
+			
 		}
 	}
 }
