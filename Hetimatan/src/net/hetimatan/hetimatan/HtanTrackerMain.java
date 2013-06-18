@@ -1,4 +1,4 @@
-package net.hetimatan;
+package net.hetimatan.hetimatan;
 
 
 import java.io.File;
@@ -16,7 +16,7 @@ import javafx.scene.Scene;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-public class PeerMonitorApp extends Application implements TrackerServer.StatusCheck {
+public class HtanTrackerMain extends Application implements TrackerServer.StatusCheck {
 
 	private TrackerServer mServer = null;
 	private MetaFile mMetafile = null;
