@@ -336,6 +336,7 @@ public class TorrentFront {
 			message.encode(mOutput);
 			//mOutput.logon(false);
 			mOutput.flush();
+			peer.addUploaded((int)piece.length());
 			TorrentHistory.get().pushSend(this, message);
 		} catch(IOException e) {
 			TorrentHistory.get().pushMessage("ERROR: BROKEN");
@@ -436,6 +437,7 @@ public class TorrentFront {
 				if(peer == null) {return;}
 				TorrentData data = peer.getTorrentData();
 				data.setPiece(piece.getIndex(), piece.getCotent());
+				peer.addDownloaded((int)piece.getCotent().length());
 			}
 			
 			break;
