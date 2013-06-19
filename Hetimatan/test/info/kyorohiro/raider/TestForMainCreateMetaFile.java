@@ -4,7 +4,7 @@ package info.kyorohiro.raider;
 import java.io.File;
 import java.io.IOException;
 
-import net.hetimatan.MainCreateTorrentFile;
+import net.hetimatan.console.MainCreateTorrentFile;
 import net.hetimatan.net.torrent.util.metafile.MetaFile;
 import net.hetimatan.net.torrent.util.metafile.MetaFileCreater;
 import junit.framework.TestCase;

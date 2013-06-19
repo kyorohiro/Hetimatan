@@ -14,7 +14,6 @@ import net.hetimatan.io.net.KyoroSocket;
 import net.hetimatan.net.http.task.HttpFrontRequestTask;
 import net.hetimatan.net.http.task.HttpServerAcceptTask;
 import net.hetimatan.net.http.task.HttpServerBootTask;
-import net.hetimatan.util.event.EventTaskRunner;
 import net.hetimatan.util.http.HttpRequestURI;
 import net.hetimatan.util.io.ByteArrayBuilder;
 import net.hetimatan.util.log.Log;
@@ -36,68 +35,16 @@ public class HttpServer {
 	private KyoroServerSocket mServerSocket = null;
 	private KyoroSelector mSelector = null;
 
-	public void startServer(KyoroSocketEventRunner requestRunner) {
-		if(Log.ON){Log.v(TAG, "HttpServer#startServer()");}
-
-		if (requestRunner != null) {
-			mRequestRunner = requestRunner;
-		} else {
-			mMyReqRunner = true;
-			mRequestRunner = new KyoroSocketEventRunner();
+	public boolean isBinded() {
+		if(mServerSocket == null) {
+			return false;
 		}
-
-		mRequestRunner.waitIsSelect(true);
-		HttpServerBootTask boot = new HttpServerBootTask(this, mRequestRunner);
-		boot.nextAction(null);
-		mSelector = mRequestRunner.getSelector();
-		mRequestRunner.start(boot);
-	}
-
-	public void close() {
-		if(Log.ON){Log.v(TAG, "close()");}
-		try {
-			if (null != mRequestRunner) {
-				mRequestRunner.close();				
-			}
-			if (null != mServerSocket) {
-				mServerSocket.close();
-			}
-			if(null != mSelector) {
-				mSelector.close();
-			}
-			if(mClientInfos != null) {
-				while (0<mClientInfos.size()) {
-					HttpFront front = mClientInfos.removeFirst();
-					front.close();
-				}
-			}
-			if(mMyReqRunner&&mRequestRunner != null) {
-				mRequestRunner.close();
-			}
-			mAcceptTask = null;
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		return mServerSocket.isBinded();
 	}
 
 	public void setPort(int port) {
 		mPort = port;
 	}
-
-	public void removeList(HttpFront front) {
-		if(mClientInfos != null && front != null) {
-			mClientInfos.remove(front);
-		}
-	}
-
-	public HttpFront removeFirst() {
-		if(mClientInfos.size() > 0) {
-			return mClientInfos.removeFirst();
-		} else {
-			return null;
-		}
-	}
-
 
 	public void boot() throws IOException {
 		if(Log.ON){Log.v(TAG, "HttpServer#boot():"+mPort);}
@@ -116,10 +63,6 @@ public class HttpServer {
 		HttpFront info = new HttpFront(this, socket);
 		socket.setEventTaskAtWrakReference(new HttpFrontRequestTask(info, mRequestRunner));
 		addLastHttpRequest(info);
-	}
-
-	public void addLastHttpRequest(HttpFront info) {
-		mClientInfos.addLast(info);
 	}
 
 
@@ -164,14 +107,79 @@ public class HttpServer {
 		}
 	}
 
-	public boolean isBinded() {
-		if(mServerSocket == null) {
-			return false;
+	public void close() {
+		if(Log.ON){Log.v(TAG, "close()");}
+		try {
+			if (null != mRequestRunner) {
+				mRequestRunner.close();				
+			}
+			if (null != mServerSocket) {
+				mServerSocket.close();
+			}
+			if(null != mSelector) {
+				mSelector.close();
+			}
+			if(mClientInfos != null) {
+				while (0<mClientInfos.size()) {
+					HttpFront front = mClientInfos.removeFirst();
+					front.close();
+				}
+			}
+			if(mMyReqRunner&&mRequestRunner != null) {
+				mRequestRunner.close();
+			}
+			mAcceptTask = null;
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-		return mServerSocket.isBinded();
 	}
 
+	//
+	// Task Runner
+	//
 	public KyoroSocketEventRunner getEventRunner() {
 		return mRequestRunner;
 	}
+
+	//
+	// HttpServer HttpFront list
+	//
+	public void addLastHttpRequest(HttpFront info) {
+		mClientInfos.addLast(info);
+	}
+
+	public void removeList(HttpFront front) {
+		if(mClientInfos != null && front != null) {
+			mClientInfos.remove(front);
+		}
+	}
+
+	public HttpFront removeFirst() {
+		if(mClientInfos.size() > 0) {
+			return mClientInfos.removeFirst();
+		} else {
+			return null;
+		}
+	}
+
+	//
+	// start task
+	//
+	public void startServer(KyoroSocketEventRunner requestRunner) {
+		if(Log.ON){Log.v(TAG, "HttpServer#startServer()");}
+
+		if (requestRunner != null) {
+			mRequestRunner = requestRunner;
+		} else {
+			mMyReqRunner = true;
+			mRequestRunner = new KyoroSocketEventRunner();
+		}
+
+		mRequestRunner.waitIsSelect(true);
+		HttpServerBootTask boot = new HttpServerBootTask(this, mRequestRunner);
+		boot.nextAction(null);
+		mSelector = mRequestRunner.getSelector();
+		mRequestRunner.start(boot);
+	}
+
 }

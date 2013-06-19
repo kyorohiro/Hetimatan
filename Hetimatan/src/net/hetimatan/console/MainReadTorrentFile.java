@@ -1,4 +1,4 @@
-package net.hetimatan;
+package net.hetimatan.console;
 
 
 

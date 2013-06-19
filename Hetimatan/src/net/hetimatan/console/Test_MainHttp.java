@@ -1,4 +1,4 @@
-package net.hetimatan;
+package net.hetimatan.console;
 
 
 import java.awt.FlowLayout;

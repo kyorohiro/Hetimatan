@@ -1,4 +1,4 @@
-package net.hetimatan;
+package net.hetimatan.console;
 
 public class Test_Main {
 	public static final String COMMAND_CLIENT   = "client";
