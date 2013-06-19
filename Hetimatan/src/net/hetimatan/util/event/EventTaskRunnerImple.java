@@ -41,6 +41,13 @@ public class EventTaskRunnerImple extends EventTaskRunner {
 		kickWorker();
 	}
 
+	@Override
+	public void releaseTask(EventTask task) {
+		if(task != null) {
+		mDefferTasks.remove(task);
+		}
+	}
+
 	public int updateDeffer() {
 		long curTime = System.currentTimeMillis();
 		long time = -1;
@@ -182,6 +189,7 @@ public class EventTaskRunnerImple extends EventTaskRunner {
 		public DefferTask(EventTask task, int deffer) {
 			mDefferStart = System.currentTimeMillis();
 			mDefferEnd = mDefferStart + (long)deffer;
+			mDefferTasks = task;
 		}
 
 		public long deffer(long curTime) {
@@ -191,7 +199,6 @@ public class EventTaskRunnerImple extends EventTaskRunner {
 		public EventTask getEventTask() {
 			return mDefferTasks;
 		}
-	}
-	
+	}	
 	
 } 

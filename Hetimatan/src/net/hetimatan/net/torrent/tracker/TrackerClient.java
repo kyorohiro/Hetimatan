@@ -17,6 +17,7 @@ import net.hetimatan.net.torrent.util.metafile.MetaFile;
 public class TrackerClient extends HttpGet {
 
 	private MetaFile mMetaFile = null;
+	private long mLastResponse = System.currentTimeMillis();
 	private int mInterval = 0;
 	private TrackerRequest mRequest = new TrackerRequest();
 	private TreeSet<TrackerPeerInfo> mPeers32 = new TreeSet<TrackerPeerInfo>();
@@ -65,7 +66,7 @@ public class TrackerClient extends HttpGet {
 		return mRequest.getClientPort();
 	}
 
-	public int getInterval() {
+	public int getIntervalPerSec() {
 		return mInterval;
 	}	
 
@@ -134,6 +135,8 @@ public class TrackerClient extends HttpGet {
 			System.out.println("@7:interval="+trackerResponse.getInterval());
 			System.out.println("@8:failre="+trackerResponse.getFailureReason());
 			System.out.println("@9:warning="+trackerResponse.getWarningMessage());
+			mInterval = trackerResponse.getInterval();
+			mLastResponse = System.currentTimeMillis();
 			for(int i=0;i<trackerResponse.numOfIp();i++) {
 				System.out.println("@ip["+i+"]="+trackerResponse.getIP(i)+":"+trackerResponse.getPort(i));					
 				mPeers32.add(new TrackerPeerInfo(trackerResponse.getIP(i), trackerResponse.getPort(i)));

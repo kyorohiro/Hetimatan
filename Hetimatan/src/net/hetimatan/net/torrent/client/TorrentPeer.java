@@ -90,10 +90,12 @@ public class TorrentPeer {
 		mTrackerClient.startTask(mMasterRunner, last);
 	}
 
+	private ScenarioFinTracker mFinTrackerTask = null;
 	public void startTracker(String event) {
-		startTracker(event, new ScenarioFinTracker(mPieceScenario, mMasterRunner));
+		startTracker(event, mFinTrackerTask = new ScenarioFinTracker(mPieceScenario, mMasterRunner));
 	}
 
+	private TorrentPeerStartTracker mTrackerTask = null;
 	public EventTaskRunner startTask(KyoroSocketEventRunner runner) {
 		System.out.println("TorrentPeer#startTask:");
 		if(runner == null) {
@@ -102,11 +104,18 @@ public class TorrentPeer {
 		runner.waitIsSelect(true);//todo
 		mAcceptSelector = runner.getSelector();
 		TorrentPeerBootTask bootTask = new TorrentPeerBootTask(this, runner);
-		bootTask.nextAction(new TorrentPeerStartTracker(this, runner));
+		bootTask.nextAction(mTrackerTask = new TorrentPeerStartTracker(this, runner));
 		runner.start(bootTask);
 		return runner; 
 	}
 
+	public void setTrackerTask(int timeout) {
+		if(mTrackerTask == null) {
+			mTrackerTask = new TorrentPeerStartTracker(this, getClientRunner());
+		}
+		getClientRunner().releaseTask(mTrackerTask);		
+		getClientRunner().pushWork(mTrackerTask, timeout);
+	}
 	public void startConnect(TrackerPeerInfo peer) throws IOException {
 		if(contain(peer)) {return;}
 		TorrentFront front = createFront(peer);

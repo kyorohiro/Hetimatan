@@ -93,5 +93,6 @@ public class TorrentPeerPiecer implements TorrentFront.EventListener {
 	 		}
 	 	}
 	 	client.clearPeer32();
+	 	peer.setTrackerTask(client.getIntervalPerSec()*1000);
 	}
 }

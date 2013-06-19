@@ -9,6 +9,7 @@ import net.hetimatan.util.io.ByteArrayBuilder;
 
 public abstract class EventTaskRunner {
 	public abstract int numOfWork();
+	public abstract void releaseTask(EventTask task);
 	public abstract void pushWork(EventTask task);
 	public abstract void pushWork(EventTask task, int timeout);
 	public abstract EventTask popWork();
