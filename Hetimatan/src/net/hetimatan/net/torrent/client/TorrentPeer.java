@@ -57,17 +57,23 @@ public class TorrentPeer {
 	private MetaFile mMetaFile                  = null;
 	private TorrentData mData                   = null; 
 	private TrackerClient mTrackerClient        = null;
-	private TorrentPeerSetting mSetting = new TorrentPeerSetting();
-	private TorrentPeerChoker mChoker = null;
-	private TorrentPeerRequester mRequester = new TorrentPeerRequester(this);
-	private TorrentPeerPiecer mPieceScenario     = null;
+	private TorrentPeerSetting mSetting         = new TorrentPeerSetting();
+	private TorrentPeerChoker mChoker           = null;
+	private TorrentPeerRequester mRequester     = new TorrentPeerRequester(this);
+	private TorrentPeerPiecer mPieceScenario    = null;
 
 	// ---
 	// task
 	//
-	private TorrentPeerAcceptTask mAcceptTask       = null;
+	private TorrentPeerAcceptTask mAcceptTask   = null;
 
-	
+
+	// ---
+	//
+	//
+	private ScenarioFinTracker mFinTrackerTask = null;
+	private TorrentPeerStartTracker mTrackerTask = null;
+
 	public TorrentPeer(MetaFile metafile, String peerId) throws URISyntaxException, IOException {
 		mTrackerClient = new TrackerClient(metafile, peerId);
 		mData = new TorrentData(metafile);
@@ -90,12 +96,11 @@ public class TorrentPeer {
 		mTrackerClient.startTask(mMasterRunner, last);
 	}
 
-	private ScenarioFinTracker mFinTrackerTask = null;
+
 	public void startTracker(String event) {
 		startTracker(event, mFinTrackerTask = new ScenarioFinTracker(mPieceScenario, mMasterRunner));
 	}
 
-	private TorrentPeerStartTracker mTrackerTask = null;
 	public EventTaskRunner startTask(KyoroSocketEventRunner runner) {
 		System.out.println("TorrentPeer#startTask:");
 		if(runner == null) {
@@ -116,6 +121,7 @@ public class TorrentPeer {
 		getClientRunner().releaseTask(mTrackerTask);		
 		getClientRunner().pushWork(mTrackerTask, timeout);
 	}
+
 	public void startConnect(TrackerPeerInfo peer) throws IOException {
 		if(contain(peer)) {return;}
 		TorrentFront front = createFront(peer);

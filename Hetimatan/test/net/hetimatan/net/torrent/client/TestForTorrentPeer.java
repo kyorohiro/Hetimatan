@@ -16,20 +16,22 @@ public class TestForTorrentPeer extends TestCase {
 	public void test001() throws IOException, URISyntaxException, InterruptedException {
 		TrackerServer server = new TrackerServer();
 		server.setPort(6861);
-		byte[] infoHash = "abc".getBytes();
+		MetaFile metafile =
+				MetaFileCreater.createFromTargetFile(new File("testdata/1kb/1k.txt"),"http://127.0.0.1:6861/announce");
+		byte[] infoHash = metafile.getInfoSha1AsBenString().toByte();
 		EventTaskRunner runner = null;
 		server.addData(infoHash);
 		TorrentPeer peer = null;
-		MetaFile metafile = MetaFileCreater.createFromTorrentFile(new File("./testdata/1m_a.txt.torrent"));
-		server.setInterval(2000);
+//		MetaFileCreater.createFromTorrentFile(new File("./testdata/1m_a.txt.torrent"));
+		server.setInterval(1);
 		try {
 			server.startServer(null);
 			for(int i=0;!server.isBinded()&&i<1000;i++) {Thread.yield();Thread.sleep(100);}
 			peer = new TorrentPeer(metafile, TorrentPeer.createPeerId());
 			runner = peer.startTask(null);
 
-			for(int i=0;3<server.getResponceCount()&&i<1000;i++) {Thread.yield();Thread.sleep(100);}
-			if(3<server.getResponceCount()) {
+			for(int i=0;3>server.getResponceCount()&&i<1000;i++) {Thread.yield();Thread.sleep(100);}
+			if(3>server.getResponceCount()) {
 				assertTrue(false);
 			}
 		} finally {
