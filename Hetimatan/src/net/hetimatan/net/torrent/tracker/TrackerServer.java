@@ -27,6 +27,9 @@ public class TrackerServer extends HttpServer {
 
 	private StatusCheck mObserver = null;
 	private TrackerDB mDB = new TrackerDB();
+	private long mResponceCount = 0;
+	private int mInterval = 1800;
+	
 
 	public static KyoroFile newMessageWrongRequest() throws IOException {
 		BenDiction diction = new BenDiction();
@@ -34,8 +37,16 @@ public class TrackerServer extends HttpServer {
 		return new RACashFile(BenObject.createEncode(diction));
 	}
 
+	public void setInterval(int interval) {
+		mInterval = interval;
+	}
+
 	public TrackerDB getTrackerDB() {
 		return mDB;
+	}
+
+	public long getResponceCount() {
+		return mResponceCount;
 	}
 
 	public void addData(byte[] infoHash) {
@@ -58,6 +69,7 @@ public class TrackerServer extends HttpServer {
 
 	@Override
 	public KyoroFile createContent(KyoroSocket socket, HttpRequestURI uri) throws IOException {
+		mResponceCount++;
 		try {
 			System.out.println("#request#"+uri.getLine().toString()+"#");
 			if (!containHash(uri)) {
@@ -68,6 +80,7 @@ public class TrackerServer extends HttpServer {
 			TrackerData trackerData = mDB.getManagedData(mDB.convertInfoHashForRaider(request.getInfoHash()));
 			TrackerDatam peerInfo = trackerData.updatePeerInfo(uri, socket.getHost(), socket.getPort());
 			trackerData.putPeerInfo(peerInfo);
+			trackerData.setInterval(mInterval);
 
 			BenDiction diction = TrackerResponse.createResponce(trackerData, peerInfo, request.getCompact());
 			kickObserver();

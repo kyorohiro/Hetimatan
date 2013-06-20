@@ -15,11 +15,20 @@ import net.hetimatan.util.http.HttpRequestURI;
 public class TrackerData {
 
 	private boolean isUpdated = false;
+	private int mInterval = 1800;
 	private int mComplete = 0;
 	private int mIncomplete = 0;
 	private byte[] mInfoHash = null;
 	private Random mRand = new Random();
 	private LinkedHashMap<String, TrackerDatam> mInfos = new LinkedHashMap<String, TrackerDatam>();
+
+	public void setInterval(int interval) {
+		mInterval = interval;
+	}
+
+	public int getInterval() {
+		return mInterval;
+	}
 
 	private void update() {
 		int completed = 0;

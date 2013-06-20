@@ -204,7 +204,7 @@ public class TrackerResponse {
 		int len = data.getPeerInfoAtRamdom(peerInfos);
 
 		BenDiction diction  = new BenDiction();
-		diction.append(KEY_INTERVAL,   new BenInteger(1800));
+		diction.append(KEY_INTERVAL,   new BenInteger(data.getInterval()));
 		diction.append(KEY_COMPLETE,   new BenInteger(data.getComplete()));
 		diction.append(KEY_INCOMPLETE, new BenInteger(data.getIncomplete()));
 

@@ -54,6 +54,7 @@ public class HttpServer {
 		mServerSocket.setEventTaskAtWrakReference(mAcceptTask = new HttpServerAcceptTask(this, mRequestRunner));
 	}
 
+
 	//
 	// AcceptTrackerTask call
 	public void accept() throws IOException {
@@ -96,6 +97,7 @@ public class HttpServer {
 		kfiles.seek(0);
 		return kfiles;
 	}
+
 	//
 	// this method is overrided
 	public KyoroFile createContent(KyoroSocket socket, HttpRequestURI uri) throws IOException {
