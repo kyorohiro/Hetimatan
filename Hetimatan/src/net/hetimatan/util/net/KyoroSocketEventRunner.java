@@ -1,9 +1,6 @@
 package net.hetimatan.util.net;
 
 import java.io.IOException;
-
-import com.sun.corba.se.pept.transport.Selector;
-
 import net.hetimatan.io.net.KyoroSelector;
 import net.hetimatan.util.event.EventTask;
 import net.hetimatan.util.event.EventTaskRunner;
@@ -12,10 +9,10 @@ import net.hetimatan.util.log.Log;
 
 
 public class KyoroSocketEventRunner extends EventTaskRunnerImple {
-
 	public static final String TAG ="looper";
+
+	private SelctorLoopTask mOneShot = new SelctorLoopTask(this);
 	private KyoroSelector mSelector = new KyoroSelector();
-	private SelctorLoopTask mLoopTask = null;
 	private boolean mWaitIsSelect = false;
 
 	public KyoroSocketEventRunner() {
@@ -45,7 +42,6 @@ public class KyoroSocketEventRunner extends EventTaskRunnerImple {
 		//}
 	}
 
-	private boolean mIsSelecting = false;
 	@Override
 	public void kickWorker() {
 		if(!mWaitIsSelect) {
@@ -62,9 +58,6 @@ public class KyoroSocketEventRunner extends EventTaskRunnerImple {
 	}
 
 	public boolean waitBySelectable(int timeout) throws IOException, InterruptedException {
-		synchronized (this){
-		mIsSelecting = true;
-		}
 		if(Log.ON){Log.v(TAG, "waitBySelectable "+numOfWork());}
 		if(numOfWork() == 0) {
 			if(timeout<0) {
@@ -81,9 +74,6 @@ public class KyoroSocketEventRunner extends EventTaskRunnerImple {
 			if(!mSelector.getCurrentSocket().startEventTask()) {
 			//	if(Log.ON){Log.v(TAG,"Wearning not task");}
 			}
-		}
-		synchronized (this){
-		mIsSelecting = false;
 		}
 		return ret;
 	}
@@ -109,7 +99,6 @@ public class KyoroSocketEventRunner extends EventTaskRunnerImple {
 		}
 	}
 
-	private SelctorLoopTask mOneShot = new SelctorLoopTask(this);
 	public static class SelctorLoopTask extends EventTask {
 		public SelctorLoopTask(KyoroSocketEventRunner runner) {
 			super(runner);

@@ -5,7 +5,6 @@ import net.hetimatan.io.net.KyoroSocket;
 import net.hetimatan.util.event.EventTask;
 import net.hetimatan.util.event.EventTaskRunner;
 import net.hetimatan.util.io.ByteArrayBuilder;
-import net.hetimatan.util.log.Log;
 
 
 public class MessageSendTask extends EventTask {
