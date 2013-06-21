@@ -19,6 +19,10 @@ public class TorrentPeerStartTracker extends EventTask {
 	@Override
 	public void action() throws Throwable {
 		TorrentPeer server = mServer.get();
-		server.startTracker(TrackerRequest.EVENT_STARTED);
+		if(server.isSeeder()) {
+			server.startTracker(TrackerRequest.EVENT_COMPLETED);
+		} else {
+			server.startTracker(TrackerRequest.EVENT_STARTED);
+		}
 	}
 }
