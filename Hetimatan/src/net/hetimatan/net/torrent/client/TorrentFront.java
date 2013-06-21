@@ -31,6 +31,7 @@ import net.hetimatan.net.torrent.client.message.TorrentMessage;
 import net.hetimatan.net.torrent.client.task.TorrentFrontChokerTask;
 import net.hetimatan.net.torrent.client.task.TorrentFrontCloseTask;
 import net.hetimatan.net.torrent.client.task.TorrentFrontConnectionTask;
+import net.hetimatan.net.torrent.client.task.TorrentFrontHaveTask;
 import net.hetimatan.net.torrent.client.task.TorrentFrontInterestTask;
 import net.hetimatan.net.torrent.client.task.TorrentFrontNotInterestTask;
 import net.hetimatan.net.torrent.client.task.TorrentFrontReceiverTask;
@@ -64,6 +65,8 @@ public class TorrentFront {
 	private TorrentFrontInterestTask mInterestTask = null;
 	private TorrentFrontNotInterestTask mNotInterestTask = null;
 	private TorrentFrontRequestTask mRequestTask = null;
+	private TorrentFrontChokerTask mChokerTask = null;
+	private TorrentFrontHaveTask mHaveTask = null;
 	
 	private TrackerPeerInfo mPeer = null;
 
@@ -177,7 +180,6 @@ public class TorrentFront {
 		peer.getClientRunner().pushWork(mRequestTask);
 	}
 
-	private TorrentFrontChokerTask mChokerTask = null;
 	public void startChoker(boolean isChoke) throws IOException {
 		TorrentPeer peer = mTorrentPeer.get();
 		if(peer == null) {return;}
@@ -186,6 +188,16 @@ public class TorrentFront {
 		}
 		mChokerTask.isChoke(isChoke);
 		peer.getClientRunner().pushWork(mChokerTask);
+	}
+
+	public void startHave(int index) throws IOException {
+		TorrentPeer peer = mTorrentPeer.get();
+		if(peer == null) {return;}
+		//if(mChokerTask == null) {
+			mHaveTask = new TorrentFrontHaveTask(this, peer.getClientRunner(), index);
+		//}
+		//mChokerTask.isChoke(isChoke);
+		peer.getClientRunner().pushWork(mHaveTask);
 	}
 
 	public void close() throws IOException {
@@ -257,6 +269,14 @@ public class TorrentFront {
 		TorrentHistory.get().pushSend(this, bitfield);
 	}
 
+	public void have(int index) throws IOException {
+		if(Log.ON){Log.v(TAG, "TorrentFrontTask#notinterest");}
+		MessageHave message = new MessageHave(index);
+		message.encode(mOutput);
+		mOutput.flush();
+		TorrentHistory.get().pushSend(this, message);
+	}
+
 	public void uncoke() throws IOException {
 		if(Log.ON){Log.v(TAG, "TorrentFrontTask#unchoke");}
 		MessageUnchoke message = new MessageUnchoke();
@@ -291,6 +311,7 @@ public class TorrentFront {
 		mMyInfo.mInterest = false;
 		TorrentHistory.get().pushSend(this, message);
 	}
+
 
 	public void interest() throws IOException {
 		if(Log.ON){Log.v(TAG, "TorrentFrontTask#interest");}

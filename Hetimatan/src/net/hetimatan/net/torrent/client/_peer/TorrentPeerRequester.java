@@ -6,6 +6,8 @@ import java.lang.ref.WeakReference;
 import net.hetimatan.net.torrent.client.TorrentData;
 import net.hetimatan.net.torrent.client.TorrentFront;
 import net.hetimatan.net.torrent.client.TorrentPeer;
+import net.hetimatan.net.torrent.client.message.MessageHave;
+import net.hetimatan.net.torrent.client.message.MessagePiece;
 import net.hetimatan.net.torrent.client.message.TorrentMessage;
 import net.hetimatan.net.torrent.tracker.TrackerRequest;
 import net.hetimatan.util.bitfield.BitField;
@@ -27,6 +29,20 @@ public class TorrentPeerRequester implements TorrentFront.EventListener {
 		return nextId;//mTodoCurrentRequestIndex++;
 	}
 
+	private void sendHave(int index) {
+	 	TorrentPeer peer = mOwner.get();
+		if(peer == null) {return;}
+		for(int i=0;i<peer.numOfFront();i++) {
+			TorrentFront front = peer.getTorrentFront(i);
+			if(front != null) {
+				try {
+					front.startHave(index);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
 	/*
 	 * except myself's peer send message to me.
 	 */
@@ -34,6 +50,11 @@ public class TorrentPeerRequester implements TorrentFront.EventListener {
 	public void onReceiveMessage(TorrentFront front, TorrentMessage message) {
 	 	TorrentPeer peer = mOwner.get();
 		if(peer == null) {return;}
+
+		if(message.getType()==TorrentMessage.SIGN_PIECE) {
+			sendHave(((MessagePiece)message).getIndex());
+		}
+
 		if(
 		message.getType()==TorrentMessage.SIGN_PIECE||
 		message.getType()==TorrentMessage.SIGN_UNCHOKE) {
