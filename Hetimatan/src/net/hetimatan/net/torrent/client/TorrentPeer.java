@@ -14,6 +14,7 @@ import net.hetimatan.io.net.KyoroServerSocketImpl;
 import net.hetimatan.io.net.KyoroSocket;
 import net.hetimatan.io.net.KyoroSocketImpl;
 import net.hetimatan.net.torrent.client._peer.TorrentPeerChoker;
+import net.hetimatan.net.torrent.client._peer.TorrentPeerInterest;
 import net.hetimatan.net.torrent.client._peer.TorrentPeerRequester;
 import net.hetimatan.net.torrent.client._peer.TorrentPeerSetting;
 import net.hetimatan.net.torrent.client._peer.TorrentPeerPiecer;
@@ -58,9 +59,10 @@ public class TorrentPeer {
 	private TorrentData mData                   = null; 
 	private TrackerClient mTrackerClient        = null;
 	private TorrentPeerSetting mSetting         = new TorrentPeerSetting();
-	private TorrentPeerChoker mChoker           = null;
+	private TorrentPeerChoker mChoker           = new TorrentPeerChoker(this);
 	private TorrentPeerRequester mRequester     = new TorrentPeerRequester(this);
-	private TorrentPeerPiecer mPieceScenario    = null;
+	private TorrentPeerPiecer mPieceScenario    = new TorrentPeerPiecer(this);
+	private TorrentPeerInterest mInterest       = new TorrentPeerInterest(this);
 
 	// ---
 	// task
@@ -78,8 +80,6 @@ public class TorrentPeer {
 		mTrackerClient = new TrackerClient(metafile, peerId);
 		mData = new TorrentData(metafile);
 		mMetaFile = metafile;
-		mPieceScenario = new TorrentPeerPiecer(this);
-		mChoker = new TorrentPeerChoker(this);
 	}
 
 	public void addDownloaded(int downloaded) {
@@ -128,8 +128,7 @@ public class TorrentPeer {
 		if(addTorrentFront(peer, front)){
 			TorrentHistory.get().pushMessage("TorrentPeer#connect()"+peer.toString()+"\n");
 			front.startConnect(peer.getHostName(), peer.getPort());
-			front.addObserverAtWeak(mPieceScenario);
-			front.addObserverAtWeak(mRequester);//RequestScenario);
+			addObserver(front);
 		}
 	}
 
@@ -233,13 +232,17 @@ public class TorrentPeer {
 			}
 			TorrentHistory.get().pushMessage("TorrentPeer#accepted()\n");
 			TorrentFront front = new TorrentFront(this, socket);
-			front.addObserverAtWeak(mPieceScenario);
-			front.addObserverAtWeak(mRequester);//mRequestScenario);
+			addObserver(front);
 			addTorrentFront(front);
 			front.startConnectForAccept();
 		}
 	}
 
+	private void addObserver(TorrentFront front) {
+		front.addObserverAtWeak(mPieceScenario);
+		front.addObserverAtWeak(mRequester);//mRequestScenario);
+		front.addObserverAtWeak(mInterest);
+	}
 	public TorrentFront createFront(TrackerPeerInfo peer) throws IOException {
 		KyoroSocketImpl s = new KyoroSocketImpl();
 		TorrentFront front = createFront(s);

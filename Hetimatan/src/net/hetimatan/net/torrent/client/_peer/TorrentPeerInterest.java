@@ -1,4 +1,4 @@
-package net.hetimatan.net.torrent.client.scenario;
+package net.hetimatan.net.torrent.client._peer;
 
 
 import java.lang.ref.WeakReference;
@@ -14,12 +14,12 @@ import net.hetimatan.util.bitfield.BitField;
 //
 // if target peer has my lacked piece. notify interest. else notify not interst
 // 
-public class TorrentInterestScenario implements TorrentFront.EventListener {
+public class TorrentPeerInterest implements TorrentFront.EventListener {
 
 	private WeakReference<TorrentPeer> mUploadTargetPeer = null;
 	private LinkedList<ScenarioSendPieceTask> mScenarioList = new LinkedList<ScenarioSendPieceTask>();
 
-	public TorrentInterestScenario(TorrentPeer peer) {
+	public TorrentPeerInterest(TorrentPeer peer) {
 		mUploadTargetPeer = new WeakReference<TorrentPeer>(peer);
 	}
 
