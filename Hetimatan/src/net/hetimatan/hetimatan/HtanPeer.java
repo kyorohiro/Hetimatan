@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Iterator;
 
+import net.hetimatan.io.filen.KFNextHelper;
+import net.hetimatan.io.filen.RACashFile;
 import net.hetimatan.net.torrent.client.TorrentPeer;
 import net.hetimatan.net.torrent.client.task.TorrentPeerStopTracker;
 import net.hetimatan.net.torrent.tracker.TrackerClient;
@@ -21,9 +23,12 @@ public class HtanPeer {
 
 	private File mTorrentFile = null;
 	private TorrentPeer mPeer = null;
-	private String mPeerId = TorrentPeer.createPeerId();
+	private String mPeerId = getPeerId();
 	private EventTaskRunner mRunner = null;
 	private StatusCheck mObserver = null;
+
+	public HtanPeer() {
+	}
 
 	public void setTorrentFile(File torrentFile) {
 		mTorrentFile = torrentFile;
@@ -97,5 +102,30 @@ public class HtanPeer {
 			mTrackerStatus = b.toString();
 			kickObserver();
 		}
+	}
+
+	public static final File sPeerIdSt = new File("peerid");
+	public static String getPeerId() {
+		RACashFile cash = null;
+
+		String peerid = null;
+		try {
+			cash = new RACashFile(sPeerIdSt,10,2);
+			if(cash.length() == 0) {
+				peerid = TorrentPeer.createPeerId();
+				cash.addChunk(peerid.getBytes());
+				cash.syncWrite();
+			} else {
+				peerid = new String(KFNextHelper.newBinary(cash));
+			}
+		} catch (IOException e) {
+			peerid=TorrentPeer.createPeerId();
+		} finally {
+			if(cash != null) {
+				try {cash.close();
+				} catch (IOException e) {e.printStackTrace();}
+			}
+		}
+		return peerid;
 	}
 }
