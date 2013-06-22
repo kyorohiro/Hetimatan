@@ -14,6 +14,14 @@ import net.hetimatan.io.filen.RACashFile;
 //Status-Line = HTTP-Version SP Status-Code SP Reason-Phrase CRLF
 public class HttpResponse extends HttpObject {
 
+	public static final String STATUS_CODE_301_MOVE_PERMANENTLY = "301 Moved Permanently";
+	public static final String STATUS_CODE_302_Found = "302 Found";
+	public static final String STATUS_CODE_303_SEE_OTHER= "303 See Other";
+	public static final String STATUS_CODE_304_NOT_MODIFIED= "304 Not Modified";
+	public static final String STATUS_CODE_305_USE_PROXY= "305 Use Proxy";
+	public static final String STATUS_CODE_307_TEMPORARY_REDIRECT= "307 Temporary Redirect";
+
+	
 	private LinkedList<HttpHeader> mHeaders = new LinkedList<HttpHeader>();
 	private String mHttpVersion = null;
 	private String mStatusCode = null;
