@@ -1,4 +1,4 @@
-package info.kyorohiro.raider.util.http;
+package net.hetimatan.util.http;
 
 import net.hetimatan.io.file.MarkableFileReader;
 import net.hetimatan.io.filen.RACashFile;

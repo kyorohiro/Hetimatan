@@ -20,6 +20,9 @@ public class HttpResponse extends HttpObject {
 	public static final String STATUS_CODE_304_NOT_MODIFIED= "304 Not Modified";
 	public static final String STATUS_CODE_305_USE_PROXY= "305 Use Proxy";
 	public static final String STATUS_CODE_307_TEMPORARY_REDIRECT= "307 Temporary Redirect";
+	public static final String[] REDIRECT_STATUSCODE = {
+		"301","302","303","307"
+	};
 
 	
 	private LinkedList<HttpHeader> mHeaders = new LinkedList<HttpHeader>();
@@ -65,6 +68,14 @@ public class HttpResponse extends HttpObject {
 		return mHeaders;
 	}
 
+	public String getHeader(String key) {
+		for(HttpHeader header : mHeaders) {
+			if(key.replaceAll(" ", "").toLowerCase().equals(header.getKey().replaceAll(" ", "").toLowerCase())){
+				return header.getValue();
+			}
+		}
+		return "";
+	}
 	public HttpResponse addHeader(String key, String value) {
 		return addHeader(new HttpHeader(key, value));
 	}

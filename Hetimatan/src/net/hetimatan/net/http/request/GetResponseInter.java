@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.net.Socket;
 
 import net.hetimatan.io.filen.RACashFile;
+import net.hetimatan.util.http.HttpResponse;
 
 public interface GetResponseInter {
 	public int getVFOffset() ;
@@ -15,5 +16,6 @@ public interface GetResponseInter {
 	public void read() throws IOException, InterruptedException ;
 	public void readHeader() throws IOException, InterruptedException ;
 	public void readBody() throws IOException, InterruptedException ;
+	public HttpResponse getHttpResponse() throws IOException;
 	public void close();
 }

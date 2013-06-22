@@ -24,8 +24,14 @@ public class HttpGetReadBodyTask extends EventTask {
 	//
 	@Override
 	public void action() throws IOException, InterruptedException {
-		mOwner.get().recvBody();
-		nextAction(mLast);
+		HttpGet httpGet = mOwner.get();
+		httpGet.recvBody();
+		if(httpGet.isRedirect()) {
+			httpGet.updateRedirect(httpGet.getLocation());
+			httpGet.startTask(getRunner(), mLast);
+		} else {
+			nextAction(mLast);
+		}
 		//todo 
 //		if(mOwner.get().bodyIsReadeable()) {
 //			nextAction(new HttpGetRecvBodyTask(mOwner.get(), getRunner(), mLast));

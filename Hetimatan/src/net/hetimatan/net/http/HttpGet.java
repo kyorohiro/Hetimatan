@@ -3,6 +3,8 @@ package net.hetimatan.net.http;
 
 import java.io.IOException;
 
+import net.hetimatan.io.file.MarkableFileReader;
+import net.hetimatan.io.filen.ByteKyoroFile;
 import net.hetimatan.io.filen.RACashFile;
 import net.hetimatan.io.net.KyoroSelector;
 import net.hetimatan.io.net.KyoroSocket;
@@ -13,6 +15,10 @@ import net.hetimatan.net.http.task.HttpGetConnectionTask;
 import net.hetimatan.util.event.EventTask;
 import net.hetimatan.util.event.EventTaskRunner;
 import net.hetimatan.util.event.EventTaskRunnerImple;
+import net.hetimatan.util.http.HttpGetRequestUri;
+import net.hetimatan.util.http.HttpHeader;
+import net.hetimatan.util.http.HttpResponse;
+import net.hetimatan.util.http.HttpUrl;
 import net.hetimatan.util.log.Log;
 import net.hetimatan.util.net.KyoroSocketEventRunner;
 
@@ -33,6 +39,23 @@ public class HttpGet {
 		mPort = port;
 	}
 
+	public void updateRedirect(String location) throws IOException {
+		MarkableFileReader reader = null;
+		try {
+			reader = new MarkableFileReader(location.getBytes());
+			HttpGetRequestUri geturi = HttpGetRequestUri.decode(reader);
+			HttpUrl httpurl = HttpUrl.decode(geturi.getPath());
+			mHost =  httpurl.getHost();
+			mPort= httpurl.getPort();
+			mPath = httpurl.getMethod();
+		} finally {
+			reader.close();
+		}
+	}
+
+	
+	
+
 	protected GetRequesterInter createGetRequest() {
 		if (mCurrentRequest == null) {
 			mCurrentRequest = new KyoroSocketGetRequester();
@@ -43,6 +66,7 @@ public class HttpGet {
 
 	public EventTaskRunner startTask(EventTaskRunner runner, EventTask last) {
 		if(Log.ON){Log.v(TAG, "HttpGet#startTask()");}
+		mCurrentRequest = null;//todo
 		if(runner == null) {
 			runner = new EventTaskRunnerImple();
 		}
@@ -115,14 +139,45 @@ public class HttpGet {
 			int len = (int)vf.length();
 			byte[] buffer = new byte[len];
 			vf.read(buffer, 0, len);
-//			System.out.println("@1:"+new String(buffer, 0, mResponse.getVFOffset()));
-//			System.out.println("@2:"+new String(buffer));
-//			System.out.println("@3:"+mResponse.getVFOffset()+","+buffer.length);
+			System.out.println("@1:"+new String(buffer, 0, mResponse.getVFOffset()));
+			System.out.println("@2:"+new String(buffer));
+			System.out.println("@3:"+mResponse.getVFOffset()+","+buffer.length);
 
 		} finally {
 			mCurrentSocket.close();
 			mCurrentSocket = null;
 		}
+	}
+
+	public boolean isRedirect() throws IOException {
+		GetResponseInter response = getGetResponse();
+		HttpResponse httpResponse = response.getHttpResponse();
+		String statusCode = httpResponse.getStatusCode();
+		for(String candidate :HttpResponse.REDIRECT_STATUSCODE) {
+			if (candidate.equals(statusCode)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public String getLocation() throws IOException {
+		GetResponseInter response = getGetResponse();
+		HttpResponse httpResponse = response.getHttpResponse();
+		String path = httpResponse.getHeader(HttpHeader.HEADER_LOCATION);
+		if(path.startsWith("http://")) {
+			return path;
+		} else {
+			if(!path.startsWith("/")) {
+				path = "/"+path;
+			}
+			return mHost+":"+mPort+""+path;
+		}
+	}
+
+	public HttpResponse getHttpResponse() throws IOException {
+		GetResponseInter response = getGetResponse();
+		return response.getHttpResponse();
 	}
 
 	public void close() throws IOException {

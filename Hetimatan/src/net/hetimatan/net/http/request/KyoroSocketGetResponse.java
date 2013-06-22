@@ -22,6 +22,7 @@ public class KyoroSocketGetResponse implements GetResponseInter {
 	private KyoroFileForKyoroSocket mBase = null;
 	private MarkableFileReader mReader = new MarkableFileReader(mBase, 512);
 	private long mContentLength = Integer.MAX_VALUE;
+	private HttpResponse mResponse = null;
 
 	public KyoroSocketGetResponse(KyoroSocket socket, KyoroSelector selector) throws IOException {
 		mSocket = socket;
@@ -84,9 +85,9 @@ public class KyoroSocketGetResponse implements GetResponseInter {
 	public void readHeader() throws IOException, InterruptedException {
 		try {
 			mReader.seek(0);
-			HttpResponse response = HttpResponse.decode(mReader, false);
+			mResponse = HttpResponse.decode(mReader, false);
 			mVfOffset = (int)mReader.getFilePointer();
-			mContentLength = response.getContentSizeFromHeader();
+			mContentLength = mResponse.getContentSizeFromHeader();
 			{
 				mReader.seek(0);
 				byte[] bu = new byte[mVfOffset];
@@ -94,7 +95,7 @@ public class KyoroSocketGetResponse implements GetResponseInter {
 				System.out.println("++++"+new String(bu)+"#####");
 				mReader.seek(mVfOffset);
 			}
-			for(HttpHeader h :response.getHeader()) {
+			for(HttpHeader h :mResponse.getHeader()) {
 				System.out.print("[##]"+h.getKey()+","+h.getValue());
 			}
 		} catch(Exception e) {
@@ -122,5 +123,10 @@ public class KyoroSocketGetResponse implements GetResponseInter {
 			mReader.close();
 		}
 		mVF = mBase.getVF();		
+	}
+
+	@Override
+	public HttpResponse getHttpResponse() throws IOException {
+		return mResponse;
 	}
 }

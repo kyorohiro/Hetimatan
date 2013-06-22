@@ -22,9 +22,9 @@ public class ByteKyoroFile implements KyoroFile, KyoroByteOutput {
 	}
 
 	public ByteKyoroFile(ByteArrayBuilder buffer) {
-		mLimit = Integer.MAX_VALUE;
+		mLimit  = Integer.MAX_VALUE;
 		mBuffer = buffer;
-		mLength =buffer.length();
+		mLength = buffer.length();
 	}
 
 	public ByteKyoroFile(int size, int limit) {

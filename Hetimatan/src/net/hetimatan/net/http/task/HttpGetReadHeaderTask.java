@@ -33,8 +33,9 @@ public class HttpGetReadHeaderTask extends EventTask {
 				return;
 			}
 		}
-	
-		mOwner.get().recvHeader();
+		HttpGet httpget = mOwner.get();
+		if(httpget == null) {return;}
+		httpget.recvHeader();
 		nextAction(new HttpGetReadBodyTask(mOwner.get(), getRunner(), mLast));
 	}
 	

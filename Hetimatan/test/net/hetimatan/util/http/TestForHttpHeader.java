@@ -1,4 +1,4 @@
-package info.kyorohiro.raider.util.http;
+package net.hetimatan.util.http;
 
 import java.io.IOException;
 import net.hetimatan.io.file.MarkableFileReader;
