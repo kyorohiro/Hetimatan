@@ -4,6 +4,7 @@ import net.hetimatan.net.torrent.util.piece.PieceInfoList;
 
 public class HttpObjectHelper {
 	private static long[] sdef = {0, Long.MAX_VALUE};
+
 	public static PieceInfoList getRangeList(String range, long max) {
 		long[] v= getRange(range, max);
 		PieceInfoList list = new PieceInfoList();
@@ -48,4 +49,6 @@ public class HttpObjectHelper {
 		}
 		return ret;
 	}
+
+	
 }
