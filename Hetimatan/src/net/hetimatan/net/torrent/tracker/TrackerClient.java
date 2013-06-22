@@ -18,7 +18,7 @@ public class TrackerClient extends HttpGet {
 
 	private MetaFile mMetaFile = null;
 	private long mLastResponse = System.currentTimeMillis();
-	private int mInterval = 0;
+	private int mInterval = 30;
 	private TrackerRequest mRequest = new TrackerRequest();
 	private TreeSet<TrackerPeerInfo> mPeers32 = new TreeSet<TrackerPeerInfo>();
 
@@ -135,7 +135,12 @@ public class TrackerClient extends HttpGet {
 			System.out.println("@7:interval="+trackerResponse.getInterval());
 			System.out.println("@8:failre="+trackerResponse.getFailureReason());
 			System.out.println("@9:warning="+trackerResponse.getWarningMessage());
-			mInterval = trackerResponse.getInterval();
+			int interval = trackerResponse.getInterval();
+			
+			// todo test guard
+			if(interval>10) {
+				mInterval = interval;
+			}
 			mLastResponse = System.currentTimeMillis();
 			for(int i=0;i<trackerResponse.numOfIp();i++) {
 				System.out.println("@ip["+i+"]="+trackerResponse.getIP(i)+":"+trackerResponse.getPort(i));					

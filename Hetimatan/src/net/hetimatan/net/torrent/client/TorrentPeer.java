@@ -39,7 +39,7 @@ public class TorrentPeer {
 	public static final int TORRENT_PORT_END    = 6889;
 
 
-	private KyoroServerSocket mServerSocket     = null;
+	private KyoroServerSocket mServerSocket         = null;
 	private LinkedHashMap<TrackerPeerInfo, TorrentFront> mFrontList = new LinkedHashMap<TrackerPeerInfo, TorrentFront>();
 	private KyoroSocketEventRunner mMasterRunner    = null;
 	private KyoroSelector mAcceptSelector           = null;
@@ -48,9 +48,9 @@ public class TorrentPeer {
 	// property
 	//
 	private int mPort                           = TORRENT_PORT_BEGIN;
-	private boolean mIsBooted = false;
-	private long mDownloaded = 0;
-	private long mUploaded = 0;
+	private boolean mIsBooted                   = false;
+	private long mDownloaded                    = 0;
+	private long mUploaded                      = 0;
 
 	// ---
 	// this class's delegation
