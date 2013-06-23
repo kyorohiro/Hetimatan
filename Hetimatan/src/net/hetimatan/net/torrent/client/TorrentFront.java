@@ -15,6 +15,7 @@ import net.hetimatan.io.net.KyoroSocketOutputStream;
 import net.hetimatan.net.torrent.client._front.TorrentFrontMyInfo;
 import net.hetimatan.net.torrent.client._front.TorrentFrontTargetInfo;
 import net.hetimatan.net.torrent.client.message.HelperLookAheadMessage;
+import net.hetimatan.net.torrent.client.message.HelperLookAheadShakehand;
 import net.hetimatan.net.torrent.client.message.MessageBitField;
 import net.hetimatan.net.torrent.client.message.MessageCancel;
 import net.hetimatan.net.torrent.client.message.MessageChoke;
@@ -31,6 +32,7 @@ import net.hetimatan.net.torrent.client.message.TorrentMessage;
 import net.hetimatan.net.torrent.client.task.TorrentFrontChokerTask;
 import net.hetimatan.net.torrent.client.task.TorrentFrontCloseTask;
 import net.hetimatan.net.torrent.client.task.TorrentFrontConnectionTask;
+import net.hetimatan.net.torrent.client.task.TorrentFrontFirstAction;
 import net.hetimatan.net.torrent.client.task.TorrentFrontHaveTask;
 import net.hetimatan.net.torrent.client.task.TorrentFrontInterestTask;
 import net.hetimatan.net.torrent.client.task.TorrentFrontNotInterestTask;
@@ -52,6 +54,7 @@ public class TorrentFront {
 	private KyoroSocketOutputStream mOutput = null;
 	private WeakReference<TorrentPeer> mTorrentPeer = null;
 	private HelperLookAheadMessage mCurrentHelper = null;
+	private HelperLookAheadShakehand mCurrentSHHelper = null;
 
 	private TorrentFrontTargetInfo mTargetInfo = null;
 	private TorrentFrontMyInfo mMyInfo = null;
@@ -125,21 +128,26 @@ public class TorrentFront {
 		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"start accept task");}
 		EventTaskRunner runner = mTorrentPeer.get().getClientRunner();
 		mStartTask = new TorrentFrontShakeHandTask(this, runner);
+		mFirstAction = new TorrentFrontFirstAction(this, mTorrentPeer.get().getClientRunner());
 		if(mCloseTask == null) {
 			mCloseTask = new TorrentFrontCloseTask(this, mTorrentPeer.get().getClientRunner());
 		}
+		mStartTask.nextAction(mFirstAction);
 		mStartTask.errorAction(mCloseTask);
 		runner.pushWork(mStartTask);
 	}
 
+	private TorrentFrontFirstAction mFirstAction = null;
 	public void startConnect(String host, int port) throws IOException {
 		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"start connection task");}
 		mConnection = new TorrentFrontConnectionTask(this, mTorrentPeer.get().getClientRunner(), host, port);
 		mStartTask = new TorrentFrontShakeHandTask(this, mTorrentPeer.get().getClientRunner());
-		mConnection.nextAction(mStartTask);
+		mFirstAction = new TorrentFrontFirstAction(this, mTorrentPeer.get().getClientRunner());
 		if(mCloseTask == null) {
 			mCloseTask = new TorrentFrontCloseTask(this, mTorrentPeer.get().getClientRunner());
 		}
+		mConnection.nextAction(mStartTask);
+		mStartTask.nextAction(mFirstAction);
 		mConnection.errorAction(mCloseTask);
 		mStartTask.errorAction(mCloseTask);
 		mTorrentPeer.get().getClientRunner().start(mConnection);
@@ -246,7 +254,7 @@ public class TorrentFront {
 		return mTargetInfo.mTargetBitField.isAllOn();
 	}
 
-	public void shakehand() throws IOException {
+	public void revcShakehand() throws IOException {
 		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"TorrentFrontTask#shakehand");}
 		try {
 			mReader.setBlockOn(true);
@@ -335,7 +343,7 @@ public class TorrentFront {
 		TorrentHistory.get().pushSend(this, message);
 	}
 
-	public void notinterest() throws IOException {
+	public void sendNotinterest() throws IOException {
 		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"TorrentFrontTask#notinterest");}
 		MessageNotInterested message = new MessageNotInterested();
 		message.encode(mOutput);
@@ -345,7 +353,7 @@ public class TorrentFront {
 	}
 
 
-	public void interest() throws IOException {
+	public void sendInterest() throws IOException {
 		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"TorrentFrontTask#interest");}
 		MessageInterested message = new MessageInterested();
 		message.encode(mOutput);
@@ -396,6 +404,21 @@ public class TorrentFront {
 			e.printStackTrace();
 			close();
 			throw e;
+		}
+	}
+
+	public boolean reveiveSH() throws IOException {
+		if(mCurrentSHHelper == null) {
+			TorrentHistory.get().pushMessage("[receive start]\n");
+			mCurrentSHHelper = 
+					new HelperLookAheadShakehand(mReader.getFilePointer(), mReader);
+		}
+		mCurrentSHHelper.read();
+		if(mReader.isEOF()){close(); return true;}
+		if(mCurrentSHHelper.isEnd()) {
+			return true;
+		} else {
+			return false;
 		}
 	}
 

@@ -27,7 +27,7 @@ public class TestForTorrentPeerWithChoker extends TestCase {
 		front.connect(peer.getHostName(), peer.getPort());
 		while(!front.isConnect()){Thread.sleep(0);Thread.yield();}
 		front.sendShakehand();
-		front.shakehand();
+		front.revcShakehand();
 		front.sendBitfield();
 		front.uncoke();
 
@@ -91,21 +91,21 @@ public class TestForTorrentPeerWithChoker extends TestCase {
 		front003.sendShakehand();
 		front004.sendShakehand();
 		front005.sendShakehand();
-		front001.shakehand();
-		front002.shakehand();
-		front003.shakehand();
-		front004.shakehand();
-		front005.shakehand();
+		front001.revcShakehand();
+		front002.revcShakehand();
+		front003.revcShakehand();
+		front004.revcShakehand();
+		front005.revcShakehand();
 		front001.sendBitfield();
 		front002.sendBitfield();
 		front003.sendBitfield();
 		front004.sendBitfield();
 		front005.sendBitfield();
-		front001.interest();
-		front002.interest();
-		front003.interest();
-		front004.interest();
-		front005.interest();
+		front001.sendInterest();
+		front002.sendInterest();
+		front003.sendInterest();
+		front004.sendInterest();
+		front005.sendInterest();
 		front001.uncoke();
 		front002.uncoke();
 		front003.uncoke();

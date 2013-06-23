@@ -56,7 +56,9 @@ public class TorrentPeerRequester implements TorrentFront.EventListener {
 
 		if(
 		message.getType()==TorrentMessage.SIGN_PIECE||
-		message.getType()==TorrentMessage.SIGN_UNCHOKE) {
+		message.getType()==TorrentMessage.SIGN_UNCHOKE||
+		message.getType()==TorrentMessage.SIGN_HAVE
+		) {
 			if(!peer.isSeeder()) {
 				try {
 					front.startDownload();

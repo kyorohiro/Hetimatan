@@ -18,6 +18,6 @@ public class TorrentFrontNotInterestTask extends EventTask {
 	@Override
 	public void action() throws Throwable {
 		TorrentFront front = mTorrentFront.get();
-		front.notinterest();
+		front.sendNotinterest();
 	}
 }
