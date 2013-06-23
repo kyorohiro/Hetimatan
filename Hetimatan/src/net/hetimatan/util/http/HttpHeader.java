@@ -17,6 +17,7 @@ public class HttpHeader extends HttpObject {
 	public static final String HEADER_CONTENT_LENGTH = "Content-Length";
 	public static final String HEADER_CONTENT_TyPE = "Content-Type";
 	public static final String HEADER_LOCATION = "Location";
+	public static final String HEADER_HOST = "Host";
 
 
 	public HttpHeader(String key, String value) {

@@ -98,10 +98,14 @@ public class TrackerClient extends HttpGet {
 	public void setMetaFile(MetaFile metafile) throws IOException, URISyntaxException {
 		mMetaFile = metafile;
 		URI uri = new URI(mMetaFile.getAnnounce());
+		int port = uri.getPort();
+		if(port == -1) {port = 80;}
+		update(uri.getHost(), uri.getPath(), port);
 		mRequest
+		.putHeaderHost(uri.getHost())
 		.putTrackerHost(uri.getHost())
 		.putPath(uri.getPath())
-		.putTrackerPort(uri.getPort())
+		.putTrackerPort(port)
 		.putInfoHash(mMetaFile.getInfoSha1AsPercentString());
 	}
 
@@ -116,6 +120,10 @@ public class TrackerClient extends HttpGet {
 		GetResponseInter mResponse = getGetResponse();
 		mResponse.readBody();
 
+		if(isRedirect()) {
+			close();
+			return;
+		}
 		try {
 			RACashFile vf = mResponse.getVF();
 			vf.seek(mResponse.getVFOffset());

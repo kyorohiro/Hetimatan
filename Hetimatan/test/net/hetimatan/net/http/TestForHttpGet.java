@@ -12,8 +12,7 @@ public class TestForHttpGet extends TestCase {
 	
 		HttpGet httpget = new HttpGet("127.0.0.1", "/301?mv=http://www.google.com", 8080);
 		httpget.startTask(null, null);
-	
 		Thread.sleep(10*60*1000);
-
 	}
+
 }

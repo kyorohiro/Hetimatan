@@ -99,7 +99,7 @@ public class TrackerRequest {
 	public int getCompact() {return mCompact;}
 	public String getEvent() {return mEvent;}
 	public String getTrackerId(){return mTrackerId;}
-	public String getHeaderHost() {return mHeaderHost;}
+//	public String getHeaderHost() {return mHeaderHost;}
 	public String getHost() {return mTrackerHost;}
 	public String getUserAgent(){return mUserAgent;}
 	public int getClientPort() {return mClientPort;}

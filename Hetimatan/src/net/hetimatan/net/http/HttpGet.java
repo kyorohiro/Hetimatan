@@ -4,7 +4,6 @@ package net.hetimatan.net.http;
 import java.io.IOException;
 
 import net.hetimatan.io.file.MarkableFileReader;
-import net.hetimatan.io.filen.ByteKyoroFile;
 import net.hetimatan.io.filen.RACashFile;
 import net.hetimatan.io.net.KyoroSelector;
 import net.hetimatan.io.net.KyoroSocket;
@@ -39,6 +38,12 @@ public class HttpGet {
 		mPort = port;
 	}
 
+	public void update(String host, String path, int port) {
+		mHost = host;
+		mPath = path;
+		mPort = port;
+	}
+
 	public void updateRedirect(String location) throws IOException {
 		MarkableFileReader reader = null;
 		try {
@@ -53,20 +58,16 @@ public class HttpGet {
 		}
 	}
 
-	
-	
-
 	protected GetRequesterInter createGetRequest() {
 		if (mCurrentRequest == null) {
 			mCurrentRequest = new KyoroSocketGetRequester();
-			mCurrentRequest.setHost(mHost).setPath(mPath).setPort(mPort);
 		}
 		return mCurrentRequest;
 	}
 
 	public EventTaskRunner startTask(EventTaskRunner runner, EventTask last) {
 		if(Log.ON){Log.v(TAG, "HttpGet#startTask()");}
-		mCurrentRequest = null;//todo
+		initForRestart();
 		if(runner == null) {
 			runner = new EventTaskRunnerImple();
 		}
@@ -74,10 +75,18 @@ public class HttpGet {
 		return runner; 
 	}
 
+	//todo 
+	protected void initForRestart() {
+		mCurrentRequest = null;//todo
+	}
+
 	public void connection() throws IOException, InterruptedException {
 		if(Log.ON){Log.v(TAG, "HttpGet#connection()");}
 		mCurrentRequest = createGetRequest();
+		mCurrentRequest.setHost(mHost).setPath(mPath).setPort(mPort);
 		mCurrentSocket = mCurrentRequest._connectionRequest();
+
+		//mCurrentRequest.putHeader(HttpHeader.HEADER_HOST, mHost);
 	}
 
 	public boolean isConnected() throws IOException {
@@ -165,6 +174,7 @@ public class HttpGet {
 		GetResponseInter response = getGetResponse();
 		HttpResponse httpResponse = response.getHttpResponse();
 		String path = httpResponse.getHeader(HttpHeader.HEADER_LOCATION);
+		path = path.replaceAll(" ", "");
 		if(path.startsWith("http://")) {
 			return path;
 		} else {
