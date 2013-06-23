@@ -408,6 +408,7 @@ public class TorrentFront {
 	}
 
 	public boolean reveiveSH() throws IOException {
+		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"TorrentFront#revieceSH()");}
 		if(mCurrentSHHelper == null) {
 			TorrentHistory.get().pushMessage("[receive start]\n");
 			mCurrentSHHelper = 
@@ -415,6 +416,8 @@ public class TorrentFront {
 		}
 		mCurrentSHHelper.read();
 		if(mReader.isEOF()){close(); return true;}
+		
+	 	TorrentPeer peer = mTorrentPeer.get();
 		if(mCurrentSHHelper.isEnd()) {
 			return true;
 		} else {
