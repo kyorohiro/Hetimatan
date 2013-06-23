@@ -74,6 +74,7 @@ public class KyoroSocketGetRequester implements GetRequesterInter {
 		URL url = new URL(SCHEME_HTTP + "://" + mHost + ":" + mPort+mPath);
 		KyoroSocket socket = null;
 		socket = new KyoroSocketImpl();
+		socket.setDebug("KyoroSocketGetConnection:"+socket.getHost()+":"+socket.getPort());
 		socket.connect(url.getHost(), url.getPort());
 		while(socket.getConnectionState() == KyoroSocket.CN_CONNECTING){
 			Thread.yield();

@@ -227,6 +227,7 @@ public class TorrentPeer {
 	public void accept() throws IOException {
 		while(true) {
 			KyoroSocket socket = mServerSocket.accept();
+			socket.setDebug("TorrentPeer"+socket.getHost()+":"+socket.getPort());
 			if(socket == null) {
 				break;
 			}
@@ -245,6 +246,7 @@ public class TorrentPeer {
 	}
 	public TorrentFront createFront(TrackerPeerInfo peer) throws IOException {
 		KyoroSocketImpl s = new KyoroSocketImpl();
+		s.setDebug("TorrentFront:"+s.getHost()+":"+s.getPort());
 		TorrentFront front = createFront(s);
 		front.setPeer(peer);
 		return front;

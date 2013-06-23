@@ -69,6 +69,7 @@ public class TorrentFront {
 	private TorrentFrontHaveTask mHaveTask = null;
 	
 	private TrackerPeerInfo mPeer = null;
+	private String mDebug = "--";
 
 	public TorrentFront(TorrentPeer peer, KyoroSocket socket) throws IOException {
 		mSocket = socket;
@@ -82,6 +83,7 @@ public class TorrentFront {
 		mTargetInfo.mTargetBitField.zeroClear();
 		mMyInfo = new TorrentFrontMyInfo();
 		mPeer = new TrackerPeerInfo(socket.getHost(), socket.getPort());
+		mDebug = ""+socket.getHost()+":"+socket.getPort();
 	}
 
 	public void setPeer(TrackerPeerInfo peer) {
@@ -120,22 +122,31 @@ public class TorrentFront {
 	}
 
 	public void startConnectForAccept() {
-		if(Log.ON){Log.v(TAG, "start accept task");}
+		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"start accept task");}
 		EventTaskRunner runner = mTorrentPeer.get().getClientRunner();
 		mStartTask = new TorrentFrontShakeHandTask(this, runner);
+		if(mCloseTask == null) {
+			mCloseTask = new TorrentFrontCloseTask(this, mTorrentPeer.get().getClientRunner());
+		}
+		mStartTask.errorAction(mCloseTask);
 		runner.pushWork(mStartTask);
 	}
 
 	public void startConnect(String host, int port) throws IOException {
-		if(Log.ON){Log.v(TAG, "start connection task");}
+		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"start connection task");}
 		mConnection = new TorrentFrontConnectionTask(this, mTorrentPeer.get().getClientRunner(), host, port);
 		mStartTask = new TorrentFrontShakeHandTask(this, mTorrentPeer.get().getClientRunner());
 		mConnection.nextAction(mStartTask);
+		if(mCloseTask == null) {
+			mCloseTask = new TorrentFrontCloseTask(this, mTorrentPeer.get().getClientRunner());
+		}
+		mConnection.errorAction(mCloseTask);
+		mStartTask.errorAction(mCloseTask);
 		mTorrentPeer.get().getClientRunner().start(mConnection);
 	}
 
 	public void startReceliver() throws IOException {
-		if(Log.ON){Log.v(TAG, "start receiver");}
+		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"start receiver");}
 		TorrentPeer peer = mTorrentPeer.get();
 		if(peer == null) {return;}
 		EventTaskRunner runner = peer.getClientRunner();
@@ -149,24 +160,32 @@ public class TorrentFront {
 	}
 
 	public void startInterest() {
-		if(Log.ON){Log.v(TAG, "start interest");}
+		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"start interest");}
 		TorrentPeer peer = mTorrentPeer.get();
 		if(peer == null) {return;}
 		if(mMyInfo.mInterest == true) {return;}
 		if(mInterestTask == null) {
 			mInterestTask = new TorrentFrontInterestTask(this, peer.getClientRunner());
 		}
+		if(mCloseTask == null) {
+			mCloseTask = new TorrentFrontCloseTask(this, mTorrentPeer.get().getClientRunner());
+		}
+		mInterestTask.errorAction(mCloseTask);
 		peer.getClientRunner().pushWork(mInterestTask);
 	}
 
 	public void startNotInterest() {
-		if(Log.ON){Log.v(TAG, "start notinterest");}
+		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"start notinterest");}
 		TorrentPeer peer = mTorrentPeer.get();
 		if(peer == null) {return;}
 		if(mMyInfo.mInterest == false) {return;}
 		if(mNotInterestTask == null) {
 			mNotInterestTask = new TorrentFrontNotInterestTask(this, peer.getClientRunner());
 		}
+		if(mCloseTask == null) {
+			mCloseTask = new TorrentFrontCloseTask(this, mTorrentPeer.get().getClientRunner());
+		}
+		mNotInterestTask.errorAction(mCloseTask);
 		peer.getClientRunner().pushWork(mNotInterestTask);
 	}
 
@@ -175,8 +194,12 @@ public class TorrentFront {
 		if(peer == null) {return;}
 		if(peer.isSeeder()){return;}
 		if(mTargetInfo.mTargetChoked){return;}
-		if(Log.ON){Log.v(TAG, "startDownload");}
+		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"startDownload");}
 		mRequestTask = new TorrentFrontRequestTask(this, peer.getClientRunner());
+		if(mCloseTask == null) {
+			mCloseTask = new TorrentFrontCloseTask(this, mTorrentPeer.get().getClientRunner());
+		}
+		mRequestTask.errorAction(mCloseTask);
 		peer.getClientRunner().pushWork(mRequestTask);
 	}
 
@@ -186,6 +209,10 @@ public class TorrentFront {
 		if(mChokerTask == null) {
 			mChokerTask = new TorrentFrontChokerTask(this, peer.getClientRunner(), isChoke);
 		}
+		if(mCloseTask == null) {
+			mCloseTask = new TorrentFrontCloseTask(this, mTorrentPeer.get().getClientRunner());
+		}
+		mChokerTask.errorAction(mCloseTask);
 		mChokerTask.isChoke(isChoke);
 		peer.getClientRunner().pushWork(mChokerTask);
 	}
@@ -195,13 +222,17 @@ public class TorrentFront {
 		if(peer == null) {return;}
 		//if(mChokerTask == null) {
 			mHaveTask = new TorrentFrontHaveTask(this, peer.getClientRunner(), index);
+			if(mCloseTask == null) {
+				mCloseTask = new TorrentFrontCloseTask(this, mTorrentPeer.get().getClientRunner());
+			}
+			mHaveTask.errorAction(mCloseTask);
 		//}
 		//mChokerTask.isChoke(isChoke);
 		peer.getClientRunner().pushWork(mHaveTask);
 	}
 
 	public void close() throws IOException {
-		if(Log.ON){Log.v(TAG, "close");}
+		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"close");}
 		TorrentPeer peer = mTorrentPeer.get();
 		if(peer != null) {
 			peer.removeTorrentFront(this);
@@ -216,7 +247,7 @@ public class TorrentFront {
 	}
 
 	public void shakehand() throws IOException {
-		if(Log.ON){Log.v(TAG, "TorrentFrontTask#shakehand");}
+		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"TorrentFrontTask#shakehand");}
 		try {
 			mReader.setBlockOn(true);
 			MessageHandShake recv = MessageHandShake.decode(mReader);
@@ -229,6 +260,7 @@ public class TorrentFront {
 
 	public void connect(String hostname, int port) throws IOException {
 		if(Log.ON){Log.v(TAG, "TorrentFront#connection() : "+hostname+ ":" +port);}
+		mDebug =""+hostname+":"+port;
 		mSocket.connect(hostname, port);
 	}
 
@@ -236,10 +268,10 @@ public class TorrentFront {
 		int state = mSocket.getConnectionState();
 		switch (state) {
 		case KyoroSocket.CN_CONNECTED:
-			if(Log.ON){Log.v(TAG, "TorrentFront#connected() : ");}
+			if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"TorrentFront#connected() : ");}
 			return true;
 		case KyoroSocket.CN_DISCONNECTED:
-			if(Log.ON){Log.v(TAG, "TorrentFront#disconnected() : ");}
+			if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"TorrentFront#disconnected() : ");}
 			throw new IOException();
 		case KyoroSocket.CN_CONNECTING:
 		default:
@@ -248,7 +280,7 @@ public class TorrentFront {
 	}
 
 	public void sendShakehand() throws IOException {
-		if(Log.ON){Log.v(TAG, "TorrentFrontTask#sendShakehand");}
+		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"TorrentFrontTask#sendShakehand");}
 		PercentEncoder encoder = new PercentEncoder();
 		TorrentPeer torentPeer = mTorrentPeer.get();
 		byte[] infoHash = encoder.decode(torentPeer.getInfoHash().getBytes());
@@ -259,7 +291,7 @@ public class TorrentFront {
 	}
  
 	public void sendBitfield() throws IOException {
-		if(Log.ON){Log.v(TAG, "TorrentFrontTask#sendBitfield");}
+		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"TorrentFrontTask#sendBitfield");}
 		TorrentPeer torentPeer = mTorrentPeer.get();
 		TorrentData torrentData = torentPeer.getTorrentData();
 		MessageBitField bitfield = new MessageBitField(
@@ -270,7 +302,7 @@ public class TorrentFront {
 	}
 
 	public void have(int index) throws IOException {
-		if(Log.ON){Log.v(TAG, "TorrentFrontTask#notinterest");}
+		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"TorrentFrontTask#notinterest");}
 		MessageHave message = new MessageHave(index);
 		message.encode(mOutput);
 		mOutput.flush();
@@ -278,7 +310,7 @@ public class TorrentFront {
 	}
 
 	public void uncoke() throws IOException {
-		if(Log.ON){Log.v(TAG, "TorrentFrontTask#unchoke");}
+		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"TorrentFrontTask#unchoke");}
 		MessageUnchoke message = new MessageUnchoke();
 		message.encode(mOutput);
 		mOutput.flush();
@@ -287,7 +319,7 @@ public class TorrentFront {
 	}
 
 	public void keepAlive() throws IOException {
-		if(Log.ON){Log.v(TAG, "TorrentFrontTask#keepAlive");}
+		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"TorrentFrontTask#keepAlive");}
 		MessageKeepAlive keepAlive = new MessageKeepAlive();
 		keepAlive.encode(mOutput);
 		mOutput.flush();
@@ -295,7 +327,7 @@ public class TorrentFront {
 	}
 
 	public void choke() throws IOException {
-		if(Log.ON){Log.v(TAG, "TorrentFrontTask#choke");}
+		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"TorrentFrontTask#choke");}
 		MessageChoke message = new MessageChoke();
 		message.encode(mOutput);
 		mOutput.flush();
@@ -304,7 +336,7 @@ public class TorrentFront {
 	}
 
 	public void notinterest() throws IOException {
-		if(Log.ON){Log.v(TAG, "TorrentFrontTask#notinterest");}
+		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"TorrentFrontTask#notinterest");}
 		MessageNotInterested message = new MessageNotInterested();
 		message.encode(mOutput);
 		mOutput.flush();
@@ -314,7 +346,7 @@ public class TorrentFront {
 
 
 	public void interest() throws IOException {
-		if(Log.ON){Log.v(TAG, "TorrentFrontTask#interest");}
+		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"TorrentFrontTask#interest");}
 		MessageInterested message = new MessageInterested();
 		message.encode(mOutput);
 		mOutput.flush();
@@ -327,7 +359,7 @@ public class TorrentFront {
 	}
 
 	public void sendRequest() throws IOException {
-		if(Log.ON){Log.v(TAG, "TorrentFront#sendRequest() ");}
+		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"TorrentFront#sendRequest() ");}
 		TorrentPeer peer = mTorrentPeer.get();
 		if(peer==null){return;}
 		int index = peer.getNextRequestPiece();
@@ -345,7 +377,7 @@ public class TorrentFront {
 		long end = info.getEnd();
 		long index = start/peer.getPieceLength();//peer.getNumOfPieces();
 		try {
-			if(Log.ON){Log.v(TAG, "TorrentFront#sebdMessage start="+start+",end="+end+",index=" +index+"::"+peer.getPieceLength());}
+			if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"TorrentFront#sebdMessage start="+start+",end="+end+",index=" +index+"::"+peer.getPieceLength());}
 			if(start == end) {
 				TorrentHistory.get().pushMessage("error"+start+","+end+","+mTargetInfo.numOfPiece()+"\n");
 				return;
@@ -395,35 +427,35 @@ public class TorrentFront {
 	}
 
 	public void onReceiveMessage(HelperLookAheadMessage messageBase) throws IOException {
-		if(Log.ON){Log.v(TAG, "distribute:"+messageBase.getMessageId());}
+		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"distribute:"+messageBase.getMessageId());}
 		TorrentMessage message = null;
 		switch(messageBase.getMessageId()) {
 		case TorrentMessage.SIGN_CHOKE:
-			if(Log.ON){Log.v(TAG,"receive:choke");}
+			if(Log.ON){Log.v(TAG,"["+mDebug+"]"+"receive:choke");}
 			mTargetInfo.mTargetChoked = true;
 			mReader.seek(messageBase.myMessageFP());
 			message = MessageChoke.decode(mReader);
 			break;
 		case TorrentMessage.SIGN_UNCHOKE:
-			if(Log.ON){Log.v(TAG,"receive:unchoke");}
+			if(Log.ON){Log.v(TAG,"["+mDebug+"]"+"receive:unchoke");}
 			mTargetInfo.mTargetChoked = false;
 			mReader.seek(messageBase.myMessageFP());
 			message = MessageUnchoke.decode(mReader);
 			break;
 		case TorrentMessage.SIGN_INTERESTED:
-			if(Log.ON){Log.v(TAG,"receive:interested");}
+			if(Log.ON){Log.v(TAG,"["+mDebug+"]"+"receive:interested");}
 			mTargetInfo.mTargetInterested = true;
 			mReader.seek(messageBase.myMessageFP());
 			message = MessageInterested.decode(mReader);
 			break;
 		case TorrentMessage.SIGN_NOTINTERESTED:
-			if(Log.ON){Log.v(TAG,"receive:notinterested");}
+			if(Log.ON){Log.v(TAG,"["+mDebug+"]"+"receive:notinterested");}
 			mTargetInfo.mTargetInterested = false;
 			mReader.seek(messageBase.myMessageFP());
 			message = MessageNotInterested.decode(mReader);
 			break;
 		case TorrentMessage.SIGN_HAVE:
-			if(Log.ON){Log.v(TAG,"receive:have");}
+			if(Log.ON){Log.v(TAG,"["+mDebug+"]"+"receive:have");}
 			mReader.seek(messageBase.myMessageFP());
 			MessageHave have = MessageHave.decode(mReader);
 			mTargetInfo.mTargetBitField.isOn(have.getIndex());
@@ -433,15 +465,15 @@ public class TorrentFront {
 			mReader.seek(messageBase.myMessageFP());
 			MessageBitField bitfieldMS = MessageBitField.decode(mReader);
 			mTargetInfo.mTargetBitField.setBitfield(bitfieldMS.getBitField().getBinary());
-			if(Log.ON){Log.v(TAG,"receive:bitfield:"+bitfieldMS.getBitField().lengthPerByte()
+			if(Log.ON){Log.v(TAG,"["+mDebug+"]"+"receive:bitfield:"+bitfieldMS.getBitField().lengthPerByte()
 					+","+bitfieldMS.getBitField().toURLString());}
 			message = bitfieldMS;
 			break;
 		case TorrentMessage.SIGN_REQUEST:
-			if(Log.ON){Log.v(TAG,"receive:request:--");}
+			if(Log.ON){Log.v(TAG,"["+mDebug+"]"+"receive:request:--");}
 			mReader.seek(messageBase.myMessageFP());
 			MessageRequest request = MessageRequest.decode(mReader);
-			if(Log.ON){Log.v(TAG,"receive:request:"+request.getIndex()
+			if(Log.ON){Log.v(TAG,"["+mDebug+"]"+"receive:request:"+request.getIndex()
 					+","+request.getBegin()+","+request.getLength());}
 			message = request;
 			mTargetInfo.request(
@@ -449,7 +481,7 @@ public class TorrentFront {
 					request.getBegin()+request.getLength());
 			break;
 		case TorrentMessage.SIGN_PIECE:
-			if(Log.ON){Log.v(TAG,"receive:piece");}
+			if(Log.ON){Log.v(TAG,"["+mDebug+"]"+"receive:piece");}
 			mReader.seek(messageBase.myMessageFP());
 			MessagePiece piece = MessagePiece.decode(mReader);
 			message = piece;
@@ -463,7 +495,7 @@ public class TorrentFront {
 			
 			break;
 		case TorrentMessage.SIGN_CANCEL:
-			if(Log.ON){Log.v(TAG,"receive:cancel");}
+			if(Log.ON){Log.v(TAG,"["+mDebug+"]"+"receive:cancel");}
 			mReader.seek(messageBase.myMessageFP());
 			MessageCancel cancel = MessageCancel.decode(mReader);
 			message = cancel;

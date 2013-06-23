@@ -8,11 +8,17 @@ import net.hetimatan.util.event.EventTask;
 
 public abstract class KyoroSelectable {
 	public abstract SelectableChannel getRawChannel();
+	private String mDebug = "001";
 	private WeakReference<Object> mRelative = null; 
 	private WeakReference<EventTask> mEventTask = null; 
 
 	public void setRelative(Object obj) {
 		mRelative = new WeakReference<Object>(obj);
+	}
+
+
+	public void setDebug(String deubg) {
+		mDebug = deubg;
 	}
 
 	public Object getRelative() {

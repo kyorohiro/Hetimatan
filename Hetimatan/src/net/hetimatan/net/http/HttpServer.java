@@ -61,6 +61,7 @@ public class HttpServer {
 		if(Log.ON){Log.v(TAG, "HttpServer#accept():");}
 		KyoroSocket socket = mServerSocket.accept();
 		socket.regist(mSelector, KyoroSelector.READ);
+		socket.setDebug("HttpServer:READ"+socket.getHost()+":"+socket.getPort());
 		HttpFront info = new HttpFront(this, socket);
 		socket.setEventTaskAtWrakReference(new HttpFrontRequestTask(info, mRequestRunner));
 		addLastHttpRequest(info);
