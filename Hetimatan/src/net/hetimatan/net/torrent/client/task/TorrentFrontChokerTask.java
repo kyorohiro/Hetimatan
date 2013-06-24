@@ -26,7 +26,7 @@ public class TorrentFrontChokerTask extends EventTask {
 	public void action() throws Throwable {
 		TorrentFront front = mTorrentFront.get();
 		if(mIsChoke) {
-			front.choke();			
+			front.sendChoke();			
 		} else {
 			front.uncoke();
 		}

@@ -33,7 +33,7 @@ import net.hetimatan.util.url.PercentEncoder;
 
 
 public class TorrentPeer {
-	public static final String TAG = "TorrentPeer";
+	public static final String TAG              = "TorrentPeer";
 	public static final String PEERID_HEAD      = "-Kn0000-";//"-KY0114-";
 	public static final int TORRENT_PORT_BEGIN  = 6881;
 	public static final int TORRENT_PORT_END    = 6889;
@@ -42,7 +42,7 @@ public class TorrentPeer {
 	private KyoroServerSocket mServerSocket         = null;
 	private LinkedHashMap<TrackerPeerInfo, TorrentFront> mFrontList = new LinkedHashMap<TrackerPeerInfo, TorrentFront>();
 	private KyoroSocketEventRunner mMasterRunner    = null;
-	private KyoroSelector mAcceptSelector           = null;
+	private KyoroSelector mMasterSelector           = null;
 
 	// ---
 	// property
@@ -68,11 +68,6 @@ public class TorrentPeer {
 	// task
 	//
 	private TorrentPeerAcceptTask mAcceptTask   = null;
-
-
-	// ---
-	//
-	//
 	private ScenarioFinTracker mFinTrackerTask = null;
 	private TorrentPeerStartTracker mTrackerTask = null;
 
@@ -90,15 +85,22 @@ public class TorrentPeer {
 		mUploaded += uploaded;
 	}
 
+	public KyoroSelector getSelector() {
+		return mMasterSelector;
+	}
+
+	public TorrentPeerSetting getSetting() {
+		return mSetting;
+	}
+
 	public void startTracker(String event, EventTask last) {
-//		startTracker(event, new ScenarioFinTracker(mPieceScenario, mMasterRunner));
 		mTrackerClient.update(event, mDownloaded, mUploaded);
 		mTrackerClient.startTask(mMasterRunner, last);
 	}
 
-
 	public void startTracker(String event) {
-		startTracker(event, mFinTrackerTask = new ScenarioFinTracker(mPieceScenario, mMasterRunner));
+		mFinTrackerTask = new ScenarioFinTracker(mPieceScenario, mMasterRunner);
+		startTracker(event, mFinTrackerTask);
 	}
 
 	public EventTaskRunner startTask(KyoroSocketEventRunner runner) {
@@ -107,7 +109,7 @@ public class TorrentPeer {
 			mMasterRunner = runner = new KyoroSocketEventRunner();
 		}
 		runner.waitIsSelect(true);//todo
-		mAcceptSelector = runner.getSelector();
+		mMasterSelector = runner.getSelector();
 		TorrentPeerBootTask bootTask = new TorrentPeerBootTask(this, runner);
 		bootTask.nextAction(mTrackerTask = new TorrentPeerStartTracker(this, runner));
 		runner.start(bootTask);
@@ -130,14 +132,6 @@ public class TorrentPeer {
 			front.startConnect(peer.getHostName(), peer.getPort());
 			addObserver(front);
 		}
-	}
-
-	public KyoroSelector getSelector() {
-		return mAcceptSelector;
-	}
-
-	public TorrentPeerSetting getSetting() {
-		return mSetting;
 	}
 
 	public void updateOptimusUnchokePeer(TorrentFront front) throws IOException {
@@ -194,6 +188,15 @@ public class TorrentPeer {
 		mMasterRunner.pushWork(task);
 	}
 
+	public EventTaskRunner getClientRunner() {
+		return mMasterRunner;
+	}
+
+	public int getServerPort() {
+		try { return mServerSocket.getPort();
+		} catch (IOException e) { return 0;}
+	}
+
 	public void boot() throws IOException {
 		if(Log.ON){Log.v(TAG, "TorrentPeer#boot");}
 		mIsBooted = false;
@@ -201,10 +204,10 @@ public class TorrentPeer {
 		if(mMasterRunner == null) {
 			mMasterRunner = new KyoroSocketEventRunner();
 		}
-		if(mAcceptSelector ==null) {
-			mAcceptSelector = mMasterRunner.getSelector();
+		if(mMasterSelector ==null) {
+			mMasterSelector = mMasterRunner.getSelector();
 		}
-		serverSocket.regist(mAcceptSelector, KyoroSelector.ACCEPT);
+		serverSocket.regist(mMasterSelector, KyoroSelector.ACCEPT);
 		mAcceptTask = new TorrentPeerAcceptTask(this, mMasterRunner);
 		serverSocket.setEventTaskAtWrakReference(mAcceptTask);
 		do {
@@ -244,6 +247,7 @@ public class TorrentPeer {
 		front.addObserverAtWeak(mRequester);//mRequestScenario);
 		front.addObserverAtWeak(mInterest);
 	}
+
 	public TorrentFront createFront(TrackerPeerInfo peer) throws IOException {
 		KyoroSocketImpl s = new KyoroSocketImpl();
 		s.setDebug("TorrentFront:"+s.getHost()+":"+s.getPort());
@@ -257,13 +261,27 @@ public class TorrentPeer {
 		return front;
 	}
 
+	public void close() {
+		try { mServerSocket.close();} catch (IOException e) { }
+	}
+
+	public int getNextRequestPiece() {
+		return mRequester.nextPieceId();
+	}
+
+
+	
+	
+	public synchronized int numOfFront() {
+		return mFrontList.size();
+	}	
+
 	public boolean addTorrentFront(TorrentFront front) throws IOException {
 		String host = front.getSocket().getHost();
 		int port = front.getSocket().getPort();
 		TrackerPeerInfo peer = new TrackerPeerInfo(host, port);
 		return addTorrentFront(peer, front);
 	}
-
 
 	public boolean contain(TrackerPeerInfo peer) {
 		return mFrontList.containsKey(peer);
@@ -281,23 +299,6 @@ public class TorrentPeer {
 	public void removeTorrentFront(TorrentFront front) {
 		mFrontList.remove(front.getPeer());
 	}
-
-	public EventTaskRunner getClientRunner() {
-		return mMasterRunner;
-	}
-
-	public void close() {
-		try { mServerSocket.close();} catch (IOException e) { }
-	}
-
-	public int getServerPort() {
-		try { return mServerSocket.getPort();
-		} catch (IOException e) { return 0;}
-	}
-
-	public synchronized int numOfFront() {
-		return mFrontList.size();
-	}	
 
 	public TorrentFront getTorrentFront(int i) {
 		TrackerPeerInfo key = getFrontPeer(i);
@@ -329,7 +330,4 @@ public class TorrentPeer {
 		return encoder.encode(peerId);
 	}
 
-	public int getNextRequestPiece() {
-		return mRequester.nextPieceId();
-	}
 }
