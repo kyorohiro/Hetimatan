@@ -260,6 +260,15 @@ public class TorrentFront {
 			mReader.setBlockOn(true);
 			MessageHandShake recv = MessageHandShake.decode(mReader);
 			recv.printLog();
+			{//todo
+				TorrentPeer peer = getTorrentPeer();
+				PercentEncoder encoder = new PercentEncoder();
+				if(
+						peer.getPeerId()
+						.equals(encoder.encode(recv.getPeerId()))){	
+					throw new IOException();
+				}
+			}
 		} finally {
 			mReader.setBlockOn(false);
 			Log.v(TAG, "/TorrentFrontTask#shakehand");
@@ -310,7 +319,7 @@ public class TorrentFront {
 	}
 
 	public void have(int index) throws IOException {
-		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"TorrentFrontTask#notinterest");}
+		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"TorrentFrontTask#have");}
 		MessageHave message = new MessageHave(index);
 		message.encode(mOutput);
 		mOutput.flush();
@@ -366,11 +375,14 @@ public class TorrentFront {
 		return mTargetInfo.haveRequest();
 	}
 
+	private int mRequestPiece = -1;
 	public void sendRequest() throws IOException {
 		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"TorrentFront#sendRequest() ");}
 		TorrentPeer peer = mTorrentPeer.get();
 		if(peer==null){return;}
+		if(mRequestPiece != -1) { return;}
 		int index = peer.getNextRequestPiece();
+		mRequestPiece = index;
 		int pieceLength = mTargetInfo.getPieceLength();
 		MessageRequest request = new MessageRequest(index, 0, pieceLength);
 		request.encode(mOutput);
@@ -518,7 +530,11 @@ public class TorrentFront {
 				data.setPiece(piece.getIndex(), piece.getCotent());
 				peer.addDownloaded((int)piece.getCotent().length());
 			}
-			
+			{
+				if(mRequestPiece == piece.getIndex()) {
+					mRequestPiece = -1;
+				}
+			}
 			break;
 		case TorrentMessage.SIGN_CANCEL:
 			if(Log.ON){Log.v(TAG,"["+mDebug+"]"+"receive:cancel");}
@@ -532,14 +548,14 @@ public class TorrentFront {
 			break;
 		}
 
-		if (null != message) {
-			dispatch(message);
-			mLastMessage = message;
-		}
 		TorrentPeer peer = mTorrentPeer.get();
 		if(peer != null) {
 			TorrentHistory.get().pushReceive(this, message);
-			//peer.getHistory().sync();
+		}
+
+		if (null != message) {
+			dispatch(message);
+			mLastMessage = message;
 		}
 	}
 

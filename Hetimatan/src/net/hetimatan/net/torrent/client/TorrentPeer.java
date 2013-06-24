@@ -279,7 +279,7 @@ public class TorrentPeer {
 	}
 
 	public void removeTorrentFront(TorrentFront front) {
-		mFrontList.remove(front);
+		mFrontList.remove(front.getPeer());
 	}
 
 	public EventTaskRunner getClientRunner() {

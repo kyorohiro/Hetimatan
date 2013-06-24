@@ -42,6 +42,8 @@ public class TorrentPeerRequester implements TorrentFront.EventListener {
 			}
 		}
 	}
+
+	private int requestPiece = -1;
 	/*
 	 * except myself's peer send message to me.
 	 */
@@ -61,7 +63,7 @@ public class TorrentPeerRequester implements TorrentFront.EventListener {
 		) {
 			if(!peer.isSeeder()) {
 				try {
-					front.startDownload();
+						front.startDownload();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
