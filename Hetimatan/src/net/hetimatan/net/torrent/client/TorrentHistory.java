@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import net.hetimatan.io.filen.RACashFile;
+import net.hetimatan.net.torrent.client.message.MessageBitField;
 import net.hetimatan.net.torrent.client.message.MessagePiece;
 import net.hetimatan.net.torrent.client.message.MessageRequest;
 import net.hetimatan.net.torrent.client.message.TorrentMessage;
@@ -73,7 +74,8 @@ public class TorrentHistory {
 			case TorrentMessage.SIGN_HAVE:
 				mes = "["+action+"]TM: have\n"; break;
 			case TorrentMessage.SIGN_BITFIELD:
-				mes = "["+action+"]TM: bitfield\n"; break;
+				MessageBitField bitfield = (MessageBitField)message;
+				mes = "["+action+"]TM: bitfield"+bitfield.toString()+"\n"; break;
 			case TorrentMessage.SIGN_REQUEST:
 				MessageRequest request = (MessageRequest)message;
 				mes = "["+action+"]TM: request"+request.toString()+"\n"; break;
@@ -86,9 +88,8 @@ public class TorrentHistory {
 				mes = "["+action+"]TM: null\n"; break;
 			}
 			if(mes != null) {
-				mCash.addChunk(mes.getBytes());
+				pushMessage(mes);
 			}
-		} catch(IOException e) {
 		} finally {	
 		}
 	}

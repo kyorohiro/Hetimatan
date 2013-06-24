@@ -467,60 +467,43 @@ public class TorrentFront {
 	public void onReceiveMessage(HelperLookAheadMessage messageBase) throws IOException {
 		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"distribute:"+messageBase.getMessageId());}
 		TorrentMessage message = null;
-		switch(messageBase.getMessageId()) {
+		int messageId = messageBase.getMessageId();
+		mReader.seek(messageBase.myMessageFP());
+		switch(messageId) {
 		case TorrentMessage.SIGN_CHOKE:
-			if(Log.ON){Log.v(TAG,"["+mDebug+"]"+"receive:choke");}
 			mTargetInfo.mTargetChoked = true;
-			mReader.seek(messageBase.myMessageFP());
 			message = MessageChoke.decode(mReader);
 			break;
 		case TorrentMessage.SIGN_UNCHOKE:
-			if(Log.ON){Log.v(TAG,"["+mDebug+"]"+"receive:unchoke");}
 			mTargetInfo.mTargetChoked = false;
-			mReader.seek(messageBase.myMessageFP());
 			message = MessageUnchoke.decode(mReader);
 			break;
 		case TorrentMessage.SIGN_INTERESTED:
-			if(Log.ON){Log.v(TAG,"["+mDebug+"]"+"receive:interested");}
 			mTargetInfo.mTargetInterested = true;
-			mReader.seek(messageBase.myMessageFP());
 			message = MessageInterested.decode(mReader);
 			break;
 		case TorrentMessage.SIGN_NOTINTERESTED:
-			if(Log.ON){Log.v(TAG,"["+mDebug+"]"+"receive:notinterested");}
 			mTargetInfo.mTargetInterested = false;
-			mReader.seek(messageBase.myMessageFP());
 			message = MessageNotInterested.decode(mReader);
 			break;
 		case TorrentMessage.SIGN_HAVE:
-			if(Log.ON){Log.v(TAG,"["+mDebug+"]"+"receive:have");}
-			mReader.seek(messageBase.myMessageFP());
 			MessageHave have = MessageHave.decode(mReader);
 			mTargetInfo.mTargetBitField.isOn(have.getIndex());
 			message = have;
 			break;
 		case TorrentMessage.SIGN_BITFIELD:
-			mReader.seek(messageBase.myMessageFP());
 			MessageBitField bitfieldMS = MessageBitField.decode(mReader);
 			mTargetInfo.mTargetBitField.setBitfield(bitfieldMS.getBitField().getBinary());
-			if(Log.ON){Log.v(TAG,"["+mDebug+"]"+"receive:bitfield:"+bitfieldMS.getBitField().lengthPerByte()
-					+","+bitfieldMS.getBitField().toURLString());}
 			message = bitfieldMS;
 			break;
 		case TorrentMessage.SIGN_REQUEST:
-			if(Log.ON){Log.v(TAG,"["+mDebug+"]"+"receive:request:--");}
-			mReader.seek(messageBase.myMessageFP());
 			MessageRequest request = MessageRequest.decode(mReader);
-			if(Log.ON){Log.v(TAG,"["+mDebug+"]"+"receive:request:"+request.getIndex()
-					+","+request.getBegin()+","+request.getLength());}
 			message = request;
 			mTargetInfo.request(
 					request.getIndex(), request.getBegin(), 
 					request.getBegin()+request.getLength());
 			break;
 		case TorrentMessage.SIGN_PIECE:
-			if(Log.ON){Log.v(TAG,"["+mDebug+"]"+"receive:piece");}
-			mReader.seek(messageBase.myMessageFP());
 			MessagePiece piece = MessagePiece.decode(mReader);
 			message = piece;
 			{
@@ -537,13 +520,10 @@ public class TorrentFront {
 			}
 			break;
 		case TorrentMessage.SIGN_CANCEL:
-			if(Log.ON){Log.v(TAG,"["+mDebug+"]"+"receive:cancel");}
-			mReader.seek(messageBase.myMessageFP());
 			MessageCancel cancel = MessageCancel.decode(mReader);
 			message = cancel;
 			break;
 		default:
-			mReader.seek(messageBase.myMessageFP());
 			message = MessageNull.decode(mReader);
 			break;
 		}

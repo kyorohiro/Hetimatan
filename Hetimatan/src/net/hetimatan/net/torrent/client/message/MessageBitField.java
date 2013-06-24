@@ -7,6 +7,7 @@ import java.io.OutputStream;
 import net.hetimatan.io.file.MarkableReader;
 import net.hetimatan.util.bitfield.BitField;
 import net.hetimatan.util.io.ByteArrayBuilder;
+import net.hetimatan.util.log.Log;
 import net.hetimatan.util.url.PercentEncoder;
 
 public class MessageBitField extends TorrentMessage {
@@ -29,7 +30,9 @@ public class MessageBitField extends TorrentMessage {
 	private void setBitfield(byte[] bitfield) {
 		mBitfield.setBitfield(bitfield);
 	}
-
+	public String toString() {
+		return "bitfield:"+getBitField().lengthPerByte()+","+getBitField().toURLString();
+	};
 	public void isOn(int number, boolean on) {
 		mBitfield.isOn(number, on);
 	}
