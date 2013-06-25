@@ -48,8 +48,8 @@ public class TorrentPeerPiecer implements TorrentFront.EventListener {
 		int newLen =  4-existLen;
 		if(newLen<0) {return;}
 		boolean have = false;
-		for(int i=0;i<peer.numOfFront();i++) {
-			TorrentFront f = peer.getTorrentFront(i);
+		for(int i=0;i<peer.getTorrentPeerManager().numOfFront();i++) {
+			TorrentFront f = peer.getTorrentPeerManager().getTorrentFront(i);
 			if(f == null){continue;}
 			if(f != null&&f.haveTargetRequest()) {
 				sendPiece(f);

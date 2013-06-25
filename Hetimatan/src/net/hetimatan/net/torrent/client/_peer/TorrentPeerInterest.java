@@ -23,7 +23,6 @@ public class TorrentPeerInterest implements TorrentFront.EventListener {
 		mUploadTargetPeer = new WeakReference<TorrentPeer>(peer);
 	}
 
-
 	/*
 	 * except myself's peer send message to me.
 	 */

@@ -241,7 +241,7 @@ public class TorrentFront {
 		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"close");}
 		TorrentPeer peer = mTorrentPeer.get();
 		if(peer != null) {
-			peer.removeTorrentFront(this);
+			peer.getTorrentPeerManager().removeTorrentFront(this);
 		}
 		if(mSocket != null) {	
 			mSocket.close();

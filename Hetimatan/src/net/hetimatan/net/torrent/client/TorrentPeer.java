@@ -14,6 +14,7 @@ import net.hetimatan.io.net.KyoroServerSocketImpl;
 import net.hetimatan.io.net.KyoroSocket;
 import net.hetimatan.io.net.KyoroSocketImpl;
 import net.hetimatan.net.torrent.client._peer.TorrentPeerChoker;
+import net.hetimatan.net.torrent.client._peer.TorrentPeerFrontManager;
 import net.hetimatan.net.torrent.client._peer.TorrentPeerInterest;
 import net.hetimatan.net.torrent.client._peer.TorrentPeerRequester;
 import net.hetimatan.net.torrent.client._peer.TorrentPeerSetting;
@@ -125,9 +126,9 @@ public class TorrentPeer {
 	}
 
 	public void startConnect(TrackerPeerInfo peer) throws IOException {
-		if(contain(peer)) {return;}
+		if(getTorrentPeerManager().contain(peer)) {return;}
 		TorrentFront front = createFront(peer);
-		if(addTorrentFront(peer, front)){
+		if(getTorrentPeerManager().addTorrentFront(peer, front)){
 			TorrentHistory.get().pushMessage("TorrentPeer#connect()"+peer.toString()+"\n");
 			front.startConnect(peer.getHostName(), peer.getPort());
 			addObserver(front);
@@ -237,7 +238,7 @@ public class TorrentPeer {
 			TorrentHistory.get().pushMessage("TorrentPeer#accepted()\n");
 			TorrentFront front = new TorrentFront(this, socket);
 			addObserver(front);
-			addTorrentFront(front);
+			getTorrentPeerManager().addTorrentFront(front);
 			front.startConnectForAccept();
 		}
 	}
@@ -270,52 +271,9 @@ public class TorrentPeer {
 	}
 
 
-	
-	
-	public synchronized int numOfFront() {
-		return mFrontList.size();
-	}	
-
-	public boolean addTorrentFront(TorrentFront front) throws IOException {
-		String host = front.getSocket().getHost();
-		int port = front.getSocket().getPort();
-		TrackerPeerInfo peer = new TrackerPeerInfo(host, port);
-		return addTorrentFront(peer, front);
-	}
-
-	public boolean contain(TrackerPeerInfo peer) {
-		return mFrontList.containsKey(peer);
-	}
-
-	public boolean addTorrentFront(TrackerPeerInfo peer, TorrentFront front) throws IOException {
-		if(mFrontList.containsKey(peer)) {
-			return false;
-		} else {
-			mFrontList.put(peer, front);
-			return true;
-		}
-	}
-
-	public void removeTorrentFront(TorrentFront front) {
-		mFrontList.remove(front.getPeer());
-	}
-
-	public TorrentFront getTorrentFront(int i) {
-		TrackerPeerInfo key = getFrontPeer(i);
-		return getTorrentFront(key);
-	}
-	public TorrentFront getTorrentFront(TrackerPeerInfo peer) {
-		if(peer == null) {return null;}
-		return mFrontList.get(peer);
-	}
-
-	public TrackerPeerInfo getFrontPeer(int index) {
-		Set<TrackerPeerInfo> keys = mFrontList.keySet();
-		if(index<keys.size()) {
-			return (TrackerPeerInfo)keys.toArray()[index];
-		} else {
-			return null;
-		}
+	private TorrentPeerFrontManager mFrontManager = new TorrentPeerFrontManager();
+	public TorrentPeerFrontManager getTorrentPeerManager() {
+		return mFrontManager;
 	}
 
 	// peerid is random 20 byte string.  

@@ -31,8 +31,8 @@ public class TorrentPeerRequester implements TorrentFront.EventListener {
 	private void sendHave(int index) {
 	 	TorrentPeer peer = mOwner.get();
 		if(peer == null) {return;}
-		for(int i=0;i<peer.numOfFront();i++) {
-			TorrentFront front = peer.getTorrentFront(i);
+		for(int i=0;i<peer.getTorrentPeerManager().numOfFront();i++) {
+			TorrentFront front = peer.getTorrentPeerManager().getTorrentFront(i);
 			if(front != null) {
 				try {
 					front.startHave(index);
