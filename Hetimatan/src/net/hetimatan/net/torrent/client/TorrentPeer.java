@@ -4,9 +4,7 @@ package net.hetimatan.net.torrent.client;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.LinkedHashMap;
 import java.util.Random;
-import java.util.Set;
 
 import net.hetimatan.io.net.KyoroSelector;
 import net.hetimatan.io.net.KyoroServerSocket;
@@ -41,7 +39,6 @@ public class TorrentPeer {
 
 
 	private KyoroServerSocket mServerSocket         = null;
-	private LinkedHashMap<TrackerPeerInfo, TorrentFront> mFrontList = new LinkedHashMap<TrackerPeerInfo, TorrentFront>();
 	private KyoroSocketEventRunner mMasterRunner    = null;
 	private KyoroSelector mMasterSelector           = null;
 
@@ -64,6 +61,7 @@ public class TorrentPeer {
 	private TorrentPeerRequester mRequester     = new TorrentPeerRequester(this);
 	private TorrentPeerPiecer mPieceScenario    = new TorrentPeerPiecer(this);
 	private TorrentPeerInterest mInterest       = new TorrentPeerInterest(this);
+	private TorrentPeerFrontManager mFrontManager = new TorrentPeerFrontManager();
 
 	// ---
 	// task
@@ -270,8 +268,6 @@ public class TorrentPeer {
 		return mRequester.nextPieceId();
 	}
 
-
-	private TorrentPeerFrontManager mFrontManager = new TorrentPeerFrontManager();
 	public TorrentPeerFrontManager getTorrentPeerManager() {
 		return mFrontManager;
 	}
