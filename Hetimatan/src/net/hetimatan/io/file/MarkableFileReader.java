@@ -120,51 +120,61 @@ public class MarkableFileReader implements MarkableReader {
 	//
 	// this method is blocking communocation
 	public int read() throws IOException {
-		int ret = -1;
-		byte[] buffer = new byte[1];
-		boolean first = true;
-		do {
-			mFile.seek(mFilePointer);
-			ret = mFile.read(buffer);
-			if(mBlockOn== false || first==false||ret != 0) {break;}
-			first = false;
-			waitForUnreadable(TIMEOUT);
-		} while(true);
-		mCurLen = ret;
-		if(ret>0) {
-			seek(mFilePointer + 1);
+		try {
+			int ret = -1;
+			byte[] buffer = new byte[1];
+			boolean first = true;
+			do {
+				mFile.seek(mFilePointer);
+				ret = mFile.read(buffer);
+				if(mBlockOn== false || first==false||ret != 0) {break;}
+				first = false;
+				waitForUnreadable(TIMEOUT);
+			} while(true);
+			mCurLen = ret;
+			if(ret>0) {
+				seek(mFilePointer + 1);
+			}
+			if(ret<0) {
+				return -1;
+			}
+			if(ret==0) {
+				return -2;
+			}
+			return 0xFF & buffer[0];
+		} catch (IOException e) {
+			mIsEOF = true;
+			throw e;
 		}
-		if(ret<0) {
-			return -1;
-		}
-		if(ret==0) {
-			return -2;
-		}
-		return 0xFF & buffer[0];
 	}
 
 	@Override
 	public int read(byte[] out, int start, int len) throws IOException {
 
-		int ret = 0;
-		boolean first = true;
-		do {
-			mFile.seek(mFilePointer);
-			ret = mFile.read(out, start, len);
-			if(mBlockOn== false || first==false||ret != 0) {break;}
-			first = false;
-			waitForUnreadable(TIMEOUT);
-		} while(true);
-		mCurLen = ret;
-		if(ret>0) {
-			mFilePointer += ret;
-		}
-		if(ret<0) {
+		try {
+			int ret = 0;
+			boolean first = true;
+			do {
+				mFile.seek(mFilePointer);
+				ret = mFile.read(out, start, len);
+				if(mBlockOn== false || first==false||ret != 0) {break;}
+				first = false;
+				waitForUnreadable(TIMEOUT);
+			} while(true);
+			mCurLen = ret;
+			if(ret>0) {
+				mFilePointer += ret;
+			}
+			if(ret<0) {
+				mIsEOF = true;
+			} else {
+				mIsEOF = false;
+			}
+			return ret;
+		} catch (IOException e) {
 			mIsEOF = true;
-		} else {
-			mIsEOF = false;
+			throw e;
 		}
-		return ret;
 	}
 
 	public int read(byte[] out) throws IOException {

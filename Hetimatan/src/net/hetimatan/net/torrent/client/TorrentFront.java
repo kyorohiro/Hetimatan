@@ -378,7 +378,8 @@ public class TorrentFront {
 		int pieceLength = mTargetInfo.getPieceLength();
 		MessageRequest request = new MessageRequest(index, 0, pieceLength);
 		request.encode(mOutput);
-		if(Log.ON){Log.v(TAG, "/TorrentFront#sendRequest() ");}
+		mOutput.flush();
+		if(Log.ON){Log.v(TAG, "/TorrentFront#sendRequest() "+index+","+pieceLength);}
 	}
 
 	public void sendPiece() throws IOException {

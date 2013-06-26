@@ -69,6 +69,7 @@ public class KyoroServerSocketImpl extends KyoroServerSocket {
 		if(true == mOwnSelector&& mSelector != null) {
 			mSelector.close();
 		}
+		super.close();
 	}
 
 	@Override

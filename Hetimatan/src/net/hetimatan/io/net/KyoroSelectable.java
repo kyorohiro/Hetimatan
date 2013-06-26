@@ -1,6 +1,7 @@
 package net.hetimatan.io.net;
 
 
+import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.nio.channels.SelectableChannel;
 
@@ -15,7 +16,6 @@ public abstract class KyoroSelectable {
 	public void setRelative(Object obj) {
 		mRelative = new WeakReference<Object>(obj);
 	}
-
 
 	public void setDebug(String deubg) {
 		mDebug = deubg;
@@ -42,5 +42,10 @@ public abstract class KyoroSelectable {
 		}
 		task.getRunner().start(task);
 		return true;
+	}
+
+	public void close() throws IOException  {
+		mRelative = null;
+		mEventTask = null;
 	}
 }

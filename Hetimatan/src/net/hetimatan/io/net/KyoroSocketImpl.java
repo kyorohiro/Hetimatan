@@ -76,6 +76,7 @@ public class KyoroSocketImpl extends KyoroSocket {
 			mKey.cancel();
 			mKey = null;
 		}
+		super.close();
 	}
 
 	@Override
