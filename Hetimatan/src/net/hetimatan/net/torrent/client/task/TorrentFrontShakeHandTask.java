@@ -34,6 +34,7 @@ public class TorrentFrontShakeHandTask extends EventTask {
 		TorrentFront front = mTorrentFront.get();
 		if(mIsFirst) {
 			front.sendShakehand();
+			front.sendBitfield();
 			mIsFirst = false;
 		} 
 		TorrentPeer peer = front.getTorrentPeer();

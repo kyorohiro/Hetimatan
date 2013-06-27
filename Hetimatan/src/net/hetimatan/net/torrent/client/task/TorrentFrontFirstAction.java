@@ -19,7 +19,7 @@ public class TorrentFrontFirstAction extends EventTask {
 	@Override
 	public void action() throws Throwable {
 		TorrentFront front = mTorrentFront.get();
-		front.sendBitfield();
+		//front.sendBitfield();
 		TorrentPeer peer =  front.getTorrentPeer();
 		if(peer != null) { peer.updateOptimusUnchokePeer(front);}
 

@@ -369,17 +369,26 @@ public class TorrentFront {
 	}
 
 	public void sendRequest() throws IOException {
-		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"TorrentFront#sendRequest() ");}
-		TorrentPeer peer = mTorrentPeer.get();
-		if(peer==null){return;}
-		if(mRequestPiece != -1) { return;}
-		int index = peer.getNextRequestPiece();
-		mRequestPiece = index;
-		int pieceLength = mTargetInfo.getPieceLength();
-		MessageRequest request = new MessageRequest(index, 0, pieceLength);
-		request.encode(mOutput);
-		mOutput.flush();
-		if(Log.ON){Log.v(TAG, "/TorrentFront#sendRequest() "+index+","+pieceLength);}
+		int index = -1;
+		int pieceLength = -1;
+		try {
+			if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"TorrentFront#sendRequest() ");}
+			TorrentPeer peer = mTorrentPeer.get();
+			if(peer==null){if(Log.ON){Log.v(TAG, "--1--");}
+				return;}
+			if(getTargetInfo().mTargetChoked) {if(Log.ON){Log.v(TAG, "--2--");}
+				return;}
+			if(mRequestPiece != -1) {if(Log.ON){Log.v(TAG, "--3--");}
+				return;}
+			index = peer.getNextRequestPiece();
+			mRequestPiece = index;
+			pieceLength = mTargetInfo.getPieceLength();
+			MessageRequest request = new MessageRequest(index, 0, pieceLength);
+			request.encode(mOutput);
+			mOutput.flush();
+		} finally {
+			if(Log.ON){Log.v(TAG, "/TorrentFront#sendRequest() "+index+","+pieceLength);}
+		}
 	}
 
 	public void sendPiece() throws IOException {
@@ -420,7 +429,7 @@ public class TorrentFront {
 					new HelperLookAheadShakehand(mReader.getFilePointer(), mReader);
 		}
 		mCurrentSHHelper.read();
-		if(mReader.isEOF()){close(); return true;}
+		//if(mReader.isEOF()){close(); return true;}
 		
 	 	TorrentPeer peer = mTorrentPeer.get();
 		if(mCurrentSHHelper.isEnd()) {

@@ -7,7 +7,7 @@ import net.hetimatan.util.bitfield.BitField;
 public class TorrentFrontTargetInfo {
 	public BitField mTargetBitField = null;
 	public boolean mTargetInterested = false;
-	public boolean mTargetChoked = false;
+	public boolean mTargetChoked = true;//false;
 	public PieceInfoList mRequestList = new PieceInfoList();
 
 	private int mPieceLength = 0;
