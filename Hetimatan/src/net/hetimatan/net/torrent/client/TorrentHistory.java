@@ -49,11 +49,11 @@ public class TorrentHistory {
 		if(message == null || front == null) {
 			return;
 		}
-		log("recv", message);
+		log("["+front.getDebug()+"]"+"recv", message);
 	}
 
 	public synchronized void pushSend(TorrentFront front, TorrentMessage message) {
-		log("send", message);
+		log("["+front.getDebug()+"]"+"send", message);
 	}
 
 	public synchronized void log(String action, TorrentMessage message) {

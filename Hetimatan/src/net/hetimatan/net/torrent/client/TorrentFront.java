@@ -90,6 +90,10 @@ public class TorrentFront {
 		mDebug = ""+socket.getHost()+":"+socket.getPort();
 	}
 
+	public String getDebug() {
+		return mDebug;
+	}
+
 	public void setPeer(TrackerPeerInfo peer) {
 		mPeer = peer;
 	}
@@ -239,7 +243,7 @@ public class TorrentFront {
 
 	public void close() throws IOException {
 //		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"close");}
-		TorrentHistory.get().pushMessage("TorrentPeer#close()\n");
+		TorrentHistory.get().pushMessage("["+mDebug+"]"+"TorrentFront#close()\n");
 		TorrentPeer peer = mTorrentPeer.get();
 		if(peer != null) {
 			peer.getTorrentPeerManager().removeTorrentFront(this);
