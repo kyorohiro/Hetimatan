@@ -8,10 +8,16 @@ import net.hetimatan.io.file.MarkableReader;
 import net.hetimatan.util.io.ByteArrayBuilder;
 
 public class MessageChoke extends TorrentMessage {
+	public static final String TAG = "choke";
 	public static final int CHOKE_LENGTH = 1;
 
 	public MessageChoke() {
 		super(TorrentMessage.SIGN_CHOKE);
+	}
+
+	@Override
+	public String toString() {
+		return TAG+":";
 	}
 
 	@Override

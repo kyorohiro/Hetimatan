@@ -7,14 +7,22 @@ import java.io.OutputStream;
 import net.hetimatan.io.file.MarkableReader;
 import net.hetimatan.io.file.MarkableReaderHelper;
 import net.hetimatan.util.io.ByteArrayBuilder;
+import net.hetimatan.util.url.PercentEncoder;
 
 public class MessageHave extends TorrentMessage {
 
 	private int mIndex = 0;
+	public static final String TAG = "have";
 	public static final int HAVE_LENGTH = 5;
 	public MessageHave(int index) {
 		super(TorrentMessage.SIGN_HAVE);
 		mIndex = index;
+	}
+
+	@Override
+	public String toString() {
+		PercentEncoder encoder = new PercentEncoder();
+		return TAG+":"+mIndex;
 	}
 
 	public int getIndex() {

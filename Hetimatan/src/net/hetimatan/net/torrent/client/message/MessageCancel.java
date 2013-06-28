@@ -10,6 +10,7 @@ import net.hetimatan.util.io.ByteArrayBuilder;
 //cancel: <len=0013><id=8><index><begin><length>
 public class MessageCancel extends TorrentMessage {
 
+	public static final String TAG = "cancel";
 	public static final int CANCEL_LENGTH = 1+4*3;
 	private int mIndex = 0;
 	private int mBegin = 0;
@@ -20,6 +21,11 @@ public class MessageCancel extends TorrentMessage {
 		mIndex  = index;
 		mBegin  = begin;
 		mLength = length;
+	}
+
+	@Override
+	public String toString() {
+		return TAG+":"+mIndex+","+mBegin+","+mLength;
 	}
 
 	public int getIndex() {

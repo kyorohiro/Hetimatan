@@ -11,6 +11,8 @@ import net.hetimatan.util.log.Log;
 import net.hetimatan.util.url.PercentEncoder;
 
 public class MessageBitField extends TorrentMessage {
+
+	public static final String TAG = "bitfield";
 	private BitField mBitfield = null;
 
 	public MessageBitField(BitField bitfield) {
@@ -23,6 +25,11 @@ public class MessageBitField extends TorrentMessage {
 		mBitfield = new BitField(bitsize);
 	}
 
+	@Override
+	public String toString() {
+		return TAG+":"+getBitField().lengthPerByte()+","+getBitField().toURLString();
+	}
+
 	public BitField getBitField() {
 		return mBitfield;
 	}
@@ -30,9 +37,7 @@ public class MessageBitField extends TorrentMessage {
 	private void setBitfield(byte[] bitfield) {
 		mBitfield.setBitfield(bitfield);
 	}
-	public String toString() {
-		return "bitfield:"+getBitField().lengthPerByte()+","+getBitField().toURLString();
-	};
+
 	public void isOn(int number, boolean on) {
 		mBitfield.isOn(number, on);
 	}

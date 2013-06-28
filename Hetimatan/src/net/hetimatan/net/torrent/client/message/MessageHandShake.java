@@ -13,11 +13,22 @@ import net.hetimatan.util.url.PercentEncoder;
 // handshake: <pstrlen><pstr><reserved><info_hash><peer_id>
 // ref https://wiki.theory.org/BitTorrentSpecification#Handshake
 public class MessageHandShake extends TorrentMessage {
+	public static final String TAG = "handshake";
+
 	private byte[] mProtocolId = "BitTorrent protocol".getBytes();
 	private byte[] mInfoHash = EMPTY;
 	private byte[] mPeerID = EMPTY;
 	private byte[] mReserved = RESERVED;
 
+	@Override
+	public String toString() {
+		PercentEncoder encoder = new PercentEncoder();
+		return TAG+":"
+				+"protocolID:"+encoder.encode(mProtocolId)
+				+",infoHash:"+encoder.encode(mInfoHash)
+				+",peerID:"+encoder.encode(mPeerID)
+				+",reserved:"+encoder.encode(mReserved);
+	}
 
 	public void printLog() {
 		PercentEncoder encoder = new PercentEncoder();
