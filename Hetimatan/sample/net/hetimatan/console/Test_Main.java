@@ -7,8 +7,8 @@ public class Test_Main {
 
 	public static void main(String[] args) {
 //		/*
-//		String pat = COMMAND_UPLOADER;
-		String pat = COMMAND_CLIENT;
+		String pat = COMMAND_UPLOADER;
+//		String pat = COMMAND_CLIENT;
 		String[] tmp = null;
 		String command = null;
 		if(pat.equals(COMMAND_UPLOADER)) {

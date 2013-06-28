@@ -429,7 +429,7 @@ public class TorrentFront {
 					new HelperLookAheadShakehand(mReader.getFilePointer(), mReader);
 		}
 		mCurrentSHHelper.read();
-		//if(mReader.isEOF()){close(); return true;}
+		if(mReader.isEOF()){close(); return true;}
 		
 	 	TorrentPeer peer = mTorrentPeer.get();
 		if(mCurrentSHHelper.isEnd()) {

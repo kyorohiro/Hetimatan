@@ -28,6 +28,7 @@ public class HttpFront {
 	private MarkableReader mCurrentReader = null;
 	private LookaheadHttpHeader mHeaderChunk = null;
 	private KyoroFileForKyoroSocket mKFKSocket = null;
+	private MessageSendTask mSendTaskChane = null;
 
 	public HttpFront(HttpServer server, KyoroSocket socket) throws IOException {
 		if(Log.ON){Log.v(TAG, "HttpFront#new()");}
