@@ -93,6 +93,7 @@ public class TorrentPeer {
 	}
 
 	public void startTracker(String event, EventTask last) {
+		TorrentHistory.get().pushMessage("tracker:"+event+","+ mDownloaded+","+ mUploaded+"\n");
 		mTrackerClient.update(event, mDownloaded, mUploaded);
 		mTrackerClient.startTask(mMasterRunner, last);
 	}
