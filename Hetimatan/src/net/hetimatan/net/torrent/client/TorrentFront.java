@@ -238,7 +238,8 @@ public class TorrentFront {
 	}
 
 	public void close() throws IOException {
-		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"close");}
+//		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"close");}
+		TorrentHistory.get().pushMessage("TorrentPeer#close()\n");
 		TorrentPeer peer = mTorrentPeer.get();
 		if(peer != null) {
 			peer.getTorrentPeerManager().removeTorrentFront(this);
@@ -257,7 +258,8 @@ public class TorrentFront {
 		try {
 			mReader.setBlockOn(true);
 			MessageHandShake recv = MessageHandShake.decode(mReader);
-			recv.printLog();
+			TorrentHistory.get().pushReceive(this, recv);
+//			recv.printLog();
 			{//todo
 				TorrentPeer peer = getTorrentPeer();
 				PercentEncoder encoder = new PercentEncoder();
@@ -274,8 +276,9 @@ public class TorrentFront {
 	}
 
 	public void connect(String hostname, int port) throws IOException {
-		if(Log.ON){Log.v(TAG, "TorrentFront#connection() : "+hostname+ ":" +port);}
+//		if(Log.ON){Log.v(TAG, "TorrentFront#connection() : "+hostname+ ":" +port);}
 		mDebug =""+hostname+":"+port;
+		TorrentHistory.get().pushMessage("connection() : "+hostname+ ":" +port);
 		mSocket.connect(hostname, port);
 	}
 
@@ -301,6 +304,7 @@ public class TorrentFront {
 		byte[] infoHash = encoder.decode(torentPeer.getInfoHash().getBytes());
 		byte[] peerId = encoder.decode(torentPeer.getPeerId().getBytes());
 		MessageHandShake send = new MessageHandShake(infoHash, peerId);
+		TorrentHistory.get().pushSend(this, send);
 		send.encode(mOutput);
 		mOutput.flush();
 	}
@@ -386,6 +390,7 @@ public class TorrentFront {
 			MessageRequest request = new MessageRequest(index, 0, pieceLength);
 			request.encode(mOutput);
 			mOutput.flush();
+			TorrentHistory.get().pushSend(this, request);
 		} finally {
 			if(Log.ON){Log.v(TAG, "/TorrentFront#sendRequest() "+index+","+pieceLength);}
 		}

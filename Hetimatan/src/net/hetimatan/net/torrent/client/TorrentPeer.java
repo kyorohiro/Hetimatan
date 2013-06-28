@@ -197,7 +197,8 @@ public class TorrentPeer {
 	}
 
 	public void boot() throws IOException {
-		if(Log.ON){Log.v(TAG, "TorrentPeer#boot");}
+//		if(Log.ON){Log.v(TAG, "TorrentPeer#boot");}
+		TorrentHistory.get().pushMessage("TorrentPeer#boot()\n");
 		mIsBooted = false;
 		KyoroServerSocket serverSocket = new KyoroServerSocketImpl();
 		if(mMasterRunner == null) {
