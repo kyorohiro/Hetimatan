@@ -61,34 +61,8 @@ public class TorrentHistory {
 
 	public synchronized void log(String action, TorrentMessage message) {
 		try {
-			String mes = null;
-			switch(message.getType()) {
-			case TorrentMessage.SIGN_CHOKE:
-				mes = "["+action+"]TM: choke\n"; break;
-			case TorrentMessage.SIGN_UNCHOKE:
-				mes = "["+action+"]TM: unchoke\n"; break;
-			case TorrentMessage.SIGN_INTERESTED:
-				mes = "["+action+"]TM: interestedn\n"; break;
-			case TorrentMessage.SIGN_NOTINTERESTED:
-				mes = "["+action+"]TM: notinterested\n"; break;
-			case TorrentMessage.SIGN_HAVE:
-				mes = "["+action+"]TM: have\n"; break;
-			case TorrentMessage.SIGN_BITFIELD:
-				MessageBitField bitfield = (MessageBitField)message;
-				mes = "["+action+"]TM: bitfield"+bitfield.toString()+"\n"; break;
-			case TorrentMessage.SIGN_REQUEST:
-				MessageRequest request = (MessageRequest)message;
-				mes = "["+action+"]TM: request"+request.toString()+"\n"; break;
-			case TorrentMessage.SIGN_PIECE:
-				MessagePiece piece = (MessagePiece)message;
-				mes = "["+action+"]TM: piece"+piece.toString()+"\n"; break;
-			case TorrentMessage.SIGN_CANCEL:
-				mes = "["+action+"]TM: cancel\n"; break;
-			default:
-				mes = "["+action+"]TM: null\n"; break;
-			}
-			if(mes != null) {
-				pushMessage(mes);
+			if(message != null) {
+				pushMessage(""+action+" "+message.toString()+"\r\n");
 			}
 		} finally {	
 		}
