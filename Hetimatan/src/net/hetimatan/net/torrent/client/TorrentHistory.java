@@ -4,9 +4,6 @@ import java.io.File;
 import java.io.IOException;
 
 import net.hetimatan.io.filen.RACashFile;
-import net.hetimatan.net.torrent.client.message.MessageBitField;
-import net.hetimatan.net.torrent.client.message.MessagePiece;
-import net.hetimatan.net.torrent.client.message.MessageRequest;
 import net.hetimatan.net.torrent.client.message.TorrentMessage;
 import net.hetimatan.util.log.Log;
 
@@ -41,9 +38,9 @@ public class TorrentHistory {
 		if(mes != null) {
 			Log.v("HISTORY", mes);
 			try {
-			mCash.addChunk(mes.getBytes());
+				mCash.addChunk(mes.getBytes());
 			} catch(IOException e) {
-				
+
 			}
 		}
 	}
@@ -68,11 +65,11 @@ public class TorrentHistory {
 		}
 	}
 
-    public class ShutdonwTask implements Runnable {
+	public class ShutdonwTask implements Runnable {
 		@Override
 		public void run() {
 			sync();
 		}
-    }
+	}
 
 }
