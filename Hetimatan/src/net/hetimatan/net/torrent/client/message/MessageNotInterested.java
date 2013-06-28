@@ -8,10 +8,16 @@ import net.hetimatan.io.file.MarkableReader;
 import net.hetimatan.util.io.ByteArrayBuilder;
 
 public class MessageNotInterested extends TorrentMessage {
+	public static final String TAG = "notinterested";
 	public static final int NOT_INTEREST_LENGTH = 1;
 
 	public MessageNotInterested() {
 		super(TorrentMessage.SIGN_NOTINTERESTED);
+	}
+
+	@Override
+	public String toString() {
+		return TAG+":";
 	}
 
 	@Override

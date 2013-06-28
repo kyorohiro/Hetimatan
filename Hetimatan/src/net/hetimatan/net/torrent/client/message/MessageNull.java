@@ -9,8 +9,15 @@ import net.hetimatan.util.io.ByteArrayBuilder;
 
 public class MessageNull extends TorrentMessage {
 
+	public static final String TAG = "nullmessage";
+
 	public MessageNull() {
 		super(TorrentMessage.DUMMY_SIGN_NULL);
+	}
+
+	@Override
+	public String toString() {
+		return TAG+":";
 	}
 
 	@Override

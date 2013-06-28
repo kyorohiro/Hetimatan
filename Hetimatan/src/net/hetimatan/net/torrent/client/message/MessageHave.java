@@ -21,7 +21,6 @@ public class MessageHave extends TorrentMessage {
 
 	@Override
 	public String toString() {
-		PercentEncoder encoder = new PercentEncoder();
 		return TAG+":"+mIndex;
 	}
 

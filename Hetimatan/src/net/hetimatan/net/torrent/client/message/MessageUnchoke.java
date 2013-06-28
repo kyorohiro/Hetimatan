@@ -8,10 +8,15 @@ import net.hetimatan.io.file.MarkableReader;
 import net.hetimatan.util.io.ByteArrayBuilder;
 
 public class MessageUnchoke extends TorrentMessage {
+	public static final String TAG = "unchoke";
 	public static final int UNCHOKE_LENGTH = 1;
 
 	public MessageUnchoke() {
 		super(TorrentMessage.SIGN_UNCHOKE);
+	}
+
+	public String toString() {
+		return TAG+":";
 	}
 
 	@Override

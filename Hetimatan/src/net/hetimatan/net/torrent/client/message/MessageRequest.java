@@ -10,6 +10,7 @@ import net.hetimatan.util.io.ByteArrayBuilder;
 //request: <len=0013><id=6><index><begin><length>
 public class MessageRequest extends TorrentMessage {
 
+	public static final String TAG = "request";
 	public static final int REQUEST_LENGTH = 1+4*3;
 	private int mIndex = 0;
 	private int mBegin = 0;
@@ -23,7 +24,7 @@ public class MessageRequest extends TorrentMessage {
 	}
 
 	public String toString() {
-		return "[request]"+mIndex+","+mBegin+","+mLength;
+		return TAG+":"+mIndex+","+mBegin+","+mLength;
 	}
 
 	public int getIndex() {

@@ -9,9 +9,15 @@ import net.hetimatan.util.io.ByteArrayBuilder;
 
 public class MessageInterested extends TorrentMessage {
 	public static final int INTEREST_LENGTH = 1;
-
+	public static final String TAG = "interested";
+	
 	public MessageInterested() {
 		super(TorrentMessage.SIGN_INTERESTED);
+	}
+
+	@Override
+	public String toString() {
+		return TAG+":";
 	}
 
 	@Override

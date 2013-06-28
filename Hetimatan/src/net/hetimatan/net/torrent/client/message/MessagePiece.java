@@ -16,10 +16,12 @@ import net.hetimatan.util.url.PercentEncoder;
 
 public class MessagePiece extends TorrentMessage {
 
+	public static final String TAG = "piece";
 	private int mIndex = 0;
 	private int mBegin = 0;
 	private KyoroFile mContent = null;
 
+	
 	public MessagePiece(int index, int begin, KyoroFile content) {
 		super(TorrentMessage.SIGN_PIECE);
 		try {
@@ -33,12 +35,13 @@ public class MessagePiece extends TorrentMessage {
 		mContent = content;
 	}
 
+
 	public String toString() {
 		int len = -1;
 		try {
 			len = (int)mContent.length();
 		} catch (IOException e) {}
-		return "[piece]"+mIndex+","+mBegin+","+len;
+		return TAG+":"+mIndex+","+mBegin+","+len;
 	}
 
 	public int getIndex() {

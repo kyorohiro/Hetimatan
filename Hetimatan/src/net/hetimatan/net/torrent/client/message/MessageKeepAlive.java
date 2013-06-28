@@ -9,8 +9,14 @@ import net.hetimatan.util.io.ByteArrayBuilder;
 
 public class MessageKeepAlive extends TorrentMessage {
 
+	public static final String TAG = "keepalive";
 	public MessageKeepAlive() {
 		super(TorrentMessage.DUMMY_SIGN_KEEPALIVE);
+	}
+
+	@Override
+	public String toString() {
+		return TAG+":";
 	}
 
 	@Override
