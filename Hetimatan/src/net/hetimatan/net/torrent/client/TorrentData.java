@@ -48,6 +48,21 @@ public class TorrentData {
 		mRequestDataInfo.zeroClear();
 	}
 
+	public void load() throws IOException {
+		RACashFile cash = null;
+		try {
+			cash = new RACashFile(mHead, 256, 2);
+			byte[] buffer = KFNextHelper.newBinary(cash);
+			mStockedDataInfo.setBitfield(buffer);
+			mRequestDataInfo.setBitfield(buffer);
+			cash.syncWrite();
+		} finally {
+			if(cash != null) {
+				cash.close();
+			}
+		}
+	}
+
 	public void save() throws IOException {
 		RACashFile cash = null;
 		try {
