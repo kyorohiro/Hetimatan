@@ -9,7 +9,6 @@ import java.util.LinkedList;
 import net.hetimatan.net.torrent.client.TorrentFront;
 import net.hetimatan.net.torrent.client.TorrentPeer;
 import net.hetimatan.net.torrent.client.message.TorrentMessage;
-import net.hetimatan.net.torrent.client.scenario.task.ScenarioSeeder;
 import net.hetimatan.net.torrent.client.task.TorrentFrontSendPieceTask;
 import net.hetimatan.net.torrent.tracker.TrackerClient;
 import net.hetimatan.net.torrent.tracker.TrackerPeerInfo;

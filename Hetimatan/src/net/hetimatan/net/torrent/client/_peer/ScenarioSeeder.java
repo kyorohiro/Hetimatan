@@ -1,17 +1,16 @@
-package net.hetimatan.net.torrent.client.scenario.task;
+package net.hetimatan.net.torrent.client._peer;
 
 import java.lang.ref.WeakReference;
 
-import net.hetimatan.net.torrent.client._peer.TorrentPeerPiecer;
 import net.hetimatan.util.event.EventTask;
 import net.hetimatan.util.event.EventTaskRunner;
 
 
-public class ScenarioFinTracker extends EventTask {
+public class ScenarioSeeder extends EventTask {
 	
 	private WeakReference<TorrentPeerPiecer> mTorrentScenario = null;
 
-	public ScenarioFinTracker(TorrentPeerPiecer scenario, EventTaskRunner runner) {
+	public ScenarioSeeder(TorrentPeerPiecer scenario, EventTaskRunner runner) {
 		super(runner);
 		mTorrentScenario = new WeakReference<TorrentPeerPiecer>(scenario);
 	}
@@ -21,7 +20,7 @@ public class ScenarioFinTracker extends EventTask {
 		super.action();
 		TorrentPeerPiecer scenario = mTorrentScenario.get();
 		if(scenario == null) {return;}	
-		scenario.onFinTracker();
+		scenario.distributeInOrder();
 	}
 
 }

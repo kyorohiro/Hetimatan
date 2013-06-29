@@ -17,7 +17,7 @@ import net.hetimatan.net.torrent.client._peer.TorrentPeerInterest;
 import net.hetimatan.net.torrent.client._peer.TorrentPeerRequester;
 import net.hetimatan.net.torrent.client._peer.TorrentPeerSetting;
 import net.hetimatan.net.torrent.client._peer.TorrentPeerPiecer;
-import net.hetimatan.net.torrent.client.scenario.task.ScenarioFinTracker;
+import net.hetimatan.net.torrent.client.task.TorrentFrontFinTrackerTask;
 import net.hetimatan.net.torrent.client.task.TorrentPeerAcceptTask;
 import net.hetimatan.net.torrent.client.task.TorrentPeerBootTask;
 import net.hetimatan.net.torrent.client.task.TorrentPeerStartTracker;
@@ -67,7 +67,7 @@ public class TorrentPeer {
 	// task
 	//
 	private TorrentPeerAcceptTask mAcceptTask   = null;
-	private ScenarioFinTracker mFinTrackerTask = null;
+	private TorrentFrontFinTrackerTask mFinTrackerTask = null;
 	private TorrentPeerStartTracker mTrackerTask = null;
 
 	public TorrentPeer(MetaFile metafile, String peerId) throws URISyntaxException, IOException {
@@ -99,7 +99,7 @@ public class TorrentPeer {
 	}
 
 	public void startTracker(String event) {
-		mFinTrackerTask = new ScenarioFinTracker(mPieceScenario, mMasterRunner);
+		mFinTrackerTask = new TorrentFrontFinTrackerTask(mPieceScenario, mMasterRunner);
 		startTracker(event, mFinTrackerTask);
 	}
 
