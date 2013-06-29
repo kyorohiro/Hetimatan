@@ -26,12 +26,13 @@ public class HtanPeer {
 	private String mPeerId = getPeerId();
 	private EventTaskRunner mRunner = null;
 	private StatusCheck mObserver = null;
-
+	private MetaFile mMetafile = null;
 	public HtanPeer() {
 	}
 
-	public void setTorrentFile(File torrentFile) {
+	public void setTorrentFile(File torrentFile) throws IOException {
 		mTorrentFile = torrentFile;
+		mMetafile = MetaFileCreater.createFromTorrentFile(mTorrentFile);
 	}
 
 	public boolean isStarted() {
@@ -43,8 +44,8 @@ public class HtanPeer {
 		if(!easyCheck()) {
 			throw new IOException("unsupported file");
 		}
-		MetaFile metafile = MetaFileCreater.createFromTorrentFile(mTorrentFile);
-		mPeer = new TorrentPeer(metafile, mPeerId);
+
+		mPeer = new TorrentPeer(mMetafile, mPeerId);
 		mRunner = mPeer.startTask(null);
 		mPeer.getTracker().setStatusCheck(new TrackerStatus());
 	}
@@ -54,12 +55,8 @@ public class HtanPeer {
 			mPeer.close();
 		}
 		if(mRunner != null) {
-//			EventTask stopTask  = new TorrentPeerStopTracker(mPeer, mRunner);
 			EventTask closeTask = new CloseTask(mRunner, null);
-			//stopTask.nextAction(closeTask);
 			mPeer.startTracker(TrackerRequest.EVENT_STOPPED, closeTask);
-//			mRunner.pushWork(stopTask);
-//			mRunner.close();
 		}
 	}
 

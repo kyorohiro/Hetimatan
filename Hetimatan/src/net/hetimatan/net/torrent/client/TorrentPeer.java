@@ -264,6 +264,7 @@ public class TorrentPeer {
 
 	public void close() {
 		try { mServerSocket.close();} catch (IOException e) { }
+		try { getTorrentData().save();} catch (IOException e) { }
 	}
 
 	public int getNextRequestPiece() {

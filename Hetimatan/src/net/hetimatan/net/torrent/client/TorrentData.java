@@ -7,7 +7,9 @@ import net.hetimatan.io.file.KyoroFile;
 import net.hetimatan.io.filen.KFNextHelper;
 import net.hetimatan.io.filen.RACashFile;
 import net.hetimatan.net.torrent.util.metafile.MetaFile;
+import net.hetimatan.net.torrent.util.metafile.MetaFileCreater;
 import net.hetimatan.util.bitfield.BitField;
+import net.hetimatan.util.url.PercentEncoder;
 
 
 public class TorrentData {
@@ -18,9 +20,13 @@ public class TorrentData {
 	private RACashFile mCash = null;
 	private int mPieceLength =0;
 	private File mContent = null;
+	private File mHead = null;
+	private File mSource = null;
 	private long mDataLength = 0;
+	private MetaFile mMetafile = null;
 
 	public TorrentData(MetaFile file) throws IOException{//(int pieceLength) {
+		mMetafile = file;
 		int numOfPiece = file.numOfPiece();
 		mPieceLength =(int)file.getPieceLength();
 
@@ -32,12 +38,39 @@ public class TorrentData {
 		File dir = getPieceDir();
 		dir.mkdirs();
 		mContent = new File(dir, "_content");
+		mHead = new File(dir, "_header");
+		mSource = new File(dir, "_source");
 		mCash = new RACashFile(mContent, 256, 10);
 		for(Long l:file.getFileLengths()) {
 			mDataLength += l;
 		}
 		mStockedDataInfo.zeroClear();
 		mRequestDataInfo.zeroClear();
+	}
+
+	public void save() throws IOException {
+		RACashFile cash = null;
+		try {
+			PercentEncoder encoder = new PercentEncoder();
+			cash = new RACashFile(mHead, 256, 2);
+			cash.write(
+					encoder.encode(
+					mStockedDataInfo.getBinary()).getBytes());
+			cash.syncWrite();
+		} finally {
+			if(cash != null) {
+				cash.close();
+			}
+		}
+		try {
+			cash = new RACashFile(mSource, 256, 2);
+			mMetafile.save(cash);
+			cash.syncWrite();
+		} finally {
+			if(cash != null) {
+				cash.close();
+			}
+		}		
 	}
 
 	public boolean isComplete() {

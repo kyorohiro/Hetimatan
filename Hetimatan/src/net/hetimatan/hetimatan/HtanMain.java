@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 import net.hetimatan.hetimatan.HtanPeer.StatusCheck;
+import net.hetimatan.net.torrent.util.metafile.MetaFile;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -12,7 +13,6 @@ import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.TableView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
@@ -20,11 +20,16 @@ import javafx.stage.Stage;
 
 public class HtanMain extends Application {
 	private File mTorrent = (new File(".")).getAbsoluteFile().getParentFile();
+	private File mSource = null;
+
 	private Text mTorrentFilePath = new Text(25, 25, mTorrent.getAbsolutePath());
+	private Text mSourceFilePath = new Text(25, 25, "....");
 	private Text mTrackerInfo = new Text(25, 25, ".....");
-	private Button mOpenFileButton = new Button("open file");
+	private Button mOpenTorrentFileButton = new Button("open torrent file");
+//	private Button mOpenSourceFileButton = new Button("open source file");
 	private Button mStartDownloadButton = new Button("start download");
 	private HtanPeer mPeer = new HtanPeer();
+
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -35,7 +40,7 @@ public class HtanMain extends Application {
 		primaryStage.setScene(scene);
 		root.setStyle("-fx-background-color: #3cb371; -fx-text-fill: #ffa500");
 		root.getChildren().add(mTorrentFilePath);
-		root.getChildren().add(mOpenFileButton);
+		root.getChildren().add(mOpenTorrentFileButton);
 		root.getChildren().add(mStartDownloadButton);
 		root.getChildren().add(mTrackerInfo);
 		buttonSetting();
@@ -51,7 +56,7 @@ public class HtanMain extends Application {
 	}
 
 	private void buttonSetting() {
-		mOpenFileButton.setOnAction(new EventHandler<ActionEvent>() {
+		mOpenTorrentFileButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
 				FileChooser fc = new FileChooser();
@@ -68,7 +73,25 @@ public class HtanMain extends Application {
 				}
 			}
 		});
-
+		/*
+		mOpenSourceFileButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				FileChooser fc = new FileChooser();
+				if(mSource == null) {
+				} else if(mSource.isFile()) {
+					fc.setInitialDirectory(mSource.getAbsoluteFile().getParentFile());
+				} else if(mSource.isDirectory()){
+					fc.setInitialDirectory(mSource.getAbsoluteFile());
+				}
+				File ret = fc.showOpenDialog(null);
+				if(ret != null){// && ret.isFile()) {
+					mSource = ret;
+					mSourceFilePath.setText(ret.getAbsolutePath());
+					System.out.println(""+ret.getAbsolutePath());
+				}
+			}
+		});*/
 		mStartDownloadButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
