@@ -21,7 +21,7 @@ public class TorrentFrontShakeHandTask extends EventTask {
 
 	@Override
 	public boolean isKeep() {
-		return false;//mIsKeep;
+		return mIsKeep;
 	}
 
 	private boolean mIsFirst = true;
@@ -32,31 +32,33 @@ public class TorrentFrontShakeHandTask extends EventTask {
 	@Override
 	public void action() throws Throwable {
 		TorrentFront front = mTorrentFront.get();
+		TorrentPeer peer = front.getTorrentPeer();
+		KyoroSocket mSocket = front.getSocket();
 		if(mIsFirst) {
 			front.sendShakehand();
 			front.sendBitfield();
 			mIsFirst = false;
-		} 
-		TorrentPeer peer = front.getTorrentPeer();
-		KyoroSocket mSocket = front.getSocket();
-		if(front.reveiveSH()) {
-			mSocket.regist(peer.getSelector(), KyoroSelector.READ);
-			mSocket.setEventTaskAtWrakReference(null);
-			mIsKeep = false;
-			front.revcShakehand();
-			if(mNext != null) {
-				nextAction(mNext);
-			}
-
-		} else {
 			mSocket.regist(peer.getSelector(), KyoroSelector.READ);
 			mSocket.setEventTaskAtWrakReference(this);
 			mIsKeep = true;
-			if(mNext == null) {
-				mNext = nextAction();
+		} else {
+			if(front.reveiveSH()) {
+				mSocket.regist(peer.getSelector(), KyoroSelector.READ);
+				mSocket.setEventTaskAtWrakReference(null);
+				mIsKeep = false;
+				front.revcShakehand();
+				if(mNext != null) {
+					nextAction(mNext);
+				}
+			} else {
+				mSocket.regist(peer.getSelector(), KyoroSelector.READ);
+				mSocket.setEventTaskAtWrakReference(this);
+				mIsKeep = true;
+				if(mNext == null) {
+					mNext = nextAction();
+				}
+				nextAction(null);
 			}
-			nextAction(null);
-
 		}
 	}
 }

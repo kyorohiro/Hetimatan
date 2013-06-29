@@ -4,19 +4,24 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
 
+import net.hetimatan.io.file.KyoroFile;
+import net.hetimatan.io.filen.RACashFile;
+
 public class KyoroSocketOutputStream extends OutputStream {
 
 	private KyoroSocket mSocket = null;
+	private boolean mIsBlock = true;
+	private KyoroFile mCash = null;
 
 	public KyoroSocketOutputStream(KyoroSocket socket) {
 		mSocket = socket;
 	}
 
-	private boolean mLogon = false;
-	public int vi = 0;
-	public void logon(boolean on) {
-		mLogon = on;
-		vi=0;
+	public void writeToCash(byte[] b, int off, int len) throws IOException {
+		if(mCash == null) {
+			mCash = new RACashFile(1024, 256);
+		}
+		mCash.addChunk(b, off, off+len);
 	}
 
 	@Override
@@ -31,16 +36,21 @@ public class KyoroSocketOutputStream extends OutputStream {
 			writedAll += writedOneshot;
 			System.out.println("##"+writedAll+"/"+len);
 		} while(writedAll<len);
-		vi += len-off;
 	}
 
 	@Override
 	public void write(int b) throws IOException {
-		vi++;
 		ByteBuffer buffer = ByteBuffer.allocate(1);
 		buffer.put((byte)(0xFF&b));
 		buffer.flip();
 		mSocket.write(buffer.array(), 0, 1);
 	}
 
+	@Override
+	public void close() throws IOException {
+		if(mCash != null) {
+			mCash.close();
+		}
+		super.close();
+	}
 }

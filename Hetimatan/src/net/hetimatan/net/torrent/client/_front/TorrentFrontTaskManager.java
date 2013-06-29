@@ -17,9 +17,11 @@ import net.hetimatan.net.torrent.client.task.TorrentFrontRequestTask;
 import net.hetimatan.net.torrent.client.task.TorrentFrontShakeHandTask;
 import net.hetimatan.util.event.EventTaskRunner;
 import net.hetimatan.util.log.Log;
+import net.hetimatan.util.net.MessageSendTask;
 
 public class TorrentFrontTaskManager {
 	public static final String TAG = "TorrentFrontTask";
+
 	private TorrentFrontShakeHandTask mStartTask = null;
 	public TorrentFrontReceiverTask mReceiverTask = null; //todo
 	private TorrentFrontConnectionTask mConnection = null;
@@ -30,8 +32,19 @@ public class TorrentFrontTaskManager {
 	private TorrentFrontChokerTask mChokerTask = null;
 	private TorrentFrontHaveTask mHaveTask = null;
 	private TorrentFrontFirstAction mFirstAction = null;
+	private MessageSendTask mTaskChain = null;
 
-	
+
+	public void startSendTask(TorrentPeer peer, TorrentFront front) {
+		 if(mTaskChain == null) {
+			 mTaskChain = new MessageSendTask(peer.getClientRunner(), front.getSocket(), front.getSendCash());
+		 }
+
+		 if(!peer.getClientRunner().contains(mTaskChain)) {
+			 peer.getClientRunner().pushWork(mTaskChain);
+		 }
+	}
+
 	public void startConnectForAccept(TorrentPeer peer, TorrentFront front) {
 		if(Log.ON){Log.v(TAG, "["+front.getDebug()+"]"+"start accept task");}
 		EventTaskRunner runner = peer.getClientRunner();
@@ -136,7 +149,5 @@ public class TorrentFrontTaskManager {
 		mHaveTask.errorAction(mCloseTask);
 		peer.getClientRunner().pushWork(mHaveTask);
 	}
-	
-	
-	
+
 }
