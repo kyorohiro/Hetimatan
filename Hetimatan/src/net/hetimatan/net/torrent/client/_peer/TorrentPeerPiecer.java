@@ -10,7 +10,7 @@ import net.hetimatan.net.torrent.client.TorrentFront;
 import net.hetimatan.net.torrent.client.TorrentPeer;
 import net.hetimatan.net.torrent.client.message.TorrentMessage;
 import net.hetimatan.net.torrent.client.scenario.task.ScenarioSeeder;
-import net.hetimatan.net.torrent.client.scenario.task.ScenarioSendPieceTask;
+import net.hetimatan.net.torrent.client.task.TorrentFrontSendPieceTask;
 import net.hetimatan.net.torrent.tracker.TrackerClient;
 import net.hetimatan.net.torrent.tracker.TrackerPeerInfo;
 
@@ -20,7 +20,7 @@ import net.hetimatan.net.torrent.tracker.TrackerPeerInfo;
 public class TorrentPeerPiecer implements TorrentFront.EventListener {
 
 	private WeakReference<TorrentPeer> mUploadTargetPeer = null;
-	private LinkedList<ScenarioSendPieceTask> mScenarioList = new LinkedList<ScenarioSendPieceTask>();
+	private LinkedList<TorrentFrontSendPieceTask> mScenarioList = new LinkedList<TorrentFrontSendPieceTask>();
 	private ScenarioSeeder mSeederTask = null;
 
 	public TorrentPeerPiecer(TorrentPeer peer) {
@@ -31,7 +31,7 @@ public class TorrentPeerPiecer implements TorrentFront.EventListener {
 	public void sendPiece(TorrentFront front) {
 		TorrentPeer peer = mUploadTargetPeer.get();
 		if(peer == null){return;}
-		ScenarioSendPieceTask task = new ScenarioSendPieceTask(this, front, peer.getClientRunner());
+		TorrentFrontSendPieceTask task = new TorrentFrontSendPieceTask(front, peer.getClientRunner());
 		peer.getClientRunner().pushWork(task);
 	}
 
