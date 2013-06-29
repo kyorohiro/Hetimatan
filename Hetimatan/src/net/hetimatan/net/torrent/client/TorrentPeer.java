@@ -231,10 +231,8 @@ public class TorrentPeer {
 	public void accept() throws IOException {
 		while(true) {
 			KyoroSocket socket = mServerSocket.accept();
+			if(socket == null) {break;}
 			socket.setDebug("TorrentPeer"+socket.getHost()+":"+socket.getPort());
-			if(socket == null) {
-				break;
-			}
 			TorrentHistory.get().pushMessage("TorrentPeer#accepted()\n");
 			TorrentFront front = new TorrentFront(this, socket);
 			addObserver(front);
