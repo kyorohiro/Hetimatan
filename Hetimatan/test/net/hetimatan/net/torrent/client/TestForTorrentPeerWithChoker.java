@@ -33,14 +33,14 @@ public class TestForTorrentPeerWithChoker extends TestCase {
 
 		assertEquals(1, testPeer.getTorrentPeerManager().numOfFront());
 		testPeer.getTorrentPeerManager().getTorrentFront(testPeer.getTorrentPeerManager().getFrontPeer(0)).waitMessage(TorrentMessage.SIGN_UNCHOKE, 3000);
-		assertEquals(false, testPeer.getTorrentPeerManager().getTorrentFront(testPeer.getTorrentPeerManager().getFrontPeer(0)).getTargetInfo().mTargetChoked);
+		assertEquals(TorrentFront.FALSE, testPeer.getTorrentPeerManager().getTorrentFront(testPeer.getTorrentPeerManager().getFrontPeer(0)).getTargetInfo().isChoked());
 
 
 		front.sendChoke();
 		testPeer.getTorrentPeerManager().getTorrentFront(testPeer.getTorrentPeerManager().getFrontPeer(0))
 		.waitMessage(TorrentMessage.SIGN_CHOKE, 3000);
 		assertEquals(1, testPeer.getTorrentPeerManager().numOfFront());
-		assertEquals(true, testPeer.getTorrentPeerManager().getTorrentFront(testPeer.getTorrentPeerManager().getFrontPeer(0)).getTargetInfo().mTargetChoked);
+		assertEquals(true, testPeer.getTorrentPeerManager().getTorrentFront(testPeer.getTorrentPeerManager().getFrontPeer(0)).getTargetInfo().isChoked() == TorrentFront.TRUE);
 
 		testPeer.close();
 		compe.close();
@@ -124,12 +124,11 @@ public class TestForTorrentPeerWithChoker extends TestCase {
 		testPeer.getTorrentPeerManager().getTorrentFront(testPeer.getTorrentPeerManager().getFrontPeer(2)).waitMessage(TorrentMessage.SIGN_UNCHOKE, 3000);
 		testPeer.getTorrentPeerManager().getTorrentFront(testPeer.getTorrentPeerManager().getFrontPeer(3)).waitMessage(TorrentMessage.SIGN_UNCHOKE, 3000);
 		testPeer.getTorrentPeerManager().getTorrentFront(testPeer.getTorrentPeerManager().getFrontPeer(4)).waitMessage(TorrentMessage.SIGN_UNCHOKE, 3000);
-		assertEquals(false, testPeer.getTorrentPeerManager().getTorrentFront(testPeer.getTorrentPeerManager().getFrontPeer(0)).getTargetInfo().mTargetChoked);
-		assertEquals(false, testPeer.getTorrentPeerManager().getTorrentFront(testPeer.getTorrentPeerManager().getFrontPeer(1)).getTargetInfo().mTargetChoked);
-		assertEquals(false, testPeer.getTorrentPeerManager().getTorrentFront(testPeer.getTorrentPeerManager().getFrontPeer(2)).getTargetInfo().mTargetChoked);
-		assertEquals(false, testPeer.getTorrentPeerManager().getTorrentFront(testPeer.getTorrentPeerManager().getFrontPeer(3)).getTargetInfo().mTargetChoked);
-		assertEquals(false, testPeer.getTorrentPeerManager().getTorrentFront(testPeer.getTorrentPeerManager().getFrontPeer(4)).getTargetInfo().mTargetChoked);
-
+		assertEquals(TorrentFront.FALSE, testPeer.getTorrentPeerManager().getTorrentFront(testPeer.getTorrentPeerManager().getFrontPeer(0)).getTargetInfo().isChoked());
+		assertEquals(TorrentFront.FALSE, testPeer.getTorrentPeerManager().getTorrentFront(testPeer.getTorrentPeerManager().getFrontPeer(1)).getTargetInfo().isChoked());
+		assertEquals(TorrentFront.FALSE, testPeer.getTorrentPeerManager().getTorrentFront(testPeer.getTorrentPeerManager().getFrontPeer(2)).getTargetInfo().isChoked());
+		assertEquals(TorrentFront.FALSE, testPeer.getTorrentPeerManager().getTorrentFront(testPeer.getTorrentPeerManager().getFrontPeer(3)).getTargetInfo().isChoked());
+		assertEquals(TorrentFront.FALSE, testPeer.getTorrentPeerManager().getTorrentFront(testPeer.getTorrentPeerManager().getFrontPeer(4)).getTargetInfo().isChoked());
 //		testPeer.updateOptimusUnchokePeer();
 //		Thread.sleep(3000);
 		int num = 0;

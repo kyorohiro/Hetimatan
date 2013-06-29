@@ -209,7 +209,7 @@ public class TorrentFront {
 		TorrentPeer peer = mTorrentPeer.get();
 		if(peer == null) {return;}
 		if(peer.isSeeder()){return;}
-		if(mTargetInfo.mTargetChoked){return;}
+		if(mTargetInfo.isChoked() != TorrentFront.TRUE){return;}
 		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"startDownload");}
 		mRequestTask = new TorrentFrontRequestTask(this, peer.getClientRunner());
 		if(mCloseTask == null) {
@@ -392,7 +392,7 @@ public class TorrentFront {
 			TorrentPeer peer = mTorrentPeer.get();
 			if(peer==null){if(Log.ON){Log.v(TAG, "--1--");}
 				return;}
-			if(getTargetInfo().mTargetChoked) {if(Log.ON){Log.v(TAG, "--2--");}
+			if(getTargetInfo().isChoked() == TorrentFront.TRUE) {if(Log.ON){Log.v(TAG, "--2--");}
 				return;}
 			if(mRequestPiece != -1) {if(Log.ON){Log.v(TAG, "--3--");}
 				return;}
@@ -490,11 +490,11 @@ public class TorrentFront {
 		mReader.seek(messageBase.myMessageFP());
 		switch(messageId) {
 		case TorrentMessage.SIGN_CHOKE:
-			mTargetInfo.mTargetChoked = true;
+			mTargetInfo.isChoke(true);
 			message = MessageChoke.decode(mReader);
 			break;
 		case TorrentMessage.SIGN_UNCHOKE:
-			mTargetInfo.mTargetChoked = false;
+			mTargetInfo.isChoke(false);
 			message = MessageUnchoke.decode(mReader);
 			break;
 		case TorrentMessage.SIGN_INTERESTED:
