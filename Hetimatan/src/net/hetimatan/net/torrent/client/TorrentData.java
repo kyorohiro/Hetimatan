@@ -50,12 +50,12 @@ public class TorrentData {
 
 	public void load() throws IOException {
 		RACashFile cash = null;
+		PercentEncoder encoder = new PercentEncoder();
 		try {
 			cash = new RACashFile(mHead, 256, 2);
 			byte[] buffer = KFNextHelper.newBinary(cash);
-			mStockedDataInfo.setBitfield(buffer);
-			mRequestDataInfo.setBitfield(buffer);
-			cash.syncWrite();
+			mStockedDataInfo.setBitfield(encoder.decode(buffer));
+			mRequestDataInfo.setBitfield(encoder.decode(buffer));
 		} finally {
 			if(cash != null) {
 				cash.close();

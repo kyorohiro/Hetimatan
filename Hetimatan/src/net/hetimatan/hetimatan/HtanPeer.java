@@ -46,6 +46,9 @@ public class HtanPeer {
 		}
 
 		mPeer = new TorrentPeer(mMetafile, mPeerId);
+		try {
+		mPeer.getTorrentData().load();
+		} catch(IOException e) {e.printStackTrace();}
 		mRunner = mPeer.startTask(null);
 		mPeer.getTracker().setStatusCheck(new TrackerStatus());
 	}
