@@ -126,45 +126,8 @@ public class TorrentFront {
 		return mTargetInfo;
 	}
 
-	public void startConnectForAccept() {
-		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"start accept task");}
-		mTaskManager.startConnectForAccept(mTorrentPeer.get(), this);
-	}
-
-	public void startConnect(String host, int port) throws IOException {
-		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"start connection task");}
-		mTaskManager.startConnect(mTorrentPeer.get(), this, host, port);
-	}
-
-	public void startReceliver() throws IOException {
-		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"start receiver");}
-		mTaskManager.startReceliver(mTorrentPeer.get(), this);
-		TorrentPeer peer = mTorrentPeer.get();
-	}
-
-	public void startInterest() {
-		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"start interest");}
-		mTaskManager.startInterest(mTorrentPeer.get(), this);
-	}
-
-	public void startNotInterest() {
-		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"start notinterest");}
-		mTaskManager.startNotInterest(mTorrentPeer.get(), this);
-	}
-
-	public void startDownload() throws IOException {
-		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"start Download");}
-		mTaskManager.startDownload(mTorrentPeer.get(), this);
-	}
-
-	public void startChoker(boolean isChoke) throws IOException {
-		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"start Choker");}
-		mTaskManager.startChoker(mTorrentPeer.get(), this, isChoke);
-	}
-
-	public void startHave(int index) throws IOException {
-		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"start Have");}
-		mTaskManager.startHave(mTorrentPeer.get(), this, index);
+	public TorrentFrontTaskManager getTaskManager() {
+		return mTaskManager;
 	}
 
 	public void close() throws IOException {
@@ -228,7 +191,6 @@ public class TorrentFront {
 	}
 
 	public void sendShakehand() throws IOException {
-		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"TorrentFrontTask#sendShakehand");}
 		PercentEncoder encoder = new PercentEncoder();
 		TorrentPeer torentPeer = mTorrentPeer.get();
 		byte[] infoHash = encoder.decode(torentPeer.getInfoHash().getBytes());
@@ -242,8 +204,7 @@ public class TorrentFront {
 	public void sendBitfield() throws IOException {
 		TorrentPeer torentPeer = mTorrentPeer.get();
 		TorrentData torrentData = torentPeer.getTorrentData();
-		MessageBitField bitfield = new MessageBitField(
-				torrentData.getStockedDataInfo());
+		MessageBitField bitfield = new MessageBitField(torrentData.getStockedDataInfo());
 		bitfield.encode(mOutput);
 		mOutput.flush();
 		TorrentHistory.get().pushSend(this, bitfield);
@@ -285,7 +246,6 @@ public class TorrentFront {
 	}
 
 	public void sendNotinterest() throws IOException {
-		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"TorrentFrontTask#notinterest");}
 		MessageNotInterested message = new MessageNotInterested();
 		message.encode(mOutput);
 		mOutput.flush();
@@ -295,7 +255,6 @@ public class TorrentFront {
 
 
 	public void sendInterest() throws IOException {
-		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"TorrentFrontTask#interest");}
 		MessageInterested message = new MessageInterested();
 		message.encode(mOutput);
 		mOutput.flush();
@@ -519,5 +478,49 @@ public class TorrentFront {
 			}
 			observer.onReceiveMessage(this, message);
 		}
+	}
+
+
+	// ------------------------------------------------
+	//
+	// ------------------------------------------------
+	public void startConnectForAccept() {
+		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"start accept task");}
+		mTaskManager.startConnectForAccept(mTorrentPeer.get(), this);
+	}
+
+	public void startConnect(String host, int port) throws IOException {
+		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"start connection task");}
+		mTaskManager.startConnect(mTorrentPeer.get(), this, host, port);
+	}
+
+	public void startReceliver() throws IOException {
+		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"start receiver");}
+		mTaskManager.startReceliver(mTorrentPeer.get(), this);
+	}
+
+	public void startInterest() {
+		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"start interest");}
+		mTaskManager.startInterest(mTorrentPeer.get(), this);
+	}
+
+	public void startNotInterest() {
+		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"start notinterest");}
+		mTaskManager.startNotInterest(mTorrentPeer.get(), this);
+	}
+
+	public void startDownload() throws IOException {
+		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"start Download");}
+		mTaskManager.startDownload(mTorrentPeer.get(), this);
+	}
+
+	public void startChoker(boolean isChoke) throws IOException {
+		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"start Choker");}
+		mTaskManager.startChoker(mTorrentPeer.get(), this, isChoke);
+	}
+
+	public void startHave(int index) throws IOException {
+		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"start Have");}
+		mTaskManager.startHave(mTorrentPeer.get(), this, index);
 	}
 }
