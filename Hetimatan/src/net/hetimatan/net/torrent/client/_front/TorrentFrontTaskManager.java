@@ -104,7 +104,7 @@ public class TorrentFrontTaskManager {
 	public void startDownload(TorrentPeer peer, TorrentFront front) throws IOException {
 		if(peer == null) {return;}
 		if(peer.isSeeder()){return;}
-		if(front.getTargetInfo().isChoked() != TorrentFront.TRUE){return;}
+		if(front.getTargetInfo().isChoked() != TorrentFront.FALSE){return;}
 		if(Log.ON){Log.v(TAG, "["+front.getDebug()+"]"+"startDownload");}
 		mRequestTask = new TorrentFrontRequestTask(front, peer.getClientRunner());
 		if(mCloseTask == null) {

@@ -33,7 +33,7 @@ import net.hetimatan.util.url.PercentEncoder;
 
 public class TorrentPeer {
 	public static final String TAG              = "TorrentPeer";
-	public static final String PEERID_HEAD      = "-Kn0000-";//"-KY0114-";
+	public static final String PEERID_HEAD      = "-KY0114-";
 	public static final int TORRENT_PORT_BEGIN  = 6881;
 	public static final int TORRENT_PORT_END    = 6889;
 
