@@ -49,6 +49,9 @@ import net.hetimatan.util.url.PercentEncoder;
 
 public class TorrentFront {
 	public static final String TAG = "TorrentFront";
+	public static final int TRUE  = 0;
+	public static final int FALSE = 1;
+	public static final int NONE  = -1;
 
 	private MarkableReader mReader = null;
 	private KyoroSocketOutputStream mOutput = null;
@@ -323,33 +326,38 @@ public class TorrentFront {
 		TorrentHistory.get().pushSend(this, bitfield);
 	}
 
-	public void have(int index) throws IOException {
+	public void sendHave(int index) throws IOException {
 		MessageHave message = new MessageHave(index);
 		message.encode(mOutput);
 		mOutput.flush();
 		TorrentHistory.get().pushSend(this, message);
 	}
 
-	public void uncoke() throws IOException {
-		MessageUnchoke message = new MessageUnchoke();
-		message.encode(mOutput);
-		mOutput.flush();
-		mMyInfo.mChoked = false;
-		TorrentHistory.get().pushSend(this, message);
-	}
 
-	public void keepAlive() throws IOException {
+	public void sendKeepAlive() throws IOException {
 		MessageKeepAlive keepAlive = new MessageKeepAlive();
 		keepAlive.encode(mOutput);
 		mOutput.flush();
 		TorrentHistory.get().pushSend(this, keepAlive);
 	}
 
+	public void sendUncoke() throws IOException {
+		MessageUnchoke message = new MessageUnchoke();
+		message.encode(mOutput);
+		mOutput.flush();
+		if(mMyInfo.isChoked() != TorrentFront.FALSE) {
+			mMyInfo.isChoke(false);
+		}
+		TorrentHistory.get().pushSend(this, message);
+	}
+
 	public void sendChoke() throws IOException {
 		MessageChoke message = new MessageChoke();
 		message.encode(mOutput);
 		mOutput.flush();
-		mMyInfo.mChoked = true;
+		if(mMyInfo.isChoked() != TorrentFront.TRUE) {
+			mMyInfo.isChoke(true);
+		}
 		TorrentHistory.get().pushSend(this, message);
 	}
 

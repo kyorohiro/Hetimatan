@@ -7,7 +7,6 @@ import net.hetimatan.io.file.KyoroFile;
 import net.hetimatan.io.filen.KFNextHelper;
 import net.hetimatan.io.filen.RACashFile;
 import net.hetimatan.net.torrent.util.metafile.MetaFile;
-import net.hetimatan.net.torrent.util.metafile.MetaFileCreater;
 import net.hetimatan.util.bitfield.BitField;
 import net.hetimatan.util.url.PercentEncoder;
 

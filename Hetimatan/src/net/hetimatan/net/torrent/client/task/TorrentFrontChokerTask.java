@@ -28,7 +28,7 @@ public class TorrentFrontChokerTask extends EventTask {
 		if(mIsChoke) {
 			front.sendChoke();			
 		} else {
-			front.uncoke();
+			front.sendUncoke();
 		}
 	}
 }

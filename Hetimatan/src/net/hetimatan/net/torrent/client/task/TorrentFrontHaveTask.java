@@ -21,6 +21,6 @@ public class TorrentFrontHaveTask extends EventTask {
 	@Override
 	public void action() throws Throwable {
 		TorrentFront front = mTorrentFront.get();
-		front.have(mIndex);
+		front.sendHave(mIndex);
 	}
 }

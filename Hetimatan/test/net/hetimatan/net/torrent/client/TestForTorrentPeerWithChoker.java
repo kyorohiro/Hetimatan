@@ -29,7 +29,7 @@ public class TestForTorrentPeerWithChoker extends TestCase {
 		front.sendShakehand();
 		front.revcShakehand();
 		front.sendBitfield();
-		front.uncoke();
+		front.sendUncoke();
 
 		assertEquals(1, testPeer.getTorrentPeerManager().numOfFront());
 		testPeer.getTorrentPeerManager().getTorrentFront(testPeer.getTorrentPeerManager().getFrontPeer(0)).waitMessage(TorrentMessage.SIGN_UNCHOKE, 3000);
@@ -106,11 +106,11 @@ public class TestForTorrentPeerWithChoker extends TestCase {
 		front003.sendInterest();
 		front004.sendInterest();
 		front005.sendInterest();
-		front001.uncoke();
-		front002.uncoke();
-		front003.uncoke();
-		front004.uncoke();
-		front005.uncoke();
+		front001.sendUncoke();
+		front002.sendUncoke();
+		front003.sendUncoke();
+		front004.sendUncoke();
+		front005.sendUncoke();
 
 		front001.startReceliver();
 		front002.startReceliver();
@@ -134,7 +134,9 @@ public class TestForTorrentPeerWithChoker extends TestCase {
 //		Thread.sleep(3000);
 		int num = 0;
 		for(int i=0;i<5;i++) {
-			if(testPeer.getTorrentPeerManager().getTorrentFront(testPeer.getTorrentPeerManager().getFrontPeer(i)).getMyInfo().mChoked) {
+			if(testPeer.getTorrentPeerManager()
+					.getTorrentFront(testPeer.getTorrentPeerManager().getFrontPeer(i))
+					.getMyInfo().isChoked() == TorrentFront.TRUE) {
 				num++;
 			}
 		}
