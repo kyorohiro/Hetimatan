@@ -8,25 +8,26 @@ import java.util.Iterator;
 import net.hetimatan.io.filen.KFNextHelper;
 import net.hetimatan.io.filen.RACashFile;
 import net.hetimatan.net.torrent.client.TorrentPeer;
-import net.hetimatan.net.torrent.client.task.TorrentPeerStopTracker;
 import net.hetimatan.net.torrent.tracker.TrackerClient;
 import net.hetimatan.net.torrent.tracker.TrackerPeerInfo;
 import net.hetimatan.net.torrent.tracker.TrackerRequest;
-import net.hetimatan.net.torrent.tracker.TrackerServer.StatusCheck;
 import net.hetimatan.net.torrent.util.metafile.MetaFile;
 import net.hetimatan.net.torrent.util.metafile.MetaFileCreater;
 import net.hetimatan.util.event.CloseTask;
 import net.hetimatan.util.event.EventTask;
 import net.hetimatan.util.event.EventTaskRunner;
+import net.hetimatan.util.event.GlobalAccessProperty;
 
 public class HtanPeer {
 
 	private File mTorrentFile = null;
 	private TorrentPeer mPeer = null;
-	private String mPeerId = getPeerId();
 	private EventTaskRunner mRunner = null;
 	private StatusCheck mObserver = null;
 	private MetaFile mMetafile = null;
+	
+	public static final File sPeerIdSt = new File("peerid");
+
 	public HtanPeer() {
 	}
 
@@ -45,7 +46,8 @@ public class HtanPeer {
 			throw new IOException("unsupported file");
 		}
 
-		mPeer = new TorrentPeer(mMetafile, mPeerId);
+		String peerId = getPeerId();
+		mPeer = new TorrentPeer(mMetafile, peerId);
 		try {
 		mPeer.getTorrentData().load();
 		} catch(IOException e) {e.printStackTrace();}
@@ -104,10 +106,12 @@ public class HtanPeer {
 		}
 	}
 
-	public static final File sPeerIdSt = new File("peerid");
 	public static String getPeerId() {
 		RACashFile cash = null;
-
+		File parent = (new File("dummy")).getAbsoluteFile().getParentFile();
+		String path = GlobalAccessProperty.getInstance().get("my.home", parent.getAbsolutePath());
+		File home = new File(path);
+		File sPeerIdSt = new File(home,"peerid");
 		String peerid = null;
 		try {
 			cash = new RACashFile(sPeerIdSt,10,2);
@@ -128,4 +132,5 @@ public class HtanPeer {
 		}
 		return peerid;
 	}
+	
 }

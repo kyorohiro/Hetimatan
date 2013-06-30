@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import net.hetimatan.io.filen.RACashFile;
 import net.hetimatan.net.torrent.client.message.TorrentMessage;
+import net.hetimatan.util.event.GlobalAccessProperty;
 import net.hetimatan.util.log.Log;
 
 
@@ -14,7 +15,10 @@ public class TorrentHistory {
 	private static TorrentHistory sHistory = null;
 
 	private TorrentHistory() throws IOException {
-		mCash = new RACashFile(new File("history"), 512, 2);
+		File parent = (new File("dummy")).getAbsoluteFile().getParentFile();
+		String path = GlobalAccessProperty.getInstance().get("my.home", parent.getAbsolutePath());
+		File home = new File(path);
+		mCash = new RACashFile(new File(home, "history"), 512, 2);
 		mCash.isCashMode(false);
 		Runtime.getRuntime().addShutdownHook(new Thread(new ShutdonwTask()));
 	}

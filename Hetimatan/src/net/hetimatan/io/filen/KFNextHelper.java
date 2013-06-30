@@ -9,7 +9,7 @@ import net.hetimatan.util.event.GlobalAccessProperty;
 
 public class KFNextHelper {
 
-	public final static String GATAG_DEFAULTCASH = "GATAG_DEFAULTCASH";
+	public final static String GATAG_DEFAULTCASH = "my.tmp";
 	private static int sID = 0;
 
 	public static File newCashFile() {

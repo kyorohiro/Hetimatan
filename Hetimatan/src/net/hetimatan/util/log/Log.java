@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import net.hetimatan.io.filen.RACashFile;
+import net.hetimatan.util.event.GlobalAccessProperty;
 
 
 public class Log {
@@ -18,7 +19,10 @@ public class Log {
   
     public Log() {
     	if(mode == MODE_FILE && ON) {
-            File file = new File("master.log");
+    		File parent = (new File("dummy")).getParentFile();
+    		String path = GlobalAccessProperty.getInstance().get("my.home", parent.getAbsolutePath());
+    		File home = new File(path);
+            File file = new File(home, "master.log");
             try {
                 mLog = new RACashFile(file, 512, 2);
             } catch (IOException e) {

@@ -8,6 +8,7 @@ import net.hetimatan.io.filen.KFNextHelper;
 import net.hetimatan.io.filen.RACashFile;
 import net.hetimatan.net.torrent.util.metafile.MetaFile;
 import net.hetimatan.util.bitfield.BitField;
+import net.hetimatan.util.event.GlobalAccessProperty;
 import net.hetimatan.util.url.PercentEncoder;
 
 
@@ -146,7 +147,10 @@ public class TorrentData {
 	}
 
 	public File getPieceDir() {
-		return new File(mInfoHash);
+		String currentDir = (new File("dummy")).getParent();
+		String homeAsSt = GlobalAccessProperty.getInstance().get("my.home", currentDir);
+		File home = new File(homeAsSt);
+		return new File(home, mInfoHash);
 	}
 
 }
