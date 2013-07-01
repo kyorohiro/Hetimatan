@@ -18,7 +18,7 @@ import net.hetimatan.util.event.EventTask;
 import net.hetimatan.util.event.EventTaskRunner;
 import net.hetimatan.util.event.GlobalAccessProperty;
 
-public class HtanPeer {
+public class HtanClientPeer {
 
 	private File mTorrentFile = null;
 	private TorrentPeer mPeer = null;
@@ -28,7 +28,7 @@ public class HtanPeer {
 	
 	public static final File sPeerIdSt = new File("peerid");
 
-	public HtanPeer() {
+	public HtanClientPeer() {
 	}
 
 	public void setTorrentFile(File torrentFile) throws IOException {

@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-import net.hetimatan.hetimatan.HtanPeer.StatusCheck;
+import net.hetimatan.hetimatan.HtanClientPeer.StatusCheck;
 import net.hetimatan.util.event.GlobalAccessProperty;
 
 import javafx.application.Application;
@@ -18,13 +18,13 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-public class HtanMain extends Application {
+public class HtanClientMain extends Application {
 	private File mTorrent = (new File(".")).getAbsoluteFile().getParentFile();
 	private Text mTorrentFilePath = new Text(25, 25, mTorrent.getAbsolutePath());
 	private Text mTrackerInfo = new Text(25, 25, ".....");
 	private Button mOpenTorrentFileButton = new Button("open torrent file");
 	private Button mStartDownloadButton = new Button("start download");
-	private HtanPeer mPeer = new HtanPeer();
+	private HtanClientPeer mPeer = new HtanClientPeer();
 
 
 	@Override

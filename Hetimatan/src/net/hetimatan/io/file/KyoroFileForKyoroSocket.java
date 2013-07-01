@@ -27,6 +27,7 @@ public class KyoroFileForKyoroSocket extends OutputStream implements KyoroFile {
 	public void setSelector(KyoroSelector selector){
 		mSelector = selector;
 	}
+
 	public RACashFile getVF() {
 		return mVf;
 	}

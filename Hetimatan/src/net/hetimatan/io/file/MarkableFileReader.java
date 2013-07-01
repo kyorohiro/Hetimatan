@@ -136,6 +136,7 @@ public class MarkableFileReader implements MarkableReader {
 				seek(mFilePointer + 1);
 			}
 			if(ret<0) {
+				mIsEOF = true;
 				return -1;
 			}
 			if(ret==0) {
