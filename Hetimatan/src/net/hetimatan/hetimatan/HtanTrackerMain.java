@@ -53,6 +53,14 @@ public class HtanTrackerMain extends Application implements TrackerServer.Status
 		buttonSetting();
 	}
 
+	@Override
+	public void stop() throws Exception {
+		super.stop();
+		if(mServer !=  null) {
+			mServer.close();
+		}
+	}
+
 	private void buttonSetting() {
 		mOpenButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
