@@ -61,10 +61,21 @@ public class HtanTrackerMain extends Application implements TrackerServer.Status
 		}
 	}
 
+	private boolean isStarted() {
+		if(mServer == null) {
+			return false;
+		}
+		if(mServer.isBinded()){
+			return true;
+		} else {
+			return false;
+		}
+	}
 	private void buttonSetting() {
 		mOpenButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
+				if(isStarted()){return;}
 				FileChooser fc = new FileChooser();
 				if(mTorrent.isFile()) {
 					fc.setInitialDirectory(mTorrent.getAbsoluteFile().getParentFile());
@@ -83,6 +94,7 @@ public class HtanTrackerMain extends Application implements TrackerServer.Status
 			@Override
 			public void handle(ActionEvent event) {
 				try {
+					if(isStarted()){return;}
 					startServer();
 				} catch (IOException e) {
 					e.printStackTrace();
