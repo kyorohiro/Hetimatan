@@ -11,6 +11,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
@@ -20,7 +21,8 @@ public class HtanToolMain extends Application {
 
 	private File mInput = (new File("d")).getAbsoluteFile().getParentFile();
 	private Text mText = new Text(""+mInput.getAbsolutePath());
-	private TextArea mAddress = new TextArea("http://127.0.0.1/announce");
+	private TextField mAddress = new TextField("http://127.0.0.1/announce");
+	private Text mInfo = new Text("...");
 	private Button mOpen = new Button("open");
 	private Button mStart = new Button("start");
 
@@ -32,6 +34,7 @@ public class HtanToolMain extends Application {
 		root.getChildren().add(mOpen);
 		root.getChildren().add(mAddress);
 		root.getChildren().add(mStart);
+		root.getChildren().add(mInfo);
 		arg0.setScene(secne);
 		arg0.show();
 		buttonSetting();
@@ -58,13 +61,18 @@ public class HtanToolMain extends Application {
 		mStart.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
+				mInfo.setText("start");
 				String address  =  mAddress.getText();
-				File input = new File(mInput.getAbsolutePath()+".torrent");
-				File output = new File(mInput.getAbsolutePath());
+				File input = new File(mInput.getAbsolutePath());
+				File output = new File(mInput.getAbsolutePath()+".torrent");
 				try {
-					MainCreateTorrentFile.save(address, input, output);
+					MainCreateTorrentFile.createFile(address, input, output);
+					mInfo.setText("end ok");
 				} catch (IOException e) {
 					e.printStackTrace();
+					mInfo.setText("end error. "+e.getStackTrace());
+				} finally {
+					
 				}
 			}
 		});

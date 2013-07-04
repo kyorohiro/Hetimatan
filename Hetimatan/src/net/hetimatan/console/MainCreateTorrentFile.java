@@ -31,7 +31,7 @@ public class MainCreateTorrentFile {
 		}
 
 		try {
-			save(address, targetFile, outputFile);
+			createFile(address, targetFile, outputFile);
 		} catch (IOException e) {
 			showTorrentFileCreateIsFailed();
 			showHelp();
@@ -39,7 +39,7 @@ public class MainCreateTorrentFile {
 		}
 	}
 
-	public static void save(String address, File input, File output) throws IOException {
+	public static void createFile(String address, File input, File output) throws IOException {
 		MetaFile metaFile = null;
 		if(input.isDirectory()) {
 			metaFile = MetaFileCreater.createFromTargetDir(input, address);
