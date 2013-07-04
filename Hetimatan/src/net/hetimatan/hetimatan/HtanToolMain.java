@@ -8,6 +8,7 @@ import net.hetimatan.console.MainCreateTorrentFile;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Orientation;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
@@ -29,6 +30,7 @@ public class HtanToolMain extends Application {
 	@Override
 	public void start(Stage arg0) throws Exception {
 		FlowPane root = new FlowPane();
+		root.setOrientation(Orientation.VERTICAL);
 		Scene secne = new Scene(root);
 		root.getChildren().add(mText);
 		root.getChildren().add(mOpen);
