@@ -29,12 +29,6 @@ public class MainCreateTorrentFile {
 			showHelp();
 			return;
 		}
-		if(outputFile.exists()) {
-			if(!outputFile.delete()) {
-				System.out.print(" confuse output file ("+outputFile.getName()+")");
-				return;
-			}
-		}
 
 		try {
 			save(address, targetFile, outputFile);
@@ -52,6 +46,14 @@ public class MainCreateTorrentFile {
 		} else {
 			metaFile = MetaFileCreater.createFromTargetFile(input, address);
 		}
+
+		if(output.exists()) {
+			if(!output.delete()) {
+				System.out.print(" confuse output file ("+output.getName()+")");
+				return;
+			}
+		}
+
 		RACashFile _output = new RACashFile(output, 1024, 2);
 		try {
 			metaFile.save(_output);

@@ -1,6 +1,7 @@
 package net.hetimatan.hetimatan;
 
 import java.io.File;
+import java.io.IOException;
 
 import net.hetimatan.console.MainCreateTorrentFile;
 
@@ -57,13 +58,14 @@ public class HtanToolMain extends Application {
 		mStart.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				String[] args = new String[5];
-				args[0] = "-a";
-				args[1] =  mAddress.getText();
-				args[2] = "-o";
-				args[3] = mInput.getAbsolutePath()+".torrent";
-				args[4] = mInput.getAbsolutePath();
-				MainCreateTorrentFile.main(args);
+				String address  =  mAddress.getText();
+				File input = new File(mInput.getAbsolutePath()+".torrent");
+				File output = new File(mInput.getAbsolutePath());
+				try {
+					MainCreateTorrentFile.save(address, input, output);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 		});
 	}
