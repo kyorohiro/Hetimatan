@@ -33,6 +33,7 @@ public class HtanToolMain extends Application {
 		root.getChildren().add(mStart);
 		arg0.setScene(secne);
 		arg0.show();
+		buttonSetting();
 	}
 
 	public void buttonSetting() {
