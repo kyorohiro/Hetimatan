@@ -57,9 +57,12 @@ public class HtanToolMain extends Application {
 		mStart.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				String[] args = new String[2];
-				args[0] = ""+mAddress.getText();
-				args[1] = ""+mInput.getAbsolutePath();
+				String[] args = new String[5];
+				args[0] = "-a";
+				args[1] =  mAddress.getText();
+				args[2] = "-o";
+				args[3] = mInput.getAbsolutePath()+".torrent";
+				args[4] = mInput.getAbsolutePath();
 				MainCreateTorrentFile.main(args);
 			}
 		});
