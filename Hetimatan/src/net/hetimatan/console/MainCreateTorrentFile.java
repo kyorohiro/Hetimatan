@@ -23,33 +23,21 @@ public class MainCreateTorrentFile {
 		Builder b = new Builder(args);
 		String address = b.address;
 		File targetFile = new File(b.input);
+		File outputFile = new File(b.output);
 		if(!targetFile.exists()) {
 			showFileDoNotExists(targetFile);
 			showHelp();
 			return;
 		}
+		if(outputFile.exists()) {
+			if(!outputFile.delete()) {
+				System.out.print(" confuse output file ("+outputFile.getName()+")");
+				return;
+			}
+		}
 
 		try {
-			MetaFile metaFile = null;
-			if(targetFile.isDirectory()) {
-				metaFile = MetaFileCreater.createFromTargetDir(targetFile, address);
-			} else {
-				metaFile = MetaFileCreater.createFromTargetFile(targetFile, address);
-			}
-			File outputFile = new File(b.output);
-			if(outputFile.exists()) {
-				if(!outputFile.delete()) {
-					System.out.print(" confuse output file ("+outputFile.getName()+")");
-					return;
-				}
-			}
-			RACashFile output = new RACashFile(outputFile, 1024, 2);
-			try {
-				metaFile.save(output);
-				output.syncWrite();
-			} finally {
-				output.close();
-			}
+			save(address, targetFile, outputFile);
 		} catch (IOException e) {
 			showTorrentFileCreateIsFailed();
 			showHelp();
@@ -57,6 +45,21 @@ public class MainCreateTorrentFile {
 		}
 	}
 
+	public static void save(String address, File input, File output) throws IOException {
+		MetaFile metaFile = null;
+		if(input.isDirectory()) {
+			metaFile = MetaFileCreater.createFromTargetDir(input, address);
+		} else {
+			metaFile = MetaFileCreater.createFromTargetFile(input, address);
+		}
+		RACashFile _output = new RACashFile(output, 1024, 2);
+		try {
+			metaFile.save(_output);
+			_output.syncWrite();
+		} finally {
+			_output.close();
+		}
+	}
 	public static void showTorrentFileCreateIsFailed() {
 		StringBuilder message = new StringBuilder();
 		message.append("[Error] failed to create a torrent file.\r\n");
