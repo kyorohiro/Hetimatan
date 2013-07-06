@@ -32,17 +32,26 @@ public class TorrentFrontTaskManager {
 	private TorrentFrontChokerTask mChokerTask = null;
 	private TorrentFrontHaveTask mHaveTask = null;
 	private TorrentFrontFirstAction mFirstAction = null;
-	private MessageSendTask mTaskChain = null;
+	private MessageSendTask mSendTaskChain = null;
 
 
 	public void startSendTask(TorrentPeer peer, TorrentFront front) {
-		 if(mTaskChain == null) {
-			 mTaskChain = new MessageSendTask(peer.getClientRunner(), front.getSocket(), front.getSendCash());
+		 if(mSendTaskChain == null) {
+			 mSendTaskChain = new MessageSendTask(peer.getClientRunner(), front.getSocket(), front.getSendCash());
 		 }
 
-		 if(!peer.getClientRunner().contains(mTaskChain)) {
-			 peer.getClientRunner().pushWork(mTaskChain);
+		 if(!peer.getClientRunner().contains(mSendTaskChain)) {
+			 peer.getClientRunner().pushWork(mSendTaskChain);
 		 }
+	}
+
+	public void flushSendTask(TorrentPeer peer) throws Throwable {
+		if(peer.getClientRunner().contains(mSendTaskChain)) {
+			do {
+				mSendTaskChain.action();
+			} while(mSendTaskChain.isKeep());
+			peer.getClientRunner().releaseTask(mSendTaskChain);
+		}
 	}
 
 	public void startConnectForAccept(TorrentPeer peer, TorrentFront front) {

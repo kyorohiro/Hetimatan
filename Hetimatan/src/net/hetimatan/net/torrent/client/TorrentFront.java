@@ -207,6 +207,10 @@ public class TorrentFront {
 //		mOutput.flush();
 	}
 
+	public void flush() throws Throwable {
+		mTaskManager.flushSendTask(getTorrentPeer());
+	}
+
 	public void sendBitfield() throws IOException {
 		TorrentPeer torentPeer = mTorrentPeer.get();
 		TorrentData torrentData = torentPeer.getTorrentData();
