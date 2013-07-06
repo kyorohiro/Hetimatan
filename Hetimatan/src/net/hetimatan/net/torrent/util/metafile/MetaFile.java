@@ -169,7 +169,8 @@ public class MetaFile {
 				if (len < 0) {
 					break;
 				}
-				md.update(temp, offset, len);
+//				md.update(temp, offset, len);
+				md.update(temp, 0, len);
 				offset += len;
 			} while (true);
 			digestLen = md.digest(buffer, bufferBegin, digestLen);
