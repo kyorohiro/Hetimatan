@@ -12,7 +12,7 @@ import junit.framework.TestCase;
 
 public class TestForTorrentPeerWithChoker extends TestCase {
 
-	public void testChoke() throws IOException, URISyntaxException, InterruptedException {
+	public void testChoke() throws Throwable {
 		File metafile = new File("./testdata/1m_a.txt.torrent");
 		MetaFile metainfo = MetaFileCreater.createFromTorrentFile(metafile);
 		TorrentPeer testPeer = new TorrentPeer(metainfo, TorrentPeer.createPeerId());
@@ -26,6 +26,7 @@ public class TestForTorrentPeerWithChoker extends TestCase {
 		front.connect(peer.getHostName(), peer.getPort());
 		while(!front.isConnect()){Thread.sleep(0);Thread.yield();}
 		front.sendShakehand();
+		front.flushSendTask();
 		front.revcShakehand();
 		front.sendBitfield();
 		front.sendUncoke();

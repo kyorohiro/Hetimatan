@@ -191,7 +191,7 @@ public class TorrentFront {
 		}
 	}
 
-	public void flushSendTask() throws IOException {	
+	public void pushflushSendTask() throws IOException {	
 		getTaskManager().startSendTask(getTorrentPeer(), this);
 	}
 
@@ -203,11 +203,11 @@ public class TorrentFront {
 		MessageHandShake send = new MessageHandShake(infoHash, peerId);
 		TorrentHistory.get().pushSend(this, send);
 		send.encode(mSendCash.getLastOutput());
-		flushSendTask();
+		pushflushSendTask();
 //		mOutput.flush();
 	}
 
-	public void flush() throws Throwable {
+	public void flushSendTask() throws IOException {
 		mTaskManager.flushSendTask(getTorrentPeer());
 	}
 
@@ -216,7 +216,7 @@ public class TorrentFront {
 		TorrentData torrentData = torentPeer.getTorrentData();
 		MessageBitField bitfield = new MessageBitField(torrentData.getStockedDataInfo());
 		bitfield.encode(mSendCash.getLastOutput());
-		flushSendTask();
+		pushflushSendTask();
 //		mOutput.flush();
 		TorrentHistory.get().pushSend(this, bitfield);
 	}
@@ -224,7 +224,7 @@ public class TorrentFront {
 	public void sendHave(int index) throws IOException {
 		MessageHave message = new MessageHave(index);
 		message.encode(mSendCash.getLastOutput());
-		flushSendTask();
+		pushflushSendTask();
 		TorrentHistory.get().pushSend(this, message);
 	}
 
@@ -232,14 +232,14 @@ public class TorrentFront {
 	public void sendKeepAlive() throws IOException {
 		MessageKeepAlive keepAlive = new MessageKeepAlive();
 		keepAlive.encode(mSendCash.getLastOutput());
-		flushSendTask();
+		pushflushSendTask();
 		TorrentHistory.get().pushSend(this, keepAlive);
 	}
 
 	public void sendUncoke() throws IOException {
 		MessageUnchoke message = new MessageUnchoke();
 		message.encode(mSendCash.getLastOutput());
-		flushSendTask();
+		pushflushSendTask();
 		if(mMyInfo.isChoked() != TorrentFront.FALSE) {
 			mMyInfo.isChoke(false);
 		}
@@ -249,7 +249,7 @@ public class TorrentFront {
 	public void sendChoke() throws IOException {
 		MessageChoke message = new MessageChoke();
 		message.encode(mSendCash.getLastOutput());
-		flushSendTask();
+		pushflushSendTask();
 		if(mMyInfo.isChoked() != TorrentFront.TRUE) {
 			mMyInfo.isChoke(true);
 		}
@@ -259,7 +259,7 @@ public class TorrentFront {
 	public void sendNotinterest() throws IOException {
 		MessageNotInterested message = new MessageNotInterested();
 		message.encode(mSendCash.getLastOutput());
-		flushSendTask();
+		pushflushSendTask();
 		mMyInfo.mInterest = false;
 		TorrentHistory.get().pushSend(this, message);
 	}
@@ -268,7 +268,7 @@ public class TorrentFront {
 	public void sendInterest() throws IOException {
 		MessageInterested message = new MessageInterested();
 		message.encode(mSendCash.getLastOutput());
-		flushSendTask();
+		pushflushSendTask();
 		mMyInfo.mInterest = true;
 		TorrentHistory.get().pushSend(this, message);
 	}
@@ -294,7 +294,7 @@ public class TorrentFront {
 			pieceLength = mTargetInfo.getPieceLength();
 			MessageRequest request = new MessageRequest(index, 0, pieceLength);
 			request.encode(mSendCash.getLastOutput());
-			flushSendTask();
+			pushflushSendTask();
 			TorrentHistory.get().pushSend(this, request);
 		} finally {
 			if(Log.ON){Log.v(TAG, "/TorrentFront#sendRequest() "+index+","+pieceLength);}
@@ -318,7 +318,7 @@ public class TorrentFront {
 			KyoroFile piece = peer.getTorrentData().getPiece(start, end);
 			MessagePiece message = new MessagePiece((int)index, (int)(start-(index*peer.getPieceLength())), piece);
 			message.encode(mSendCash.getLastOutput());
-			flushSendTask();
+			pushflushSendTask();
 			peer.addUploaded((int)piece.length());
 			TorrentHistory.get().pushSend(this, message);
 		} catch(IOException e) {

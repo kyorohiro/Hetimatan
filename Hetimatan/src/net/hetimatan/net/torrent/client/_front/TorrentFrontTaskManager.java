@@ -45,12 +45,16 @@ public class TorrentFrontTaskManager {
 		 }
 	}
 
-	public void flushSendTask(TorrentPeer peer) throws Throwable {
-		if(peer.getClientRunner().contains(mSendTaskChain)) {
-			do {
-				mSendTaskChain.action();
-			} while(mSendTaskChain.isKeep());
-			peer.getClientRunner().releaseTask(mSendTaskChain);
+	public void flushSendTask(TorrentPeer peer) throws IOException  {
+		try {
+			if(peer.getClientRunner().contains(mSendTaskChain)) {
+				do {
+					mSendTaskChain.action();
+				} while(mSendTaskChain.isKeep());
+				peer.getClientRunner().releaseTask(mSendTaskChain);
+			}
+		} catch(Throwable t) {
+			throw new IOException("");
 		}
 	}
 
