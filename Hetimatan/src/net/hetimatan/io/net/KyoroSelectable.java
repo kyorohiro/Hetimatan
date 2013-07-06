@@ -63,6 +63,7 @@ public abstract class KyoroSelectable {
 		}
 		return true;
 	}
+
 	private boolean action(WeakReference<EventTask> eventTask ) {
 		if(eventTask == null) {
 			return false;
