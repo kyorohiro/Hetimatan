@@ -1,4 +1,4 @@
-package info.kyorohiro.raider;
+package net.hetimatan.console;
 
 
 import java.io.File;
@@ -17,6 +17,7 @@ public class TestForMainCreateMetaFile extends TestCase {
 
 	public void testSingleMetaFile() throws IOException {
 		String[] args = {
+				"-a",
 				"http://127.0.0.1:6969/announce", 
 				"./testdata/1kb/1k.txt"
 		};
@@ -47,6 +48,7 @@ public class TestForMainCreateMetaFile extends TestCase {
 
 	public void testMultiMetaFile() throws IOException {
 		String[] args = {
+				"-a",
 				"http://127.0.0.1:6969/announce", 
 				"./testdata/1kb"
 		};
@@ -58,20 +60,21 @@ public class TestForMainCreateMetaFile extends TestCase {
 		assetEqual(exp, out);
 	}
 
-/*
+
 	public void testMultiMetaFile_02() throws IOException {
 		String[] args = {
+				"-a",
 				"http://127.0.0.1:6969/announce", 
 				"./testdata/1mb"
 		};
 
 		MainCreateTorrentFile.main(args);
-		MetaFile exp = MetaFile.createFromTorrentFile(new File("./testdata/1mb.torrent"));
-		MetaFile out = MetaFile.createFromTorrentFile(new File("./a.torrent"));
+		MetaFile exp = MetaFileCreater.createFromTorrentFile(new File("./testdata/1mb.torrent"));
+		MetaFile out = MetaFileCreater.createFromTorrentFile(new File("./a.torrent"));
 
 		assetEqual(exp, out);
 	}
-*/
+
 	public void assetEqual(MetaFile exp, MetaFile out) {
 		assertEquals(exp.getAnnounce(), out.getAnnounce());
 		assertEquals(exp.getPieceLength(), out.getPieceLength());

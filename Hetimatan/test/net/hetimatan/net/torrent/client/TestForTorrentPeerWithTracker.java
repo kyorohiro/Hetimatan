@@ -34,8 +34,12 @@ public class TestForTorrentPeerWithTracker extends TestCase {
 				assertTrue(false);
 			}
 		} finally {
-			runner.close();
-			server.close();
+			if(runner != null) {
+				runner.close();
+			}
+			if(server != null) {
+				server.close();
+			}
 		}
 	}
 

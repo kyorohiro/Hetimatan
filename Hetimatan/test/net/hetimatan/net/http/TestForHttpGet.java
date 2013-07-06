@@ -3,7 +3,7 @@ package net.hetimatan.net.http;
 import junit.framework.TestCase;
 
 public class TestForHttpGet extends TestCase {
-
+/*
 	public void testRedirect() throws InterruptedException {
 		HttpServer3xx _3xx = new HttpServer3xx();
 		_3xx.startServer(null);
@@ -14,5 +14,6 @@ public class TestForHttpGet extends TestCase {
 		httpget.startTask(null, null);
 		Thread.sleep(10*60*1000);
 	}
+	*/
 
 }

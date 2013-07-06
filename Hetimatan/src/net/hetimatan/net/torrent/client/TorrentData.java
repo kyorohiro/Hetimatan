@@ -147,7 +147,7 @@ public class TorrentData {
 	}
 
 	public File getPieceDir() {
-		String currentDir = (new File("dummy")).getParent();
+		String currentDir = (new File("dummy")).getAbsoluteFile().getParent();
 		String homeAsSt = GlobalAccessProperty.getInstance().get("my.home", currentDir);
 		File home = new File(homeAsSt);
 		return new File(home, mInfoHash);
