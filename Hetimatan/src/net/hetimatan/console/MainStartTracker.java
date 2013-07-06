@@ -19,7 +19,7 @@ public class MainStartTracker {
 		try {
 			server = new TrackerServer();
 			server.setPort(TrackerServer.DEFAULT_TRACKER_PORT);
-			argsToMetafile(server, args);
+			putMetafileFromArgs(server, args);
 			server.startServer(null);
 			while (true) {
 				int v = System.in.read();
@@ -35,18 +35,18 @@ public class MainStartTracker {
 		System.exit(0);
 	}
 
-	public static void argsToMetafile(TrackerServer server, String[] args) {
+	public static void putMetafileFromArgs(TrackerServer server, String[] args) {
 		if(args == null) {return;}
 		for(String path:args) {
 			try {
-				metaFile(server, path);
+				putMetaFile(server, path);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
 	}
 
-	public static void metaFile(TrackerServer server, String path) throws IOException {
+	public static void putMetaFile(TrackerServer server, String path) throws IOException {
 		if (path == null) {
 			return;
 		}
