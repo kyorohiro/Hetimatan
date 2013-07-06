@@ -20,10 +20,13 @@ import javafx.stage.Stage;
 
 public class HtanClientMain extends Application {
 	private File mTorrent = (new File(".")).getAbsoluteFile().getParentFile();
+	private File mSource = (new File(".")).getAbsoluteFile().getParentFile();
 	private Text mTorrentFilePath = new Text(25, 25, mTorrent.getAbsolutePath());
+	private Text mSourceFilePath = new Text(25, 25, mTorrent.getAbsolutePath());
 	private Text mTrackerInfo = new Text(25, 25, ".....");
 	private Button mOpenTorrentFileButton = new Button("open torrent file");
 	private Button mStartDownloadButton = new Button("start download");
+	private Button mSourceFileButton = new Button("open source");
 	private HtanClientPeer mPeer = new HtanClientPeer();
 
 
@@ -56,6 +59,8 @@ public class HtanClientMain extends Application {
 		root.getChildren().add(mOpenTorrentFileButton);
 		root.getChildren().add(mStartDownloadButton);
 		root.getChildren().add(mTrackerInfo);
+		root.getChildren().add(mSourceFilePath);
+		root.getChildren().add(mSourceFileButton);
 		buttonSetting();
 		primaryStage.show();
 		
@@ -93,12 +98,33 @@ public class HtanClientMain extends Application {
 				try {
 					if(!mPeer.isStarted()) {
 						mPeer.setTorrentFile(mTorrent);
+						if(mSource != null && mSource.isFile()) {
+							mPeer.setSource(mSource);
+						}
 						mPeer.start();
 					}
 				} catch (IOException e) {
 					e.printStackTrace();
 				} catch (URISyntaxException e) {
 					e.printStackTrace();
+				}
+			}
+		});
+
+		mSourceFileButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				FileChooser fc = new FileChooser();
+				if(mSource.isFile()) {
+					fc.setInitialDirectory(mSource.getAbsoluteFile().getParentFile());
+				} else if(mSource.isDirectory()){
+					fc.setInitialDirectory(mSource.getAbsoluteFile());
+				}
+				File ret = fc.showOpenDialog(null);
+				if(ret != null){// && ret.isFile()) {
+					mSource = ret;
+					mSourceFilePath.setText(ret.getAbsolutePath());
+					System.out.println(""+ret.getAbsolutePath());
 				}
 			}
 		});

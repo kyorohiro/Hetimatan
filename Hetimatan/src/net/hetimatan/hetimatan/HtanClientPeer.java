@@ -65,6 +65,12 @@ public class HtanClientPeer {
 		}
 	}
 
+	public void setSource(File source) throws IOException {
+		File[] fs = new File[1];
+		fs[0] = source;
+		mPeer.setMasterFile(fs);
+	}
+
 	private boolean easyCheck() {
 		if(mTorrentFile == null) {return false;}
 		if(!mTorrentFile.exists()) {return false;}
