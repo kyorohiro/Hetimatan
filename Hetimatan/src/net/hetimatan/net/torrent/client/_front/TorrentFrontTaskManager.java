@@ -95,7 +95,7 @@ public class TorrentFrontTaskManager {
 		mReceiverTask.errorAction(mCloseTask);
 		peer.getSelector().wakeup();
 		front.getSocket().regist(peer.getSelector(), KyoroSelector.READ);
-		front.getSocket().setEventTaskAtWrakReference(mReceiverTask);
+		front.getSocket().setEventTaskAtWrakReference(mReceiverTask, KyoroSelector.READ);
 		runner.pushWork(mReceiverTask);
 	}
 

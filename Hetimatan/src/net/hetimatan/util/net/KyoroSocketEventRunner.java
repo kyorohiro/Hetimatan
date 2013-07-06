@@ -71,7 +71,7 @@ public class KyoroSocketEventRunner extends EventTaskRunnerImple {
 		boolean ret = false;
 		while(mSelector.next()) {
 			ret = true;
-			if(!mSelector.getCurrentSocket().startEventTask()) {
+			if(!mSelector.getCurrentSocket().startEventTask(mSelector.getkey())) {
 			//	if(Log.ON){Log.v(TAG,"Wearning not task");}
 			}
 		}

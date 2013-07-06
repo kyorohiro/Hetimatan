@@ -39,12 +39,12 @@ public class TorrentFrontShakeHandTask extends EventTask {
 			front.sendBitfield();
 			mIsFirst = false;
 			mSocket.regist(peer.getSelector(), KyoroSelector.READ);
-			mSocket.setEventTaskAtWrakReference(this);
+			mSocket.setEventTaskAtWrakReference(this, KyoroSelector.READ);
 			mIsKeep = true;
 		} else {
 			if(front.reveiveSH()) {
 				mSocket.regist(peer.getSelector(), KyoroSelector.READ);
-				mSocket.setEventTaskAtWrakReference(null);
+				mSocket.setEventTaskAtWrakReference(null,KyoroSelector.READ);
 				mIsKeep = false;
 				front.revcShakehand();
 				if(mNext != null) {
@@ -52,7 +52,7 @@ public class TorrentFrontShakeHandTask extends EventTask {
 				}
 			} else {
 				mSocket.regist(peer.getSelector(), KyoroSelector.READ);
-				mSocket.setEventTaskAtWrakReference(this);
+				mSocket.setEventTaskAtWrakReference(this,KyoroSelector.READ);
 				mIsKeep = true;
 				if(mNext == null) {
 					mNext = nextAction();

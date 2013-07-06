@@ -28,11 +28,11 @@ public abstract class KyoroSelectable {
 		return mRelative.get();
 	}
 
-	public void setEventTaskAtWrakReference(EventTask task) {
+	public void setEventTaskAtWrakReference(EventTask task, int state) {
 		mEventTask =  new WeakReference<EventTask>(task);
 	}
 
-	public boolean startEventTask() {
+	public boolean startEventTask(int key) {
 		if(mEventTask == null) {
 			return false;
 		}

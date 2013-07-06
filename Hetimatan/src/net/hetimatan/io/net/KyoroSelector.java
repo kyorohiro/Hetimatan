@@ -15,6 +15,9 @@ public class KyoroSelector {
 	public static final int READ = SelectionKey.OP_READ;
 	public static final int WRITE = SelectionKey.OP_WRITE;
 	public static final int CONNECT = SelectionKey.OP_CONNECT;
+	public static final int ALL = ACCEPT|READ|WRITE|CONNECT;
+	public static final int READ_WRITE = READ|WRITE;
+	
 	public static final int CANCEL = -1;
 
 	private Selector mSelector = null;

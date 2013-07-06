@@ -210,7 +210,7 @@ public class TorrentPeer {
 		}
 		serverSocket.regist(mMasterSelector, KyoroSelector.ACCEPT);
 		mAcceptTask = new TorrentPeerAcceptTask(this, mMasterRunner);
-		serverSocket.setEventTaskAtWrakReference(mAcceptTask);
+		serverSocket.setEventTaskAtWrakReference(mAcceptTask, KyoroSelector.ACCEPT);
 		do {
 			try {
 				serverSocket.bind(mPort);

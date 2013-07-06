@@ -51,7 +51,8 @@ public class HttpServer {
 		mServerSocket = new KyoroServerSocketImpl();
 		mServerSocket.bind(mPort);
 		mServerSocket.regist(mSelector, KyoroSelector.ACCEPT);
-		mServerSocket.setEventTaskAtWrakReference(mAcceptTask = new HttpServerAcceptTask(this, mRequestRunner));
+		mAcceptTask = new HttpServerAcceptTask(this, mRequestRunner);
+		mServerSocket.setEventTaskAtWrakReference(mAcceptTask, KyoroSelector.ACCEPT);
 	}
 
 
@@ -63,7 +64,8 @@ public class HttpServer {
 		socket.regist(mSelector, KyoroSelector.READ);
 		socket.setDebug("HttpServer:READ"+socket.getHost()+":"+socket.getPort());
 		HttpFront info = new HttpFront(this, socket);
-		socket.setEventTaskAtWrakReference(new HttpFrontRequestTask(info, mRequestRunner));
+		HttpFrontRequestTask requestTask = new HttpFrontRequestTask(info, mRequestRunner);
+		socket.setEventTaskAtWrakReference(requestTask, KyoroSelector.READ_WRITE);
 		addLastHttpRequest(info);
 	}
 
