@@ -2,6 +2,7 @@ package net.hetimatan.console;
 
 
 import java.io.File;
+import java.io.IOException;
 
 import net.hetimatan.net.torrent.client.TorrentPeer;
 import net.hetimatan.net.torrent.util.metafile.MetaFile;
@@ -16,11 +17,11 @@ public class MainStartClient {
 
 	public static void main(String[] args) {
 		try {
-			start(args);
+			startClient(args);
 		} catch (Throwable e) { e.printStackTrace(); }
 	}
 
-	public static void start(String[] args) throws Throwable {
+	public static void startClient(String[] args) throws Throwable {
 		String metafileAsString = args[0];
 		File metaFile = new File(metafileAsString);
 		if(!metaFile.exists()) {
@@ -30,24 +31,16 @@ public class MainStartClient {
 		MetaFile metafile =MetaFileCreater.createFromTorrentFile(metaFile);
 		TorrentPeer peer = new TorrentPeer(metafile, TorrentPeer.createPeerId());
 		sPeer = peer;
-		{
-			File[] master = new File[args.length-1];
-			for(int i=0;i<master.length;i++){
-				master[i] = new File(args[i+1]);
-			}
-			peer.setMasterFile(master);
-		}
+		setMasterFileFromArgs(peer, args);
 		peer.startTask(null);
 	}
 
-	public static class Last extends EventTask {
-		public Last(EventTaskRunner runner) {
-			super(runner);
+	private static void setMasterFileFromArgs(TorrentPeer peer, String[] args) throws IOException {
+		File[] master = new File[args.length-1];
+		for(int i=0;i<master.length;i++){
+			master[i] = new File(args[i+1]);
 		}
-		@Override
-		public void action() throws Throwable {
-			super.action();
-			System.out.println("END");
-		}
+		peer.setMasterFile(master);
 	}
+
 }

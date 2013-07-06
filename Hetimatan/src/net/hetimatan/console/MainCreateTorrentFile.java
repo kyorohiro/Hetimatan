@@ -20,7 +20,7 @@ public class MainCreateTorrentFile {
 			showHelp();
 			return;
 		}
-		Builder b = new Builder(args);
+		ArgsParser b = new ArgsParser(args);
 		String address = b.address;
 		File targetFile = new File(b.input);
 		File outputFile = new File(b.output);
@@ -31,7 +31,7 @@ public class MainCreateTorrentFile {
 		}
 
 		try {
-			createFile(address, targetFile, outputFile);
+			createTorrentFile(address, targetFile, outputFile);
 		} catch (IOException e) {
 			showTorrentFileCreateIsFailed();
 			showHelp();
@@ -39,7 +39,7 @@ public class MainCreateTorrentFile {
 		}
 	}
 
-	public static void createFile(String address, File input, File output) throws IOException {
+	public static void createTorrentFile(String address, File input, File output) throws IOException {
 		MetaFile metaFile = null;
 		if(input.isDirectory()) {
 			metaFile = MetaFileCreater.createFromTargetDir(input, address);
@@ -89,12 +89,12 @@ public class MainCreateTorrentFile {
 		System.out.println(message.toString());
 	}
 
-	static class Builder {
+	static class ArgsParser {
 		String address = "http://127.0.0.1";
 		String input   = "input";
 		String output  = "a.torrent";
 
-		public Builder(String[] args) {
+		public ArgsParser(String[] args) {
 			for(int i=0;i<args.length;i++) {
 				String v = args[i];
 				if(v.equals("-o")&&i+1<args.length) {

@@ -68,7 +68,7 @@ public class HtanToolMain extends Application {
 				File input = new File(mInput.getAbsolutePath());
 				File output = new File(mInput.getAbsolutePath()+".torrent");
 				try {
-					MainCreateTorrentFile.createFile(address, input, output);
+					MainCreateTorrentFile.createTorrentFile(address, input, output);
 					mInfo.setText("end ok");
 				} catch (IOException e) {
 					e.printStackTrace();
