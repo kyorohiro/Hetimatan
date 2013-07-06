@@ -25,17 +25,18 @@ public class TestForTorrentPeerWithChoker extends TestCase {
 		TorrentFront front = compe.createFront(peer);
 		front.connect(peer.getHostName(), peer.getPort());
 		while(!front.isConnect()){Thread.sleep(0);Thread.yield();}
+		Thread.sleep(1000);//todo
 		front.sendShakehand();
 		front.flushSendTask();
 		front.revcShakehand();
 		front.sendBitfield();
 		front.sendUncoke();
+		front.flushSendTask();
 
 		assertEquals(1, testPeer.getTorrentPeerManager().numOfFront());
 		testPeer.getTorrentPeerManager().getTorrentFront(testPeer.getTorrentPeerManager().getFrontPeer(0)).waitMessage(TorrentMessage.SIGN_UNCHOKE, 3000);
 		assertEquals(TorrentFront.FALSE,
 		testPeer.getTorrentPeerManager().getTorrentFront(testPeer.getTorrentPeerManager().getFrontPeer(0)).getTargetInfo().isChoked());
-
 
 		front.sendChoke();
 		testPeer.getTorrentPeerManager().getTorrentFront(testPeer.getTorrentPeerManager().getFrontPeer(0))
