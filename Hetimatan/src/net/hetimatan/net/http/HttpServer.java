@@ -65,7 +65,7 @@ public class HttpServer {
 		socket.setDebug("HttpServer:READ"+socket.getHost()+":"+socket.getPort());
 		HttpFront info = new HttpFront(this, socket);
 		HttpFrontRequestTask requestTask = new HttpFrontRequestTask(info, mRequestRunner);
-		socket.setEventTaskAtWrakReference(requestTask, KyoroSelector.READ_WRITE);
+		socket.setEventTaskAtWrakReference(requestTask, KyoroSelector.READ);
 		addLastHttpRequest(info);
 	}
 

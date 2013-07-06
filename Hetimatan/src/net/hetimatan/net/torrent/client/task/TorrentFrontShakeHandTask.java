@@ -1,6 +1,6 @@
 package net.hetimatan.net.torrent.client.task;
 
-import java.io.IOException;
+
 import java.lang.ref.WeakReference;
 
 import net.hetimatan.io.net.KyoroSelector;
