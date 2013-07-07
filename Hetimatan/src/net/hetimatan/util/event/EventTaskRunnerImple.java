@@ -12,6 +12,8 @@ import net.hetimatan.util.log.Log;
 import net.hetimatan.util.net.KyoroSocketEventRunner;
 
 public class EventTaskRunnerImple extends EventTaskRunner {
+	private static int sID = 0;
+	public int mId = sID++;
 	private SingleTaskRunner mRunner = new SingleTaskRunner();
 
 	private LinkedList<EventTask> mTasks = new LinkedList<EventTask>();
@@ -106,6 +108,9 @@ public class EventTaskRunnerImple extends EventTaskRunner {
 		mWorker.kick();
 	}
 
+	public synchronized void kick() {
+		notify();
+	}
 	public synchronized void waitPlus(int time) throws InterruptedException, IOException {
 		if(time<0) {
 			//Thread.sleep(10000);
@@ -125,9 +130,15 @@ public class EventTaskRunnerImple extends EventTaskRunner {
 		}
 
 		public void kick() {
-			synchronized(this){
-				notifyAll();
-			}
+			System.out.println("["+mRunner.get().mId+"]"+"---kick()--" + Thread.currentThread());
+			EventTaskRunnerImple runner = mRunner.get();
+			//synchronized(runner){
+			//	synchronized(this){
+			//		notifyAll();
+			//	}
+			//}
+			runner.kick();
+			System.out.println("["+mRunner.get().mId+"]"+"---/kick()--" + Thread.currentThread());
 		}
 
 		@Override
@@ -142,12 +153,15 @@ public class EventTaskRunnerImple extends EventTaskRunner {
 					}
 					EventTask task = runner.popWork();
 					if (task == null) {
+						System.out.println("["+mRunner.get().mId+"]"+"---wait()--" + Thread.currentThread());
+						//synchronized(runner){
 							synchronized(this){
 								if(!Thread.interrupted()) {
-									//		 if(Log.ON){ Log.v("mm","--wait--");}
 									runner.waitPlus(runner.updateDeffer());
 								} 
 							}
+						//}
+							System.out.println("["+mRunner.get().mId+"]"+"---/wait()--" + Thread.currentThread());
 					} else {
 					//	if(Log.ON){Log.v("mm","--run--");}
 						task.run();
