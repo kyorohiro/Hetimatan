@@ -19,7 +19,7 @@ public class TorrentPeerChoker {
 	}
 
 	public void updateOptimusUnchokePeer() throws IOException {
-		/*
+		
 		TorrentPeer torrentPeer = mOwner.get();if(torrentPeer == null) {return;}
 		TorrentPeerSetting mSetting = torrentPeer.getSetting();
 		int numOfUnchokerNow = mOptimusUnchokePeer.size();
@@ -40,7 +40,6 @@ public class TorrentPeerChoker {
 				__unchoke(front);
 			}
 		}
-		*/
 	}
 
 	public void onStartTorrentFront(TorrentFront front) throws IOException {
