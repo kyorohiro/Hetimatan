@@ -10,6 +10,7 @@ import net.hetimatan.util.event.EventTaskRunner;
 
 public class TorrentFrontConnectionTask extends EventTask {
 
+	public static final String TAG = "TorrentFrontConnectionTask";
 	private WeakReference<TorrentFront> mTorrentFront = null;
 	private String mHost = "";
 	private int mPort = 0;
@@ -26,8 +27,14 @@ public class TorrentFrontConnectionTask extends EventTask {
 	}
 
 	@Override
+	public String toString() {
+		return TAG;
+	}
+
+	@Override
 	public void action() throws Throwable {
 		TorrentFront front = mTorrentFront.get();
+		System.out.println("--------connection-"+front.getDebug());
 		if(!mIsCon) {
 			front.connect(mHost, mPort);
 			mIsCon = true;

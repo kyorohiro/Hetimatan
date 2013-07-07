@@ -19,6 +19,7 @@ public class TorrentPeerChoker {
 	}
 
 	public void updateOptimusUnchokePeer() throws IOException {
+		/*
 		TorrentPeer torrentPeer = mOwner.get();if(torrentPeer == null) {return;}
 		TorrentPeerSetting mSetting = torrentPeer.getSetting();
 		int numOfUnchokerNow = mOptimusUnchokePeer.size();
@@ -39,6 +40,7 @@ public class TorrentPeerChoker {
 				__unchoke(front);
 			}
 		}
+		*/
 	}
 
 	public void onStartTorrentFront(TorrentFront front) throws IOException {
@@ -47,11 +49,13 @@ public class TorrentPeerChoker {
 		int numOfUnchokerNow = mOptimusUnchokePeer.size();
 		int maxOfUnchoker = mSetting.getNumOfUnchoker();
 
+		System.out.println("--AA-0-"+numOfUnchokerNow);
 		if (numOfUnchokerNow<maxOfUnchoker) {
 			__unchoke(front);			
 		} else {
 			__choke(front);
 		}
+		System.out.println("--AA-1-"+numOfUnchokerNow);
 	}
 
 	public void __choke(TorrentFront front) throws IOException {

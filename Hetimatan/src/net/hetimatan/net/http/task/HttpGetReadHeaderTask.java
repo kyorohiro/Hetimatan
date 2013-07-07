@@ -10,8 +10,8 @@ import net.hetimatan.util.event.EventTaskRunner;
 import net.hetimatan.util.log.Log;
 
 public class HttpGetReadHeaderTask extends EventTask {
-
-	WeakReference<HttpGet> mOwner = null;
+	public static final String TAG = "HttpGetReadHeaderTask";
+	private WeakReference<HttpGet> mOwner = null;
 	private EventTask mLast = null;
 
 	public HttpGetReadHeaderTask(HttpGet client, EventTaskRunner runner, EventTask last) {
@@ -19,6 +19,11 @@ public class HttpGetReadHeaderTask extends EventTask {
 		mOwner = new WeakReference<HttpGet>(client);
 		mLast = last;
 		errorAction(last);
+	}
+
+	@Override
+	public String toString() {
+		return TAG;
 	}
 
 	private boolean mHeaderIsReadable = false;

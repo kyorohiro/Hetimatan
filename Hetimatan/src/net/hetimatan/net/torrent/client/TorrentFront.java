@@ -524,7 +524,7 @@ public class TorrentFront {
 	}
 
 	public void startChoker(boolean isChoke) throws IOException {
-		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"start Choker");}
+		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"start Choker:" +isChoke);}
 		mTaskManager.startChoker(mTorrentPeer.get(), this, isChoke);
 	}
 

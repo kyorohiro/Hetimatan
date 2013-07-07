@@ -12,11 +12,20 @@ import net.hetimatan.util.event.EventTaskRunner;
 
 
 public class TorrentFrontShakeHandTask extends EventTask {
-
+	public static final String TAG = "TorrentFrontShakeHandTask";
 	private WeakReference<TorrentFront> mTorrentFront = null;
+	private boolean mIsFirst = true;
+	private boolean mIsKeep = true;
+	private boolean mIsNext = true;
+
 	public TorrentFrontShakeHandTask(TorrentFront front, EventTaskRunner runner) {
 		super(runner);
 		mTorrentFront = new WeakReference<TorrentFront>(front);
+	}
+
+	@Override
+	public String toString() {
+		return TAG;
 	}
 
 	@Override
@@ -24,40 +33,38 @@ public class TorrentFrontShakeHandTask extends EventTask {
 		return mIsKeep;
 	}
 
-	private boolean mIsFirst = true;
-	private boolean mIsKeep = true;
-
-	private EventTask mNext = null;
+	@Override
+	public boolean isNext() {
+		return mIsNext;
+	}
 
 	@Override
 	public void action() throws Throwable {
 		TorrentFront front = mTorrentFront.get();
+
 		TorrentPeer peer = front.getTorrentPeer();
 		KyoroSocket mSocket = front.getSocket();
 		if(mIsFirst) {
+			System.out.println("-----sesefirst----"+front.getDebug());
 			front.sendShakehand();
 			front.sendBitfield();
-			mIsFirst = false;
 			mSocket.regist(peer.getSelector(), KyoroSelector.READ);
 			mSocket.setEventTaskAtWrakReference(this, KyoroSelector.READ);
-			mIsKeep = true;
+			mIsFirst = false;
+			mIsKeep = false;
+			mIsNext = false;
 		} else {
 			if(front.reveiveSH()) {
 				mSocket.regist(peer.getSelector(), KyoroSelector.READ);
 				mSocket.setEventTaskAtWrakReference(null,KyoroSelector.READ);
-				mIsKeep = false;
 				front.revcShakehand();
-				if(mNext != null) {
-					nextAction(mNext);
-				}
+				mIsKeep = false;
+				mIsNext = true;
 			} else {
 				mSocket.regist(peer.getSelector(), KyoroSelector.READ);
 				mSocket.setEventTaskAtWrakReference(this,KyoroSelector.READ);
-				mIsKeep = true;
-				if(mNext == null) {
-					mNext = nextAction();
-				}
-				nextAction(null);
+				mIsKeep = false;
+				mIsNext = false;
 			}
 		}
 	}

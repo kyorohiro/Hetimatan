@@ -9,10 +9,16 @@ import net.hetimatan.util.event.EventTaskRunner;
 
 public class TorrentFrontNotInterestTask extends EventTask {
 
+	public static final String TAG = "TorrentFrontNotInterestTask";
 	private WeakReference<TorrentFront> mTorrentFront = null;
 	public TorrentFrontNotInterestTask(TorrentFront front, EventTaskRunner runner) {
 		super(runner);
 		mTorrentFront = new WeakReference<TorrentFront>(front);
+	}
+
+	@Override
+	public String toString() {
+		return TAG;
 	}
 
 	@Override

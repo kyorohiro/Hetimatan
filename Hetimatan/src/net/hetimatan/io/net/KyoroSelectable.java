@@ -6,6 +6,7 @@ import java.lang.ref.WeakReference;
 import java.nio.channels.SelectableChannel;
 
 import net.hetimatan.util.event.EventTask;
+import net.hetimatan.util.log.Log;
 
 public abstract class KyoroSelectable {
 	public abstract SelectableChannel getRawChannel();
@@ -32,18 +33,52 @@ public abstract class KyoroSelectable {
 		return mRelative.get();
 	}
 
+	public void rejectEventTask(EventTask task) {
+		if(rejectEventTask(mAcceptTask, task)) {mAcceptTask = null;}
+		if(rejectEventTask(mConnectTask, task)) {mConnectTask = null;}
+		if(rejectEventTask(mReadTask, task)) {mReadTask = null;}
+		if(rejectEventTask(mWriteTask, task)) {mWriteTask = null;}
+	}
+
+	private boolean rejectEventTask(WeakReference<EventTask> wtask, EventTask task) {
+		if(wtask == null) {return false;};
+		EventTask t = wtask.get();
+		if(t == null) { return false;}
+		
+		if(t == task) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 	public void setEventTaskAtWrakReference(EventTask task, int state) {
 		if((state&KyoroSelector.ACCEPT)==KyoroSelector.ACCEPT) {
-			mAcceptTask = new WeakReference<EventTask>(task);
+			if(task == null) {
+				mAcceptTask = null;
+			} else {
+				mAcceptTask = new WeakReference<EventTask>(task);
+			}
 		}
 		if((state&KyoroSelector.READ)==KyoroSelector.READ) {
-			mReadTask = new WeakReference<EventTask>(task);
+			if(task == null) {
+				mReadTask = null;
+			} else {
+				mReadTask = new WeakReference<EventTask>(task);
+			}
 		}
 		if((state&KyoroSelector.WRITE)==KyoroSelector.WRITE) {
-			mAcceptTask = new WeakReference<EventTask>(task);
+			if(task == null) {
+				mWriteTask = null;
+			} else {
+				mWriteTask = new WeakReference<EventTask>(task);
+			}
 		}
 		if((state&KyoroSelector.CONNECT)==KyoroSelector.CONNECT) {
-			mConnectTask = new WeakReference<EventTask>(task);
+			if(task == null) {
+				mConnectTask = null;
+			} else {
+				mConnectTask = new WeakReference<EventTask>(task);
+			}
 		}
 	}
 
@@ -72,6 +107,7 @@ public abstract class KyoroSelectable {
 		if(task == null) {
 			return false;
 		}
+		Log.v("mm", "selector push:"+"["+task.mid+"]"+task.toString());
 		task.getRunner().start(task);
 		return true;
 	}

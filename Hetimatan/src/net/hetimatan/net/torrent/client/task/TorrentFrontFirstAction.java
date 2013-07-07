@@ -10,6 +10,7 @@ import net.hetimatan.util.event.EventTaskRunner;
 
 public class TorrentFrontFirstAction extends EventTask {
 
+	public static final String TAG = "TorrentFrontFirstAction";
 	private WeakReference<TorrentFront> mTorrentFront = null;
 	public TorrentFrontFirstAction(TorrentFront front, EventTaskRunner runner) {
 		super(runner);
@@ -17,8 +18,16 @@ public class TorrentFrontFirstAction extends EventTask {
 	}
 
 	@Override
+	public String toString() {
+		return TAG;
+	}
+
+	@Override
 	public void action() throws Throwable {
 		TorrentFront front = mTorrentFront.get();
+		System.out.println("-----first----"+front.getDebug());
+		front.getSocket().rejectEventTask(this);
+
 		//front.sendBitfield();
 		TorrentPeer peer =  front.getTorrentPeer();
 		if(peer != null) { peer.updateOptimusUnchokePeer(front);}

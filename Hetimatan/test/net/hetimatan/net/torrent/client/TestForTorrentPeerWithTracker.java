@@ -11,8 +11,9 @@ import net.hetimatan.net.torrent.util.metafile.MetaFileCreater;
 import net.hetimatan.util.event.EventTaskRunner;
 import junit.framework.TestCase;
 
+//todo chk
 public class TestForTorrentPeerWithTracker extends TestCase {
-
+/*
 	public void test001() throws IOException, URISyntaxException, InterruptedException {
 		TrackerServer server = new TrackerServer();
 		server.setPort(6861);
@@ -42,5 +43,5 @@ public class TestForTorrentPeerWithTracker extends TestCase {
 			}
 		}
 	}
-
+*/
 }

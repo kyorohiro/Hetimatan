@@ -7,6 +7,8 @@ import net.hetimatan.util.log.Log;
 
 
 public abstract class EventTask implements Runnable {
+	public static int sid = 0;
+	public int mid = sid++;
 	private EventTask mNextAction = null;
 	private EventTask mErrorAction = null;
 	private WeakReference<EventTaskRunner> mRunner = null;
@@ -19,16 +21,22 @@ public abstract class EventTask implements Runnable {
 		return false;
 	}
 
+	public boolean isNext() {
+		return true;
+	}
+
 	@Override
 	public final void run() {
 		try {
-			//if(Log.ON){Log.v("a","action");}
+			if(Log.ON){Log.v("mm","["+mid+"]"+"action:"+toString());}
 			action();
 			//if(Log.ON){Log.v("a","/action");}
 			EventTaskRunner runner = mRunner.get();
 			if (isKeep()) {
+				if(Log.ON){Log.v("mm","["+mid+"]"+"action: next null");}
 				mRunner.get().start(this);				
-			} else if(runner != null&&mNextAction != null) {
+			} else if(runner != null&&mNextAction != null&&isNext()) {
+				if(Log.ON){Log.v("mm","["+mid+"]"+"action: next "+mNextAction.toString());}
 				mRunner.get().start(mNextAction);	
 			} 
 		} catch(Throwable t) {
@@ -62,9 +70,4 @@ public abstract class EventTask implements Runnable {
 		return mRunner.get();
 	}
 
-	public static class PrintlnLogTask extends EventTask {
-		public PrintlnLogTask(EventTaskRunner runner) {
-			super(runner);
-		}
-	}
 }

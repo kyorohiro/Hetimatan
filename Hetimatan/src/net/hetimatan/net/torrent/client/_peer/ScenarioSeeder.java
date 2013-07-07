@@ -8,11 +8,17 @@ import net.hetimatan.util.event.EventTaskRunner;
 
 public class ScenarioSeeder extends EventTask {
 	
+	public static final String TAG = "ScenarioSeeder";
 	private WeakReference<TorrentPeerPiecer> mTorrentScenario = null;
 
 	public ScenarioSeeder(TorrentPeerPiecer scenario, EventTaskRunner runner) {
 		super(runner);
 		mTorrentScenario = new WeakReference<TorrentPeerPiecer>(scenario);
+	}
+
+	@Override
+	public String toString() {
+		return TAG;
 	}
 
 	@Override

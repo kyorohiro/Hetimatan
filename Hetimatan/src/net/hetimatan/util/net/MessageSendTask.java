@@ -8,6 +8,7 @@ import net.hetimatan.util.io.ByteArrayBuilder;
 
 
 public class MessageSendTask extends EventTask {
+	public static final String TAG = "MessageSendTask";
 	private int mBufferSize = 512;
 	private KyoroFile mData = null;
 	private KyoroSocket mSocket = null;
@@ -17,6 +18,11 @@ public class MessageSendTask extends EventTask {
 		super(runner);
 		mData = data;
 		mSocket = socket;
+	}
+
+	@Override
+	public String toString() {
+		return TAG;
 	}
 
 	public void setLength(int size) {

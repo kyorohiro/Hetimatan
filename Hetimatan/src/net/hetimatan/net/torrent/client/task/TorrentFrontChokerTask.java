@@ -9,6 +9,7 @@ import net.hetimatan.util.event.EventTaskRunner;
 
 public class TorrentFrontChokerTask extends EventTask {
 
+	public static final String TAG = "TorrentFrontChokerTask";
 	private WeakReference<TorrentFront> mTorrentFront = null;
 	private boolean mIsChoke = false;
 
@@ -16,6 +17,11 @@ public class TorrentFrontChokerTask extends EventTask {
 		super(runner);
 		mTorrentFront = new WeakReference<TorrentFront>(front);
 		mIsChoke = isChoke;
+	}
+
+	@Override
+	public String toString() {
+		return TAG;
 	}
 
 	public void isChoke(boolean ischoke) {

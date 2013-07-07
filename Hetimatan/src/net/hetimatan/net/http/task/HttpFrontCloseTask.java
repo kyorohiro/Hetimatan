@@ -8,11 +8,19 @@ import net.hetimatan.util.event.EventTask;
 import net.hetimatan.util.event.EventTaskRunner;
 
 public class HttpFrontCloseTask extends EventTask {
+	public static int sid = 0;
+	public static final String TAG = "HttpFrontCloseTask";
 	private WeakReference<HttpFront> mClientInfo = null;
 
+	public int mId = sid++;
 	public HttpFrontCloseTask(HttpFront clientInfo, EventTaskRunner runner) {
 		super(runner);
 		mClientInfo = new WeakReference<HttpFront>(clientInfo);
+	}
+
+	@Override
+	public String toString() {
+		return TAG;
 	}
 
 	@Override

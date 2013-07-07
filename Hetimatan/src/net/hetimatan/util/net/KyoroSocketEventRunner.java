@@ -29,11 +29,8 @@ public class KyoroSocketEventRunner extends EventTaskRunnerImple {
 
 	@Override
 	public void waitPlus(int timeout) throws InterruptedException, IOException {
-		System.out.println("["+mId+"]"+"++waitPlus()" + Thread.currentThread());
 		if(!mWaitIsSelect) {
-			System.out.println("["+mId+"]"+"++waitPlus()--1--");
 			super.waitPlus(timeout);
-			System.out.println("["+mId+"]"+"/++waitPlus()" + Thread.currentThread());
 			return;
 		}
 		//if(
@@ -42,18 +39,14 @@ public class KyoroSocketEventRunner extends EventTaskRunnerImple {
 		if(numOfWork() != 0) {
 			pushWork(mOneShot);
 		}
-		System.out.println("["+mId+"]"+"/++waitPlus()" + Thread.currentThread());
 		//}
 	}
 
 	@Override
 	public void kickWorker() {
-		System.out.println("["+mId+"]"+"++kickWorkder()" + Thread.currentThread());
 		if(!mWaitIsSelect) {
-			System.out.println("["+mId+"]"+"++kickWorkder() --1--" + Thread.currentThread());
 			super.kickWorker();
 		}else {
-			System.out.println("["+mId+"]"+"++kickWorkder() --2--" + Thread.currentThread());
 			synchronized (this){
 			if(mSelector != null){// &&mIsSelecting == true) {
 				if(!currentThreadIsMine()) {
@@ -62,7 +55,6 @@ public class KyoroSocketEventRunner extends EventTaskRunnerImple {
 			}
 			}
 		}
-		System.out.println("["+mId+"]"+"++/kickWorkder()" + Thread.currentThread());
 	}
 
 	public boolean waitBySelectable(int timeout) throws IOException, InterruptedException {
@@ -108,8 +100,14 @@ public class KyoroSocketEventRunner extends EventTaskRunnerImple {
 	}
 
 	public static class SelctorLoopTask extends EventTask {
+		public static final String TAG = "SelctorLoopTask";
 		public SelctorLoopTask(KyoroSocketEventRunner runner) {
 			super(runner);
+		}
+
+		@Override
+		public String toString() {
+			return TAG;
 		}
 
 		@Override

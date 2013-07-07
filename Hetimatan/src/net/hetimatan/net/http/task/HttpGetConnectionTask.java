@@ -10,7 +10,8 @@ import net.hetimatan.util.event.EventTaskRunner;
 
 public class HttpGetConnectionTask extends EventTask {
 
-	WeakReference<HttpGet> mOwner = null;
+	public static final String TAG = "HttpGetConnectionTask";
+	private WeakReference<HttpGet> mOwner = null;
 	private EventTask mLast = null;
 	private boolean mIsFirst = true;	
 
@@ -19,6 +20,11 @@ public class HttpGetConnectionTask extends EventTask {
 		mOwner = new WeakReference<HttpGet>(client);
 		mLast = last;
 		errorAction(last);
+	}
+
+	@Override
+	public String toString() {
+		return TAG;
 	}
 
 	//

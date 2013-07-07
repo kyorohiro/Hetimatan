@@ -9,11 +9,17 @@ import net.hetimatan.util.event.EventTask;
 import net.hetimatan.util.event.EventTaskRunner;
 
 public class TorrentPeerStopTracker extends EventTask {
+	public static final String TAG = "TorrentPeerStopTracker";
 	private WeakReference<TorrentPeer> mServer = null;
 
 	public TorrentPeerStopTracker(TorrentPeer httpServer, EventTaskRunner runner) {
 		super(runner);
 		mServer = new WeakReference<TorrentPeer>(httpServer);
+	}
+
+	@Override
+	public String toString() {
+		return TAG;
 	}
 
 	@Override
