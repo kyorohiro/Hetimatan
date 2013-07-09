@@ -46,8 +46,10 @@ public class HtanClientPeer {
 			throw new IOException("unsupported file");
 		}
 
-		String peerId = getPeerId();
-		mPeer = new TorrentPeer(mMetafile, peerId);
+		if(mPeer == null) {
+			String peerId = getPeerId();
+			mPeer = new TorrentPeer(mMetafile, peerId);
+		}
 		try {
 		mPeer.getTorrentData().load();
 		} catch(IOException e) {e.printStackTrace();}
@@ -65,9 +67,13 @@ public class HtanClientPeer {
 		}
 	}
 
-	public void setSource(File source) throws IOException {
+	public void setSource(File source) throws IOException, URISyntaxException {
 		File[] fs = new File[1];
 		fs[0] = source;
+		if(mPeer == null) {
+			String peerId = getPeerId();
+			mPeer = new TorrentPeer(mMetafile, peerId);
+		}
 		mPeer.setMasterFile(fs);
 	}
 
