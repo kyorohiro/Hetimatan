@@ -9,10 +9,6 @@ import net.hetimatan.net.torrent.util.metafile.MetaFile;
 import net.hetimatan.net.torrent.util.metafile.MetaFileCreater;
 
 
-/**
- * 80% complemte. 
- * Create Metafile(*.torrent file) 
- */
 public class MainCreateTorrentFile {
 
 	public static void main(String[] args) {

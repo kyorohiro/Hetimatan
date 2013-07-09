@@ -9,9 +9,6 @@ import net.hetimatan.net.torrent.util.metafile.MetaFile;
 import net.hetimatan.net.torrent.util.metafile.MetaFileCreater;
 
 
-/**
- * 60% complete
- */
 public class MainStartTracker {
 
 	public static void main(String[] args) {

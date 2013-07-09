@@ -7,8 +7,6 @@ import java.io.IOException;
 import net.hetimatan.net.torrent.client.TorrentPeer;
 import net.hetimatan.net.torrent.util.metafile.MetaFile;
 import net.hetimatan.net.torrent.util.metafile.MetaFileCreater;
-import net.hetimatan.util.event.EventTask;
-import net.hetimatan.util.event.EventTaskRunner;
 
 
 public class MainStartClient {
