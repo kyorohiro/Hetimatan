@@ -45,7 +45,7 @@ public class KFNextHelper {
 
 	public static void xcopy(File[] srcs, RACashFile dest) throws IOException {
 		for(int i=0;i<srcs.length;i++) {
-			RACashFile src = new RACashFile(srcs[i], 256, 10);
+			RACashFile src = new RACashFile(srcs[i], 16*1024, 10);
 			long fp = dest.getFilePointer();
 			try {
 				KFNextHelper.copy(src, dest);
