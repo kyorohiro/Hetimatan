@@ -69,6 +69,7 @@ public class KFNextHelper {
 				len = buffer.length;
 				len = src.read(buffer);
 				if(len>0) {
+//					dest.write(buffer, 0, 1);//len);
 					dest.write(buffer, 0, len);
 				}
 			} while(len>0);

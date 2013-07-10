@@ -93,4 +93,29 @@ public class TestForKFNextHelper extends TestCase {
 		}
 	}
 
+	public void testTime() throws IOException {
+		
+		long start = System.currentTimeMillis();
+//		File srcF = new File(".\testdata\1mb\1m_a.txt");
+		File srcF = new File("../../h264.mp4");
+		RACashFile src = new RACashFile(srcF, 16*1024, 10);
+//		RACashFile out = new RACashFile(512, 20);
+		
+		// 1 4000 3000
+		// 2 5000 6000
+		// 4 11000 11000
+		RACashFile out = new RACashFile(16*1024, 4);
+		try {
+			src.seek(0);
+			KFNextHelper.copy(src, out);
+//			byte[] result = KFNextHelper.newBinary(out);
+//			TestUtil.assertArrayEquals(this, "", exp, result);
+		} finally {
+			src.close();
+			out.close();
+		}
+		long end = System.currentTimeMillis();
+		System.out.print("time:"+(end-start));
+	}
+
 }
