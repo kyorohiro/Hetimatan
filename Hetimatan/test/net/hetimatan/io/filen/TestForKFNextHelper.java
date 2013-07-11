@@ -42,7 +42,8 @@ public class TestForKFNextHelper extends TestCase {
 		byte[] exp = new byte[1024];
 		Random r = new Random(777);
 		for(int i=0;i<exp.length;i++) {
-			exp[i] = (byte)r.nextInt();
+			exp[i] = (byte)i;
+//			exp[i] = (byte)r.nextInt();
 		}
 
 		src1.write(exp, 0, exp.length/2);
@@ -98,13 +99,13 @@ public class TestForKFNextHelper extends TestCase {
 		long start = System.currentTimeMillis();
 //		File srcF = new File(".\testdata\1mb\1m_a.txt");
 		File srcF = new File("../../h264.mp4");
-		RACashFile src = new RACashFile(srcF, 16*1024, 10);
+		RACashFile src = new RACashFile(srcF, 16*1024, 3);
 //		RACashFile out = new RACashFile(512, 20);
 		
 		// 1 4000 3000
 		// 2 5000 6000
 		// 4 11000 11000
-		RACashFile out = new RACashFile(16*1024, 4);
+		RACashFile out = new RACashFile(16*1024, 2);
 		try {
 			src.seek(0);
 			KFNextHelper.copy(src, out);

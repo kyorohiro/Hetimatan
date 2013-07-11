@@ -136,15 +136,45 @@ public class RACashFile implements KyoroFile, KyoroByteOutput {
 	}
 
 	public int write(byte[] buffer, int start, int len) throws IOException {
-		int writed= 0;
+		int tmp = -1;
+		int writed = 0;
+		do {
+			tmp =_write(buffer, start+writed, len-writed);
+			if(tmp<0) {
+				return -1;
+			} else {
+				writed += tmp;
+			}
+		} while(writed<len);
+		return writed;
+	}
+
+	private int _write(byte[] buffer, int start, int len) throws IOException {
+		boolean isW = false;
+		int writed = 0;
 		int i=start;
-        for (; i < start + len; i++) {
-        	writed = write((int)(0xFF&buffer[i]));
-        	if(writed<0) {
-        		break;
-        	}
-        }
-        return i-start;
+		int tmp = -1;
+		ByteKyoroFile file = getCash();
+		file.seek(getFilePointer());
+
+		int _len  =(int)(file.Limit()-getFilePointer());
+		if(_len<len) {
+			len = _len;
+		}
+		do {
+			tmp = file.write(buffer, start+writed, len-writed);
+			if(tmp>=0) {
+				isW = true;
+				writed += tmp;
+			}
+		} while(tmp>0&&tmp<len);
+		if(!isW) {
+			return -1;
+		} else {
+			mFilePointer +=(writed);
+			updateLength();
+			return writed;
+		}
 	}
 
 	public int write(int b) throws IOException {
@@ -166,18 +196,13 @@ public class RACashFile implements KyoroFile, KyoroByteOutput {
 		}
 		for(int i=0;i<size;i++){
 			ByteKyoroFile cash = mCash.get(i);
-//			if(cash == null) {
-//				System.out.println("----");
-//			}
 			if(cash.skip()<=fp&&fp<(cash.skip()+mChunkSize)){
-//				System.out.println("###"+cash.skip()+"#"+mChunkSize+","+i+","+getFilePointer());
 				return cash;
 			}
 		}
 		syncWrite(0);
 		ByteKyoroFile ret = mCash.remove(0);
-		mCash.addLast(ret);
-//		System.out.println("#"+getFilePointer()+"#"+mChunkSize);
+		mCash.addLast(ret);  
 		ret.reset(getFilePointer()-(getFilePointer()%mChunkSize));
 		if(mRAFile != null) {
 			ret.update(mRAFile);
@@ -190,7 +215,7 @@ public class RACashFile implements KyoroFile, KyoroByteOutput {
 		long fp = getFilePointer();
 		try {
 			seek(length());
-			write(buffer, begin, end);
+			write(buffer, begin, end-begin);
 		} finally {
 			seek(fp);
 		}

@@ -118,6 +118,9 @@ public class ByteKyoroFile implements KyoroFile, KyoroByteOutput {
 		return mLength;
 	}
 
+	public long Limit() {
+		return mSkip+mLimit;
+	}
 	@Override
 	public int read(byte[] buffer) throws IOException {
 		return read(buffer, 0, buffer.length);
@@ -158,6 +161,13 @@ public class ByteKyoroFile implements KyoroFile, KyoroByteOutput {
 
 	@Override
 	public int write(int b) throws IOException {
+		byte[] buffer = new byte[1];
+		buffer[0] = (byte)(0xFF&b);
+		return write(buffer, 0, 1);
+	}
+
+	@Override
+	public int write(byte[] buffer, int start, int len) throws IOException {
 		int bufferPoint = (int)(mFilePointer-mSkip);
 		if(bufferPoint<0) {
 			throw new IOException();
@@ -166,15 +176,19 @@ public class ByteKyoroFile implements KyoroFile, KyoroByteOutput {
 			throw new IOException(bufferPoint+"+"+1+">"+mLimit+"+"+mSkip);
 		}
 		mUpdate = true;
-		int neededLength = bufferPoint+1;
+		int skippedFP = (int)(mFilePointer-mSkip);
+		int neededLength = bufferPoint+len;
 		mBuffer.setBufferLength(neededLength);
-		byte[] inlineBuffer = mBuffer.getBuffer();
-
-		inlineBuffer[bufferPoint] = (byte)(0xFF&b);
 		mBuffer.setPointer(neededLength);
-		mFilePointer+=1;
+
+		byte[] inlineBuffer = mBuffer.getBuffer();
+		for(int i=0;i<len;i++) {
+			inlineBuffer[skippedFP+i] = buffer[start+i];
+		}
+		mFilePointer+=len;
+
 		updateLength();
-		return 1;
+		return len;
 	}
 
 	public int stockedLen() {
@@ -219,6 +233,9 @@ public class ByteKyoroFile implements KyoroFile, KyoroByteOutput {
 		return write(data, 0, data.length);
 	}
 
+
+
+/*
 	@Override
 	public int write(byte[] buffer, int start, int len) throws IOException {
 		int writed= 0;
@@ -232,6 +249,29 @@ public class ByteKyoroFile implements KyoroFile, KyoroByteOutput {
         return i-start;
 	}
 
+
+	@Override
+	public int write(int b) throws IOException {
+		int bufferPoint = (int)(mFilePointer-mSkip);
+		if(bufferPoint<0) {
+			throw new IOException();
+		}
+		if((bufferPoint)>(mLimit+mSkip)) {
+			throw new IOException(bufferPoint+"+"+1+">"+mLimit+"+"+mSkip);
+		}
+		mUpdate = true;
+		int neededLength = bufferPoint+1;
+		mBuffer.setBufferLength(neededLength);
+		byte[] inlineBuffer = mBuffer.getBuffer();
+
+		inlineBuffer[bufferPoint] = (byte)(0xFF&b);
+		mBuffer.setPointer(neededLength);
+		mFilePointer+=1;
+		updateLength();
+		return 1;
+	}
+
+*/
 	@Override
 	public void close() throws IOException {
 		mBuffer.clear();
