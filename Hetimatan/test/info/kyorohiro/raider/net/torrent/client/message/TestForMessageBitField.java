@@ -4,7 +4,7 @@ import info.kyorohiro.raider.util.TestUtil;
 import java.io.IOException;
 import net.hetimatan.io.file.MarkableFileReader;
 import net.hetimatan.io.filen.KFNextHelper;
-import net.hetimatan.io.filen.RACashFile;
+import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.net.torrent.client.message.MessageBitField;
 import net.hetimatan.util.io.ByteArrayBuilder;
 
@@ -24,7 +24,7 @@ public class TestForMessageBitField extends TestCase {
 		byte[] expected = builder.createBuffer();
 
 		MessageBitField bitfield = new MessageBitField(3);
-		RACashFile output = new RACashFile(512);
+		CashKyoroFile output = new CashKyoroFile(512);
 		bitfield.encode(output.getLastOutput());
 		byte[] target = KFNextHelper.newBinary(output);
 		TestUtil.assertArrayEquals(this, "", expected, target);
@@ -58,7 +58,7 @@ public class TestForMessageBitField extends TestCase {
 			byte[] expected = builder.createBuffer();
 
 			MessageBitField bitfield = new MessageBitField(8);
-			RACashFile output = new RACashFile(512);
+			CashKyoroFile output = new CashKyoroFile(512);
 			bitfield.encode(output.getLastOutput());
 			byte[] target = KFNextHelper.newBinary(output);
 			TestUtil.assertArrayEquals(this, "", expected, target);
@@ -73,7 +73,7 @@ public class TestForMessageBitField extends TestCase {
 			byte[] expected = builder.createBuffer();
 
 			MessageBitField bitfield = new MessageBitField(9);
-			RACashFile output = new RACashFile(512);
+			CashKyoroFile output = new CashKyoroFile(512);
 			bitfield.encode(output.getLastOutput());
 			byte[] target = KFNextHelper.newBinary(output);
 			TestUtil.assertArrayEquals(this, "", expected, target);

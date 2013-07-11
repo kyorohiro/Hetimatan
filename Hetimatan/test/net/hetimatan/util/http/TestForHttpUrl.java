@@ -4,13 +4,13 @@ import java.io.IOException;
 
 
 import net.hetimatan.io.filen.KFNextHelper;
-import net.hetimatan.io.filen.RACashFile;
+import net.hetimatan.io.filen.CashKyoroFile;
 import junit.framework.TestCase;
 
 public class TestForHttpUrl extends TestCase {
 
 	public void testEncode() throws IOException {
-		RACashFile output = new RACashFile(512);
+		CashKyoroFile output = new CashKyoroFile(512);
 		try {
 			HttpUrl url = new HttpUrl("127.0.0.1", "xx", 8080);
 			url.encode(output.getLastOutput());

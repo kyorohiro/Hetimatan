@@ -5,30 +5,30 @@ import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
 
-import net.hetimatan.io.filen.RACashFile;
+import net.hetimatan.io.filen.CashKyoroFile;
 
 //todo
 public class KyoroFileForFiles implements KyoroFile {
 
-	private RACashFile mVf = null;
+	private CashKyoroFile mVf = null;
 	private KyoroFile[] mFiles = null;
 
 	public static KyoroFileForFiles create(LinkedList<File> findFiles) throws IOException {
 		KyoroFile[] tmp = new KyoroFile[findFiles.size()];
 		int i=0;
 		for(File f:findFiles) {
-			tmp[i] = new RACashFile(f,512, 2);
+			tmp[i] = new CashKyoroFile(f,512, 2);
 			i++;
 		}
 		return new KyoroFileForFiles(tmp);
 	}
 	public KyoroFileForFiles(KyoroFile[] files) throws IOException {
-		mVf = new RACashFile(1024, 2);
+		mVf = new CashKyoroFile(1024, 2);
 		mFiles = new KyoroFile[files.length];
 		System.arraycopy(files, 0, mFiles, 0, mFiles.length);
 	}
 
-	public RACashFile getVF() {
+	public CashKyoroFile getVF() {
 		return mVf;
 	}
 

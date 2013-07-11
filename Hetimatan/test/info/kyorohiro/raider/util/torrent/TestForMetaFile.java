@@ -3,7 +3,7 @@ package info.kyorohiro.raider.util.torrent;
 import java.io.File;
 import java.io.IOException;
 
-import net.hetimatan.io.filen.RACashFile;
+import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.net.torrent.util.bencode.BenString;
 import net.hetimatan.net.torrent.util.metafile.MetaFile;
 import net.hetimatan.net.torrent.util.metafile.MetaFileCreater;
@@ -108,7 +108,7 @@ public class TestForMetaFile extends TestCase {
 					getTestData("moon.jpg"), "http://127.0.0.1:8080/announce");
 			File dummy = new File("./dummy");
 			dummy.delete();
-			RACashFile output = new RACashFile(dummy, 512, 2);
+			CashKyoroFile output = new CashKyoroFile(dummy, 512, 2);
 			torrent.save(output);
 		}
 		{

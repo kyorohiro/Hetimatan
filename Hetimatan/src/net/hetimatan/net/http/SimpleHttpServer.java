@@ -9,7 +9,7 @@ import net.hetimatan.io.file.KyoroFile;
 import net.hetimatan.io.file.KyoroFileForFiles;
 import net.hetimatan.io.filen.ByteKyoroFile;
 import net.hetimatan.io.filen.KFNextHelper;
-import net.hetimatan.io.filen.RACashFile;
+import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.io.net.KyoroSocket;
 import net.hetimatan.net.http.HttpFront;
 import net.hetimatan.net.http.HttpServer;
@@ -22,7 +22,7 @@ import net.hetimatan.util.io.ByteArrayBuilder;
 //@todo
 public class SimpleHttpServer extends HttpServer {
 
-	private RACashFile mFile = null;
+	private CashKyoroFile mFile = null;
 	private int mMaxOfRenge = 5;
 	private LinkedHashMap<String, String> mMimetype = new LinkedHashMap<String,String>();
 	{
@@ -33,7 +33,7 @@ public class SimpleHttpServer extends HttpServer {
 
 	public SimpleHttpServer() { 
 		try {
-			mFile = new RACashFile(new File("../../h264.mp4"), 16*1024, 4);
+			mFile = new CashKyoroFile(new File("../../h264.mp4"), 16*1024, 4);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

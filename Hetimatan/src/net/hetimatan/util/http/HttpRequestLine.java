@@ -6,7 +6,7 @@ import java.io.OutputStream;
 
 import net.hetimatan.io.file.MarkableFileReader;
 import net.hetimatan.io.file.MarkableReader;
-import net.hetimatan.io.filen.RACashFile;
+import net.hetimatan.io.filen.CashKyoroFile;
 
 //Request-Line   = Method SP Request-URI SP HTTP-Version CRLF
 public class HttpRequestLine extends HttpObject {
@@ -58,7 +58,7 @@ public class HttpRequestLine extends HttpObject {
 	}
 
 	public static HttpRequestLine decode(String path) throws IOException {
-		RACashFile vFile = new RACashFile(512, 2);
+		CashKyoroFile vFile = new CashKyoroFile(512, 2);
 		vFile.addChunk(path.getBytes());
 		MarkableReader reader = new MarkableFileReader(vFile, 256);
 		return HttpRequestLine.decode(reader);

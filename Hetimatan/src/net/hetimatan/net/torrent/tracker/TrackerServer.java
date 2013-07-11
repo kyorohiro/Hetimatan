@@ -3,7 +3,7 @@ package net.hetimatan.net.torrent.tracker;
 import java.io.IOException;
 
 import net.hetimatan.io.file.KyoroFile;
-import net.hetimatan.io.filen.RACashFile;
+import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.io.net.KyoroSocket;
 import net.hetimatan.net.http.HttpServer;
 import net.hetimatan.net.torrent.tracker.db.TrackerDB;
@@ -34,7 +34,7 @@ public class TrackerServer extends HttpServer {
 	public static KyoroFile newMessageWrongRequest() throws IOException {
 		BenDiction diction = new BenDiction();
 		diction.append(TrackerResponse.KEY_FAILURE_REASON, new BenString(MESSAGE_UNMANAGED_DATA));
-		return new RACashFile(BenObject.createEncode(diction));
+		return new CashKyoroFile(BenObject.createEncode(diction));
 	}
 
 	public void setInterval(int interval) {
@@ -84,7 +84,7 @@ public class TrackerServer extends HttpServer {
 
 			BenDiction diction = TrackerResponse.createResponce(trackerData, peerInfo, request.getCompact());
 			kickObserver();
-			return new RACashFile(BenObject.createEncode(diction));
+			return new CashKyoroFile(BenObject.createEncode(diction));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return newMessageWrongRequest();

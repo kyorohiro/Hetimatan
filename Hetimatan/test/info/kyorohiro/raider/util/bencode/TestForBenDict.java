@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import net.hetimatan.io.file.MarkableFileReader;
-import net.hetimatan.io.filen.RACashFile;
+import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.net.torrent.util.bencode.BenDiction;
 import net.hetimatan.net.torrent.util.bencode.BenInteger;
 import net.hetimatan.net.torrent.util.bencode.BenObject;
@@ -37,7 +37,7 @@ public class TestForBenDict extends TestCase {
 	public void testEncode001() throws IOException {
 		BenDiction bDict = new BenDiction();
 		bDict.append("001", new BenInteger(100));
-		RACashFile output = new RACashFile(new File("./dummy_002"), 512, 2);
+		CashKyoroFile output = new CashKyoroFile(new File("./dummy_002"), 512, 2);
 		try {
 		bDict.encode(output.getLastOutput());
 		output.seek(0);
@@ -54,7 +54,7 @@ public class TestForBenDict extends TestCase {
 		BenDiction bDict = new BenDiction();
 
 		bDict.append("001", new BenString("abc"));
-		RACashFile output = new RACashFile(new File("./dummy_002"), 512, 2);
+		CashKyoroFile output = new CashKyoroFile(new File("./dummy_002"), 512, 2);
 		try {
 		bDict.encode(output.getLastOutput());
 		output.seek(0);
@@ -71,7 +71,7 @@ public class TestForBenDict extends TestCase {
 		BenDiction bDict = new BenDiction();
 		bDict.append("001", new BenString("abc"));
 		bDict.append("abcd", new BenString("abc"));
-		RACashFile output = new RACashFile(new File("./dummy_002"), 512, 2);
+		CashKyoroFile output = new CashKyoroFile(new File("./dummy_002"), 512, 2);
 		try {
 			bDict.encode(output.getLastOutput());
 			output.seek(0);
@@ -88,7 +88,7 @@ public class TestForBenDict extends TestCase {
 	public void testDecode001() throws IOException {
 		File dummy = new File("./dummy_002");
 		dummy.delete();
-		RACashFile base = new RACashFile(new File("./dummy_002"), 512, 2);
+		CashKyoroFile base = new CashKyoroFile(new File("./dummy_002"), 512, 2);
 		base.addChunk(("d3:001i100ee").getBytes());
 		MarkableFileReader reader = new MarkableFileReader(base, 512);
 
@@ -106,7 +106,7 @@ public class TestForBenDict extends TestCase {
 	public void testDecode002() throws IOException {
 		File dummy = new File("./dummy_002");
 		dummy.delete();
-		RACashFile base = new RACashFile(new File("./dummy_002"), 512, 2);
+		CashKyoroFile base = new CashKyoroFile(new File("./dummy_002"), 512, 2);
 		base.addChunk(("d3:0013:abc4:abcd4:abcde").getBytes());
 		MarkableFileReader reader = new MarkableFileReader(base, 512);
 
@@ -126,7 +126,7 @@ public class TestForBenDict extends TestCase {
 	public void testDecodeError001() throws IOException {
 		File dummy = new File("./dummy_002");
 		dummy.delete();
-		RACashFile base = new RACashFile(new File("./dummy_002"), 512, 2);
+		CashKyoroFile base = new CashKyoroFile(new File("./dummy_002"), 512, 2);
 		base.addChunk(("d3:001i100e").getBytes());
 		MarkableFileReader reader = new MarkableFileReader(base, 512);
 
@@ -142,7 +142,7 @@ public class TestForBenDict extends TestCase {
 	public void testDecodeError002() throws IOException {
 		File dummy = new File("./dummy_002");
 		dummy.delete();
-		RACashFile base = new RACashFile(new File("./dummy_002"), 512, 2);
+		CashKyoroFile base = new CashKyoroFile(new File("./dummy_002"), 512, 2);
 		base.addChunk(("d3:01i100ee").getBytes());
 		MarkableFileReader reader = new MarkableFileReader(base, 512);
 

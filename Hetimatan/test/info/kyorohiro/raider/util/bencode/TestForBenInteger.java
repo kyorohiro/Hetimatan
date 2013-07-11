@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import net.hetimatan.io.file.MarkableFileReader;
-import net.hetimatan.io.filen.RACashFile;
+import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.net.torrent.util.bencode.BenInteger;
 import net.hetimatan.net.torrent.util.bencode.BenObject;
 import junit.framework.TestCase;
@@ -27,7 +27,7 @@ public class TestForBenInteger extends TestCase {
 
 	public void testEncode001() throws IOException {
 		BenInteger bint = new BenInteger(0);
-		RACashFile output = new RACashFile(512);
+		CashKyoroFile output = new CashKyoroFile(512);
 		try {
 			bint.encode(output.getLastOutput());
 			output.seek(0);
@@ -42,7 +42,7 @@ public class TestForBenInteger extends TestCase {
 
 	public void testEncode002() throws IOException {
 		BenInteger bint = new BenInteger(-1);
-		RACashFile output = new RACashFile(512);
+		CashKyoroFile output = new CashKyoroFile(512);
 		try {
 			bint.encode(output.getLastOutput());
 			output.seek(0);
@@ -57,7 +57,7 @@ public class TestForBenInteger extends TestCase {
 
 	public void testEncode003() throws IOException {
 		BenInteger bint = new BenInteger(Integer.MAX_VALUE);
-		RACashFile output = new RACashFile(512);
+		CashKyoroFile output = new CashKyoroFile(512);
 		try {
 			bint.encode(output.getLastOutput());
 			output.seek(0);
@@ -71,7 +71,7 @@ public class TestForBenInteger extends TestCase {
 	}
 
 	public void testDecode001() throws IOException {
-		RACashFile base = new RACashFile(512);
+		CashKyoroFile base = new CashKyoroFile(512);
 		base.addChunk("i0e".getBytes());
 		MarkableFileReader reader = new MarkableFileReader(base, 512);
 
@@ -85,7 +85,7 @@ public class TestForBenInteger extends TestCase {
 	}
 
 	public void testDecode002() throws IOException {
-		RACashFile base = new RACashFile(512);
+		CashKyoroFile base = new CashKyoroFile(512);
 		base.addChunk("i0ei1e".getBytes());
 		MarkableFileReader reader = new MarkableFileReader(base, 512);
 
@@ -103,7 +103,7 @@ public class TestForBenInteger extends TestCase {
 	}
 
 	public void testDecode003() throws IOException {
-		RACashFile base = new RACashFile(512);
+		CashKyoroFile base = new CashKyoroFile(512);
 		base.addChunk(("i-1ei"+Integer.MAX_VALUE+"e").getBytes());
 		MarkableFileReader reader = new MarkableFileReader(base, 512);
 
@@ -120,7 +120,7 @@ public class TestForBenInteger extends TestCase {
 	}
 
 	public void testDecodeError001() throws IOException {
-		RACashFile base = new RACashFile(512);
+		CashKyoroFile base = new CashKyoroFile(512);
 		base.addChunk("i0ae".getBytes());
 		MarkableFileReader reader = new MarkableFileReader(base, 512);
 

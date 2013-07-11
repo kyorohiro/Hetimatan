@@ -6,7 +6,7 @@ import java.net.URISyntaxException;
 import java.util.Iterator;
 
 import net.hetimatan.io.filen.KFNextHelper;
-import net.hetimatan.io.filen.RACashFile;
+import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.net.torrent.client.TorrentPeer;
 import net.hetimatan.net.torrent.tracker.TrackerClient;
 import net.hetimatan.net.torrent.tracker.TrackerPeerInfo;
@@ -119,14 +119,14 @@ public class HtanClientPeer {
 	}
 
 	public static String getPeerId() {
-		RACashFile cash = null;
+		CashKyoroFile cash = null;
 		File parent = (new File("dummy")).getAbsoluteFile().getParentFile();
 		String path = GlobalAccessProperty.getInstance().get("my.home", parent.getAbsolutePath());
 		File home = new File(path);
 		File sPeerIdSt = new File(home,"peerid");
 		String peerid = null;
 		try {
-			cash = new RACashFile(sPeerIdSt,10,2);
+			cash = new CashKyoroFile(sPeerIdSt,10,2);
 			if(cash.length() == 0) {
 				peerid = TorrentPeer.createPeerId();
 				cash.addChunk(peerid.getBytes());

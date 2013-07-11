@@ -4,7 +4,7 @@ package net.hetimatan.net.http;
 import java.io.IOException;
 
 import net.hetimatan.io.file.MarkableFileReader;
-import net.hetimatan.io.filen.RACashFile;
+import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.io.net.KyoroSelector;
 import net.hetimatan.io.net.KyoroSocket;
 import net.hetimatan.net.http.request.GetRequesterInter;
@@ -143,7 +143,7 @@ public class HttpGet {
 		mResponse.readBody();
 
 		try {
-			RACashFile vf = mResponse.getVF();
+			CashKyoroFile vf = mResponse.getVF();
 			vf.seek(mResponse.getVFOffset());
 			int len = (int)vf.length();
 			byte[] buffer = new byte[len];

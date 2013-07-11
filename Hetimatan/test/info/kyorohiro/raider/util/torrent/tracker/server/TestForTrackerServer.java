@@ -5,7 +5,7 @@ import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-import net.hetimatan.io.filen.RACashFile;
+import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.net.http.request.GetRequesterInter;
 import net.hetimatan.net.http.request.GetResponseInter;
 import net.hetimatan.net.torrent.tracker.TrackerRequest;
@@ -80,7 +80,7 @@ public class TestForTrackerServer extends TestCase {
 			// done
 			GetResponseInter response = requester.doRequest();
 			System.out.println("offset::"+response.getVFOffset());
-			RACashFile vf = response.getVF();
+			CashKyoroFile vf = response.getVF();
 			byte[] buffer = null;
 			try {
 				vf.seek(response.getVFOffset());
@@ -124,7 +124,7 @@ public class TestForTrackerServer extends TestCase {
 
 			// done
 			GetResponseInter response = requester.doRequest();
-			RACashFile vf = response.getVF();
+			CashKyoroFile vf = response.getVF();
 			byte[] buffer = null;
 			try {
 				vf.seek(response.getVFOffset());
@@ -184,7 +184,7 @@ public class TestForTrackerServer extends TestCase {
 
 			// done
 			GetResponseInter response = requester.doRequest();
-			RACashFile vf = response.getVF();
+			CashKyoroFile vf = response.getVF();
 			byte[] buffer = null;
 			try {
 				vf.seek(response.getVFOffset());

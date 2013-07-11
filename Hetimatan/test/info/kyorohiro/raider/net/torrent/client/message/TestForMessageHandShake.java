@@ -5,7 +5,7 @@ import java.io.IOException;
 import junit.framework.TestCase;
 import net.hetimatan.io.file.MarkableFileReader;
 import net.hetimatan.io.filen.KFNextHelper;
-import net.hetimatan.io.filen.RACashFile;
+import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.net.torrent.client.message.MessageBitField;
 import net.hetimatan.net.torrent.client.message.MessageCancel;
 import net.hetimatan.net.torrent.client.message.MessageChoke;
@@ -47,7 +47,7 @@ public class TestForMessageHandShake extends TestCase {
 		builder.append("123456789C123456789D".getBytes());
 		byte[] expected = builder.createBuffer();
 
-		RACashFile output = new RACashFile(512);
+		CashKyoroFile output = new CashKyoroFile(512);
 		message.encode(output.getLastOutput());
 		output.syncWrite();
 		TestUtil.assertArrayEquals(this, "", expected, KFNextHelper.newBinary(output));

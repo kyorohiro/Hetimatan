@@ -12,7 +12,7 @@ import net.hetimatan.io.file.KyoroFile;
 import net.hetimatan.util.log.Log;
 
 //
-public class RACashFile implements KyoroFile, KyoroByteOutput {
+public class CashKyoroFile implements KyoroFile, KyoroByteOutput {
 	public static final String TAG ="RACashFile";
 	private RandomAccessFile mRAFile = null;
 	private File mFile = null;
@@ -23,23 +23,23 @@ public class RACashFile implements KyoroFile, KyoroByteOutput {
 	private boolean mIsCash = false;
 	private ByteKyoroFile mCurrent = null;
 
-	public RACashFile(byte[] data) throws IOException {
+	public CashKyoroFile(byte[] data) throws IOException {
 		this(KFNextHelper.newCashFile(), data.length, 2);
 		addChunk(data);
 	}
 
-	public RACashFile(int chunkSize) throws IOException {
+	public CashKyoroFile(int chunkSize) throws IOException {
 		this(KFNextHelper.newCashFile(), chunkSize, 2);
 		mIsCash = true;
 	}
 
-	public RACashFile(int chunkSize, int chunkNum) throws IOException {
+	public CashKyoroFile(int chunkSize, int chunkNum) throws IOException {
 		this(KFNextHelper.newCashFile(), chunkSize, chunkNum);
 		mIsCash = true;
 	}
 
 
-	public RACashFile(File f, int chunkSize, int chunkNum) throws IOException {		
+	public CashKyoroFile(File f, int chunkSize, int chunkNum) throws IOException {		
 		mChunkSize = chunkSize;
 		mFile = f;
 		if(mFile.exists()) {
@@ -260,7 +260,7 @@ public class RACashFile implements KyoroFile, KyoroByteOutput {
 		private byte[] buffer = new byte[1];
 		@Override
 		public synchronized void write(int b) throws IOException {
-			RACashFile file = RACashFile.this;
+			CashKyoroFile file = CashKyoroFile.this;
 			buffer[0] = (byte)(0xFF&b);
 			file.addChunk(buffer);
 		}

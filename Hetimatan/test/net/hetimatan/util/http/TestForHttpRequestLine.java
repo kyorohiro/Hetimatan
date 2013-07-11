@@ -1,7 +1,7 @@
 package net.hetimatan.util.http;
 
 import net.hetimatan.io.file.MarkableFileReader;
-import net.hetimatan.io.filen.RACashFile;
+import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.util.http.HttpHeader;
 import net.hetimatan.util.http.HttpObject;
 import net.hetimatan.util.http.HttpRequestLine;
@@ -21,7 +21,7 @@ public class TestForHttpRequestLine extends TestCase {
 	public void testEncode001() throws IOException {
 		//(String method, String requestUri, String httpVersion)
 		HttpRequestLine line = new HttpRequestLine(HttpRequestLine.GET, "/announce?a=b&b=c", HttpRequestLine.HTTP11);
-		RACashFile output = new RACashFile(512);
+		CashKyoroFile output = new CashKyoroFile(512);
 		line.encode(output.getLastOutput());
 
 		output.seek(0);
@@ -32,7 +32,7 @@ public class TestForHttpRequestLine extends TestCase {
 	}
 
 	public void testDecode001() throws IOException {
-		RACashFile base = new RACashFile(512);
+		CashKyoroFile base = new CashKyoroFile(512);
 		base.addChunk("GET /announce?a=b&b=c HTTP/1.1\r\n".getBytes());
 		MarkableFileReader reader = new MarkableFileReader(base, 512);
 

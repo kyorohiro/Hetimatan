@@ -3,7 +3,7 @@ package net.hetimatan.util.log;
 import java.io.File;
 import java.io.IOException;
 
-import net.hetimatan.io.filen.RACashFile;
+import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.util.event.GlobalAccessProperty;
 
 
@@ -15,7 +15,7 @@ public class Log {
     public static final Log  log = new Log();
     public static final int  mode = 1;//MODE_FILE;
     public static final boolean isTime = false;
-    private RACashFile mLog = null;
+    private CashKyoroFile mLog = null;
   
     public Log() {
     	if(mode == MODE_FILE && ON) {
@@ -24,7 +24,7 @@ public class Log {
     		File home = new File(path);
             File file = new File(home, "master.log");
             try {
-                mLog = new RACashFile(file, 512, 2);
+                mLog = new CashKyoroFile(file, 512, 2);
             } catch (IOException e) {
                 e.printStackTrace();
             }

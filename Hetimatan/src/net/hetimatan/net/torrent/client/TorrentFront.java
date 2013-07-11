@@ -9,7 +9,7 @@ import net.hetimatan.io.file.KyoroFile;
 import net.hetimatan.io.file.KyoroFileForKyoroSocket;
 import net.hetimatan.io.file.MarkableFileReader;
 import net.hetimatan.io.file.MarkableReader;
-import net.hetimatan.io.filen.RACashFile;
+import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.io.net.KyoroSocket;
 import net.hetimatan.io.net.KyoroSocketOutputStream;
 import net.hetimatan.net.torrent.client._front.TorrentFrontMyInfo;
@@ -64,9 +64,9 @@ public class TorrentFront {
 	private int mRequestPiece = -1;
 
 	// cash
-	private RACashFile mSendCash = null;
+	private CashKyoroFile mSendCash = null;
 
-	public RACashFile getSendCash() {
+	public CashKyoroFile getSendCash() {
 		return mSendCash;
 	}
 
@@ -83,7 +83,7 @@ public class TorrentFront {
 		mMyInfo = new TorrentFrontMyInfo();
 		mPeer = new TrackerPeerInfo(socket.getHost(), socket.getPort());
 		mDebug = ""+socket.getHost()+":"+socket.getPort();
-		mSendCash = new RACashFile(1024, 3);
+		mSendCash = new CashKyoroFile(1024, 3);
 	}
 	
 	public String getDebug() {

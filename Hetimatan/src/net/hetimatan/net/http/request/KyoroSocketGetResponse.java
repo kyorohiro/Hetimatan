@@ -6,7 +6,7 @@ import java.io.IOException;
 
 import net.hetimatan.io.file.KyoroFileForKyoroSocket;
 import net.hetimatan.io.file.MarkableFileReader;
-import net.hetimatan.io.filen.RACashFile;
+import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.io.net.KyoroSelector;
 import net.hetimatan.io.net.KyoroSocket;
 import net.hetimatan.util.http.LookaheadHttpHeader;
@@ -14,7 +14,7 @@ import net.hetimatan.util.http.HttpHeader;
 import net.hetimatan.util.http.HttpResponse;
 
 public class KyoroSocketGetResponse implements GetResponseInter {
-	private RACashFile mVF = null;
+	private CashKyoroFile mVF = null;
 	private int mVfOffset = 0;
 	private KyoroSocket mSocket = null;
 	private LookaheadHttpHeader mHeaderChunk = null;
@@ -38,7 +38,7 @@ public class KyoroSocketGetResponse implements GetResponseInter {
 	}
 
 	@Override
-	public RACashFile getVF() {
+	public CashKyoroFile getVF() {
 		return mVF;
 	}
 

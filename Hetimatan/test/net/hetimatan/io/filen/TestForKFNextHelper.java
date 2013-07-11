@@ -7,15 +7,15 @@ import java.io.IOException;
 import java.util.Random;
 
 import net.hetimatan.io.filen.KFNextHelper;
-import net.hetimatan.io.filen.RACashFile;
+import net.hetimatan.io.filen.CashKyoroFile;
 
 import junit.framework.TestCase;
 
 public class TestForKFNextHelper extends TestCase {
 
 	public void testOne() throws IOException {
-		RACashFile src = new RACashFile(10, 10);
-		RACashFile out = new RACashFile(5, 20);
+		CashKyoroFile src = new CashKyoroFile(10, 10);
+		CashKyoroFile out = new CashKyoroFile(5, 20);
 		byte[] exp = new byte[1024];
 		Random r = new Random(777);
 		for(int i=0;i<exp.length;i++) {
@@ -36,9 +36,9 @@ public class TestForKFNextHelper extends TestCase {
 	public void testXCopy() throws IOException {
 		File f1 = new File("./f1");
 		File f2 = new File("./f2");
-		RACashFile src1 = new RACashFile(f1, 10, 10);
-		RACashFile src2 = new RACashFile(f2, 10, 10);
-		RACashFile out = new RACashFile(5, 20);
+		CashKyoroFile src1 = new CashKyoroFile(f1, 10, 10);
+		CashKyoroFile src2 = new CashKyoroFile(f2, 10, 10);
+		CashKyoroFile out = new CashKyoroFile(5, 20);
 		byte[] exp = new byte[1024];
 		Random r = new Random(777);
 		for(int i=0;i<exp.length;i++) {
@@ -67,9 +67,9 @@ public class TestForKFNextHelper extends TestCase {
 	}
 
 	public void testTwo() throws IOException {
-		RACashFile src1 = new RACashFile(10, 10);
-		RACashFile src2 = new RACashFile(10, 10);
-		RACashFile out = new RACashFile(5, 20);
+		CashKyoroFile src1 = new CashKyoroFile(10, 10);
+		CashKyoroFile src2 = new CashKyoroFile(10, 10);
+		CashKyoroFile out = new CashKyoroFile(5, 20);
 		byte[] exp = new byte[1024];
 		Random r = new Random(777);
 		for(int i=0;i<exp.length;i++) {
@@ -99,13 +99,13 @@ public class TestForKFNextHelper extends TestCase {
 		long start = System.currentTimeMillis();
 //		File srcF = new File(".\testdata\1mb\1m_a.txt");
 		File srcF = new File("../../h264.mp4");
-		RACashFile src = new RACashFile(srcF, 16*1024, 3);
+		CashKyoroFile src = new CashKyoroFile(srcF, 16*1024, 3);
 //		RACashFile out = new RACashFile(512, 20);
 		
 		// 1 4000 3000
 		// 2 5000 6000
 		// 4 11000 11000
-		RACashFile out = new RACashFile(16*1024, 2);
+		CashKyoroFile out = new CashKyoroFile(16*1024, 10);
 		try {
 			src.seek(0);
 			KFNextHelper.copy(src, out);

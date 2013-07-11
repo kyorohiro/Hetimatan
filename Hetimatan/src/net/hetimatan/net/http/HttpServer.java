@@ -6,7 +6,7 @@ import java.util.LinkedList;
 import net.hetimatan.io.file.KyoroFile;
 import net.hetimatan.io.file.KyoroFileForFiles;
 import net.hetimatan.io.filen.ByteKyoroFile;
-import net.hetimatan.io.filen.RACashFile;
+import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.io.net.KyoroSelector;
 import net.hetimatan.io.net.KyoroServerSocket;
 import net.hetimatan.io.net.KyoroServerSocketImpl;
@@ -106,7 +106,7 @@ public class HttpServer {
 	public KyoroFile createContent(KyoroSocket socket, HttpRequestURI uri) throws IOException {
 		if(Log.ON){Log.v(TAG, "HttpServer#createResponse");}
 		try {
-			return new RACashFile("hello world".getBytes());
+			return new CashKyoroFile("hello world".getBytes());
 		} finally {
 			if(Log.ON){Log.v(TAG, "/HttpServer#createResponse");}
 		}

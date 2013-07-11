@@ -7,7 +7,7 @@ import java.util.LinkedList;
 
 import net.hetimatan.io.file.KyoroFileForFiles;
 import net.hetimatan.io.file.MarkableFileReader;
-import net.hetimatan.io.filen.RACashFile;
+import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.net.torrent.util.bencode.BenDiction;
 import net.hetimatan.net.torrent.util.bencode.BenInteger;
 import net.hetimatan.net.torrent.util.bencode.BenList;
@@ -55,7 +55,7 @@ public class MetaFileCreater {
 	public static MetaFile createFromTorrentFile(File file) throws IOException {
 		MarkableFileReader reader = null;
 		try {
-			RACashFile vfile = new RACashFile(file, 512, 2);// read only
+			CashKyoroFile vfile = new CashKyoroFile(file, 512, 2);// read only
 			reader = new MarkableFileReader(vfile, 512);
 			BenDiction dection = BenDiction.decodeDiction(reader);
 			return createFromTorrentDiction(dection);

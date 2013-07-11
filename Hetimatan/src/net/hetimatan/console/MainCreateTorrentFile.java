@@ -4,7 +4,7 @@ package net.hetimatan.console;
 import java.io.File;
 import java.io.IOException;
 
-import net.hetimatan.io.filen.RACashFile;
+import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.net.torrent.util.metafile.MetaFile;
 import net.hetimatan.net.torrent.util.metafile.MetaFileCreater;
 
@@ -50,7 +50,7 @@ public class MainCreateTorrentFile {
 			}
 		}
 
-		RACashFile _output = new RACashFile(output, 1024, 2);
+		CashKyoroFile _output = new CashKyoroFile(output, 1024, 2);
 		try {
 			metaFile.save(_output);
 			_output.syncWrite();

@@ -3,23 +3,23 @@ package net.hetimatan.io.filen;
 import java.io.IOException;
 import java.util.Random;
 
-import net.hetimatan.io.filen.AccessorFile;
-import net.hetimatan.io.filen.RACashFile;
+import net.hetimatan.io.filen.PartReferenceKyoroFile;
+import net.hetimatan.io.filen.CashKyoroFile;
 
 import junit.framework.TestCase;
 
 public class TestForSubRACashFile extends TestCase {
 
 	public void testZeroByte() throws IOException {
-		RACashFile vf = null;
+		CashKyoroFile vf = null;
 		try {
-			vf = new RACashFile(10, 3);
+			vf = new CashKyoroFile(10, 3);
 			byte[] buffer = new byte[101];
 			for(int i=0;i<buffer.length;i++) {buffer[0] = 0;}
 			int ret = vf.read(buffer);
 			
 			//=====================
-			AccessorFile scash = new AccessorFile(vf, 10, 100, 10, 3);
+			PartReferenceKyoroFile scash = new PartReferenceKyoroFile(vf, 10, 100, 10, 3);
 			scash.read(buffer);
 			assertEquals(-1, ret);
 			for(int i=0;i<buffer.length;i++) {assertEquals(0, buffer[0]);}
@@ -29,9 +29,9 @@ public class TestForSubRACashFile extends TestCase {
 	}
 
 	public void testXxxByte() throws IOException {
-		RACashFile vf = null;
+		CashKyoroFile vf = null;
 		try {
-			vf = new RACashFile(10, 3);
+			vf = new CashKyoroFile(10, 3);
 			byte[] expected = new byte[101];
 			Random r = new Random(123);
 			for(int i=0;i<expected.length;i++) {
@@ -40,7 +40,7 @@ public class TestForSubRACashFile extends TestCase {
 			
 			//=====================
 			byte[] buffer = new byte[100];
-			AccessorFile scash = new AccessorFile(vf, 10, 100, 10, 3);
+			PartReferenceKyoroFile scash = new PartReferenceKyoroFile(vf, 10, 100, 10, 3);
 			ret = scash.read(buffer);
 			assertEquals(90, ret);
 			for(int i=10;i<100;i++) {assertEquals(expected[i], buffer[i-10]);}
@@ -50,9 +50,9 @@ public class TestForSubRACashFile extends TestCase {
 	}
 	
 	public void testXxyByte() throws IOException {
-		RACashFile vf = null;
+		CashKyoroFile vf = null;
 		try {
-			vf = new RACashFile(10, 3);
+			vf = new CashKyoroFile(10, 3);
 			byte[] expected = new byte[101];
 			Random r = new Random(123);
 			for(int i=0;i<expected.length;i++) {
@@ -61,7 +61,7 @@ public class TestForSubRACashFile extends TestCase {
 			
 			//=====================
 			byte[] buffer = new byte[12];
-			AccessorFile scash = new AccessorFile(vf, 10, 100, 10, 3);
+			PartReferenceKyoroFile scash = new PartReferenceKyoroFile(vf, 10, 100, 10, 3);
 			scash.seek(1);
 			ret = scash.read(buffer);
 			assertEquals(12, ret);
@@ -72,9 +72,9 @@ public class TestForSubRACashFile extends TestCase {
 	}
 
 	public void testXxzByte() throws IOException {
-		RACashFile vf = null;
+		CashKyoroFile vf = null;
 		try {
-			vf = new RACashFile(10, 3);
+			vf = new CashKyoroFile(10, 3);
 			byte[] expected = new byte[90];
 			Random r = new Random(123);
 			for(int i=0;i<expected.length;i++) {
@@ -83,7 +83,7 @@ public class TestForSubRACashFile extends TestCase {
 			
 			//=====================
 			byte[] buffer = new byte[1200];
-			AccessorFile scash = new AccessorFile(vf, 10, 100, 10, 3);
+			PartReferenceKyoroFile scash = new PartReferenceKyoroFile(vf, 10, 100, 10, 3);
 			scash.seek(2);
 			ret = scash.read(buffer);
 			assertEquals(88, ret);

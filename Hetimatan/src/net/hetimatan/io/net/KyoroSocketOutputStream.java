@@ -5,7 +5,7 @@ import java.io.OutputStream;
 import java.nio.ByteBuffer;
 
 import net.hetimatan.io.file.KyoroFile;
-import net.hetimatan.io.filen.RACashFile;
+import net.hetimatan.io.filen.CashKyoroFile;
 
 public class KyoroSocketOutputStream extends OutputStream {
 
@@ -19,7 +19,7 @@ public class KyoroSocketOutputStream extends OutputStream {
 
 	public void writeToCash(byte[] b, int off, int len) throws IOException {
 		if(mCash == null) {
-			mCash = new RACashFile(1024, 256);
+			mCash = new CashKyoroFile(1024, 256);
 		}
 		mCash.addChunk(b, off, off+len);
 	}

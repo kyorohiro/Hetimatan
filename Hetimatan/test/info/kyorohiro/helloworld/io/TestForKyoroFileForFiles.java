@@ -6,7 +6,7 @@ import java.util.Random;
 import net.hetimatan.io.file.KyoroFile;
 import net.hetimatan.io.file.KyoroFileForFiles;
 import net.hetimatan.io.filen.ByteKyoroFile;
-import net.hetimatan.io.filen.RACashFile;
+import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.util.io.ByteArrayBuilder;
 
 import junit.framework.TestCase;
@@ -18,8 +18,8 @@ public class TestForKyoroFileForFiles extends TestCase {
 	}
 
 	public void testOne001() throws IOException {
-		RACashFile[] files = new RACashFile[1];
-		files[0] = new RACashFile("あいう".getBytes());
+		CashKyoroFile[] files = new CashKyoroFile[1];
+		files[0] = new CashKyoroFile("あいう".getBytes());
 		KyoroFileForFiles kff = new KyoroFileForFiles(files);
 		byte[] buffer = new byte[256];
 		int len = kff.read(buffer);
@@ -32,8 +32,8 @@ public class TestForKyoroFileForFiles extends TestCase {
 		for(int i=0;i<testdata.length;i++){
 			testdata[i] = (byte)Math.random();
 		}
-		RACashFile[] files = new RACashFile[1];
-		files[0] = new RACashFile(testdata);
+		CashKyoroFile[] files = new CashKyoroFile[1];
+		files[0] = new CashKyoroFile(testdata);
 		KyoroFileForFiles kff = new KyoroFileForFiles(files);
 		byte[] buffer = new byte[256];
 		int len = kff.read(buffer);
@@ -53,9 +53,9 @@ public class TestForKyoroFileForFiles extends TestCase {
 	}
 
 	public void testTwo001() throws IOException {
-		RACashFile[] files = new RACashFile[2];
-		files[0] = new RACashFile("あいう".getBytes());
-		files[1] = new RACashFile("かきく".getBytes());
+		CashKyoroFile[] files = new CashKyoroFile[2];
+		files[0] = new CashKyoroFile("あいう".getBytes());
+		files[1] = new CashKyoroFile("かきく".getBytes());
 		KyoroFileForFiles kff = new KyoroFileForFiles(files);
 		byte[] buffer = new byte[256];
 		int len = kff.read(buffer);
@@ -64,10 +64,10 @@ public class TestForKyoroFileForFiles extends TestCase {
 	}
 
 	public void testTwo002() throws IOException {
-		RACashFile[] files = new RACashFile[3];
-		files[0] = new RACashFile("あいう".getBytes());
-		files[1] = new RACashFile("かきく".getBytes());
-		files[2] = new RACashFile("さ".getBytes());
+		CashKyoroFile[] files = new CashKyoroFile[3];
+		files[0] = new CashKyoroFile("あいう".getBytes());
+		files[1] = new CashKyoroFile("かきく".getBytes());
+		files[2] = new CashKyoroFile("さ".getBytes());
 		KyoroFileForFiles kff = new KyoroFileForFiles(files);
 		try {
 			byte[] buffer = new byte[256];
@@ -84,7 +84,7 @@ public class TestForKyoroFileForFiles extends TestCase {
 		ByteArrayBuilder s0 = new ByteArrayBuilder();
 		s0.append("ab".getBytes());
 		files[0] = new ByteKyoroFile(s0);
-		files[1] = new RACashFile("cdefgh".getBytes());
+		files[1] = new CashKyoroFile("cdefgh".getBytes());
 		KyoroFileForFiles kff = new KyoroFileForFiles(files);
 		byte[] buffer = new byte[4];
 		{
@@ -107,8 +107,8 @@ public class TestForKyoroFileForFiles extends TestCase {
 			testdata[i] = (byte)(ra.nextInt()%128);
 		}
 
-		RACashFile[] files = new RACashFile[1];
-		files[0] = new RACashFile(testdata);
+		CashKyoroFile[] files = new CashKyoroFile[1];
+		files[0] = new CashKyoroFile(testdata);
 		KyoroFileForFiles kff = new KyoroFileForFiles(files);
 		byte[] buffer = new byte[1024];
 

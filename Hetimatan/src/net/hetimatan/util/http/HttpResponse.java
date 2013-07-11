@@ -7,7 +7,7 @@ import java.util.LinkedList;
 
 import net.hetimatan.io.file.KyoroFile;
 import net.hetimatan.io.file.MarkableReader;
-import net.hetimatan.io.filen.RACashFile;
+import net.hetimatan.io.filen.CashKyoroFile;
 
 // http://www.studyinghttp.net/cgi-bin/rfc.cgi?2616
 //http://www.w3.org/Protocols/rfc2616/rfc2616.html
@@ -57,7 +57,7 @@ public class HttpResponse extends HttpObject {
 
 
 	public void setContent(byte[] content) throws IOException {
-		setContent(new RACashFile(content));
+		setContent(new CashKyoroFile(content));
 	}
 
 	public void setContent(KyoroFile content) {
@@ -171,7 +171,7 @@ public class HttpResponse extends HttpObject {
 		}
 		// 
 		// todo MarkableReader内の VFを使用してもよいかも
-		RACashFile vf = new RACashFile(512, 2);
+		CashKyoroFile vf = new CashKyoroFile(512, 2);
 		if(isReadBody) {
 			int added = 0;
 			byte[] buffer = new byte[1];

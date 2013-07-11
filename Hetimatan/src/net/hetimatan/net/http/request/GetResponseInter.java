@@ -5,12 +5,12 @@ package net.hetimatan.net.http.request;
 import java.io.IOException;
 import java.net.Socket;
 
-import net.hetimatan.io.filen.RACashFile;
+import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.util.http.HttpResponse;
 
 public interface GetResponseInter {
 	public int getVFOffset() ;
-	public RACashFile getVF();
+	public CashKyoroFile getVF();
 	public boolean headerIsReadable() throws IOException;
 	public boolean bodyIsReadable() throws IOException;
 	public void read() throws IOException, InterruptedException ;

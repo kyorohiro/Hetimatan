@@ -6,7 +6,7 @@ import junit.framework.TestCase;
 import net.hetimatan.io.file.KyoroFile;
 import net.hetimatan.io.file.MarkableFileReader;
 import net.hetimatan.io.filen.KFNextHelper;
-import net.hetimatan.io.filen.RACashFile;
+import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.net.torrent.client.message.MessageBitField;
 import net.hetimatan.net.torrent.client.message.MessageCancel;
 import net.hetimatan.net.torrent.client.message.MessageChoke;
@@ -27,7 +27,7 @@ public class TestForMessagePiece extends TestCase {
 	public void testEncode() throws IOException {
 //		piece: <len=0009+X><id=7><index><begin><block>
 		byte[] bcont = {(byte)13,(byte)14,(byte)15};
-		KyoroFile cont = new  RACashFile(bcont);
+		KyoroFile cont = new  CashKyoroFile(bcont);
 		ByteArrayBuilder builder = new ByteArrayBuilder();
 		builder.appendInt(9+bcont.length);
 		builder.append(TorrentMessage.SIGN_PIECE);
@@ -38,7 +38,7 @@ public class TestForMessagePiece extends TestCase {
 		byte[] expected = builder.createBuffer();
 
 		MessagePiece request = new MessagePiece(10, 100, cont);
-		RACashFile output = new RACashFile(512);
+		CashKyoroFile output = new CashKyoroFile(512);
 		request.encode(output.getLastOutput());
 		byte[] target = KFNextHelper.newBinary(output);
 		TestUtil.assertArrayEquals(this, "", expected, target);
@@ -46,7 +46,7 @@ public class TestForMessagePiece extends TestCase {
 
 	public void testDecode() throws IOException {
 		byte[] bcont = {(byte)13,(byte)14,(byte)15};
-		RACashFile cont = new  RACashFile(bcont);
+		CashKyoroFile cont = new  CashKyoroFile(bcont);
 		ByteArrayBuilder builder = new ByteArrayBuilder();
 		builder.appendInt(9+bcont.length);
 		builder.append(TorrentMessage.SIGN_PIECE);

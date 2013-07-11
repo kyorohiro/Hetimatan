@@ -8,7 +8,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.LinkedList;
 
 import net.hetimatan.io.file.MarkableFileReader;
-import net.hetimatan.io.filen.RACashFile;
+import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.net.torrent.util.bencode.BenDiction;
 import net.hetimatan.net.torrent.util.bencode.BenList;
 import net.hetimatan.net.torrent.util.bencode.BenObject;
@@ -81,7 +81,7 @@ public class MetaFile {
 
 	public BenString getInfoSha1AsBenString() throws IOException {
 		BenDiction info = getInfo();
-		RACashFile output = new RACashFile(1024, 2);
+		CashKyoroFile output = new CashKyoroFile(1024, 2);
 		info.encode(output.getLastOutput());
 		output.seek(0);
 		MarkableFileReader reader = new MarkableFileReader(output, 512);
@@ -117,7 +117,7 @@ public class MetaFile {
 	 * @throws IOException
 	 */
 	// TODOb kiyo seek output,\.seek(length)
-	public void save(RACashFile output) throws IOException {
+	public void save(CashKyoroFile output) throws IOException {
 		mDiction.encode(output.getLastOutput());
 		output.syncWrite();
 	}

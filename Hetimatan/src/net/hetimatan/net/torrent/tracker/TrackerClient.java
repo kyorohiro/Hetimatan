@@ -7,7 +7,7 @@ import java.util.Iterator;
 import java.util.TreeSet;
 
 import net.hetimatan.io.file.MarkableFileReader;
-import net.hetimatan.io.filen.RACashFile;
+import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.net.http.HttpGet;
 import net.hetimatan.net.http.request.GetRequesterInter;
 import net.hetimatan.net.http.request.GetResponseInter;
@@ -125,7 +125,7 @@ public class TrackerClient extends HttpGet {
 			return;
 		}
 		try {
-			RACashFile vf = mResponse.getVF();
+			CashKyoroFile vf = mResponse.getVF();
 			vf.seek(mResponse.getVFOffset());
 			int len = (int)vf.length();
 			byte[] buffer = new byte[len];

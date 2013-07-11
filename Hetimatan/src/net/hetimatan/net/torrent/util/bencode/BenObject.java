@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import net.hetimatan.io.file.MarkableReader;
-import net.hetimatan.io.filen.RACashFile;
+import net.hetimatan.io.filen.CashKyoroFile;
 
 
 public abstract class BenObject {
@@ -20,10 +20,10 @@ public abstract class BenObject {
 //		System.out.println("bencode_log:"+log);
 	}
 
-	private static RACashFile vFile = null;
+	private static CashKyoroFile vFile = null;
 	public static synchronized byte[] createEncode(BenObject target) throws IOException {
 		try {
-			vFile = new RACashFile(512, 2);
+			vFile = new CashKyoroFile(512, 2);
 			target.encode(vFile.getLastOutput());
 			byte[] buffer = new byte[(int)vFile.length()];
 			//int len = 

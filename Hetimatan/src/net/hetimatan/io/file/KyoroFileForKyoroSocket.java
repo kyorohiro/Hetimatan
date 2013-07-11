@@ -4,7 +4,7 @@ package net.hetimatan.io.file;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import net.hetimatan.io.filen.RACashFile;
+import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.io.net.KyoroSelector;
 import net.hetimatan.io.net.KyoroSocket;
 import net.hetimatan.util.log.Log;
@@ -16,19 +16,19 @@ import net.hetimatan.util.log.Log;
 public class KyoroFileForKyoroSocket extends OutputStream implements KyoroFile {
 
 	private KyoroSocket mSocket = null;
-	private RACashFile mVf = null;
+	private CashKyoroFile mVf = null;
 	private KyoroSelector mSelector = null;
 
 	public KyoroFileForKyoroSocket(KyoroSocket socket, int writeCashSize) throws IOException {
 		mSocket = socket;
-		mVf = new RACashFile(writeCashSize, 2);
+		mVf = new CashKyoroFile(writeCashSize, 2);
 	}
 
 	public void setSelector(KyoroSelector selector){
 		mSelector = selector;
 	}
 
-	public RACashFile getVF() {
+	public CashKyoroFile getVF() {
 		return mVf;
 	}
 

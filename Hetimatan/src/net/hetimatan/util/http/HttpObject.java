@@ -7,7 +7,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 import net.hetimatan.io.file.MarkableReader;
-import net.hetimatan.io.filen.RACashFile;
+import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.util.io.ByteArrayBuilder;
 
 public abstract class HttpObject {
@@ -21,10 +21,10 @@ public abstract class HttpObject {
 	public static final int TYPE_LIST  = 2;
 	public static final int TYPE_DICT  = 3;
 
-	private static RACashFile vFile = null;
+	private static CashKyoroFile vFile = null;
 	public static synchronized String createEncode(HttpObject target) throws IOException {
 		try {
-			vFile = new RACashFile(512, 2);
+			vFile = new CashKyoroFile(512, 2);
 			target.encode(vFile.getLastOutput());
 			byte[] buffer = new byte[(int)vFile.length()];
 			//vFile.seek(0);//todo

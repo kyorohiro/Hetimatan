@@ -10,7 +10,7 @@ import net.hetimatan.io.file.KyoroFile;
 // todo:RACashFileと同じコードがある。 
 // RACashFileの一部をKyoroFileとして取得する。
 // 独自にキャッシュをもてる。 
-public class AccessorFile implements KyoroFile {
+public class PartReferenceKyoroFile implements KyoroFile {
 	private KyoroFile mRAFile = null;
 	private LinkedList<ByteKyoroFile> mCash = null;
 	private long mFilePointer = 0;
@@ -19,7 +19,7 @@ public class AccessorFile implements KyoroFile {
 	private int mChunkSize = 0;
 	private boolean mIsCash = false;
 
-	public AccessorFile(KyoroFile f, long start, long end, int chunkSize, int chunkNum) throws IOException {		
+	public PartReferenceKyoroFile(KyoroFile f, long start, long end, int chunkSize, int chunkNum) throws IOException {		
 		mChunkSize = chunkSize;
 		mRAFile = f;
 		mIsCash = false;

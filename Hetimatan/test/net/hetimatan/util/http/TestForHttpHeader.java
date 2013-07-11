@@ -2,7 +2,7 @@ package net.hetimatan.util.http;
 
 import java.io.IOException;
 import net.hetimatan.io.file.MarkableFileReader;
-import net.hetimatan.io.filen.RACashFile;
+import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.util.http.HttpHeader;
 import net.hetimatan.util.http.HttpObject;
 import net.hetimatan.util.http.HttpRequestLine;
@@ -20,7 +20,7 @@ public class TestForHttpHeader extends TestCase {
 
 	public void testEncode001() throws IOException {
 		HttpHeader header = new HttpHeader("key","value");
-		RACashFile output = new RACashFile(512);
+		CashKyoroFile output = new CashKyoroFile(512);
 		header.encode(output.getLastOutput());
 
 		output.seek(0);
@@ -31,7 +31,7 @@ public class TestForHttpHeader extends TestCase {
 	}
 
 	public void testDecode001() throws IOException {
-		RACashFile base = new RACashFile(512);
+		CashKyoroFile base = new CashKyoroFile(512);
 		base.addChunk("key:value\r\n".getBytes());
 		MarkableFileReader reader = new MarkableFileReader(base, 512);
 

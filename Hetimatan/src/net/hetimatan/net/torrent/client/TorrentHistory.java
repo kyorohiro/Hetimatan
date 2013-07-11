@@ -3,7 +3,7 @@ package net.hetimatan.net.torrent.client;
 import java.io.File;
 import java.io.IOException;
 
-import net.hetimatan.io.filen.RACashFile;
+import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.net.torrent.client.message.TorrentMessage;
 import net.hetimatan.util.event.GlobalAccessProperty;
 import net.hetimatan.util.log.Log;
@@ -11,14 +11,14 @@ import net.hetimatan.util.log.Log;
 
 public class TorrentHistory {
 
-	private RACashFile mCash = null;
+	private CashKyoroFile mCash = null;
 	private static TorrentHistory sHistory = null;
 
 	private TorrentHistory() throws IOException {
 		File parent = (new File("dummy")).getAbsoluteFile().getParentFile();
 		String path = GlobalAccessProperty.getInstance().get("my.home", parent.getAbsolutePath());
 		File home = new File(path);
-		mCash = new RACashFile(new File(home, "history"), 512, 2);
+		mCash = new CashKyoroFile(new File(home, "history"), 512, 2);
 		mCash.isCashMode(false);
 		Runtime.getRuntime().addShutdownHook(new Thread(new ShutdonwTask()));
 	}

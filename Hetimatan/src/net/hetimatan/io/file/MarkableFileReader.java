@@ -8,7 +8,7 @@ import java.util.LinkedList;
 
 import javax.management.MXBean;
 
-import net.hetimatan.io.filen.RACashFile;
+import net.hetimatan.io.filen.CashKyoroFile;
 
 public class MarkableFileReader implements MarkableReader {
 	public static final int TIMEOUT = 30000; 
@@ -65,11 +65,11 @@ public class MarkableFileReader implements MarkableReader {
 	}
 
 	public MarkableFileReader(byte[] buffer) throws IOException {
-		mFile = new RACashFile(buffer);
+		mFile = new CashKyoroFile(buffer);
 	}
 
 	public MarkableFileReader(File path, int cashSize) throws IOException {
-		mFile = new RACashFile(path, cashSize, 2);
+		mFile = new CashKyoroFile(path, cashSize, 2);
 	}
 
 	public MarkableFileReader(KyoroFile base, int cashSize) throws FileNotFoundException {

@@ -5,7 +5,7 @@ import java.io.IOException;
 
 import net.hetimatan.io.file.KyoroFile;
 import net.hetimatan.io.filen.KFNextHelper;
-import net.hetimatan.io.filen.RACashFile;
+import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.net.torrent.util.metafile.MetaFile;
 import net.hetimatan.util.bitfield.BitField;
 import net.hetimatan.util.event.GlobalAccessProperty;
@@ -17,7 +17,7 @@ public class TorrentData {
 	private BitField mRequestDataInfo = null;
 
 	private String mInfoHash = "_";
-	private RACashFile mCash = null;
+	private CashKyoroFile mCash = null;
 	private int mPieceLength =0;
 	private File mContent = null;
 	private File mHead = null;
@@ -40,7 +40,7 @@ public class TorrentData {
 		mContent = new File(dir, "_content");
 		mHead = new File(dir, "_header");
 		mSource = new File(dir, "_source");
-		mCash = new RACashFile(mContent, 256, 10);
+		mCash = new CashKyoroFile(mContent, 256, 10);
 		for(Long l:file.getFileLengths()) {
 			mDataLength += l;
 		}
@@ -49,10 +49,10 @@ public class TorrentData {
 	}
 
 	public void load() throws IOException {
-		RACashFile cash = null;
+		CashKyoroFile cash = null;
 		PercentEncoder encoder = new PercentEncoder();
 		try {
-			cash = new RACashFile(mHead, 256, 2);
+			cash = new CashKyoroFile(mHead, 256, 2);
 			byte[] buffer = KFNextHelper.newBinary(cash);
 			mStockedDataInfo.setBitfield(encoder.decode(buffer));
 			mRequestDataInfo.setBitfield(encoder.decode(buffer));
@@ -64,10 +64,10 @@ public class TorrentData {
 	}
 
 	public void save() throws IOException {
-		RACashFile cash = null;
+		CashKyoroFile cash = null;
 		try {
 			PercentEncoder encoder = new PercentEncoder();
-			cash = new RACashFile(mHead, 256, 2);
+			cash = new CashKyoroFile(mHead, 256, 2);
 			cash.write(
 					encoder.encode(
 					mStockedDataInfo.getBinary()).getBytes());
@@ -78,7 +78,7 @@ public class TorrentData {
 			}
 		}
 		try {
-			cash = new RACashFile(mSource, 256, 2);
+			cash = new CashKyoroFile(mSource, 256, 2);
 			mMetafile.save(cash);
 			cash.syncWrite();
 		} finally {

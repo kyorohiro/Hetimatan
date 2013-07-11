@@ -2,16 +2,16 @@ package net.hetimatan.io.filen;
 
 import java.io.IOException;
 
-import net.hetimatan.io.filen.RACashFile;
+import net.hetimatan.io.filen.CashKyoroFile;
 import junit.framework.TestCase;
 
 public class TestForRACashFile extends TestCase {
 
 	//prev vf test
 	public void testZeroByte() throws IOException {
-		RACashFile vf = null;
+		CashKyoroFile vf = null;
 		try {
-			vf = new RACashFile(10, 3);
+			vf = new CashKyoroFile(10, 3);
 			byte[] buffer = new byte[101];
 			for(int i=0;i<buffer.length;i++) {buffer[0] = 0;}
 			int ret = vf.read(buffer);
@@ -23,9 +23,9 @@ public class TestForRACashFile extends TestCase {
 	}
 
 	public void testAddChunk() throws IOException {
-		RACashFile vf = null;
+		CashKyoroFile vf = null;
 		try {
-			vf = new RACashFile(10, 3);
+			vf = new CashKyoroFile(10, 3);
 			byte[] add = {1, 2, 3, 4, 5};
 			byte[] read = new byte[6];
 			vf.addChunk(add, 0, 5);
@@ -45,9 +45,9 @@ public class TestForRACashFile extends TestCase {
 		 "きょうは歌舞伎座の切符が二枚手に入ったから一緒に見に行か"+
 		 "ないか。午後一時の開場だから十時頃の電車で銀座あたりへ来"+
 		 "てくれるといい。君の知っているカフェーかレストランがあるだろう」";
-		RACashFile vf = null;
+		CashKyoroFile vf = null;
 		try {
-			vf = new RACashFile(10, 3);
+			vf = new CashKyoroFile(10, 3);
 			byte[] buffer = new byte[1000];
 			for(int i=0;i<buffer.length;i++) {
 				buffer[0] = 0;}
@@ -117,9 +117,9 @@ public class TestForRACashFile extends TestCase {
 						+"お"
 						+"したように白鷹先生の話が出て来るじゃないの。おかしいわ……」\r\n"
 						+"「そりゃあ庚戌会がその頃にあるからさ」\r\n";
-		RACashFile vf = null;
+		CashKyoroFile vf = null;
 		try {
-			vf = new RACashFile(10, 3);
+			vf = new CashKyoroFile(10, 3);
 			byte[] buffer = new byte[1300];
 			for(int i=0;i<buffer.length;i++) {
 				buffer[0] = 0;
@@ -186,7 +186,7 @@ public class TestForRACashFile extends TestCase {
 				"  8192byte:::/storage/sdcard0:::HR\r\n"
 		};
 		try {
-			RACashFile vf = new RACashFile(10, 3);
+			CashKyoroFile vf = new CashKyoroFile(10, 3);
 			byte[] buffer = new byte[1300];
 			for(int i=0;i<buffer.length;i++) {
 				buffer[0] = 0;
@@ -236,7 +236,7 @@ public class TestForRACashFile extends TestCase {
 	
 	//nexy byte test
 	public void testRead_zero() throws IOException {
-		RACashFile file = new RACashFile(10, 3);
+		CashKyoroFile file = new CashKyoroFile(10, 3);
 		try {
 			byte[] buffer = new byte[100];
 			int len = file.read(buffer);
@@ -248,7 +248,7 @@ public class TestForRACashFile extends TestCase {
 		}
 	}
 	public void testWriteRead() throws IOException {
-		RACashFile file = new RACashFile(10, 3);
+		CashKyoroFile file = new CashKyoroFile(10, 3);
 		try {
 			file.write(1);
 			file.write(2);
@@ -266,7 +266,7 @@ public class TestForRACashFile extends TestCase {
 	}
 
 	public void testSeek_append1() throws IOException {
-		RACashFile file = new RACashFile(4, 5);
+		CashKyoroFile file = new CashKyoroFile(4, 5);
 		try {
 			file.write(1);
 			file.write(2);
@@ -286,7 +286,7 @@ public class TestForRACashFile extends TestCase {
 	}
 
 	public void testSeekWrite_append2() throws IOException {
-		RACashFile file = new RACashFile(10, 1);
+		CashKyoroFile file = new CashKyoroFile(10, 1);
 		try {
 			file.write(1);
 			file.write(2);
@@ -307,7 +307,7 @@ public class TestForRACashFile extends TestCase {
 	}
 
 	public void testSeekWrite_back() throws IOException {
-		RACashFile file = new RACashFile(2,10);
+		CashKyoroFile file = new CashKyoroFile(2,10);
 		try {
 			file.write(1);
 			file.write(2);

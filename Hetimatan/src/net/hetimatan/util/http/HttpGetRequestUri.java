@@ -8,7 +8,7 @@ import java.util.Set;
 
 import net.hetimatan.io.file.MarkableFileReader;
 import net.hetimatan.io.file.MarkableReader;
-import net.hetimatan.io.filen.RACashFile;
+import net.hetimatan.io.filen.CashKyoroFile;
 
 // GET request
 // http://www.w3schools.com/tags/ref_httpmethods.asp
@@ -19,7 +19,7 @@ public class HttpGetRequestUri extends HttpObject {
 	// todo throw IOEXception?
 	public static HttpGetRequestUri crateHttpGetRequestUri(String requestPath) {
 		try {
-			RACashFile base = new RACashFile(requestPath.getBytes());
+			CashKyoroFile base = new CashKyoroFile(requestPath.getBytes());
 			MarkableReader reader  = new MarkableFileReader(base, 100);
 			return HttpGetRequestUri.decode(reader);
 		} catch(Exception e) {

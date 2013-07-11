@@ -8,7 +8,7 @@ import net.hetimatan.io.file.KyoroFile;
 import net.hetimatan.io.file.MarkableFileReader;
 import net.hetimatan.io.file.MarkableReader;
 import net.hetimatan.io.filen.KFNextHelper;
-import net.hetimatan.io.filen.RACashFile;
+import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.net.torrent.util.bencode.BenString;
 import net.hetimatan.net.torrent.util.metafile.MetaFile;
 import net.hetimatan.util.io.ByteArrayBuilder;
@@ -59,7 +59,7 @@ public class MessagePiece extends TorrentMessage {
 	@Override
 	public void encode(OutputStream output) throws IOException {
 		int length = 1+4*2+(int)mContent.length();
-		RACashFile vf = new RACashFile(500, 2);
+		CashKyoroFile vf = new CashKyoroFile(500, 2);
 		vf.write(ByteArrayBuilder.parseInt(length, ByteArrayBuilder.BYTEORDER_BIG_ENDIAN));
 		vf.write(TorrentMessage.SIGN_PIECE);
 		vf.write(ByteArrayBuilder.parseInt(mIndex, ByteArrayBuilder.BYTEORDER_BIG_ENDIAN));
@@ -100,7 +100,7 @@ public class MessagePiece extends TorrentMessage {
 		_signed(reader, TorrentMessage.SIGN_PIECE);
 		int index = _decodeInt(reader);
 		int begin = _decodeInt(reader);
-		KyoroFile content = new RACashFile(len-9, 2);
+		KyoroFile content = new CashKyoroFile(len-9, 2);
 		read(reader, content, begin, len-9);		
 		return new MessagePiece(index, begin, content);
 	}

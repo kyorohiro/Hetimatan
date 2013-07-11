@@ -1,7 +1,7 @@
 package net.hetimatan.util.http;
 
 import net.hetimatan.io.file.MarkableFileReader;
-import net.hetimatan.io.filen.RACashFile;
+import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.util.http.HttpGetRequestUri;
 import net.hetimatan.util.http.HttpHeader;
 import net.hetimatan.util.http.HttpObject;
@@ -23,7 +23,7 @@ public class TestForHttpGETRequestURI  extends TestCase {
 
 	public void testEncode001() throws IOException {
 		HttpGetRequestUri uri = new HttpGetRequestUri("*");
-		RACashFile output = new RACashFile(512);
+		CashKyoroFile output = new CashKyoroFile(512);
 		uri.encode(output.getLastOutput());
 		output.seek(0);
 		byte[] buffer = new byte[(int)output.length()];
@@ -36,7 +36,7 @@ public class TestForHttpGETRequestURI  extends TestCase {
 		HttpGetRequestUri uri = new HttpGetRequestUri("/announce");
 		uri.putVale("01", "value01");
 
-		RACashFile output = new RACashFile(512);
+		CashKyoroFile output = new CashKyoroFile(512);
 		uri.encode(output.getLastOutput());
 		output.seek(0);
 		byte[] buffer = new byte[(int)output.length()];
@@ -50,7 +50,7 @@ public class TestForHttpGETRequestURI  extends TestCase {
 		uri.putVale("01", "value01");
 		uri.putVale("02", "value02");
 		uri.putVale("03", "value03");
-		RACashFile output = new RACashFile(512);
+		CashKyoroFile output = new CashKyoroFile(512);
 		uri.encode(output.getLastOutput());
 		output.seek(0);
 		byte[] buffer = new byte[(int)output.length()];
@@ -60,7 +60,7 @@ public class TestForHttpGETRequestURI  extends TestCase {
 	}
 
 	public void testDecode001() throws IOException {
-		RACashFile base = new RACashFile(512);
+		CashKyoroFile base = new CashKyoroFile(512);
 		base.addChunk("*".getBytes());
 		MarkableFileReader reader = new MarkableFileReader(base, 512);
 
@@ -69,7 +69,7 @@ public class TestForHttpGETRequestURI  extends TestCase {
 	}
 
 	public void testDecode002() throws IOException {
-		RACashFile base = new RACashFile(512);
+		CashKyoroFile base = new CashKyoroFile(512);
 		base.addChunk("/announce?01=value01".getBytes());
 		MarkableFileReader reader = new MarkableFileReader(base, 512);
 
@@ -84,7 +84,7 @@ public class TestForHttpGETRequestURI  extends TestCase {
 	}
 
 	public void testDecode003() throws IOException {
-		RACashFile base = new RACashFile(512);
+		CashKyoroFile base = new CashKyoroFile(512);
 		base.addChunk("/announce?01=value01&02=value02&03=value03".getBytes());
 		MarkableFileReader reader = new MarkableFileReader(base, 512);
 

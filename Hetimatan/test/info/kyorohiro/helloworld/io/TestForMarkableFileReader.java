@@ -3,7 +3,7 @@ package info.kyorohiro.helloworld.io;
 import java.io.IOException;
 
 import net.hetimatan.io.file.MarkableFileReader;
-import net.hetimatan.io.filen.RACashFile;
+import net.hetimatan.io.filen.CashKyoroFile;
 
 import junit.framework.TestCase;
 
@@ -14,7 +14,7 @@ public class TestForMarkableFileReader extends TestCase {
 	}
 
 	public void test000() throws IOException {
-		RACashFile base = new RACashFile(512, 2);
+		CashKyoroFile base = new CashKyoroFile(512, 2);
 		MarkableFileReader reader = new MarkableFileReader(base, 10);
 
 		try {
@@ -30,7 +30,7 @@ public class TestForMarkableFileReader extends TestCase {
 	}
 
 	public void test001() throws IOException {
-		RACashFile base = new RACashFile(512, 2);
+		CashKyoroFile base = new CashKyoroFile(512, 2);
 		MarkableFileReader reader = new MarkableFileReader(base, 10);
 
 		try {
@@ -46,7 +46,7 @@ public class TestForMarkableFileReader extends TestCase {
 	}
 
 	public void test002() throws IOException {
-		RACashFile base = new RACashFile(512, 2);
+		CashKyoroFile base = new CashKyoroFile(512, 2);
 		MarkableFileReader reader = new MarkableFileReader(base, 10);
 
 		try {
@@ -62,7 +62,7 @@ public class TestForMarkableFileReader extends TestCase {
 	}
 
 	public void test003() throws IOException {
-		RACashFile base = new RACashFile(512, 2);
+		CashKyoroFile base = new CashKyoroFile(512, 2);
 		MarkableFileReader reader = new MarkableFileReader(base, 10);
 
 		try {
@@ -80,7 +80,7 @@ public class TestForMarkableFileReader extends TestCase {
 	}
 
 	public void test004() throws IOException {
-		RACashFile base = new RACashFile(512, 2);
+		CashKyoroFile base = new CashKyoroFile(512, 2);
 		MarkableFileReader reader = new MarkableFileReader(base, 10);
 
 		try {

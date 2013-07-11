@@ -5,7 +5,7 @@ import java.io.IOException;
 import junit.framework.TestCase;
 import net.hetimatan.io.file.MarkableFileReader;
 import net.hetimatan.io.filen.KFNextHelper;
-import net.hetimatan.io.filen.RACashFile;
+import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.net.torrent.client.message.MessageBitField;
 import net.hetimatan.net.torrent.client.message.MessageCancel;
 import net.hetimatan.net.torrent.client.message.MessageChoke;
@@ -26,7 +26,7 @@ public class TestForMessageUnchoke extends TestCase {
 		byte[] expected = builder.createBuffer();
 
 		MessageUnchoke choke = new MessageUnchoke();
-		RACashFile output = new RACashFile(512);
+		CashKyoroFile output = new CashKyoroFile(512);
 		choke.encode(output.getLastOutput());
 		byte[] target = KFNextHelper.newBinary(output);
 		TestUtil.assertArrayEquals(this, "", expected, target);

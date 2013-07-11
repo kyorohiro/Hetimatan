@@ -1,7 +1,7 @@
 package net.hetimatan.util.http;
 
 import net.hetimatan.io.file.MarkableFileReader;
-import net.hetimatan.io.filen.RACashFile;
+import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.util.http.HttpHeader;
 import net.hetimatan.util.http.HttpObject;
 import net.hetimatan.util.http.HttpRequestLine;
@@ -16,7 +16,7 @@ public class TestForHttpRequestURI extends TestCase {
 	public void testEncode001() throws IOException {
 		HttpRequestURI uri = new HttpRequestURI(
 				HttpRequestLine.decode("GET /announce HTTP/1.1\r\n"));
-		RACashFile output = new RACashFile(512);
+		CashKyoroFile output = new CashKyoroFile(512);
 		uri.encode(output.getLastOutput());
 
 		output.seek(0);
@@ -29,7 +29,7 @@ public class TestForHttpRequestURI extends TestCase {
 	public void testEncode002() throws IOException {
 		HttpRequestURI uri = new HttpRequestURI(HttpRequestLine.decode("GET /announce HTTP/1.1\r\n"));
 		uri.addHeader(HttpHeader.decode("User-agent: Mozilla/5.0 (Linux; U; Android 2.2.1; ja-jp; Full Android Build/MASTER) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1\r\n"));
-		RACashFile output = new RACashFile(512);
+		CashKyoroFile output = new CashKyoroFile(512);
 		uri.encode(output.getLastOutput());
 
 		output.seek(0);
@@ -46,7 +46,7 @@ public class TestForHttpRequestURI extends TestCase {
 		uri.addHeader(HttpHeader.decode("Accept-encoding: gzip\r\n"));
 		uri.addHeader(HttpHeader.decode("Host: 127.0.0.1:6969\r\n"));
 		uri.addHeader(HttpHeader.decode("User-agent: BitTorrent/4.0.2\r\n"));
-		RACashFile output = new RACashFile(512);
+		CashKyoroFile output = new CashKyoroFile(512);
 		uri.encode(output.getLastOutput());
 
 		output.seek(0);
@@ -62,7 +62,7 @@ public class TestForHttpRequestURI extends TestCase {
 
 
 	public void testDecode001() throws IOException {
-		RACashFile base = new RACashFile(512);
+		CashKyoroFile base = new CashKyoroFile(512);
 		base.addChunk("GET /announce HTTP/1.1\r\n\r\n".getBytes());
 		MarkableFileReader reader = new MarkableFileReader(base, 512);
 
@@ -75,7 +75,7 @@ public class TestForHttpRequestURI extends TestCase {
 	}
 
 	public void testDecode002() throws IOException {
-		RACashFile base = new RACashFile(512);
+		CashKyoroFile base = new CashKyoroFile(512);
 		String inputUrl = "GET /announce HTTP/1.1\r\n"
 				+"Accept-encoding: gzip\r\n"
 				+"Host: 127.0.0.1:6969\r\n"
@@ -101,7 +101,7 @@ public class TestForHttpRequestURI extends TestCase {
 
 
 	public void testDecodeError001() throws IOException {
-		RACashFile base = new RACashFile(512);
+		CashKyoroFile base = new CashKyoroFile(512);
 		base.addChunk("GET /announce HTTP/1.1\r\n".getBytes());
 		MarkableFileReader reader = new MarkableFileReader(base, 512);
 

@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import net.hetimatan.io.file.MarkableFileReader;
-import net.hetimatan.io.filen.RACashFile;
+import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.net.torrent.util.bencode.BenObject;
 import net.hetimatan.net.torrent.util.bencode.BenString;
 import junit.framework.TestCase;
@@ -28,7 +28,7 @@ public class TestForBenString extends TestCase {
 	public void testEncode001() throws IOException {
 		byte[] base = "ABC".getBytes("utf8");
 		BenString bint = new BenString(base, 0, base.length, "utf8");
-		RACashFile output = new RACashFile(512);
+		CashKyoroFile output = new CashKyoroFile(512);
 		try {
 			bint.encode(output.getLastOutput());
 			output.seek(0);
@@ -44,7 +44,7 @@ public class TestForBenString extends TestCase {
 	public void testEncode002() throws IOException {
 		byte[] base = "a".getBytes("utf8");
 		BenString bint = new BenString(base, 0, base.length, "utf8");
-		RACashFile output = new RACashFile(512);
+		CashKyoroFile output = new CashKyoroFile(512);
 		try {
 			bint.encode(output.getLastOutput());
 			output.seek(0);
@@ -62,7 +62,7 @@ public class TestForBenString extends TestCase {
 		BenString bint1 = new BenString(base1, 0, base1.length, "utf8");
 		byte[] base2 = "ABCDE".getBytes("utf8");
 		BenString bint2 = new BenString(base2, 0, base2.length, "utf8");
-		RACashFile output = new RACashFile(512);
+		CashKyoroFile output = new CashKyoroFile(512);
 
 		try {
 			bint1.encode(output.getLastOutput());
@@ -78,7 +78,7 @@ public class TestForBenString extends TestCase {
 	}
 
 	public void testDecode001() throws IOException {
-		RACashFile base = new RACashFile(512);
+		CashKyoroFile base = new CashKyoroFile(512);
 		base.addChunk(("1:a").getBytes());
 		MarkableFileReader reader = new MarkableFileReader(base, 512);
 
@@ -93,7 +93,7 @@ public class TestForBenString extends TestCase {
 	}
 
 	public void testDecode002() throws IOException {
-		RACashFile base = new RACashFile(512);
+		CashKyoroFile base = new CashKyoroFile(512);
 		base.addChunk(("4:abcd3:efg").getBytes());
 		MarkableFileReader reader = new MarkableFileReader(base, 512);
 
@@ -118,7 +118,7 @@ public class TestForBenString extends TestCase {
 	}
 
 	public void testDecode003() throws IOException {
-		RACashFile base = new RACashFile(512);
+		CashKyoroFile base = new CashKyoroFile(512);
 		base.addChunk(("10:0123456789").getBytes());
 		MarkableFileReader reader = new MarkableFileReader(base, 512);
 
@@ -136,7 +136,7 @@ public class TestForBenString extends TestCase {
 	}
 
 	public void testDecodeError001() throws IOException {
-		RACashFile base = new RACashFile(512);
+		CashKyoroFile base = new CashKyoroFile(512);
 		base.addChunk(("1b:a").getBytes());
 		MarkableFileReader reader = new MarkableFileReader(base, 512);
 
@@ -151,7 +151,7 @@ public class TestForBenString extends TestCase {
 	}
 
 	public void testDecodeError002() throws IOException {
-		RACashFile base = new RACashFile(512);
+		CashKyoroFile base = new CashKyoroFile(512);
 		base.addChunk(("-1:a").getBytes());
 		MarkableFileReader reader = new MarkableFileReader(base, 512);
 
@@ -166,7 +166,7 @@ public class TestForBenString extends TestCase {
 	}
 
 	public void testDecodeError003() throws IOException {
-		RACashFile base = new RACashFile(512);
+		CashKyoroFile base = new CashKyoroFile(512);
 		base.addChunk(("2:a").getBytes());
 		MarkableFileReader reader = new MarkableFileReader(base, 512);
 

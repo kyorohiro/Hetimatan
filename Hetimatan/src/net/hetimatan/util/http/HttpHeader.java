@@ -6,7 +6,7 @@ import java.io.OutputStream;
 
 import net.hetimatan.io.file.MarkableFileReader;
 import net.hetimatan.io.file.MarkableReader;
-import net.hetimatan.io.filen.RACashFile;
+import net.hetimatan.io.filen.CashKyoroFile;
 
 // KEY ":" VALUE CRLF
 public class HttpHeader extends HttpObject {
@@ -42,7 +42,7 @@ public class HttpHeader extends HttpObject {
 	}
 
 	public static HttpHeader decode(String path) throws IOException {
-		RACashFile vFile = new RACashFile(512, 2);
+		CashKyoroFile vFile = new CashKyoroFile(512, 2);
 		vFile.addChunk(path.getBytes());
 		MarkableReader reader = new MarkableFileReader(vFile, 256);
 		return HttpHeader.decode(reader);

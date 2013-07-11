@@ -43,9 +43,9 @@ public class KFNextHelper {
 		return buffer;
 	}
 
-	public static void xcopy(File[] srcs, RACashFile dest) throws IOException {
+	public static void xcopy(File[] srcs, CashKyoroFile dest) throws IOException {
 		for(int i=0;i<srcs.length;i++) {
-			RACashFile src = new RACashFile(srcs[i], 16*1024, 10);
+			CashKyoroFile src = new CashKyoroFile(srcs[i], 16*1024, 10);
 			long fp = dest.getFilePointer();
 			try {
 				KFNextHelper.copy(src, dest);
@@ -58,7 +58,7 @@ public class KFNextHelper {
 	}
 
 //	public static void copy(RACashFile src, RACashFile  dest) throws IOException {
-	public static void copy(KyoroFile src, RACashFile  dest) throws IOException {
+	public static void copy(KyoroFile src, CashKyoroFile  dest) throws IOException {
 		byte[] buffer = new byte[512];
 		int len=0;
 		long srcFP = src.getFilePointer();
@@ -79,8 +79,8 @@ public class KFNextHelper {
 		}
 	}
 
-	public static KyoroFile subSequence(RACashFile file, long start, long end) throws IOException {
-		return new AccessorFile(file, start, end, 256, 3);
+	public static KyoroFile subSequence(CashKyoroFile file, long start, long end) throws IOException {
+		return new PartReferenceKyoroFile(file, start, end, 256, 3);
 	}
 
 }
