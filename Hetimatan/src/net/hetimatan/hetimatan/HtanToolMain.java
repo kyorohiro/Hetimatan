@@ -3,6 +3,8 @@ package net.hetimatan.hetimatan;
 import java.io.File;
 import java.io.IOException;
 
+import javax.swing.plaf.metal.MetalIconFactory.FolderIcon16;
+
 import net.hetimatan.console.MainCreateTorrentFile;
 
 import javafx.application.Application;
@@ -14,6 +16,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.text.Text;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -23,7 +26,8 @@ public class HtanToolMain extends Application {
 	private Text mText = new Text(""+mInput.getAbsolutePath());
 	private TextField mAddress = new TextField("http://127.0.0.1/announce");
 	private Text mInfo = new Text("...");
-	private Button mOpen = new Button("open");
+	private Button mOpenFile = new Button("open file");
+	private Button mOpenFolder = new Button("open folder");
 	private Button mStart = new Button("start");
 
 	@Override
@@ -32,7 +36,8 @@ public class HtanToolMain extends Application {
 		root.setOrientation(Orientation.VERTICAL);
 		Scene secne = new Scene(root);
 		root.getChildren().add(mText);
-		root.getChildren().add(mOpen);
+		root.getChildren().add(mOpenFile);
+		root.getChildren().add(mOpenFolder);
 		root.getChildren().add(mAddress);
 		root.getChildren().add(mStart);
 		root.getChildren().add(mInfo);
@@ -42,7 +47,7 @@ public class HtanToolMain extends Application {
 	}
 
 	public void buttonSetting() {
-		mOpen.setOnAction(new EventHandler<ActionEvent>() {
+		mOpenFile.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
 				FileChooser fc = new FileChooser();
@@ -52,6 +57,23 @@ public class HtanToolMain extends Application {
 					fc.setInitialDirectory(mInput.getAbsoluteFile());
 				}
 				File ret = fc.showOpenDialog(null);
+				if(ret != null){// && ret.isFile()) {
+					mInput = ret;
+					mText.setText(ret.getAbsolutePath());
+					System.out.println(""+ret.getAbsolutePath());
+				}
+			}
+		});
+		mOpenFolder.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				DirectoryChooser fc = new DirectoryChooser();
+				if(mInput.isFile()) {
+					fc.setInitialDirectory(mInput.getAbsoluteFile().getParentFile());
+				} else if(mInput.isDirectory()){
+					fc.setInitialDirectory(mInput.getAbsoluteFile());
+				}
+				File ret = fc.showDialog(null);
 				if(ret != null){// && ret.isFile()) {
 					mInput = ret;
 					mText.setText(ret.getAbsolutePath());
