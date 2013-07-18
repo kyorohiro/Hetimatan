@@ -9,7 +9,7 @@ import net.hetimatan.io.file.MarkableReader;
 import net.hetimatan.io.filen.CashKyoroFile;
 
 // KEY ":" VALUE CRLF
-public class HttpHeader extends HttpObject {
+public class HttpRequestHeader extends HttpObject {
 
 	private String mKey = "";
 	private String mValue = "";
@@ -20,7 +20,7 @@ public class HttpHeader extends HttpObject {
 	public static final String HEADER_HOST = "Host";
 
 
-	public HttpHeader(String key, String value) {
+	public HttpRequestHeader(String key, String value) {
 		mKey = key;
 		mValue = value;
 	}
@@ -41,19 +41,19 @@ public class HttpHeader extends HttpObject {
 		return mValue;
 	}
 
-	public static HttpHeader decode(String path) throws IOException {
+	public static HttpRequestHeader decode(String path) throws IOException {
 		CashKyoroFile vFile = new CashKyoroFile(512, 2);
 		vFile.addChunk(path.getBytes());
 		MarkableReader reader = new MarkableFileReader(vFile, 256);
-		return HttpHeader.decode(reader);
+		return HttpRequestHeader.decode(reader);
 	}
 
-	public static HttpHeader decode(MarkableReader reader) throws IOException {
+	public static HttpRequestHeader decode(MarkableReader reader) throws IOException {
 		String key = _key(reader);
 		_sep(reader);
 		String value = _val(reader);
 		_crlf(reader);
-		return new HttpHeader(key, value);
+		return new HttpRequestHeader(key, value);
 	}
 
 	private static String _key(MarkableReader reader) throws IOException {

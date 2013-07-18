@@ -2,10 +2,10 @@ package net.hetimatan.util.http;
 
 import net.hetimatan.io.file.MarkableFileReader;
 import net.hetimatan.io.filen.CashKyoroFile;
-import net.hetimatan.util.http.HttpHeader;
+import net.hetimatan.util.http.HttpRequestHeader;
 import net.hetimatan.util.http.HttpObject;
 import net.hetimatan.util.http.HttpRequestLine;
-import net.hetimatan.util.http.HttpRequestURI;
+import net.hetimatan.util.http.HttpRequest;
 import net.hetimatan.util.http.HttpResponse;
 import net.hetimatan.util.io.ByteArrayBuilder;
 

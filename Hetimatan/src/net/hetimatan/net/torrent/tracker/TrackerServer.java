@@ -14,9 +14,9 @@ import net.hetimatan.net.torrent.util.bencode.BenObject;
 import net.hetimatan.net.torrent.util.bencode.BenString;
 import net.hetimatan.net.torrent.util.metafile.MetaFile;
 import net.hetimatan.util.event.SingleTaskRunner;
-import net.hetimatan.util.http.HttpGetRequestUri;
+import net.hetimatan.util.http.HttpRequestUri;
 import net.hetimatan.util.http.HttpRequestLine;
-import net.hetimatan.util.http.HttpRequestURI;
+import net.hetimatan.util.http.HttpRequest;
 import net.hetimatan.util.url.PercentEncoder;
 
 
@@ -60,15 +60,15 @@ public class TrackerServer extends HttpServer {
 		addData(infoHash.toByte());
 	}
 
-	public boolean containHash(HttpRequestURI uri) {
+	public boolean containHash(HttpRequest uri) {
 		HttpRequestLine line = uri.getLine();
-		HttpGetRequestUri geturi = line.getRequestURI();
+		HttpRequestUri geturi = line.getRequestURI();
 		String infoHash = geturi.getValue(TrackerRequest.KEY_INFO_HASH);
 		return mDB.isManaged(infoHash);
 	}
 
 	@Override
-	public KyoroFile createContent(KyoroSocket socket, HttpRequestURI uri) throws IOException {
+	public KyoroFile createContent(KyoroSocket socket, HttpRequest uri) throws IOException {
 		mResponceCount++;
 		try {
 			System.out.println("#request#"+uri.getLine().toString()+"#");

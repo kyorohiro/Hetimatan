@@ -11,7 +11,7 @@ import net.hetimatan.io.filen.CashKyoroFile;
 //Request-Line   = Method SP Request-URI SP HTTP-Version CRLF
 public class HttpRequestLine extends HttpObject {
 	private String mMethod = "";
-	private HttpGetRequestUri mRequestURI = null;
+	private HttpRequestUri mRequestURI = null;
 	private String mHTTPVersion = "";
 
 	public static final String HTTP11 = "HTTP/1.1";
@@ -20,7 +20,7 @@ public class HttpRequestLine extends HttpObject {
 
 	public HttpRequestLine(String method, String requestUri, String httpVersion) {
 		mMethod = method;
-		mRequestURI = HttpGetRequestUri.crateHttpGetRequestUri(requestUri);
+		mRequestURI = HttpRequestUri.crateHttpGetRequestUri(requestUri);
 		mHTTPVersion = httpVersion;
 	}
 
@@ -39,7 +39,7 @@ public class HttpRequestLine extends HttpObject {
 		return mMethod;
 	}
 
-	public HttpGetRequestUri getRequestURI() {
+	public HttpRequestUri getRequestURI() {
 		return mRequestURI;
 	}
 	

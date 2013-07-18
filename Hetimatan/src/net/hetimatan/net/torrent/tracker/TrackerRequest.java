@@ -6,7 +6,7 @@ import net.hetimatan.net.http.request.KyoroSocketGetRequester;
 import net.hetimatan.net.torrent.client.TorrentPeer;
 import net.hetimatan.util.http.HttpObject;
 import net.hetimatan.util.http.HttpRequestLine;
-import net.hetimatan.util.http.HttpRequestURI;
+import net.hetimatan.util.http.HttpRequest;
 
 
 public class TrackerRequest {
@@ -45,7 +45,7 @@ public class TrackerRequest {
 	public TrackerRequest() {
 	}
 
-	public static TrackerRequest decode(HttpRequestURI uri) {
+	public static TrackerRequest decode(HttpRequest uri) {
 		TrackerRequest request = new TrackerRequest();
 		request.mPath = uri.getLine().getRequestURI().getPath();
 		request.mHttpVersion = uri.getLine().getHttpVersion();

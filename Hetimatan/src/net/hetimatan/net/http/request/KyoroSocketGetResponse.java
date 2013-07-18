@@ -10,7 +10,7 @@ import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.io.net.KyoroSelector;
 import net.hetimatan.io.net.KyoroSocket;
 import net.hetimatan.util.http.LookaheadHttpHeader;
-import net.hetimatan.util.http.HttpHeader;
+import net.hetimatan.util.http.HttpRequestHeader;
 import net.hetimatan.util.http.HttpResponse;
 
 public class KyoroSocketGetResponse implements GetResponseInter {
@@ -95,7 +95,7 @@ public class KyoroSocketGetResponse implements GetResponseInter {
 				System.out.println("++++"+new String(bu)+"#####");
 				mReader.seek(mVfOffset);
 			}
-			for(HttpHeader h :mResponse.getHeader()) {
+			for(HttpRequestHeader h :mResponse.getHeader()) {
 				System.out.print("[##]"+h.getKey()+","+h.getValue());
 			}
 		} catch(Exception e) {

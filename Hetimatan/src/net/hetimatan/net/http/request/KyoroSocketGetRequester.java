@@ -11,7 +11,7 @@ import net.hetimatan.io.net.KyoroSocket;
 import net.hetimatan.io.net.KyoroSocketImpl;
 import net.hetimatan.util.http.HttpObject;
 import net.hetimatan.util.http.HttpRequestLine;
-import net.hetimatan.util.http.HttpRequestURI;
+import net.hetimatan.util.http.HttpRequest;
 
 
 public class KyoroSocketGetRequester implements GetRequesterInter {
@@ -107,7 +107,7 @@ public class KyoroSocketGetRequester implements GetRequesterInter {
 	}
 
 	public synchronized byte[] createRequest() throws IOException {
-		HttpRequestURI uri = HttpRequestURI
+		HttpRequest uri = HttpRequest
 		.newInstance(REQUEST_METHOD_GET, mPath, HttpRequestLine.HTTP10)
 		;//.addHeader(HEADER_HOST, InetAddress.getLocalHost().getHostName());
 		for (String key : mHeader.keySet()) {

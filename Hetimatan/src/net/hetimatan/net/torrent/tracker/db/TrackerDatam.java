@@ -2,10 +2,10 @@ package net.hetimatan.net.torrent.tracker.db;
 
 import net.hetimatan.net.torrent.client.TorrentPeer;
 import net.hetimatan.net.torrent.tracker.TrackerRequest;
-import net.hetimatan.util.http.HttpGetRequestUri;
+import net.hetimatan.util.http.HttpRequestUri;
 import net.hetimatan.util.http.HttpObject;
 import net.hetimatan.util.http.HttpRequestLine;
-import net.hetimatan.util.http.HttpRequestURI;
+import net.hetimatan.util.http.HttpRequest;
 
 @Deprecated
 public class TrackerDatam {
@@ -74,15 +74,15 @@ public class TrackerDatam {
 		mTrackerId = trackerId;
 	}
 
-	public static TrackerDatam createPeerInfo(HttpRequestURI uri, String ip, int port) {
+	public static TrackerDatam createPeerInfo(HttpRequest uri, String ip, int port) {
 		TrackerDatam peerInfo = new TrackerDatam();
 		updatePeerInfo(peerInfo, uri, ip, port);
 		return peerInfo;
 	}
 
-	public static TrackerDatam updatePeerInfo(TrackerDatam peerInfo, HttpRequestURI uri, String ip, int port) {
+	public static TrackerDatam updatePeerInfo(TrackerDatam peerInfo, HttpRequest uri, String ip, int port) {
 		HttpRequestLine line   = uri.getLine();
-		HttpGetRequestUri path = line.getRequestURI();
+		HttpRequestUri path = line.getRequestURI();
 		peerInfo.mDownloaded = HttpObject.parseInt(path.getValue(TrackerRequest.KEY_DOWNLOADED), peerInfo.mDownloaded);
 		peerInfo.mLeft       = HttpObject.parseInt(path.getValue(TrackerRequest.KEY_LEFT), peerInfo.mLeft);
 		peerInfo.mUploaded   = HttpObject.parseInt(path.getValue(TrackerRequest.KEY_UPLOADED), peerInfo.mUploaded);

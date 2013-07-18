@@ -13,7 +13,7 @@ import net.hetimatan.net.http.HttpFront;
 import net.hetimatan.net.http.HttpServer;
 import net.hetimatan.net.torrent.util.piece.PieceInfoList;
 import net.hetimatan.util.http.HttpObjectHelper;
-import net.hetimatan.util.http.HttpRequestURI;
+import net.hetimatan.util.http.HttpRequest;
 import net.hetimatan.util.io.ByteArrayBuilder;
 
 public class MediaServer extends HttpServer {
@@ -29,7 +29,7 @@ public class MediaServer extends HttpServer {
 	}
 
 	@Override
-	public ByteArrayBuilder createHeader(KyoroSocket socket, HttpRequestURI uri, KyoroFile responce) throws IOException {	
+	public ByteArrayBuilder createHeader(KyoroSocket socket, HttpRequest uri, KyoroFile responce) throws IOException {	
 		String rangeHeader = uri.getHeaderValue("Range");
 		long[] range = new long[0];
 		if(rangeHeader != null && rangeHeader.length() != 0) {
@@ -46,12 +46,12 @@ public class MediaServer extends HttpServer {
 	}
 
 	@Override
-	public KyoroFile createContent(KyoroSocket socket, HttpRequestURI uri) throws IOException {
+	public KyoroFile createContent(KyoroSocket socket, HttpRequest uri) throws IOException {
 		return KFNextHelper.subSequence(mFile, 0, mFile.length());
 	}
 
 	@Override
-	public KyoroFile createResponse(HttpFront front, KyoroSocket socket, HttpRequestURI uri) throws IOException {
+	public KyoroFile createResponse(HttpFront front, KyoroSocket socket, HttpRequest uri) throws IOException {
 		String rangeHeader = uri.getHeaderValue("Range");
 		boolean isRange = false;
 		PieceInfoList list = null;
@@ -68,7 +68,7 @@ public class MediaServer extends HttpServer {
 //		}
 	}
 
-	public KyoroFile createRangeResponse(PieceInfoList list, HttpFront front, KyoroSocket socket, HttpRequestURI uri) throws IOException {
+	public KyoroFile createRangeResponse(PieceInfoList list, HttpFront front, KyoroSocket socket, HttpRequest uri) throws IOException {
 		int length = 5;
 		if(length > list.size()) {length = list.size();}
 

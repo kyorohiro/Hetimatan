@@ -14,7 +14,7 @@ import net.hetimatan.net.http.task.HttpFrontCloseTask;
 import net.hetimatan.util.event.EventTask;
 import net.hetimatan.util.http.LookaheadHttpHeader;
 import net.hetimatan.util.http.HttpObject;
-import net.hetimatan.util.http.HttpRequestURI;
+import net.hetimatan.util.http.HttpRequest;
 import net.hetimatan.util.log.Log;
 import net.hetimatan.util.net.KyoroSocketEventRunner;
 import net.hetimatan.util.net.MessageSendTask;
@@ -24,7 +24,7 @@ public class HttpFront {
 
 	private WeakReference<HttpServer> mServer = null;
 	private KyoroSocket mSocket = null;
-	private HttpRequestURI mUri = null;
+	private HttpRequest mUri = null;
 	private MarkableReader mCurrentReader = null;
 	private LookaheadHttpHeader mHeaderChunk = null;
 	private KyoroFileForKyoroSocket mKFKSocket = null;
@@ -78,7 +78,7 @@ public class HttpFront {
 	public void parseHeader() throws IOException {
 		if(Log.ON){Log.v(TAG, "HttpFront#parseHeader()");}
 //		mCurrentReader.setBlockOn(true);
-		this.mUri = HttpRequestURI.decode(mCurrentReader);
+		this.mUri = HttpRequest.decode(mCurrentReader);
 		if(Log.ON){Log.v(TAG, HttpObject.createEncode(mUri));};		
 		if(Log.ON){Log.v(TAG, "HttpFront#/parseHeader()");};
 	}

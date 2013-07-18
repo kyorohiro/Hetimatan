@@ -10,7 +10,7 @@ import java.util.Set;
 
 import net.hetimatan.net.torrent.tracker.TrackerRequest;
 import net.hetimatan.util.http.HttpObject;
-import net.hetimatan.util.http.HttpRequestURI;
+import net.hetimatan.util.http.HttpRequest;
 
 public class TrackerData {
 
@@ -127,7 +127,7 @@ public class TrackerData {
 		}
 	}
 
-	public TrackerDatam updatePeerInfo(HttpRequestURI uri, String ip, int port) {
+	public TrackerDatam updatePeerInfo(HttpRequest uri, String ip, int port) {
 		isUpdated=true;
 		String peerId = HttpObject.parseString(uri.getLine().getRequestURI().getValue(TrackerRequest.KEY_PEER_ID),"");
 		if(peerId != null&&!peerId.equals("")&&cotains(peerId)){

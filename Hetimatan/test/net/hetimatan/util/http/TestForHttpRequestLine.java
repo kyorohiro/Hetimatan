@@ -2,10 +2,10 @@ package net.hetimatan.util.http;
 
 import net.hetimatan.io.file.MarkableFileReader;
 import net.hetimatan.io.filen.CashKyoroFile;
-import net.hetimatan.util.http.HttpHeader;
+import net.hetimatan.util.http.HttpRequestHeader;
 import net.hetimatan.util.http.HttpObject;
 import net.hetimatan.util.http.HttpRequestLine;
-import net.hetimatan.util.http.HttpRequestURI;
+import net.hetimatan.util.http.HttpRequest;
 import net.hetimatan.util.http.HttpResponse;
 
 import java.io.IOException;
@@ -19,7 +19,6 @@ public class TestForHttpRequestLine extends TestCase {
 	}
 
 	public void testEncode001() throws IOException {
-		//(String method, String requestUri, String httpVersion)
 		HttpRequestLine line = new HttpRequestLine(HttpRequestLine.GET, "/announce?a=b&b=c", HttpRequestLine.HTTP11);
 		CashKyoroFile output = new CashKyoroFile(512);
 		line.encode(output.getLastOutput());

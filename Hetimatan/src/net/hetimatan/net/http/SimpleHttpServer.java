@@ -16,7 +16,7 @@ import net.hetimatan.net.http.HttpServer;
 import net.hetimatan.net.torrent.util.piece.PieceInfo;
 import net.hetimatan.net.torrent.util.piece.PieceInfoList;
 import net.hetimatan.util.http.HttpObjectHelper;
-import net.hetimatan.util.http.HttpRequestURI;
+import net.hetimatan.util.http.HttpRequest;
 import net.hetimatan.util.io.ByteArrayBuilder;
 
 //@todo
@@ -41,7 +41,7 @@ public class SimpleHttpServer extends HttpServer {
 
 
 	@Override
-	public KyoroFile createResponse(HttpFront front, KyoroSocket socket, HttpRequestURI uri) throws IOException {
+	public KyoroFile createResponse(HttpFront front, KyoroSocket socket, HttpRequest uri) throws IOException {
 		String rangeHeader = uri.getHeaderValue("Range");
 		boolean isRange = false;
 		PieceInfoList list = null;
@@ -69,7 +69,7 @@ public class SimpleHttpServer extends HttpServer {
 		return "text/plain";
 	}
 
-	public KyoroFile createDefaultResponse(HttpFront front, KyoroSocket socket, HttpRequestURI uri) throws IOException {
+	public KyoroFile createDefaultResponse(HttpFront front, KyoroSocket socket, HttpRequest uri) throws IOException {
 		KyoroFile content = KFNextHelper.subSequence(mFile, 0, mFile.length());
 		KyoroFile header = new ByteKyoroFile();
 		String path =uri.getLine().getRequestURI().getPath();
@@ -87,7 +87,7 @@ public class SimpleHttpServer extends HttpServer {
 		return kfiles;
 	}
 
-	public KyoroFile createSingleRangeResponse(PieceInfo piece, HttpFront front, KyoroSocket socket, HttpRequestURI uri) throws IOException {
+	public KyoroFile createSingleRangeResponse(PieceInfo piece, HttpFront front, KyoroSocket socket, HttpRequest uri) throws IOException {
 		KyoroFile content = KFNextHelper.subSequence(mFile, piece.getStart(), piece.getEnd()+1);
 		KyoroFile header = new ByteKyoroFile();
 		String path =uri.getLine().getRequestURI().getPath();

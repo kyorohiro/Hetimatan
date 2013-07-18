@@ -14,7 +14,7 @@ import net.hetimatan.io.net.KyoroSocket;
 import net.hetimatan.net.http.task.HttpFrontRequestTask;
 import net.hetimatan.net.http.task.HttpServerAcceptTask;
 import net.hetimatan.net.http.task.HttpServerBootTask;
-import net.hetimatan.util.http.HttpRequestURI;
+import net.hetimatan.util.http.HttpRequest;
 import net.hetimatan.util.io.ByteArrayBuilder;
 import net.hetimatan.util.log.Log;
 import net.hetimatan.util.net.KyoroSocketEventRunner;
@@ -72,7 +72,7 @@ public class HttpServer {
 
 	//
 	// this method is overrided
-	public ByteArrayBuilder createHeader(KyoroSocket socket, HttpRequestURI uri, KyoroFile responce) throws IOException {
+	public ByteArrayBuilder createHeader(KyoroSocket socket, HttpRequest uri, KyoroFile responce) throws IOException {
 		if(Log.ON){Log.v(TAG, "HttpServer#createHeader");}
 		try {
 			ByteArrayBuilder builder = new ByteArrayBuilder();
@@ -88,7 +88,7 @@ public class HttpServer {
 	}
 
 
-	public KyoroFile createResponse(HttpFront front, KyoroSocket socket, HttpRequestURI uri) throws IOException {
+	public KyoroFile createResponse(HttpFront front, KyoroSocket socket, HttpRequest uri) throws IOException {
 		KyoroFile responce = createContent(socket, uri);
 		ByteArrayBuilder builder = createHeader(socket, uri, responce);
 		KyoroFile[] files = new KyoroFile[2];
@@ -103,7 +103,7 @@ public class HttpServer {
 
 	//
 	// this method is overrided
-	public KyoroFile createContent(KyoroSocket socket, HttpRequestURI uri) throws IOException {
+	public KyoroFile createContent(KyoroSocket socket, HttpRequest uri) throws IOException {
 		if(Log.ON){Log.v(TAG, "HttpServer#createResponse");}
 		try {
 			return new CashKyoroFile("hello world".getBytes());

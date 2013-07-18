@@ -13,7 +13,7 @@ import net.hetimatan.net.torrent.util.bencode.BenDiction;
 import net.hetimatan.net.torrent.util.bencode.BenObject;
 import net.hetimatan.net.torrent.util.bencode.BenString;
 import net.hetimatan.net.torrent.util.metafile.MetaFile;
-import net.hetimatan.util.http.HttpRequestURI;
+import net.hetimatan.util.http.HttpRequest;
 import junit.framework.TestCase;
 
 public class TestForTrackerResponse extends TestCase {
@@ -161,7 +161,7 @@ public class TestForTrackerResponse extends TestCase {
 				.createPieces(new MarkableFileReader(targetFileContent))
 				.toPercentString();
 		String peerId = TorrentPeer.createPeerId();
-		HttpRequestURI uri = HttpRequestURI.newInstance("dummy", "/adsdannounce", "dummy")
+		HttpRequest uri = HttpRequest.newInstance("dummy", "/adsdannounce", "dummy")
 		.putValue(TrackerRequest.KEY_COMPACT, "1")
 		.putValue(TrackerRequest.KEY_DOWNLOADED, "1")
 		.putValue(TrackerRequest.KEY_UPLOADED, "2")

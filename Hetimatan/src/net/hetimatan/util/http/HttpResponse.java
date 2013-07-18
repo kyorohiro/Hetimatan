@@ -25,12 +25,12 @@ public class HttpResponse extends HttpObject {
 	};
 
 	
-	private LinkedList<HttpHeader> mHeaders = new LinkedList<HttpHeader>();
+	private LinkedList<HttpRequestHeader> mHeaders = new LinkedList<HttpRequestHeader>();
 	private String mHttpVersion = null;
 	private String mStatusCode = null;
 	private String mReasonPharse = null;
 	private KyoroFile mContent = null;
-	private HttpHeader mContentLength = null;
+	private HttpRequestHeader mContentLength = null;
 
 	public HttpResponse(String httpVersion, String statusCode,
 			String reasonPhrase) {
@@ -64,12 +64,12 @@ public class HttpResponse extends HttpObject {
 		mContent = content;
 	}
 
-	public LinkedList<HttpHeader> getHeader() {
+	public LinkedList<HttpRequestHeader> getHeader() {
 		return mHeaders;
 	}
 
 	public String getHeader(String key) {
-		for(HttpHeader header : mHeaders) {
+		for(HttpRequestHeader header : mHeaders) {
 			if(key.replaceAll(" ", "").toLowerCase().equals(header.getKey().replaceAll(" ", "").toLowerCase())){
 				return header.getValue();
 			}
@@ -77,13 +77,13 @@ public class HttpResponse extends HttpObject {
 		return "";
 	}
 	public HttpResponse addHeader(String key, String value) {
-		return addHeader(new HttpHeader(key, value));
+		return addHeader(new HttpRequestHeader(key, value));
 	}
 
-	public HttpResponse addHeader(HttpHeader header) {
+	public HttpResponse addHeader(HttpRequestHeader header) {
 //		System.out.println("key="+header.getKey()+","+header.getValue());
 		if (header.getKey().toLowerCase()
-				.equals(HttpHeader.HEADER_CONTENT_LENGTH.toLowerCase())) {
+				.equals(HttpRequestHeader.HEADER_CONTENT_LENGTH.toLowerCase())) {
 			mContentLength = header;
 		}
 		mHeaders.add(header);
@@ -110,9 +110,9 @@ public class HttpResponse extends HttpObject {
 		if(mContent != null) {
 			contentLength = mContent.length();
 		}
-		output.write(("" + HttpHeader.HEADER_CONTENT_LENGTH + ": "
+		output.write(("" + HttpRequestHeader.HEADER_CONTENT_LENGTH + ": "
 				+ contentLength + CRLF).getBytes());
-		for (HttpHeader header : mHeaders) {
+		for (HttpRequestHeader header : mHeaders) {
 			header.encode(output);
 		}
 		output.write(CRLF.getBytes());
@@ -155,7 +155,7 @@ public class HttpResponse extends HttpObject {
 				if (isCrlf(reader)||isLf(reader)) {
 					break;
 				}
-				ret.addHeader(HttpHeader.decode(reader));
+				ret.addHeader(HttpRequestHeader.decode(reader));
 			}
 		} catch (IOException e) {
 		}

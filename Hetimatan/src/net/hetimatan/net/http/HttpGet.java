@@ -14,8 +14,8 @@ import net.hetimatan.net.http.task.HttpGetConnectionTask;
 import net.hetimatan.util.event.EventTask;
 import net.hetimatan.util.event.EventTaskRunner;
 import net.hetimatan.util.event.EventTaskRunnerImple;
-import net.hetimatan.util.http.HttpGetRequestUri;
-import net.hetimatan.util.http.HttpHeader;
+import net.hetimatan.util.http.HttpRequestUri;
+import net.hetimatan.util.http.HttpRequestHeader;
 import net.hetimatan.util.http.HttpResponse;
 import net.hetimatan.util.http.HttpUrl;
 import net.hetimatan.util.log.Log;
@@ -32,11 +32,6 @@ public class HttpGet {
 	private int mPort = 80;
 
 	public HttpGet() {}
-	public HttpGet(String host, String path, int port) {
-		mHost = host;
-		mPath = path;
-		mPort = port;
-	}
 
 	public void update(String host, String path, int port) {
 		mHost = host;
@@ -48,7 +43,7 @@ public class HttpGet {
 		MarkableFileReader reader = null;
 		try {
 			reader = new MarkableFileReader(location.getBytes());
-			HttpGetRequestUri geturi = HttpGetRequestUri.decode(reader);
+			HttpRequestUri geturi = HttpRequestUri.decode(reader);
 			HttpUrl httpurl = HttpUrl.decode(geturi.getPath());
 			mHost =  httpurl.getHost();
 			mPort= httpurl.getPort();
@@ -173,7 +168,7 @@ public class HttpGet {
 	public String getLocation() throws IOException {
 		GetResponseInter response = getGetResponse();
 		HttpResponse httpResponse = response.getHttpResponse();
-		String path = httpResponse.getHeader(HttpHeader.HEADER_LOCATION);
+		String path = httpResponse.getHeader(HttpRequestHeader.HEADER_LOCATION);
 		path = path.replaceAll(" ", "");
 		if(path.startsWith("http://")) {
 			return path;

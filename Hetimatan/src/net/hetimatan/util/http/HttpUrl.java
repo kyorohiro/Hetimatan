@@ -63,8 +63,7 @@ public class HttpUrl extends HttpObject {
 		if(startMethod != -1) {
 			method = host.substring(startMethod);
 			host = host.substring(0, startMethod);
-		}
-		
+		}		
 
 		return new HttpUrl(host, method, port);
 	}
