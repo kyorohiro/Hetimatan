@@ -48,6 +48,27 @@ public class MarkableReaderHelper {
 			reader.popMark();
 		}
 	}
+	public static void match(MarkableReader reader, byte[] source) throws IOException {
+		int v = 0;
+		reader.pushMark();
+		int tmp = 0;
+		try {
+			do {
+				v = reader.read();
+				if (v<0) {
+					reader.backToMark();
+					throw new IOException();
+				}
+				if(v != (source[tmp]&0xff)) {
+					reader.backToMark();
+					throw new IOException();          
+				}
+				tmp++;
+			} while(tmp<source.length);
+		} finally {
+			reader.popMark();
+		}
+	}
 
 	//ByteArrayBuilder.BYTEORDER_BIG_ENDIAN
 	public static int readInt(MarkableReader reader, int order) throws IOException {

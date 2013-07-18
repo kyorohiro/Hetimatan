@@ -105,9 +105,11 @@ public class HttpRequestUri extends HttpObject {
 				'U', 'V', 'W', 'X', 'Y', 'Z',
 				'.', '-'
 		};
+
 		try {
-			MarkableReaderHelper.jumpPattern(reader, available, 256);
+			return new String(MarkableReaderHelper.jumpAndGet(reader, available, 256));
 		} catch(IOException e) {
+			throw e;
 		}
 	}
 
