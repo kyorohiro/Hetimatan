@@ -99,6 +99,14 @@ public class MetaFile {
 		return encoder.encode(infoSha1.toByte());
 	}
 
+	public int numOfFiles() {
+		if(mFiles != null) {
+			return mFiles.length;
+		} else {
+			return 0;
+		}
+	}
+
 	public String[] getFiles() {
 		return mFiles;
 	}
@@ -161,7 +169,6 @@ public class MetaFile {
 		byte[] buffer = new byte[SHA1_LENGTH];
 		int bufferBegin = 0;
 		int digestLen = SHA1_LENGTH;
-		int offset = 0;
 		try {
 			MessageDigest md = MessageDigest.getInstance("SHA");
 			do {
@@ -169,9 +176,7 @@ public class MetaFile {
 				if (len < 0) {
 					break;
 				}
-//				md.update(temp, offset, len);
 				md.update(temp, 0, len);
-				offset += len;
 			} while (true);
 			digestLen = md.digest(buffer, bufferBegin, digestLen);
 			return new BenString(buffer, 0, digestLen, "utf8");
