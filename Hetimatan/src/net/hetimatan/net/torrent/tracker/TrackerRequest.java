@@ -8,9 +8,7 @@ import net.hetimatan.util.http.HttpObject;
 import net.hetimatan.util.http.HttpRequestLine;
 import net.hetimatan.util.http.HttpRequestURI;
 
-//
-//
-// TrackerClient and TrackerServer use this class
+
 public class TrackerRequest {
 	public static final String KEY_INFO_HASH   = "info_hash";
 	public static final String KEY_PEER_ID     = "peer_id";
@@ -41,7 +39,6 @@ public class TrackerRequest {
 	private int mCompact = 1;
 	private String mEvent = TrackerRequest.EVENT_STARTED;
 	private String mTrackerId = "dummy";
-	private String mHeaderHost = "127.0.0.1";
 	private String mTrackerHost = "127.0.0.1";
 	private String mUserAgent = "Raider001";
 
@@ -52,6 +49,8 @@ public class TrackerRequest {
 		TrackerRequest request = new TrackerRequest();
 		request.mPath = uri.getLine().getRequestURI().getPath();
 		request.mHttpVersion = uri.getLine().getHttpVersion();
+		request.putTrackerHost(uri.getHeaderValue(GetRequesterInter.HEADER_HOST));
+
 		request
 		.putInfoHash(HttpObject.parseString(uri.getValue(TrackerRequest.KEY_INFO_HASH), "dummy"))
 		.putPeerId(HttpObject.parseString(uri.getValue(TrackerRequest.KEY_PEER_ID), "dummy"))
@@ -61,8 +60,6 @@ public class TrackerRequest {
 		.putLeft(HttpObject.parseInt(uri.getValue(TrackerRequest.KEY_LEFT), 0))
 		.putCompact(HttpObject.parseInt(uri.getValue(TrackerRequest.KEY_COMPACT), 0))
 		.putEvent(HttpObject.parseString(uri.getValue(TrackerRequest.KEY_EVENT), "empty"))
-		.putTrackerId(HttpObject.parseString(uri.getValue(TrackerRequest.KEY_TRACKERID), "empty"))
-		.putHeaderHost(uri.getHeaderValue(GetRequesterInter.HEADER_HOST))
 		.putHeaderUserAgent(uri.getHeaderValue(GetRequesterInter.USER_AGENT));
 		return request;
 	}
@@ -81,8 +78,6 @@ public class TrackerRequest {
 		.putValue(KEY_LEFT, "" + mLeft)
 		.putValue(KEY_COMPACT, "" + mCompact)
 		.putValue(KEY_EVENT, mEvent)
-//		.putValue(KEY_TRACKERID, mTrackerId)
-		.putHeader(GetRequesterInter.HEADER_HOST, mHeaderHost)
 		.putHeader(GetRequesterInter.USER_AGENT, mUserAgent);
 	}
 
@@ -98,8 +93,6 @@ public class TrackerRequest {
 	public long getLeft() {return mLeft;}
 	public int getCompact() {return mCompact;}
 	public String getEvent() {return mEvent;}
-	public String getTrackerId(){return mTrackerId;}
-//	public String getHeaderHost() {return mHeaderHost;}
 	public String getHost() {return mTrackerHost;}
 	public String getUserAgent(){return mUserAgent;}
 	public int getClientPort() {return mClientPort;}
@@ -162,16 +155,6 @@ public class TrackerRequest {
 
 	public TrackerRequest putEvent(String event) {
 		mEvent = event;
-		return this;
-	}
-
-	public TrackerRequest putTrackerId(String trackerId) {
-		mTrackerId = trackerId;
-		return this;
-	}
-
-	public TrackerRequest putHeaderHost(String host) {
-		mHeaderHost = host;
 		return this;
 	}
 

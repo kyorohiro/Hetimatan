@@ -102,7 +102,7 @@ public class TrackerClient extends HttpGet {
 		if(port == -1) {port = 80;}
 		update(uri.getHost(), uri.getPath(), port);
 		mRequest
-		.putHeaderHost(uri.getHost())
+		.putTrackerHost(uri.getHost())
 		.putTrackerHost(uri.getHost())
 		.putPath(uri.getPath())
 		.putTrackerPort(port)

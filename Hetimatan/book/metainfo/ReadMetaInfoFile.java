@@ -26,6 +26,7 @@ public class ReadMetaInfoFile {
 			e.printStackTrace();
 		}
 	}
+
 	public static void showMetaInfo(File path) throws IOException {
 		System.out.println("-------" + path.getAbsolutePath());
 		MetaFile metafile = MetaFileCreater.createFromTorrentFile(path);

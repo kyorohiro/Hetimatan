@@ -229,7 +229,7 @@ public class TestForTrackerServer extends TestCase {
 		.putHttpVersion(HttpRequestLine.HTTP10)
 		.putCompact(compact)
 		.putEvent(TrackerRequest.EVENT_STARTED)
-		.putHeaderHost("127.0.0.1") //client ip
+		.putTrackerHost("127.0.0.1") //client ip
 		.putHeaderUserAgent("Raider/1.0")
 		.putInfoHash("NNNNNNNNN")
 		.putPeerId("xxxx")
