@@ -7,8 +7,22 @@ import net.hetimatan.util.io.ByteArrayBuilder;
 
 public class MarkableReaderHelper {
 
-	
-	public static void match(MarkableReader reader, byte[] source) throws IOException {
+
+	public static byte[] jumpAndGet(MarkableReader reader, byte[] availabe, int limit) throws IOException {
+		long start = reader.getFilePointer();
+		jumpPattern(reader, availabe, limit);
+		long end = reader.getFilePointer();
+		if(start == end) {
+			return new byte[0];
+		} else {
+			byte[] ret = new byte[(int)(end-start)];
+			reader.seek(start);
+			reader.read(ret, 0, ret.length);
+			return ret;
+		}
+	}
+
+	public static void jumpPattern(MarkableReader reader, byte[] availabe, int limit) throws IOException {
 		int v = 0;
 		reader.pushMark();
 		int tmp = 0;
@@ -16,15 +30,20 @@ public class MarkableReaderHelper {
 			do {
 				v = reader.read();
 				if (v<0) {
-					reader.backToMark();
-					throw new IOException();
+					return;
 				}
-				if(v != (source[tmp]&0xff)) {
-					reader.backToMark();
-					throw new IOException();					
+				boolean update = false;
+				for(byte b: availabe) {
+					if(v == (b&0xff)) {
+						update = true;
+						break;
+					}
+				}
+				if(!update) {
+					return;
 				}
 				tmp++;
-			} while(tmp<source.length);
+			} while(tmp<limit);
 		} finally {
 			reader.popMark();
 		}

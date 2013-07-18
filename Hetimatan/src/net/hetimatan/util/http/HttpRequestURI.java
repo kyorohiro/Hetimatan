@@ -94,6 +94,23 @@ public class HttpRequestUri extends HttpObject {
 		return ret;
 	}
 
+	public static String host(MarkableReader reader) throws IOException {
+		final byte[] available= {
+				'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+				'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
+				'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
+				'u', 'v', 'w', 'x', 'y', 'z',
+				'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
+				'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
+				'U', 'V', 'W', 'X', 'Y', 'Z',
+				'.', '-'
+		};
+		try {
+			MarkableReaderHelper.jumpPattern(reader, available, 256);
+		} catch(IOException e) {
+		}
+	}
+
 	public static String scheme(MarkableReader reader) throws IOException {
 		try {
 			MarkableReaderHelper.match(reader, ("https").getBytes());
@@ -106,7 +123,6 @@ public class HttpRequestUri extends HttpObject {
 		} catch(IOException e) {
 			throw e;
 		}
-
 	}
 
 	private static String _path(MarkableReader reader) throws IOException {
