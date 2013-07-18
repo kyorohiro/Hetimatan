@@ -8,10 +8,12 @@ import java.util.Set;
 
 import net.hetimatan.io.file.MarkableFileReader;
 import net.hetimatan.io.file.MarkableReader;
+import net.hetimatan.io.file.MarkableReaderHelper;
 import net.hetimatan.io.filen.CashKyoroFile;
 
 // GET request
 // http://www.w3schools.com/tags/ref_httpmethods.asp
+// Request-URI    = "*" | absoluteURI | abs_path | authority
 public class HttpRequestUri extends HttpObject {
 	private String mPath = "";
 	private LinkedHashMap<String, String> mValues = new LinkedHashMap<String, String>();
@@ -90,6 +92,21 @@ public class HttpRequestUri extends HttpObject {
 			_keyValues(reader, ret);
 		}
 		return ret;
+	}
+
+	public static String scheme(MarkableReader reader) throws IOException {
+		try {
+			MarkableReaderHelper.match(reader, ("https").getBytes());
+			return "https";
+		} catch(IOException e) {
+		}
+		try {
+			MarkableReaderHelper.match(reader, ("http").getBytes());
+			return "http";
+		} catch(IOException e) {
+			throw e;
+		}
+
 	}
 
 	private static String _path(MarkableReader reader) throws IOException {

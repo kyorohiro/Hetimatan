@@ -15,10 +15,35 @@ import java.util.Iterator;
 
 import junit.framework.TestCase;
 
-public class TestForHttpGetRequestPath  extends TestCase {
+public class TestForHttpRequestUri  extends TestCase {
 
 	public void testHello() {
 
+	}
+
+	public void testDecodeScheme() throws IOException {
+		{
+			MarkableFileReader reader = new MarkableFileReader("http".getBytes());
+			assertEquals("http", HttpRequestUri.scheme(reader));
+			reader.close();
+		}
+
+		{
+			MarkableFileReader reader = new MarkableFileReader("https".getBytes());
+			assertEquals("https", HttpRequestUri.scheme(reader));
+			reader.close();
+		}
+
+		{
+			MarkableFileReader reader = new MarkableFileReader("htt".getBytes());
+			try {
+			assertEquals("htt", HttpRequestUri.scheme(reader));
+			assertTrue(false);
+			} catch(IOException e) {
+				
+			}
+			assertEquals(0, reader.getFilePointer());
+		}
 	}
 
 	public void testEncode001() throws IOException {
