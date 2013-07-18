@@ -19,7 +19,7 @@ public class ReadMetaInfoFile {
 			File single = new File("./testdata/1k.txt.torrent");
 			showMetaInfo(single);
 			//
-			File multi = new File("./testdata/1k.torrent");
+			File multi = new File("./testdata/1kb.torrent");
 			showMetaInfo(multi);
 			
 		} catch (IOException e) {
@@ -27,6 +27,7 @@ public class ReadMetaInfoFile {
 		}
 	}
 	public static void showMetaInfo(File path) throws IOException {
+		System.out.println("-------" + path.getAbsolutePath());
 		MetaFile metafile = MetaFileCreater.createFromTorrentFile(path);
 		System.out.println("announce:"+metafile.getAnnounce());
 		for(int i=0;i<metafile.numOfFiles();i++) {
@@ -34,5 +35,6 @@ public class ReadMetaInfoFile {
 		}
 		System.out.println("piece length:"+metafile.getPieceLength());
 		System.out.println("piece:"+metafile.getPieces().toPercentString());
+		System.out.println("\n\n");
 	}
 }
