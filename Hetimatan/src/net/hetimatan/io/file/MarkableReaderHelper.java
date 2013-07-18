@@ -24,11 +24,11 @@ public class MarkableReaderHelper {
 
 	public static void jumpPattern(MarkableReader reader, byte[] availabe, int limit) throws IOException {
 		int v = 0;
-		reader.pushMark();
 		int tmp = 0;
 		try {
 			do {
-				v = reader.read();
+				reader.pushMark();
+				v = reader.peek();
 				if (v<0) {
 					return;
 				}
@@ -42,12 +42,13 @@ public class MarkableReaderHelper {
 				if(!update) {
 					return;
 				}
+				reader.read();
 				tmp++;
 			} while(tmp<limit);
 		} finally {
-			reader.popMark();
 		}
 	}
+
 	public static void match(MarkableReader reader, byte[] source) throws IOException {
 		int v = 0;
 		reader.pushMark();

@@ -28,6 +28,12 @@ public class TestForHttpRequestUri  extends TestCase {
 			reader.close();
 		}
 
+		{
+			MarkableFileReader reader = new MarkableFileReader("xxx.yyyy.xxx:".getBytes());
+			assertEquals("xxx.yyyy.xxx", HttpRequestUri.host(reader));
+			reader.close();
+		}
+
 	}
 
 	public void testDecodeScheme() throws IOException {
