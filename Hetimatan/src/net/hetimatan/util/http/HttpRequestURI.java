@@ -81,6 +81,23 @@ public class HttpRequestUri extends HttpObject {
 		}
 	}
 
+	public void encodePath(OutputStream output) throws IOException {
+		output.write(mPath.getBytes());
+		Set<String> keys = mValues.keySet();
+		boolean isFirst = true;
+		for (String key : keys) {
+			if (true == isFirst) {
+				isFirst = false;
+				output.write("?".getBytes());
+			} else {
+				output.write("&".getBytes());
+			}
+			output.write(key.getBytes());
+			output.write("=".getBytes());
+			output.write(mValues.get(key).getBytes());
+		}
+	}
+
 	//
 	// /test/demo_form.asp?name1=value1&name2=value2
 	public static HttpRequestUri decode(MarkableReader reader) throws IOException {
@@ -97,6 +114,36 @@ public class HttpRequestUri extends HttpObject {
 		} catch(IOException e) {
 			throw e;
 		}
+	}
+
+	private String mHost = "";
+	private int mPort = 80;
+	
+	public String getHost() {
+		return mHost;
+	}
+	public int getPort() {
+		return mPort;
+	}
+
+	public String getMethod() {
+		CashKyoroFile vFile = null;
+		try {
+			vFile = new CashKyoroFile(512, 2);
+			encodePath(vFile.getLastOutput());
+			byte[] buffer = new byte[(int)vFile.length()];
+			int len = vFile.read(buffer);
+			return new String(buffer, 0, len);
+		} catch(IOException e) {
+		} finally {
+			try {
+				vFile.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
+		return mPath;
 	}
 
 	public static HttpRequestUri astarisk(MarkableReader reader) throws IOException  {
