@@ -84,15 +84,19 @@ public class HttpRequestUri extends HttpObject {
 	//
 	// /test/demo_form.asp?name1=value1&name2=value2
 	public static HttpRequestUri decode(MarkableReader reader) throws IOException {
-		String path = _path(reader);
-		HttpRequestUri ret = new HttpRequestUri(path);
-		if (reader.peek() == -1) {
-			return ret;
+		try {
+			return astarisk(reader);
+		} catch(IOException e) {
 		}
-		if(reader.peek() == '?') {
-			_keyValues(reader, ret);
+		try {
+			return absoluteUri(reader);
+		} catch(IOException e) {
 		}
-		return ret;
+		try {
+			return absPath(reader);
+		} catch(IOException e) {
+			throw e;
+		}
 	}
 
 	public static HttpRequestUri astarisk(MarkableReader reader) throws IOException  {
@@ -190,9 +194,15 @@ public class HttpRequestUri extends HttpObject {
 				'.', '-', '/'
 		};
 
+		boolean first = true;
 		do {
 			try {
 				reader.pushMark();
+				if(!first) {
+					MarkableReaderHelper.match(reader, "&".getBytes());
+				} else {
+					first = false;
+				}
 				String key = new String(MarkableReaderHelper.jumpAndGet(reader, keyAndvalue, 256));
 				MarkableReaderHelper.match(reader, "=".getBytes());
 				String value = new String(MarkableReaderHelper.jumpAndGet(reader, keyAndvalue, 256));
@@ -276,42 +286,5 @@ public class HttpRequestUri extends HttpObject {
 		} catch(IOException e) {
 			throw e;
 		}
-	}
-
-	private static String _path(MarkableReader reader) throws IOException {
-		return _value(reader, "?".getBytes(), true);
-	}
-
-	private static void _keyValues(MarkableReader reader, HttpRequestUri uri) throws IOException {
-		int datam = 0;
-		boolean isFirst = true;
-		while(true) {
-			datam = reader.peek();
-			if(-1 == datam) {
-				break;
-			}
-			if (true == isFirst) {
-				isFirst = false;
-				_question(reader);
-			} else {
-				_ampersand(reader);
-			}
-			_keyValue(reader, uri);
-		}
-	}
-
-	private static void _keyValue(MarkableReader reader, HttpRequestUri uri) throws IOException {
-		String key = _value(reader, "=".getBytes(), false);
-		_value(reader, (byte)'=');
-		String value = _value(reader, "&".getBytes(), true);
-		uri.putVale(key, value);
-	}
-	
-	private static void _ampersand(MarkableReader reader) throws IOException {
-		_value(reader, (byte) '&');
-	}
-
-	private static void _question(MarkableReader reader) throws IOException {
-		_value(reader, (byte) '?');
 	}
 }
