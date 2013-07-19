@@ -95,6 +95,68 @@ public class HttpRequestUri extends HttpObject {
 		return ret;
 	}
 
+	public static HttpRequestUri astarisk(MarkableReader reader) throws IOException  {
+		MarkableReaderHelper.match(reader, "*".getBytes());
+		HttpRequestUri ret = new HttpRequestUri("*");
+		return ret;
+	}
+
+	public static HttpRequestUri absPath(MarkableReader reader) throws IOException {
+		String path = "/";
+		try {
+			path = path(reader);
+		} catch(IOException e) {
+			;
+		}
+		
+		HttpRequestUri ret = new HttpRequestUri(path);
+
+		try {
+			MarkableReaderHelper.match(reader, "?".getBytes());
+			query(reader, ret);
+		} catch(IOException e) {
+		}
+		
+		try {
+			fragment(reader);
+		} catch(IOException e) {
+		}
+		
+		return ret;
+	}
+
+	public static HttpRequestUri absoluteUri(MarkableReader reader) throws IOException {
+		int port = 80;
+		String path = "/";
+		scheme(reader); 
+		MarkableReaderHelper.match(reader, "://".getBytes());
+		host(reader);
+		try {
+			MarkableReaderHelper.match(reader, ":".getBytes());
+			port = port(reader);
+		} catch(IOException e) {
+		}
+		try {
+			path = path(reader);
+		} catch(IOException e) {
+			;
+		}
+		
+		HttpRequestUri ret = new HttpRequestUri(path);
+
+		try {
+			MarkableReaderHelper.match(reader, "?".getBytes());
+			query(reader, ret);
+		} catch(IOException e) {
+		}
+		
+		try {
+			fragment(reader);
+		} catch(IOException e) {
+		}
+		
+		return ret;
+	}
 
 	public static String fragment(MarkableReader reader) throws IOException {
 		final byte[] available = {
