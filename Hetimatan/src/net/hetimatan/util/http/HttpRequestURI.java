@@ -95,6 +95,55 @@ public class HttpRequestUri extends HttpObject {
 		return ret;
 	}
 
+
+	public static String fragment(MarkableReader reader) throws IOException {
+		final byte[] available = {
+				'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+				'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
+				'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
+				'u', 'v', 'w', 'x', 'y', 'z',
+				'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
+				'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
+				'U', 'V', 'W', 'X', 'Y', 'Z',
+				'.', '-', '/'
+		};
+
+		try {
+			MarkableReaderHelper.match(reader, "#".getBytes());
+			return "#" + new String(MarkableReaderHelper.jumpAndGet(reader, available, 256));
+		} catch(IOException e) {
+			throw e;
+		}
+	}
+
+	public static void query(MarkableReader reader, HttpRequestUri uri) throws IOException {
+		final byte[] keyAndvalue= {
+				'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+				'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
+				'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
+				'u', 'v', 'w', 'x', 'y', 'z',
+				'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
+				'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
+				'U', 'V', 'W', 'X', 'Y', 'Z',
+				'.', '-', '/'
+		};
+
+		do {
+			try {
+				reader.pushMark();
+				String key = new String(MarkableReaderHelper.jumpAndGet(reader, keyAndvalue, 256));
+				MarkableReaderHelper.match(reader, "=".getBytes());
+				String value = new String(MarkableReaderHelper.jumpAndGet(reader, keyAndvalue, 256));
+				uri.putVale(key, value);
+			} catch(IOException e) {
+				reader.backToMark();
+				break;
+			} finally {
+				reader.popMark();				
+			}
+		} while(true);
+	}
+
 	public static String path(MarkableReader reader) throws IOException {
 		final byte[] available= {
 				'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',

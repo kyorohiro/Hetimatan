@@ -21,6 +21,14 @@ public class TestForHttpRequestUri  extends TestCase {
 
 	}
 
+	public void testDecodeFragment() throws IOException {
+		{
+			MarkableFileReader reader = new MarkableFileReader("#nononono".getBytes());
+			assertEquals("#nononono", HttpRequestUri.fragment(reader));
+			reader.close();
+		}	
+	}
+
 	public void testDecodePath() throws IOException {
 		{
 			MarkableFileReader reader = new MarkableFileReader("/test/xxx.html".getBytes());
