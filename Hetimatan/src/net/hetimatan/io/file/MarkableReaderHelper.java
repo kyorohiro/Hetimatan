@@ -27,7 +27,6 @@ public class MarkableReaderHelper {
 		int tmp = 0;
 		try {
 			do {
-				reader.pushMark();
 				v = reader.peek();
 				if (v<0) {
 					return;

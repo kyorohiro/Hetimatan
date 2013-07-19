@@ -21,6 +21,28 @@ public class TestForHttpRequestUri  extends TestCase {
 
 	}
 
+	public void testDecodePort() throws IOException {
+		{
+			MarkableFileReader reader = new MarkableFileReader("8080".getBytes());
+			assertEquals(8080, HttpRequestUri.port(reader));
+			reader.close();
+		}
+
+
+		{
+			MarkableFileReader reader = new MarkableFileReader("808080808080808080808080".getBytes());
+			try {
+				HttpRequestUri.port(reader);
+				assertTrue(false);
+			} catch(NumberFormatException e) {
+				assertEquals(0, reader.getFilePointer());
+			} finally {
+				reader.close();
+			}
+
+		}
+	}
+
 	public void testDecodeHost() throws IOException {
 		{
 			MarkableFileReader reader = new MarkableFileReader("127.0.0.1".getBytes());
@@ -34,6 +56,11 @@ public class TestForHttpRequestUri  extends TestCase {
 			reader.close();
 		}
 
+		{
+			MarkableFileReader reader = new MarkableFileReader(":xxx.yyyy.xxx:".getBytes());
+			assertEquals("", HttpRequestUri.host(reader));
+			reader.close();
+		}
 	}
 
 	public void testDecodeScheme() throws IOException {

@@ -10,6 +10,7 @@ import net.hetimatan.io.file.MarkableFileReader;
 import net.hetimatan.io.file.MarkableReader;
 import net.hetimatan.io.file.MarkableReaderHelper;
 import net.hetimatan.io.filen.CashKyoroFile;
+import net.hetimatan.util.io.ByteArrayBuilder;
 
 // GET request
 // http://www.w3schools.com/tags/ref_httpmethods.asp
@@ -92,6 +93,25 @@ public class HttpRequestUri extends HttpObject {
 			_keyValues(reader, ret);
 		}
 		return ret;
+	}
+
+	public static int port(MarkableReader reader) throws IOException, NumberFormatException {
+		final byte[] available= {
+				'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'
+		};
+
+		try {
+			reader.pushMark();
+			return Integer.parseInt(new String(MarkableReaderHelper.jumpAndGet(reader, available, 256)));
+		} catch(IOException e) {
+			reader.backToMark();
+			throw e;
+		} catch(NumberFormatException e) {
+			reader.backToMark();
+			throw e;
+		} finally  {
+			reader.popMark();
+		}
 	}
 
 	public static String host(MarkableReader reader) throws IOException {
