@@ -22,6 +22,7 @@ import net.hetimatan.util.net.MessageSendTask;
 public class HttpFront {
 	public static final String TAG = "HttpFront";
 
+	public String sId = ""; 
 	private WeakReference<HttpServer> mServer = null;
 	private KyoroSocket mSocket = null;
 	private HttpRequest mUri = null;
@@ -32,6 +33,9 @@ public class HttpFront {
 
 	public HttpFront(HttpServer server, KyoroSocket socket) throws IOException {
 		if(Log.ON){Log.v(TAG, "HttpFront#new()");}
+		sId = "[httpfront:"+socket.getHost()+ ":"+ socket.getPort()+"]";
+		socket.setDebug(sId);
+
 		mServer = new WeakReference<HttpServer>(server);
 		mSocket = socket;
 		mKFKSocket = new KyoroFileForKyoroSocket(socket, 1024);

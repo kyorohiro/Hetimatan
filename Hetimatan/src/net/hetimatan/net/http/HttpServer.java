@@ -55,20 +55,24 @@ public class HttpServer {
 		mServerSocket.setEventTaskAtWrakReference(mAcceptTask, KyoroSelector.ACCEPT);
 	}
 
-
-	//
-	// AcceptTrackerTask call
 	public void accept() throws IOException {
 		if(Log.ON){Log.v(TAG, "HttpServer#accept():");}
 		KyoroSocket socket = mServerSocket.accept();
-		socket.regist(mSelector, KyoroSelector.READ);
-		socket.setDebug("HttpServer:READ"+socket.getHost()+":"+socket.getPort());
-		HttpFront info = new HttpFront(this, socket);
-		HttpFrontRequestTask requestTask = new HttpFrontRequestTask(info, mRequestRunner);
-		socket.setEventTaskAtWrakReference(requestTask, KyoroSelector.READ);
-		addLastHttpRequest(info);
+		if(socket == null) {
+			return;
+		}
+		startFront(socket);
 	}
 
+	private void startFront(KyoroSocket socket) throws IOException {
+		HttpFront front = new HttpFront(this, socket);
+		HttpHistory.get().pushMessage("HttpServer#startFront:"+front.sId+"\n");
+
+		socket.regist(mSelector, KyoroSelector.READ);
+		HttpFrontRequestTask requestTask = new HttpFrontRequestTask(front, mRequestRunner);
+		socket.setEventTaskAtWrakReference(requestTask, KyoroSelector.READ);
+		addManagedHttpFront(front);		
+	}
 
 	//
 	// this method is overrided
@@ -114,6 +118,8 @@ public class HttpServer {
 
 	public void close() {
 		if(Log.ON){Log.v(TAG, "close()");}
+		HttpHistory.get().pushMessage("HttpServer#close:"+"\n");
+
 		try {
 			if (null != mRequestRunner) {
 				mRequestRunner.close();				
@@ -149,7 +155,7 @@ public class HttpServer {
 	//
 	// HttpServer HttpFront list
 	//
-	public void addLastHttpRequest(HttpFront info) {
+	public void addManagedHttpFront(HttpFront info) {
 		mClientInfos.addLast(info);
 	}
 
