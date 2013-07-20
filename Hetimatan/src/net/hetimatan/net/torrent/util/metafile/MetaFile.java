@@ -223,18 +223,7 @@ public class MetaFile {
 		}
 	}
 
-	//
-	// benlist "files"
-	// bendiction
-	// beninteger "length"
-	// benlist "path"
-	// benstring
-	// bendiction
-	// beninteger "length"
-	// benlist "path"
-	// benstring
-	// ...
-	// ...
+
 	public static void extractFileList(String dir, LinkedList<String> buffer, LinkedList<Long> lengths, BenList list) {
 		int size = list.size();
 		ByteArrayBuilder _tmpFilePath = new ByteArrayBuilder();

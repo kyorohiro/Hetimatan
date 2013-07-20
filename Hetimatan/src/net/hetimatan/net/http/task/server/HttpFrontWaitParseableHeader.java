@@ -1,4 +1,4 @@
-package net.hetimatan.net.http.task;
+package net.hetimatan.net.http.task.server;
 
 
 import java.lang.ref.WeakReference;
@@ -7,15 +7,14 @@ import net.hetimatan.net.http.HttpFront;
 import net.hetimatan.util.event.EventTask;
 import net.hetimatan.util.event.EventTaskRunner;
 
-public class HttpFrontCloseTask extends EventTask {
-	public static int sid = 0;
-	public static final String TAG = "HttpFrontCloseTask";
+public class HttpFrontWaitParseableHeader extends EventTask {
+	public static final String TAG = "HttpFrontWaitParseableHeader";
 	private WeakReference<HttpFront> mClientInfo = null;
 
-	public int mId = sid++;
-	public HttpFrontCloseTask(HttpFront clientInfo, EventTaskRunner runner) {
+	public HttpFrontWaitParseableHeader(HttpFront clientInfo, EventTaskRunner runner) {
 		super(runner);
 		mClientInfo = new WeakReference<HttpFront>(clientInfo);
+		errorAction(new HttpFrontCloseTask(clientInfo, runner));
 	}
 
 	@Override
@@ -29,6 +28,10 @@ public class HttpFrontCloseTask extends EventTask {
 		if(info == null) {
 			return;
 		} 
-		info.close();
+		if(info.isOkToParseHeader()) {
+			nextAction(this);
+		} else {
+			nextAction(this);
+		}
 	}
 }

@@ -2,7 +2,6 @@ package net.hetimatan.net.http.request;
 
 
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.URL;
 import java.util.LinkedHashMap;
 
@@ -14,7 +13,7 @@ import net.hetimatan.util.http.HttpRequestLine;
 import net.hetimatan.util.http.HttpRequest;
 
 
-public class KyoroSocketGetRequester implements GetRequesterInter {
+public class HttpGetRequester implements GetRequesterInter {
 	
 	private LinkedHashMap<String, String> mHeader = new LinkedHashMap<String, String>();
 	private LinkedHashMap<String, String> mValues = new LinkedHashMap<String, String>();
@@ -28,30 +27,29 @@ public class KyoroSocketGetRequester implements GetRequesterInter {
 		System.out.println("KyoroSocketGetRequester#"  + message);
 	}
 
-	public KyoroSocketGetRequester setHttpVersion(String httpVersion) {
+	public HttpGetRequester setHttpVersion(String httpVersion) {
 		mHttpVersion = httpVersion;
 		return this;
 	}
 
-	public KyoroSocketGetRequester setPort(int port) {
+	public HttpGetRequester setPort(int port) {
 		mPort = port;
 		return this;
 	}
 
-	public KyoroSocketGetRequester setHost(String host) {
+	public HttpGetRequester setHost(String host) {
 		mHost = host;
 		return this;
 	}
 
-	public KyoroSocketGetRequester setPath(String path) {
+	public HttpGetRequester setPath(String path) {
 		mPath = path;
 		return this;
 	}
 
 
 	@Override
-	public GetResponseInter doRequest(KyoroSelector selector)
-			throws IOException, InterruptedException {
+	public GetResponseInter doRequest(KyoroSelector selector) throws IOException, InterruptedException {
 		KyoroSocket socket = null;
 		mSelector = selector;
 		try {
@@ -64,7 +62,9 @@ public class KyoroSocketGetRequester implements GetRequesterInter {
 			if (socket != null) {
 				socket.close();
 			}
-		}	}
+		}
+	}
+
 	public GetResponseInter doRequest() throws IOException, InterruptedException {
 		return doRequest(new KyoroSelector());
 	}
@@ -90,18 +90,16 @@ public class KyoroSocketGetRequester implements GetRequesterInter {
 	}
 
 	public GetResponseInter _getResponse(KyoroSocket socket) throws IOException, InterruptedException {
-//		mHeader.get(.)
-//		return null;
-		GetResponseInter response = new KyoroSocketGetResponse(socket, mSelector);
+		GetResponseInter response = new HttpGetResponse(socket, mSelector);
 		return response;
 	}	
 
-	public KyoroSocketGetRequester putValue(String key, String value) {
+	public HttpGetRequester putValue(String key, String value) {
 		mValues.put(key, value);
 		return this;		
 	}
 
-	public KyoroSocketGetRequester putHeader(String key, String value) {
+	public HttpGetRequester putHeader(String key, String value) {
 		mHeader.put(key, value);
 		return this;
 	}

@@ -1,4 +1,4 @@
-package net.hetimatan.net.http.task;
+package net.hetimatan.net.http.task.server;
 
 
 import java.lang.ref.WeakReference;

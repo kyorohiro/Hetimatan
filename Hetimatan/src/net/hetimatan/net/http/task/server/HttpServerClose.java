@@ -1,4 +1,4 @@
-package net.hetimatan.net.http.task;
+package net.hetimatan.net.http.task.server;
 
 
 import java.lang.ref.WeakReference;
@@ -7,14 +7,13 @@ import net.hetimatan.net.http.HttpServer;
 import net.hetimatan.util.event.EventTask;
 import net.hetimatan.util.event.EventTaskRunner;
 
-public class HttpServerBootTask extends EventTask {
-	public static final String TAG = "HttpServerBootTask";
+public class HttpServerClose extends EventTask {
+	public static final String TAG = "HttpServerClose";
 	private WeakReference<HttpServer> mServer = null;
 
-	public HttpServerBootTask(HttpServer httpServer, EventTaskRunner runner) {
+	public HttpServerClose(HttpServer httpServer, EventTaskRunner runner) {
 		super(runner);
 		mServer = new WeakReference<HttpServer>(httpServer);
-		errorAction(new HttpServerClose(httpServer, runner));
 	}
 
 	@Override
@@ -25,6 +24,6 @@ public class HttpServerBootTask extends EventTask {
 	@Override
 	public void action() throws Throwable {
 		HttpServer server = mServer.get();
-		server.boot();
+		server.close();
 	}
 }

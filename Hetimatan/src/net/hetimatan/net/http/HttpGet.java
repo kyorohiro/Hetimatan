@@ -9,8 +9,8 @@ import net.hetimatan.io.net.KyoroSelector;
 import net.hetimatan.io.net.KyoroSocket;
 import net.hetimatan.net.http.request.GetRequesterInter;
 import net.hetimatan.net.http.request.GetResponseInter;
-import net.hetimatan.net.http.request.KyoroSocketGetRequester;
-import net.hetimatan.net.http.task.HttpGetConnectionTask;
+import net.hetimatan.net.http.request.HttpGetRequester;
+import net.hetimatan.net.http.task.client.HttpGetConnectionTask;
 import net.hetimatan.util.event.EventTask;
 import net.hetimatan.util.event.EventTaskRunner;
 import net.hetimatan.util.event.EventTaskRunnerImple;
@@ -53,7 +53,7 @@ public class HttpGet {
 
 	protected GetRequesterInter createGetRequest() {
 		if (mCurrentRequest == null) {
-			mCurrentRequest = new KyoroSocketGetRequester();
+			mCurrentRequest = new HttpGetRequester();
 		}
 		return mCurrentRequest;
 	}

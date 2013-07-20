@@ -13,7 +13,7 @@ import net.hetimatan.util.http.LookaheadHttpHeader;
 import net.hetimatan.util.http.HttpRequestHeader;
 import net.hetimatan.util.http.HttpResponse;
 
-public class KyoroSocketGetResponse implements GetResponseInter {
+public class HttpGetResponse implements GetResponseInter {
 	private CashKyoroFile mVF = null;
 	private int mVfOffset = 0;
 	private KyoroSocket mSocket = null;
@@ -24,7 +24,7 @@ public class KyoroSocketGetResponse implements GetResponseInter {
 	private long mContentLength = Integer.MAX_VALUE;
 	private HttpResponse mResponse = null;
 
-	public KyoroSocketGetResponse(KyoroSocket socket, KyoroSelector selector) throws IOException {
+	public HttpGetResponse(KyoroSocket socket, KyoroSelector selector) throws IOException {
 		mSocket = socket;
 		mBase = new KyoroFileForKyoroSocket(mSocket, 512*30);
 		mBase.setSelector(selector);

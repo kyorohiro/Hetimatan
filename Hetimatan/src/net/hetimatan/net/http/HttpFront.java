@@ -10,7 +10,7 @@ import net.hetimatan.io.file.MarkableFileReader;
 import net.hetimatan.io.file.MarkableReader;
 import net.hetimatan.io.net.KyoroSelector;
 import net.hetimatan.io.net.KyoroSocket;
-import net.hetimatan.net.http.task.HttpFrontCloseTask;
+import net.hetimatan.net.http.task.server.HttpFrontCloseTask;
 import net.hetimatan.util.event.EventTask;
 import net.hetimatan.util.http.LookaheadHttpHeader;
 import net.hetimatan.util.http.HttpObject;

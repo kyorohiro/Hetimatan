@@ -2,7 +2,7 @@ package net.hetimatan.net.torrent.tracker;
 
 
 import net.hetimatan.net.http.request.GetRequesterInter;
-import net.hetimatan.net.http.request.KyoroSocketGetRequester;
+import net.hetimatan.net.http.request.HttpGetRequester;
 import net.hetimatan.net.torrent.client.TorrentPeer;
 import net.hetimatan.util.http.HttpObject;
 import net.hetimatan.util.http.HttpRequestLine;
@@ -65,7 +65,7 @@ public class TrackerRequest {
 	}
 
 	public GetRequesterInter encodeToGetRequester() {
-		return (new KyoroSocketGetRequester())
+		return (new HttpGetRequester())
 		.setHost(mTrackerHost)
 		.setPath(mPath)
 		.setPort(mTrackerPort)
