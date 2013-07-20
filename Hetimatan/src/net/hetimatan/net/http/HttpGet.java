@@ -11,6 +11,7 @@ import net.hetimatan.net.http.request.GetRequesterInter;
 import net.hetimatan.net.http.request.GetResponseInter;
 import net.hetimatan.net.http.request.HttpGetRequester;
 import net.hetimatan.net.http.task.client.HttpGetConnectionTask;
+import net.hetimatan.net.http.task.client.HttpGetRequestTask;
 import net.hetimatan.util.event.EventTask;
 import net.hetimatan.util.event.EventTaskRunner;
 import net.hetimatan.util.event.EventTaskRunnerImple;
@@ -66,7 +67,9 @@ public class HttpGet {
 		if(runner == null) {
 			runner = new EventTaskRunnerImple();
 		}
-		runner.start(new HttpGetConnectionTask(this, runner, last));
+		HttpGetConnectionTask connectionTask = new HttpGetConnectionTask(this, runner, last);
+		connectionTask.nextAction(new HttpGetRequestTask(this, runner, last));
+		runner.start(connectionTask);
 		return runner; 
 	}
 
@@ -88,13 +91,13 @@ public class HttpGet {
 		int state = mCurrentSocket.getConnectionState();
 		switch (state) {
 		case KyoroSocket.CN_CONNECTED:
-			if(Log.ON){Log.v(TAG, "isConnected()true");}
+			HttpHistory.get().pushMessage(sId+"#connected"+"\n");
 			return true;
 		case KyoroSocket.CN_CONNECTING:
 			return false;
 		case KyoroSocket.CN_DISCONNECTED:
 		default:
-			if(Log.ON){Log.v(TAG, "isConnected()disconnected");}
+			HttpHistory.get().pushMessage(sId+"#disconnected"+"\n");
 			throw new IOException();
 		}
 	}

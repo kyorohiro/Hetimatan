@@ -27,6 +27,13 @@ public class HttpGetConnectionTask extends EventTask {
 		return TAG;
 	}
 
+	private boolean mIsKeep = true;
+
+	@Override
+	public boolean isKeep() {
+		return mIsKeep;
+	}
+
 	//
 	@Override
 	public void action() throws InterruptedException, IOException {
@@ -35,9 +42,9 @@ public class HttpGetConnectionTask extends EventTask {
 			mOwner.get().connection();
 		}
 		if(mOwner.get().isConnected()) {
-			nextAction(new HttpGetRequestTask(mOwner.get(), getRunner(), mLast));
+			mIsKeep = false;
 		} else {
-			nextAction(this);
+			mIsKeep = true;
 		}
 	}
 }
