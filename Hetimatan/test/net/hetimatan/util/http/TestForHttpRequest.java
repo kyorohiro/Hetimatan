@@ -6,7 +6,6 @@ import net.hetimatan.util.http.HttpRequestHeader;
 import net.hetimatan.util.http.HttpObject;
 import net.hetimatan.util.http.HttpRequestLine;
 import net.hetimatan.util.http.HttpRequest;
-import net.hetimatan.util.http.HttpResponse;
 import java.io.IOException;
 
 import junit.framework.TestCase;
@@ -106,7 +105,7 @@ public class TestForHttpRequest extends TestCase {
 		MarkableFileReader reader = new MarkableFileReader(base, 512);
 
 		try {
-			HttpRequest uri = HttpRequest.decode(reader);
+			HttpRequest.decode(reader);
 			assertTrue(false);
 		} catch(IOException e) {
 		}

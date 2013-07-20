@@ -109,8 +109,6 @@ public class TestForKFNextHelper extends TestCase {
 		try {
 			src.seek(0);
 			KFNextHelper.copy(src, out);
-//			byte[] result = KFNextHelper.newBinary(out);
-//			TestUtil.assertArrayEquals(this, "", exp, result);
 		} finally {
 			src.close();
 			out.close();
