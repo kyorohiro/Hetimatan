@@ -27,7 +27,7 @@ public class TestForHttpHeader extends TestCase {
 		byte[] buffer = new byte[(int)output.length()];
 		int len = output.read(buffer);
 		String tag = new String(buffer, 0, len);
-		assertEquals("key:value\r\n", tag);
+		assertEquals("key: value\r\n", tag);
 	}
 
 	public void testDecode001() throws IOException {

@@ -7,6 +7,7 @@ import java.util.LinkedList;
 
 import net.hetimatan.io.file.KyoroFile;
 import net.hetimatan.io.file.MarkableReader;
+import net.hetimatan.io.file.MarkableReaderHelper;
 import net.hetimatan.io.filen.CashKyoroFile;
 
 // http://www.studyinghttp.net/cgi-bin/rfc.cgi?2616
@@ -24,6 +25,16 @@ public class HttpResponse extends HttpObject {
 		"301","302","303","307"
 	};
 
+	public static final byte[] available = {
+		'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+		'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
+		'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
+		'u', 'v', 'w', 'x', 'y', 'z',
+		'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
+		'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
+		'U', 'V', 'W', 'X', 'Y', 'Z',
+		'.', '-', '/', '_'
+	};
 	
 	private LinkedList<HttpRequestHeader> mHeaders = new LinkedList<HttpRequestHeader>();
 	private String mHttpVersion = null;
@@ -134,25 +145,18 @@ public class HttpResponse extends HttpObject {
 		String statusCode = "";
 		String reasonPhrase = "";
 
-//		System.out.println("------------1-------------");
 		httpVersion = _httpVersion(reader);
-		System.out.println("-httpVersion="+httpVersion+"#");
 		_sp(reader);
-//		System.out.println("------------2-------------");
 		statusCode = _statusCode(reader);
-		System.out.println("-statusCode="+statusCode+"#");
 		_sp(reader);
-//		System.out.println("------------3-------------");
 		reasonPhrase = _reasonPhrase(reader);
-		System.out.println("-reasonPhrase="+reasonPhrase+"#");
 		_crlf(reader);
-//		System.out.println("------------4-------------");
 		HttpResponse ret = new HttpResponse(httpVersion, statusCode, reasonPhrase);
 
-//		System.out.println("------------5-------------");
+		
 		try {
 			while (true) {
-				if (isCrlf(reader)||isLf(reader)) {
+				if (isCrlf(reader)) {
 					break;
 				}
 				ret.addHeader(HttpRequestHeader.decode(reader));
@@ -160,15 +164,10 @@ public class HttpResponse extends HttpObject {
 		} catch (IOException e) {
 		}
 
-//		System.out.println("------------6-------------");
 		_crlf(reader);
-//		System.out.println("------------7-------------");
 
 		long size = ret.getContentSizeFromHeader();
-		System.out.println("------------8-------------"+size);
-		if(size <0) {
-			size = Integer.MAX_VALUE;
-		}
+		if(size <0) {size = Integer.MAX_VALUE;}
 		// 
 		// todo MarkableReader内の VFを使用してもよいかも
 		CashKyoroFile vf = new CashKyoroFile(512, 2);
@@ -190,48 +189,34 @@ public class HttpResponse extends HttpObject {
 	}
 
 	public static String _httpVersion(MarkableReader reader) throws IOException {
-		return _value(reader, SP.getBytes(), false);
+		try {
+			return new String(MarkableReaderHelper.jumpAndGet(reader, available, 256));
+		} catch(IOException e) {
+			throw e;
+		}
 	}
 
 	public static String _statusCode(MarkableReader reader) throws IOException {
-		return _value(reader, SP.getBytes(), false);
+		try {
+			return new String(MarkableReaderHelper.jumpAndGet(reader, available, 256));
+		} catch(IOException e) {
+			throw e;
+		}
 	}
 
 	public static String _reasonPhrase(MarkableReader reader) throws IOException {
 		try {
-			String ret = _value(reader,"\n".getBytes(), false);
-			//todo
-			if(ret.endsWith("\r")) {
-				ret = ret.substring(0, ret.length()-1);
-			}
-			return ret;
+			return new String(MarkableReaderHelper.jumpAndGet(reader, available, 256));
 		} catch(IOException e) {
+			throw e;
 		}
-		return _value(reader, CRLF.getBytes(), "\n".getBytes(), false);
 	}
 
-	public static boolean isLf(MarkableReader reader) {
-		try {
-			reader.pushMark();
-			int cr = reader.read();
-			if(cr =='\n'){
-				return true;
-			}
-		} catch (IOException e) {
-		} finally {
-			reader.backToMark();
-			reader.popMark();
-		}
-		return false;
-	}
 	public static boolean isCrlf(MarkableReader reader) {
+		reader.pushMark();
 		try {
-			reader.pushMark();
-			int cr = reader.read();
-			int lf = reader.read();
-			if (cr == '\r' && lf == '\n') {
-				return true;
-			}
+			_crlf(reader);
+			return true;
 		} catch (IOException e) {
 		} finally {
 			reader.backToMark();

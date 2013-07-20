@@ -54,10 +54,6 @@ public abstract class HttpObject {
 	}
 
 
-	protected static String _value(MarkableReader reader, byte[] fin, boolean EOFisFin) throws IOException {
-		return _value(reader, fin, null, EOFisFin);
-	}
-
 	protected static String _value(MarkableReader reader, byte[] fin1, byte fin2[], boolean EOFisFin) throws IOException {
 		try {
 			reader.pushMark();

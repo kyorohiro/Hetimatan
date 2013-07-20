@@ -90,9 +90,9 @@ public class TestForHttpRequest extends TestCase {
 		assertEquals("/announce", HttpObject.createEncode(line.getRequestURI()));
 		assertEquals("HTTP/1.1", line.getHttpVersion());
 		assertEquals(3, uri.getHeader().size());
-		assertEquals(" gzip", uri.getHeader().get(0).getValue());
-		assertEquals(" 127.0.0.1:6969", uri.getHeader().get(1).getValue());
-		assertEquals(" BitTorrent/4.0.2", uri.getHeader().get(2).getValue());
+		assertEquals("gzip", uri.getHeader().get(0).getValue());
+		assertEquals("127.0.0.1:6969", uri.getHeader().get(1).getValue());
+		assertEquals("BitTorrent/4.0.2", uri.getHeader().get(2).getValue());
 		assertEquals("Accept-encoding", uri.getHeader().get(0).getKey());
 		assertEquals("Host", uri.getHeader().get(1).getKey());
 		assertEquals("User-agent", uri.getHeader().get(2).getKey());
