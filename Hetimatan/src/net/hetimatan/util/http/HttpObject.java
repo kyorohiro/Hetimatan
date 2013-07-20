@@ -39,23 +39,6 @@ public abstract class HttpObject {
 	//	System.out.println("bencode_log:"+log);
 	}
 
-	public int getType() {
-		return mType;
-	}
-
-
-	public byte[] toByte() {
-		return new byte[0];
-	}
-
-	
-	public int size() {
-		return 0;
-	}
-
-
-
-	
 	public static void _crlf(MarkableReader reader) throws IOException {
 		try {
 			MarkableReaderHelper.match(reader, "\r\n".getBytes());
@@ -122,16 +105,17 @@ public abstract class HttpObject {
 				.parseShort(port, 0, ByteArrayBuilder.BYTEORDER_BIG_ENDIAN);
 	}
 
-	//HTTP-Version   = "HTTP" "/" 1*DIGIT "." 1*DIGIT
-	//public static void _httpversion(MarkableReader reader) throws IOException {
-	//	
-	//}
-	//
+	public int getType() {
+		return mType;
+	}
 
-	//
-	// benobject    : beninteger | benstring | beniction | benlist
-	//
-	//public static BenObject decodeValue(MarkableReader input) throws IOException {
+	public byte[] toByte() {
+		return new byte[0];
+	}
+
+	public int size() {
+		return 0;
+	}
 
 	public abstract void encode(OutputStream output) throws IOException;
 

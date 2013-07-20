@@ -13,16 +13,20 @@ public class LookaheadHttpHeader {
 	public static final int KEEP = 2;
 	private MarkableReader mCurrentReader = null;
 	private long mStart = 0;
+	private long mStartTime = 0;
 
 	public LookaheadHttpHeader(MarkableReader reader, int size) throws IOException {
 		mCurrentReader = reader;
 		mStart = reader.getFilePointer();
+		mStartTime = System.currentTimeMillis();
 	}
 
 	public long getStart() {
 		return mStart;
 	}
-
+	public long getElapsedTime() {
+		return System.currentTimeMillis()-mStartTime;
+	}
 	
 	private boolean mIsFirst = true;
 	public int readByEndOfHeader(boolean checkCrlf) throws IOException {

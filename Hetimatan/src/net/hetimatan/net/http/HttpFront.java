@@ -49,20 +49,24 @@ public class HttpFront {
 	}
 
 
+	public long sTimeout = 10*1024;
 	public boolean isOkToParseHeader() throws IOException {
 		boolean prev = mCurrentReader.setBlockOn(false);
 		try {
 			if(mHeaderChunk == null) {
 				mHeaderChunk = new LookaheadHttpHeader(mCurrentReader, Integer.MAX_VALUE);
 			}
-			boolean ret =LookaheadHttpHeader.readByEndOfHeader(mHeaderChunk, mCurrentReader);
-			if(ret == true) {
-				long fp = mCurrentReader.getFilePointer();
-				long st = mHeaderChunk.getStart();
-				mCurrentReader.seek(st);
+			boolean parseable =LookaheadHttpHeader.readByEndOfHeader(mHeaderChunk, mCurrentReader);
+			if(parseable == true) {
+				mCurrentReader.seek(mHeaderChunk.getStart());
 				mHeaderChunk = null;
 			}
-			return ret;
+			else if(sTimeout < mHeaderChunk.getElapsedTime()) {
+				HttpHistory.get().pushMessage(this.sId+":timeout parseheader:"+"\n");
+				mHeaderChunk = null;
+				throw new IOException("-timeout parse header-");
+			}
+			return parseable;
 		} finally {
 			mCurrentReader.setBlockOn(prev);
 		}
