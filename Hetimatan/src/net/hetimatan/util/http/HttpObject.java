@@ -7,6 +7,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 import net.hetimatan.io.file.MarkableReader;
+import net.hetimatan.io.file.MarkableReaderHelper;
 import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.util.io.ByteArrayBuilder;
 
@@ -52,18 +53,7 @@ public abstract class HttpObject {
 		return 0;
 	}
 
-	protected static void _value(MarkableReader reader, byte value) throws IOException {
-		try {
-			reader.pushMark();
-			int datam = reader.read();
-			if(datam<0||datam!=value) {
-				reader.backToMark();
-				throw new IOException();
-			}
-		} finally {
-			reader.popMark();
-		}
-	}
+
 	protected static String _value(MarkableReader reader, byte[] fin, boolean EOFisFin) throws IOException {
 		return _value(reader, fin, null, EOFisFin);
 	}
@@ -115,20 +105,17 @@ public abstract class HttpObject {
 	}
 
 	public static void _crlf(MarkableReader reader) throws IOException {
-		int cr = reader.read();
-		if(cr == '\n') {
+		try {
+			MarkableReaderHelper.match(reader, "\r\n".getBytes());
 			return;
+		} catch(IOException e) {
 		}
-		int lf = reader.read();
-		if(cr == '\r' && lf == '\n') {			
-		} else {
-			throw new IOException("#"+cr+","+lf+"#");
-		}
+		MarkableReaderHelper.match(reader, "\n".getBytes());
 	}
 
 	public static void _sp(MarkableReader reader) throws IOException {
-		//int sp = 
-		reader.read();
+		MarkableReaderHelper.match(reader, " ".getBytes());
+		MarkableReaderHelper.jumpPattern(reader, " ".getBytes(), 256);
 	}
 
 	public static String parseString(String value, String basic) {

@@ -14,7 +14,7 @@ import net.hetimatan.util.io.ByteArrayBuilder;
 
 // GET request
 // http://www.w3schools.com/tags/ref_httpmethods.asp
-// Request-URI    = "*" | absoluteURI | abs_path | authority
+// Request-URI    = "*" | absoluteURI | abs_path
 public class HttpRequestUri extends HttpObject {
 	private String mPath = "";
 	private LinkedHashMap<String, String> mValues = new LinkedHashMap<String, String>();
@@ -98,8 +98,6 @@ public class HttpRequestUri extends HttpObject {
 		}
 	}
 
-	//
-	// /test/demo_form.asp?name1=value1&name2=value2
 	public static HttpRequestUri decode(MarkableReader reader) throws IOException {
 		try {
 			return astarisk(reader);
@@ -218,7 +216,7 @@ public class HttpRequestUri extends HttpObject {
 				'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
 				'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
 				'U', 'V', 'W', 'X', 'Y', 'Z',
-				'.', '-', '/'
+				'.', '-', '/', '_'
 		};
 
 		try {

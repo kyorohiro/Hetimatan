@@ -1,8 +1,6 @@
 package net.hetimatan.util.io;
 
-//
-//promitive 型なので テンプレートが使えない？
-//
+
 public class ByteArrayBuilder {
 	public static final int BYTEORDER_BIG_ENDIAN = 1;
 	public static final int BYTEORDER_LITTLE_ENDIAN = 0;
