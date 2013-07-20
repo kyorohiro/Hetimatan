@@ -31,8 +31,8 @@ public class HttpFront {
 	private MarkableReader mCurrentReader = null;
 	private LookaheadHttpHeader mHeaderChunk = null;
 	private KyoroFileForKyoroSocket mKFKSocket = null;
-	private MessageSendTask mSendTaskChane = null;
-	private MessageSendTask mtask = null;
+//	private MessageSendTask mSendTaskChane = null;
+//	private MessageSendTask mtask = null;
 	private LinkedList<EventTask> mMyTask = new LinkedList<EventTask>();
 
 
@@ -100,7 +100,7 @@ public class HttpFront {
 	}
 
 	public void close() throws IOException {
-		if(Log.ON){Log.v(TAG, "HttpFront#close()");}
+		HttpHistory.get().pushMessage(sId+"#close:"+"\n");
 		HttpServer server = mServer.get();
 		if(server != null) {
 			server.removeList(this);

@@ -23,6 +23,7 @@ import net.hetimatan.util.net.KyoroSocketEventRunner;
 public class HttpGet {
 
 	public static final String TAG = "HttpGet";
+	public String sId = "[httpget]";
 	private GetRequesterInter mCurrentRequest = null;
 	private GetResponseInter mResponse = null;
 	private KyoroSocket mCurrentSocket = null;
@@ -36,16 +37,16 @@ public class HttpGet {
 		mHost = host;
 		mPath = path;
 		mPort = port;
+		sId = "[httpget "+mHost+":"+mPort+mPath+"]";
 	}
 
 	public void updateRedirect(String location) throws IOException {
+		HttpHistory.get().pushMessage(sId+"#redirect:"+location+"\n");
 		MarkableFileReader reader = null;
 		try {
 			reader = new MarkableFileReader(location.getBytes());
 			HttpRequestUri geturi = HttpRequestUri.decode(reader);
-			mHost =  geturi.getHost();
-			mPort= geturi.getPort();
-			mPath = geturi.getMethod();
+			update(geturi.getHost(), geturi.getMethod(), geturi.getPort());
 		} finally {
 			reader.close();
 		}
@@ -59,7 +60,8 @@ public class HttpGet {
 	}
 
 	public EventTaskRunner startTask(EventTaskRunner runner, EventTask last) {
-		if(Log.ON){Log.v(TAG, "HttpGet#startTask()");}
+		HttpHistory.get().pushMessage(sId+"#startTask"+"\n");
+
 		initForRestart();
 		if(runner == null) {
 			runner = new EventTaskRunnerImple();
