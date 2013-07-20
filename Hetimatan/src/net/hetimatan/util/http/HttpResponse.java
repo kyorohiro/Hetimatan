@@ -33,9 +33,18 @@ public class HttpResponse extends HttpObject {
 		'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
 		'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
 		'U', 'V', 'W', 'X', 'Y', 'Z',
-		'.', '-', '/', '_'
+		'.', '-', '/', '_', 
 	};
-	
+	public static final byte[] available_pharse = {
+		'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+		'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
+		'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
+		'u', 'v', 'w', 'x', 'y', 'z',
+		'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
+		'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
+		'U', 'V', 'W', 'X', 'Y', 'Z',
+		'.', '-', '/', '_', ' '
+	};
 	private LinkedList<HttpRequestHeader> mHeaders = new LinkedList<HttpRequestHeader>();
 	private String mHttpVersion = null;
 	private String mStatusCode = null;
@@ -206,7 +215,7 @@ public class HttpResponse extends HttpObject {
 
 	public static String _reasonPhrase(MarkableReader reader) throws IOException {
 		try {
-			return new String(MarkableReaderHelper.jumpAndGet(reader, available, 256));
+			return new String(MarkableReaderHelper.jumpAndGet(reader, available_pharse, 256));
 		} catch(IOException e) {
 			throw e;
 		}

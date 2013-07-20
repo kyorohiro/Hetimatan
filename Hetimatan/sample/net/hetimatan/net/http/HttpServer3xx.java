@@ -22,8 +22,7 @@ public class HttpServer3xx extends HttpServer {
 	}
 
 	@Override
-	public KyoroFile createResponse(HttpFront front, KyoroSocket socket,
-			HttpRequest uri) throws IOException {
+	public KyoroFile createResponse(HttpFront front, KyoroSocket socket, HttpRequest uri) throws IOException {
 		String path = uri.getLine().getRequestURI().getPath();
 		int index = 0;
 		if(path.startsWith("http://")) {

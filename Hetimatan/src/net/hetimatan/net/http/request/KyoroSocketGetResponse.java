@@ -100,7 +100,14 @@ public class KyoroSocketGetResponse implements GetResponseInter {
 			}
 		} catch(Exception e) {
 			e.printStackTrace();
-			mVfOffset = 0;
+			mVfOffset = (int)mReader.length();
+			{
+				mReader.seek(0);
+				byte[] bu = new byte[mVfOffset];
+				mReader.read(bu);
+				System.out.println("+DEBUG++"+new String(bu)+"#####");
+				mReader.seek(mVfOffset);
+			}
 		}
 	}
 
