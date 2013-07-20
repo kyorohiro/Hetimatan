@@ -26,6 +26,8 @@ import net.hetimatan.util.net.KyoroSocketEventRunner;
 public class HttpServer {
 	public static final String TAG = "HttpServer";
 
+	public String sId = "[http_server_empty]";
+
 	private LinkedList<HttpFront> mClientInfos = new LinkedList<HttpFront>();
 	private HttpServerAcceptTask mAcceptTask = null;
 	private int mPort = 8080;
@@ -51,6 +53,7 @@ public class HttpServer {
 		mServerSocket = new KyoroServerSocketImpl();
 		mServerSocket.bind(mPort);
 		mServerSocket.regist(mSelector, KyoroSelector.ACCEPT);
+		sId = "[httpserver"+mPort+"]";
 		mAcceptTask = new HttpServerAcceptTask(this, mRequestRunner);
 		mServerSocket.setEventTaskAtWrakReference(mAcceptTask, KyoroSelector.ACCEPT);
 	}
@@ -66,7 +69,7 @@ public class HttpServer {
 
 	private void startFront(KyoroSocket socket) throws IOException {
 		HttpFront front = new HttpFront(this, socket);
-		HttpHistory.get().pushMessage("HttpServer#startFront:"+front.sId+"\n");
+		HttpHistory.get().pushMessage(sId+"#startFront:"+front.sId+"\n");
 
 		socket.regist(mSelector, KyoroSelector.READ);
 		HttpFrontRequestTask requestTask = new HttpFrontRequestTask(front, mRequestRunner);
@@ -118,7 +121,7 @@ public class HttpServer {
 
 	public void close() {
 		if(Log.ON){Log.v(TAG, "close()");}
-		HttpHistory.get().pushMessage("HttpServer#close:"+"\n");
+		HttpHistory.get().pushMessage(sId+"#close:"+"\n");
 
 		try {
 			if (null != mRequestRunner) {
