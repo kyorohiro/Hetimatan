@@ -1,6 +1,5 @@
 package net.hetimatan.net.http;
 
-import sun.net.www.content.audio.x_aiff;
 import junit.framework.TestCase;
 
 //todo chk

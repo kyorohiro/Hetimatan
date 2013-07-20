@@ -13,13 +13,10 @@ public class LookaheadHttpHeader {
 	public static final int KEEP = 2;
 	private MarkableReader mCurrentReader = null;
 	private long mStart = 0;
-	private long mMax = 0;
-	private int[] mCrlfCheck = new int[] { -1, '\n', '\n' };
 
 	public LookaheadHttpHeader(MarkableReader reader, int size) throws IOException {
 		mCurrentReader = reader;
 		mStart = reader.getFilePointer();
-		mMax = size;
 	}
 
 	public long getStart() {
@@ -31,7 +28,6 @@ public class LookaheadHttpHeader {
 	public int readByEndOfHeader(boolean checkCrlf) throws IOException {
 		MarkableReader reader = mCurrentReader;
 		reader.setBlockOn(false);
-		int cur = 0;
 		ByteArrayBuilder buffer = EventTaskRunner.getByteArrayBuilder();
 		buffer.setBufferLength(5*1024);
 		buffer.clear();

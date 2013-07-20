@@ -30,9 +30,11 @@ public class HttpFront {
 	private LookaheadHttpHeader mHeaderChunk = null;
 	private KyoroFileForKyoroSocket mKFKSocket = null;
 	private MessageSendTask mSendTaskChane = null;
+	private MessageSendTask mtask = null;
+	private LinkedList<EventTask> mMyTask = new LinkedList<EventTask>();
+
 
 	public HttpFront(HttpServer server, KyoroSocket socket) throws IOException {
-		if(Log.ON){Log.v(TAG, "HttpFront#new()");}
 		sId = "[httpfront:"+socket.getHost()+ ":"+ socket.getPort()+"]";
 		socket.setDebug(sId);
 
@@ -42,37 +44,24 @@ public class HttpFront {
 		mCurrentReader = new MarkableFileReader(mKFKSocket,1024);
 	}
 
-	LinkedList<EventTask> mMyTask = new LinkedList<EventTask>();
 	public void addMyTask(EventTask task) {
 		mMyTask.add(task);
 	}
 
 
 	public boolean isOkToParseHeader() throws IOException {
-		//
-		//rewrite
-		//
-		KyoroSocketEventRunner runner = KyoroSocketEventRunner.getYourWorker(); 
-		KyoroSelector seletor = runner.getSelector();
-		if(seletor == null) {
-			if(Log.ON){Log.v("########","selector == null");}
-			mKFKSocket.setSelector(seletor);
-		}
 		boolean prev = mCurrentReader.setBlockOn(false);
 		try {
 			if(mHeaderChunk == null) {
-				if(Log.ON){Log.v(TAG, "HttpFront#isOkToParseHeader()");}
 				mHeaderChunk = new LookaheadHttpHeader(mCurrentReader, Integer.MAX_VALUE);
 			}
 			boolean ret =LookaheadHttpHeader.readByEndOfHeader(mHeaderChunk, mCurrentReader);
 			if(ret == true) {
-				if(Log.ON){Log.v(TAG, "HttpFront#/isOkToParseHeader()");};
 				long fp = mCurrentReader.getFilePointer();
 				long st = mHeaderChunk.getStart();
 				mCurrentReader.seek(st);
 				mHeaderChunk = null;
 			}
-
 			return ret;
 		} finally {
 			mCurrentReader.setBlockOn(prev);
@@ -84,7 +73,7 @@ public class HttpFront {
 		HttpHistory.get().pushMessage(this.sId+":parse request:"+mUri.toString()+"\n");
 	}
 
-	private MessageSendTask mtask = null;
+
 	public void doResponse() throws IOException {
 		if(Log.ON){Log.v(TAG, "HttpFront#doRespose");}
 		HttpFront info = this;
