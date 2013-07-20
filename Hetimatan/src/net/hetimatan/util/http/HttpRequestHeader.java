@@ -20,26 +20,6 @@ public class HttpRequestHeader extends HttpObject {
 	public static final String HEADER_LOCATION = "Location";
 	public static final String HEADER_HOST = "Host";
 
-	public static final byte[] sAvailableKey = {
-		'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-		'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
-		'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
-		'u', 'v', 'w', 'x', 'y', 'z',
-		'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
-		'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
-		'U', 'V', 'W', 'X', 'Y', 'Z',
-		'.', '-', '/', '_', ' '
-	};
-	public static final byte[] sAvailableValue = {
-		'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-		'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
-		'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
-		'u', 'v', 'w', 'x', 'y', 'z',
-		'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
-		'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
-		'U', 'V', 'W', 'X', 'Y', 'Z',
-		'.', '-', '/', '_', ':', ' ', ';', ',', '#', '(', ')'
-	};
 	public HttpRequestHeader(String key, String value) {
 		mKey = key;
 		mValue = value;
@@ -79,7 +59,7 @@ public class HttpRequestHeader extends HttpObject {
 
 	private static String _key(MarkableReader reader) throws IOException {
 		try {
-			return new String(MarkableReaderHelper.jumpAndGet(reader, sAvailableKey, 256));
+			return new String(MarkableReaderHelper.asciiAndGet(reader,":".getBytes(), Integer.MAX_VALUE));
 		} catch(IOException e) {
 			throw e;
 		}
@@ -87,7 +67,7 @@ public class HttpRequestHeader extends HttpObject {
 
 	private static String _val(MarkableReader reader) throws IOException {
 		try {
-			return new String(MarkableReaderHelper.jumpAndGet(reader, sAvailableValue, 256));
+			return new String(MarkableReaderHelper.asciiAndGet(reader, "".getBytes(), Integer.MAX_VALUE));
 		} catch(IOException e) {
 			throw e;
 		}

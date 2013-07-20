@@ -7,6 +7,41 @@ import net.hetimatan.util.io.ByteArrayBuilder;
 
 public class MarkableReaderHelper {
 
+	
+	public static byte[] asciiAndGet(MarkableReader reader, byte[] forbit, int limit) throws IOException {
+		long start = reader.getFilePointer();
+		ascii(reader, forbit, limit);
+		long end = reader.getFilePointer();
+		if(start == end) {
+			return new byte[0];
+		} else {
+			byte[] ret = new byte[(int)(end-start)];
+			reader.seek(start);
+			reader.read(ret, 0, ret.length);
+			return ret;
+		}
+	}
+
+	public static void ascii(MarkableReader reader, byte[]forbit, int limit) throws IOException {
+		int tmp = 0;
+		int v= 0;
+		do {
+			v = reader.peek();
+			if(v < 0) {
+				return;
+			}
+			if(!(0x20<=v&&v<=0x7e)) {
+				return;
+			}
+			for(byte b:forbit) {
+				if(b==v) {
+					return;
+				}
+			}
+			reader.read();
+			tmp++;
+		} while(tmp<limit);
+	}
 
 	public static byte[] jumpAndGet(MarkableReader reader, byte[] availabe, int limit) throws IOException {
 		long start = reader.getFilePointer();

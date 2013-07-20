@@ -67,8 +67,7 @@ public class HttpRequest extends HttpObject {
 		output.write(CRLF.getBytes());
 	}
 
-	public static HttpRequest decode(MarkableReader reader)
-			throws IOException {
+	public static HttpRequest decode(MarkableReader reader) throws IOException {
 		HttpRequestLine line = HttpRequestLine.decode(reader);
 		HttpRequest ret = new HttpRequest(line);
 		try {
