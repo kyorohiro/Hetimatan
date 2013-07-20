@@ -67,6 +67,15 @@ public class HttpRequest extends HttpObject {
 		output.write(CRLF.getBytes());
 	}
 
+	@Override
+	public String toString() {
+		try {
+			return HttpObject.createEncode(this);
+		} catch (IOException e) {
+			return "httprequest: failed";
+		}
+	}
+
 	public static HttpRequest decode(MarkableReader reader) throws IOException {
 		HttpRequestLine line = HttpRequestLine.decode(reader);
 		HttpRequest ret = new HttpRequest(line);

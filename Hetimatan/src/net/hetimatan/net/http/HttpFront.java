@@ -80,11 +80,8 @@ public class HttpFront {
 	}
 
 	public void parseHeader() throws IOException {
-		if(Log.ON){Log.v(TAG, "HttpFront#parseHeader()");}
-//		mCurrentReader.setBlockOn(true);
 		this.mUri = HttpRequest.decode(mCurrentReader);
-		if(Log.ON){Log.v(TAG, HttpObject.createEncode(mUri));};		
-		if(Log.ON){Log.v(TAG, "HttpFront#/parseHeader()");};
+		HttpHistory.get().pushMessage(this.sId+":parse request:"+mUri.toString()+"\n");
 	}
 
 	private MessageSendTask mtask = null;
