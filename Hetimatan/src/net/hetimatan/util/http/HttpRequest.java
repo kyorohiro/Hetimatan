@@ -85,15 +85,11 @@ public class HttpRequest extends HttpObject {
 	}
 
 	public static boolean isCrlf(MarkableReader reader) {
+		reader.pushMark();
 		try {
-			reader.pushMark();
-			int cr = reader.read();
-			int lf = reader.read();
-			if (cr == '\r' && lf == '\n') {
-				return true;
-			}
+			_crlf(reader);
+			return true;
 		} catch (IOException e) {
-
 		} finally {
 			reader.backToMark();
 			reader.popMark();
