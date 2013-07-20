@@ -1,5 +1,6 @@
 package net.hetimatan.net.http;
 
+import sun.net.www.content.audio.x_aiff;
 import junit.framework.TestCase;
 
 //todo chk
@@ -20,5 +21,8 @@ public class TestForHttpGet extends TestCase {
 		httpget.startTask(null, null);
 		
 		while(true){if(rc.getResponseNumber() >= 1){break;} Thread.sleep(0);}
+		
+		_3xx.close();
+		rc.close();
 	}
 }

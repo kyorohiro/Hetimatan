@@ -54,6 +54,10 @@ public class HttpServer {
 		mServerSocket.bind(mPort);
 		mServerSocket.regist(mSelector, KyoroSelector.ACCEPT);
 		sId = "[httpserver"+mPort+"]";
+		startAcceptTask();
+	}
+	private void startAcceptTask() {
+		HttpHistory.get().pushMessage(sId+"#startAccept:"+"\n");
 		mAcceptTask = new HttpServerAcceptTask(this, mRequestRunner);
 		mServerSocket.setEventTaskAtWrakReference(mAcceptTask, KyoroSelector.ACCEPT);
 	}
@@ -96,6 +100,7 @@ public class HttpServer {
 
 
 	public KyoroFile createResponse(HttpFront front, KyoroSocket socket, HttpRequest uri) throws IOException {
+		HttpHistory.get().pushMessage(sId+"#createResponse:"+front.sId+"\n");
 		KyoroFile responce = createContent(socket, uri);
 		ByteArrayBuilder builder = createHeader(socket, uri, responce);
 		KyoroFile[] files = new KyoroFile[2];
@@ -120,7 +125,6 @@ public class HttpServer {
 	}
 
 	public void close() {
-		if(Log.ON){Log.v(TAG, "close()");}
 		HttpHistory.get().pushMessage(sId+"#close:"+"\n");
 
 		try {

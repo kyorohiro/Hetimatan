@@ -94,7 +94,7 @@ public class HttpFront {
 		HttpServer server = mServer.get();
 		if(info == null || server == null) {
 			return;
-		} 
+		}
 		KyoroFile kfiles = server.createResponse(this, info.mSocket, info.mUri);
 		kfiles.seek(0);
 		MessageSendTask task = new MessageSendTask(server.getEventRunner(),info.mSocket, kfiles);
