@@ -1,10 +1,12 @@
 package net.hetimatan.net.http;
 
+import java.io.IOException;
+
 import junit.framework.TestCase;
 
 //todo chk
 public class TestForHttpGet extends TestCase {
-	public void testRedirect() throws InterruptedException {
+	public void testRedirect() throws InterruptedException, IOException {
 		HttpServer3xx _3xx = new HttpServer3xx();
 		_3xx.setPort(8080);
 		_3xx.startServer(null);

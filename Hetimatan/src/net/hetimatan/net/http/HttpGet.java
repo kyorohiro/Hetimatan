@@ -3,6 +3,7 @@ package net.hetimatan.net.http;
 
 import java.io.IOException;
 
+import net.hetimatan.io.file.KyoroFile;
 import net.hetimatan.io.file.MarkableFileReader;
 import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.io.net.KyoroSelector;
@@ -31,8 +32,21 @@ public class HttpGet {
 	private String mHost = "127.0.0.1";
 	private String mPath = "/";
 	private int mPort = 80;
+	private EventTaskRunner mRunner = null;
+	private CashKyoroFile mSendCash = null;
+	public HttpGet() throws IOException {
+		mSendCash = new CashKyoroFile(1024, 3);
+	}
 
-	public HttpGet() {}
+	public EventTaskRunner getRunner() {
+		return mRunner;
+	}
+	public KyoroFile getSendCash() {
+		return mSendCash;
+	}
+	public KyoroSocket getSocket() {
+		return mCurrentSocket;
+	}
 
 	public void update(String host, String path, int port) {
 		mHost = host;
@@ -65,7 +79,7 @@ public class HttpGet {
 
 		initForRestart();
 		if(runner == null) {
-			runner = new EventTaskRunnerImple();
+			mRunner = runner = new EventTaskRunnerImple();
 		}
 		HttpGetConnectionTask connectionTask = new HttpGetConnectionTask(this, runner, last);
 		connectionTask.nextAction(new HttpGetRequestTask(this, runner, last));

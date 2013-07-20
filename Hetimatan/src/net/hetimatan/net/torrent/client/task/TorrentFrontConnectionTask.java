@@ -34,7 +34,6 @@ public class TorrentFrontConnectionTask extends EventTask {
 	@Override
 	public void action() throws Throwable {
 		TorrentFront front = mTorrentFront.get();
-		System.out.println("--------connection-"+front.getDebug());
 		if(!mIsCon) {
 			front.connect(mHost, mPort);
 			mIsCon = true;
