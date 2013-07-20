@@ -23,6 +23,8 @@ public class HttpFront {
 	public static final String TAG = "HttpFront";
 
 	public String sId = ""; 
+	public long sTimeout = 10*1024;
+
 	private WeakReference<HttpServer> mServer = null;
 	private KyoroSocket mSocket = null;
 	private HttpRequest mUri = null;
@@ -48,8 +50,6 @@ public class HttpFront {
 		mMyTask.add(task);
 	}
 
-
-	public long sTimeout = 10*1024;
 	public boolean isOkToParseHeader() throws IOException {
 		boolean prev = mCurrentReader.setBlockOn(false);
 		try {
