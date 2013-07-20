@@ -126,6 +126,7 @@ public class HttpGet {
 
 	public void recvHeader() throws IOException, InterruptedException {
 		if(Log.ON){Log.v(TAG, "HttpGet#revcHeader()");}
+		HttpHistory.get().pushMessage(sId+"#recvHeader:"+"\n");
 		mResponse.readHeader();
 	}
 
@@ -134,7 +135,7 @@ public class HttpGet {
 	}
 
 	public void recvBody() throws IOException, InterruptedException {
-		if(Log.ON){Log.v(TAG, "HttpGet#recvBody()");}
+		HttpHistory.get().pushMessage(sId+"#recvBody:"+"\n");
 		mResponse.readBody();
 
 		try {
@@ -148,8 +149,9 @@ public class HttpGet {
 			System.out.println("@3:"+mResponse.getVFOffset()+","+buffer.length);
 
 		} finally {
-			mCurrentSocket.close();
-			mCurrentSocket = null;
+			close();
+//			mCurrentSocket.close();
+//			mCurrentSocket = null;
 		}
 	}
 
@@ -186,7 +188,7 @@ public class HttpGet {
 	}
 
 	public void close() throws IOException {
-		Log.v(TAG, "close");
+		HttpHistory.get().pushMessage(sId+"#close:"+"\n");
 		mCurrentSocket.close();
 		mCurrentSocket = null;		
 	}
