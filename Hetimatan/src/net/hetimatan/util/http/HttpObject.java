@@ -54,52 +54,6 @@ public abstract class HttpObject {
 	}
 
 
-	protected static String _value(MarkableReader reader, byte[] fin1, byte fin2[], boolean EOFisFin) throws IOException {
-		try {
-			reader.pushMark();
-			int datam = 0;
-			ByteArrayBuilder builder = new ByteArrayBuilder();
-			do {
-				datam = reader.peek();
-				if(datam < 0) {
-					if(EOFisFin) {
-						break;
-					} else {
-						reader.backToMark();
-						throw new IOException("##"+datam+"("+((char)datam)+")##"+reader.getFilePointer()+"#");
-					}
-				} else if(datam == fin1[0]) {
-					boolean pass = true;
-					try {
-						reader.pushMark();
-						if(fin1.length > 1) {
-							for(int i=0;i<fin1.length;i++) {
-								if(fin1[i] != (byte)(0xFF&reader.read())){
-									pass = false;
-									break;
-								}
-							}
-						}
-					} finally {
-						reader.backToMark();
-						reader.popMark();
-					}
-					if(pass) {
-						break;
-					}
-				} else if(fin2 != null&&datam == fin2[0]) {
-						break;
-				}
-				
-				builder.append((byte)(0xFF&datam));
-				reader.read();
-			} while(true);
-			return new String(builder.getBuffer(), 0, builder.length());
-		} finally {
-			reader.popMark();
-		}
-	}
-
 	public static void _crlf(MarkableReader reader) throws IOException {
 		try {
 			MarkableReaderHelper.match(reader, "\r\n".getBytes());
