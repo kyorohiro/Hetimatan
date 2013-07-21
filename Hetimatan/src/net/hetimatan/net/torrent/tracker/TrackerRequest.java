@@ -1,12 +1,16 @@
 package net.hetimatan.net.torrent.tracker;
 
 
+import java.io.IOException;
+
+import net.hetimatan.net.http.request.HttpGetRequestUriBuilder;
 import net.hetimatan.net.http.request.HttpGetRequester;
 import net.hetimatan.net.http.request.HttpGetRequester;
 import net.hetimatan.net.torrent.client.TorrentPeer;
 import net.hetimatan.util.http.HttpObject;
 import net.hetimatan.util.http.HttpRequestLine;
 import net.hetimatan.util.http.HttpRequest;
+import net.hetimatan.util.http.HttpRequestUri;
 
 
 public class TrackerRequest {
@@ -64,7 +68,23 @@ public class TrackerRequest {
 		return request;
 	}
 
-	public HttpGetRequester encodeToGetRequester() {
+	public HttpRequestUri createUri() throws IOException {
+		HttpGetRequestUriBuilder builder = new HttpGetRequestUriBuilder();
+		builder
+		.setHost(mTrackerHost)
+		.setPort(mTrackerPort)
+		.putValue(KEY_INFO_HASH, mInfoHash)
+		.putValue(KEY_PEER_ID, mPeerId)
+		.putValue(KEY_PORT, "" + mClientPort)
+		.putValue(KEY_UPLOADED, "" + mUploaded)
+		.putValue(KEY_DOWNLOADED, "" + mDownloaded)
+		.putValue(KEY_LEFT, "" + mLeft)
+		.putValue(KEY_COMPACT, "" + mCompact)
+		.putValue(KEY_EVENT, mEvent);
+		return builder.createHttpRequestUri();
+	}
+
+	public HttpGetRequester createHttpGetRequester() {
 		HttpGetRequester ret = (new HttpGetRequester());
 		ret.getUrlBuilder()
 		.setHost(mTrackerHost)

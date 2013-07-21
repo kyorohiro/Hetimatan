@@ -111,7 +111,7 @@ public class TrackerClient extends HttpGet {
 
 	@Override
 	public HttpGetRequester createGetRequest() {
-		return mRequest.encodeToGetRequester();
+		return mRequest.createHttpGetRequester();
 	}
 
 	@Override

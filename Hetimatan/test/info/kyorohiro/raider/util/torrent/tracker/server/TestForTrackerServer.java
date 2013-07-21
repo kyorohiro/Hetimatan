@@ -38,7 +38,7 @@ public class TestForTrackerServer extends TestCase {
 
 			// set server address
 			requester = builder
-			.encodeToGetRequester();
+			.createHttpGetRequester();
 			requester.getUrlBuilder()
 			.setHost("127.0.0.1")
 			.setPort(TrackerServer.DEFAULT_TRACKER_PORT);
@@ -74,7 +74,7 @@ public class TestForTrackerServer extends TestCase {
 
 			// set server address
 			requester = builder
-			.encodeToGetRequester();
+			.createHttpGetRequester();
 			requester.getUrlBuilder()
 
 			.setHost("127.0.0.1")
@@ -121,7 +121,7 @@ public class TestForTrackerServer extends TestCase {
 
 			// set server address
 			requester = builder
-			.encodeToGetRequester();
+			.createHttpGetRequester();
 			requester.getUrlBuilder()
 			.setHost("127.0.0.1")
 			.setPort(TrackerServer.DEFAULT_TRACKER_PORT);
@@ -183,7 +183,7 @@ public class TestForTrackerServer extends TestCase {
 			// set server address
 
 			requester = builder
-			.encodeToGetRequester();
+			.createHttpGetRequester();
 			requester.getUrlBuilder()
 			.setHost("127.0.0.1")
 			.setPort(TrackerServer.DEFAULT_TRACKER_PORT);

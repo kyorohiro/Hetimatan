@@ -77,4 +77,11 @@ public class HttpGetRequestUriBuilder {
 		uri.setPort(mPort);
 		return request;
 	}
+
+	public synchronized HttpRequestUri createHttpRequestUri() throws IOException {
+		HttpRequestUri uri = HttpRequestUri.crateHttpGetRequestUri(mPath);
+		uri.setHost(mHost);
+		uri.setPort(mPort);
+		return uri;
+	}
 }

@@ -76,23 +76,10 @@ public class HttpRequestUri extends HttpObject {
 	//
 	@Override
 	public void encode(OutputStream output) throws IOException {
-		output.write(mPath.getBytes());
-		Set<String> keys = mValues.keySet();
-		boolean isFirst = true;
-		for (String key : keys) {
-			if (true == isFirst) {
-				isFirst = false;
-				output.write("?".getBytes());
-			} else {
-				output.write("&".getBytes());
-			}
-			output.write(key.getBytes());
-			output.write("=".getBytes());
-			output.write(mValues.get(key).getBytes());
-		}
+		encodeAbsPath(output);
 	}
 
-	public void encodePath(OutputStream output) throws IOException {
+	public void encodeAbsPath(OutputStream output) throws IOException {
 		output.write(mPath.getBytes());
 		Set<String> keys = mValues.keySet();
 		boolean isFirst = true;
@@ -137,7 +124,7 @@ public class HttpRequestUri extends HttpObject {
 		CashKyoroFile vFile = null;
 		try {
 			vFile = new CashKyoroFile(512, 2);
-			encodePath(vFile.getLastOutput());
+			encodeAbsPath(vFile.getLastOutput());
 			byte[] buffer = new byte[(int)vFile.length()];
 			int len = vFile.read(buffer);
 			return new String(buffer, 0, len);
