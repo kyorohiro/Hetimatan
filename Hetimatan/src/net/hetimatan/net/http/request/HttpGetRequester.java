@@ -13,8 +13,15 @@ import net.hetimatan.util.http.HttpRequestLine;
 import net.hetimatan.util.http.HttpRequest;
 
 
-public class HttpGetRequester implements GetRequesterInter {
-	
+public class HttpGetRequester  {
+	public static final String REQUEST_METHOD_GET = "GET";
+	public static final String SCHEME_HTTP = "http";
+	public static final String HTTP10 = "HTTP/1.0";
+	public static final String HTTP11 = "HTTP/1.1";
+	public static final String HEADER_HOST = "Host";
+	public static final String USER_AGENT = "User-Agent";
+	public static final String CONTENT_LENGTH = "Content-Length";
+
 	private LinkedHashMap<String, String> mHeader = new LinkedHashMap<String, String>();
 	private LinkedHashMap<String, String> mValues = new LinkedHashMap<String, String>();
 	private String mPath = "";
@@ -48,14 +55,14 @@ public class HttpGetRequester implements GetRequesterInter {
 	}
 
 
-	@Override
-	public GetResponseInter doRequest(KyoroSelector selector) throws IOException, InterruptedException {
+	
+	public HttpGetResponse doRequest(KyoroSelector selector) throws IOException, InterruptedException {
 		KyoroSocket socket = null;
 		mSelector = selector;
 		try {
 			socket = _connectionRequest();
 			_writeRequest(socket);
-			GetResponseInter res = _getResponse(socket);
+			HttpGetResponse res = _getResponse(socket);
 			res.read();
 			return res;
 		} finally {
@@ -65,7 +72,7 @@ public class HttpGetRequester implements GetRequesterInter {
 		}
 	}
 
-	public GetResponseInter doRequest() throws IOException, InterruptedException {
+	public HttpGetResponse doRequest() throws IOException, InterruptedException {
 		return doRequest(new KyoroSelector());
 	}
 
@@ -89,8 +96,8 @@ public class HttpGetRequester implements GetRequesterInter {
 		socket.write(buffer, 0, buffer.length);
 	}
 
-	public GetResponseInter _getResponse(KyoroSocket socket) throws IOException, InterruptedException {
-		GetResponseInter response = new HttpGetResponse(socket, mSelector);
+	public HttpGetResponse _getResponse(KyoroSocket socket) throws IOException, InterruptedException {
+		HttpGetResponse response = new HttpGetResponse(socket, mSelector);
 		return response;
 	}	
 
@@ -104,20 +111,24 @@ public class HttpGetRequester implements GetRequesterInter {
 		return this;
 	}
 
-	public synchronized byte[] createRequest() throws IOException {
+	public synchronized HttpRequest createHttpRequest() throws IOException {
 		HttpRequest uri = HttpRequest
-		.newInstance(REQUEST_METHOD_GET, mPath, HttpRequestLine.HTTP10)
-		;//.addHeader(HEADER_HOST, InetAddress.getLocalHost().getHostName());
+		.newInstance(REQUEST_METHOD_GET, mPath, HttpRequestLine.HTTP10);
 		for (String key : mHeader.keySet()) {
 			uri.addHeader(key, mHeader.get(key));
 		}
 		for (String key : mValues.keySet()) {
 			uri.putValue(key, mValues.get(key));
 		}
+		return uri;
+	}
+
+	public synchronized byte[] createRequest() throws IOException {
+		HttpRequest uri = createHttpRequest();
 		return HttpObject.createEncode(uri).getBytes();
 	}
 
-	@Override
+	
 	public void setSelector(KyoroSelector selector) throws IOException {
 		mSelector = selector;
 	}

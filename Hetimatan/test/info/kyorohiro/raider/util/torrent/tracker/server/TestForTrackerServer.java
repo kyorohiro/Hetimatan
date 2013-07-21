@@ -6,8 +6,8 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 import net.hetimatan.io.filen.CashKyoroFile;
-import net.hetimatan.net.http.request.GetRequesterInter;
-import net.hetimatan.net.http.request.GetResponseInter;
+import net.hetimatan.net.http.request.HttpGetRequester;
+import net.hetimatan.net.http.request.HttpGetResponse;
 import net.hetimatan.net.torrent.tracker.TrackerRequest;
 import net.hetimatan.net.torrent.tracker.TrackerServer;
 import net.hetimatan.util.http.HttpObject;
@@ -26,7 +26,7 @@ public class TestForTrackerServer extends TestCase {
 
 	public void testGet001() throws InterruptedException, IOException {
 		TrackerServer server = null;
-		GetRequesterInter requester = null;
+		HttpGetRequester requester = null;
 		try {
 			server = new TrackerServer();
 			server.setPort(TrackerServer.DEFAULT_TRACKER_PORT);
@@ -44,7 +44,7 @@ public class TestForTrackerServer extends TestCase {
 
 			System.out.println("###doRequest");
 			// done
-			GetResponseInter response = requester.doRequest();
+			HttpGetResponse response = requester.doRequest();
 
 			
 		} finally {
@@ -54,7 +54,7 @@ public class TestForTrackerServer extends TestCase {
 
 	public void testGet002_unmanaged_InfoHash() throws InterruptedException, IOException {
 		TrackerServer server = null;
-		GetRequesterInter requester = null;
+		HttpGetRequester requester = null;
 		
 		byte[] serverHash = "abc".getBytes();
 		byte[] clientHash = "def".getBytes();
@@ -78,7 +78,7 @@ public class TestForTrackerServer extends TestCase {
 			.setPort(TrackerServer.DEFAULT_TRACKER_PORT);
 
 			// done
-			GetResponseInter response = requester.doRequest();
+			HttpGetResponse response = requester.doRequest();
 			System.out.println("offset::"+response.getVFOffset());
 			CashKyoroFile vf = response.getVF();
 			byte[] buffer = null;
@@ -99,7 +99,7 @@ public class TestForTrackerServer extends TestCase {
 
 	public void testGet003_firstAccess() throws InterruptedException, IOException {
 		TrackerServer server = null;
-		GetRequesterInter requester = null;
+		HttpGetRequester requester = null;
 
 		byte[] serverHash = "abc".getBytes();
 		byte[] clientHash = "abc".getBytes();
@@ -123,7 +123,7 @@ public class TestForTrackerServer extends TestCase {
 			.setPort(TrackerServer.DEFAULT_TRACKER_PORT);
 
 			// done
-			GetResponseInter response = requester.doRequest();
+			HttpGetResponse response = requester.doRequest();
 			CashKyoroFile vf = response.getVF();
 			byte[] buffer = null;
 			try {
@@ -159,7 +159,7 @@ public class TestForTrackerServer extends TestCase {
 	public void testGet003_compactOff() throws InterruptedException, IOException {
 		testHello();
 		TrackerServer server = null;
-		GetRequesterInter requester = null;
+		HttpGetRequester requester = null;
 
 		byte[] serverHash = "abc".getBytes();
 		byte[] clientHash = "abc".getBytes();
@@ -183,7 +183,7 @@ public class TestForTrackerServer extends TestCase {
 			.setPort(TrackerServer.DEFAULT_TRACKER_PORT);
 
 			// done
-			GetResponseInter response = requester.doRequest();
+			HttpGetResponse response = requester.doRequest();
 			CashKyoroFile vf = response.getVF();
 			byte[] buffer = null;
 			try {

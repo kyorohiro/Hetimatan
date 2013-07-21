@@ -30,7 +30,7 @@ public class HttpGetRequestTask extends EventTask {
 	@Override
 	public void action() throws InterruptedException, IOException {
 		mOwner.get().send();
-		nextAction(new HttpGetReadHeaderTask(mOwner.get(), getRunner(), mLast));
+//		nextAction(new HttpGetReadHeaderTask(mOwner.get(), getRunner(), mLast));
 	}
 	
 }

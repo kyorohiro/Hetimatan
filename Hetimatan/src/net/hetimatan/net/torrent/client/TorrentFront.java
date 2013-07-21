@@ -11,7 +11,6 @@ import net.hetimatan.io.file.MarkableFileReader;
 import net.hetimatan.io.file.MarkableReader;
 import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.io.net.KyoroSocket;
-import net.hetimatan.io.net.KyoroSocketOutputStream;
 import net.hetimatan.net.torrent.client._front.TorrentFrontMyInfo;
 import net.hetimatan.net.torrent.client._front.TorrentFrontTargetInfo;
 import net.hetimatan.net.torrent.client._front.TorrentFrontTaskManager;

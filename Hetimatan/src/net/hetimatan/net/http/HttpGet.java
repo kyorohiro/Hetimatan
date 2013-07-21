@@ -3,19 +3,19 @@ package net.hetimatan.net.http;
 
 import java.io.IOException;
 
-import net.hetimatan.io.file.KyoroFile;
 import net.hetimatan.io.file.MarkableFileReader;
 import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.io.net.KyoroSelector;
 import net.hetimatan.io.net.KyoroSocket;
-import net.hetimatan.net.http.request.GetRequesterInter;
-import net.hetimatan.net.http.request.GetResponseInter;
 import net.hetimatan.net.http.request.HttpGetRequester;
+import net.hetimatan.net.http.request.HttpGetResponse;
 import net.hetimatan.net.http.task.client.HttpGetConnectionTask;
+import net.hetimatan.net.http.task.client.HttpGetReadHeaderTask;
 import net.hetimatan.net.http.task.client.HttpGetRequestTask;
 import net.hetimatan.util.event.EventTask;
 import net.hetimatan.util.event.EventTaskRunner;
 import net.hetimatan.util.event.EventTaskRunnerImple;
+import net.hetimatan.util.http.HttpRequest;
 import net.hetimatan.util.http.HttpRequestUri;
 import net.hetimatan.util.http.HttpRequestHeader;
 import net.hetimatan.util.http.HttpResponse;
@@ -26,14 +26,16 @@ public class HttpGet {
 
 	public static final String TAG = "HttpGet";
 	public String sId = "[httpget]";
-	private GetRequesterInter mCurrentRequest = null;
-	private GetResponseInter mResponse = null;
+	private HttpGetRequester mCurrentRequest = null;
+	private HttpGetResponse mResponse = null;
 	private KyoroSocket mCurrentSocket = null;
 	private String mHost = "127.0.0.1";
 	private String mPath = "/";
 	private int mPort = 80;
 	private EventTaskRunner mRunner = null;
 	private CashKyoroFile mSendCash = null;
+	private HttpGetTaskManager mTaskManager = new HttpGetTaskManager();
+
 	public HttpGet() throws IOException {
 		mSendCash = new CashKyoroFile(1024, 3);
 	}
@@ -41,7 +43,7 @@ public class HttpGet {
 	public EventTaskRunner getRunner() {
 		return mRunner;
 	}
-	public KyoroFile getSendCash() {
+	public CashKyoroFile getSendCash() {
 		return mSendCash;
 	}
 	public KyoroSocket getSocket() {
@@ -67,7 +69,7 @@ public class HttpGet {
 		}
 	}
 
-	protected GetRequesterInter createGetRequest() {
+	protected HttpGetRequester createGetRequest() {
 		if (mCurrentRequest == null) {
 			mCurrentRequest = new HttpGetRequester();
 		}
@@ -76,7 +78,7 @@ public class HttpGet {
 
 	public EventTaskRunner startTask(EventTaskRunner runner, EventTask last) {
 		HttpHistory.get().pushMessage(sId+"#startTask"+"\n");
-
+		mTaskManager.mLast = last;
 		initForRestart();
 		if(runner == null) {
 			mRunner = runner = new EventTaskRunnerImple();
@@ -97,8 +99,6 @@ public class HttpGet {
 		mCurrentRequest = createGetRequest();
 		mCurrentRequest.setHost(mHost).setPath(mPath).setPort(mPort);
 		mCurrentSocket = mCurrentRequest._connectionRequest();
-
-		//mCurrentRequest.putHeader(HttpHeader.HEADER_HOST, mHost);
 	}
 
 	public boolean isConnected() throws IOException {
@@ -127,27 +127,39 @@ public class HttpGet {
 			selector = new KyoroSelector();
 		}
 		mCurrentRequest.setSelector(selector);
-		mCurrentRequest._writeRequest(mCurrentSocket);
-		mResponse = mCurrentRequest._getResponse(mCurrentSocket);
+		HttpRequest request = ((HttpGetRequester)mCurrentRequest).createHttpRequest();
+		CashKyoroFile cash = getSendCash();
+		request.encode(cash.getLastOutput());
+		mTaskManager.startSendTask(this);
+		mTaskManager.nextTask(new HttpGetReadHeaderTask(this, getRunner(), mTaskManager.mLast));
 	}
 
 	public boolean headerIsReadeable() throws IOException, InterruptedException {
 		if(Log.ON){Log.v(TAG, "HttpGet#headerIsReadeable()");}
+		if(mResponse == null) {
+			mResponse = mCurrentRequest._getResponse(mCurrentSocket);
+		}
 		return mResponse.headerIsReadable();
 	}
 
 	public boolean bodyIsReadeable() throws IOException, InterruptedException {
 		if(Log.ON){Log.v(TAG, "HttpGet#bodyIsReadeable()");}
+		if(mResponse == null) {
+			mResponse = mCurrentRequest._getResponse(mCurrentSocket);
+		}
 		return mResponse.bodyIsReadable();
 	}
 
 	public void recvHeader() throws IOException, InterruptedException {
 		if(Log.ON){Log.v(TAG, "HttpGet#revcHeader()");}
+		if(mResponse == null) {
+			mResponse = mCurrentRequest._getResponse(mCurrentSocket);
+		}
 		HttpHistory.get().pushMessage(sId+"#recvHeader:"+"\n");
 		mResponse.readHeader();
 	}
 
-	protected GetResponseInter getGetResponse() {
+	protected HttpGetResponse getGetResponse() {
 		return mResponse;
 	}
 
@@ -167,13 +179,11 @@ public class HttpGet {
 
 		} finally {
 			close();
-//			mCurrentSocket.close();
-//			mCurrentSocket = null;
 		}
 	}
 
 	public boolean isRedirect() throws IOException {
-		GetResponseInter response = getGetResponse();
+		HttpGetResponse response = getGetResponse();
 		HttpResponse httpResponse = response.getHttpResponse();
 		String statusCode = httpResponse.getStatusCode();
 		for(String candidate :HttpResponse.REDIRECT_STATUSCODE) {
@@ -185,7 +195,7 @@ public class HttpGet {
 	}
 
 	public String getLocation() throws IOException {
-		GetResponseInter response = getGetResponse();
+		HttpGetResponse response = getGetResponse();
 		HttpResponse httpResponse = response.getHttpResponse();
 		String path = httpResponse.getHeader(HttpRequestHeader.HEADER_LOCATION);
 		path = path.replaceAll(" ", "");
@@ -200,7 +210,7 @@ public class HttpGet {
 	}
 
 	public HttpResponse getHttpResponse() throws IOException {
-		GetResponseInter response = getGetResponse();
+		HttpGetResponse response = getGetResponse();
 		return response.getHttpResponse();
 	}
 

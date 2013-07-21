@@ -1,7 +1,7 @@
 package net.hetimatan.net.torrent.tracker;
 
 
-import net.hetimatan.net.http.request.GetRequesterInter;
+import net.hetimatan.net.http.request.HttpGetRequester;
 import net.hetimatan.net.http.request.HttpGetRequester;
 import net.hetimatan.net.torrent.client.TorrentPeer;
 import net.hetimatan.util.http.HttpObject;
@@ -49,7 +49,7 @@ public class TrackerRequest {
 		TrackerRequest request = new TrackerRequest();
 		request.mPath = uri.getLine().getRequestURI().getPath();
 		request.mHttpVersion = uri.getLine().getHttpVersion();
-		request.putTrackerHost(uri.getHeaderValue(GetRequesterInter.HEADER_HOST));
+		request.putTrackerHost(uri.getHeaderValue(HttpGetRequester.HEADER_HOST));
 
 		request
 		.putInfoHash(HttpObject.parseString(uri.getValue(TrackerRequest.KEY_INFO_HASH), "dummy"))
@@ -60,11 +60,11 @@ public class TrackerRequest {
 		.putLeft(HttpObject.parseInt(uri.getValue(TrackerRequest.KEY_LEFT), 0))
 		.putCompact(HttpObject.parseInt(uri.getValue(TrackerRequest.KEY_COMPACT), 0))
 		.putEvent(HttpObject.parseString(uri.getValue(TrackerRequest.KEY_EVENT), "empty"))
-		.putHeaderUserAgent(uri.getHeaderValue(GetRequesterInter.USER_AGENT));
+		.putHeaderUserAgent(uri.getHeaderValue(HttpGetRequester.USER_AGENT));
 		return request;
 	}
 
-	public GetRequesterInter encodeToGetRequester() {
+	public HttpGetRequester encodeToGetRequester() {
 		return (new HttpGetRequester())
 		.setHost(mTrackerHost)
 		.setPath(mPath)
@@ -78,7 +78,7 @@ public class TrackerRequest {
 		.putValue(KEY_LEFT, "" + mLeft)
 		.putValue(KEY_COMPACT, "" + mCompact)
 		.putValue(KEY_EVENT, mEvent)
-		.putHeader(GetRequesterInter.USER_AGENT, mUserAgent);
+		.putHeader(HttpGetRequester.USER_AGENT, mUserAgent);
 	}
 
 

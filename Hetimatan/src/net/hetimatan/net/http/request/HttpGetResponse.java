@@ -13,7 +13,7 @@ import net.hetimatan.util.http.LookaheadHttpHeader;
 import net.hetimatan.util.http.HttpRequestHeader;
 import net.hetimatan.util.http.HttpResponse;
 
-public class HttpGetResponse implements GetResponseInter {
+public class HttpGetResponse {
 	private CashKyoroFile mVF = null;
 	private int mVfOffset = 0;
 	private KyoroSocket mSocket = null;
@@ -32,23 +32,23 @@ public class HttpGetResponse implements GetResponseInter {
 		mVfOffset = 0;
 	}
 
-	@Override
+	
 	public int getVFOffset() {
 		return mVfOffset;
 	}
 
-	@Override
+	
 	public CashKyoroFile getVF() {
 		return mVF;
 	}
 
-	@Override
+	
 	public void read() throws IOException, InterruptedException {
 		readHeader();
 		readBody();
 	}
 
-	@Override
+	
 	public void close() {
 		try {
 			mVF.close();
@@ -57,7 +57,7 @@ public class HttpGetResponse implements GetResponseInter {
 		}
 	}
 
-	@Override
+	
 	public boolean headerIsReadable() throws IOException {		
 		boolean prev = mReader.setBlockOn(false);
 		try {
@@ -70,7 +70,7 @@ public class HttpGetResponse implements GetResponseInter {
 		}
 	}
 
-	@Override
+	
 	public boolean bodyIsReadable() throws IOException {
 		boolean prev = mReader.setBlockOn(false);
 		try {
@@ -81,7 +81,7 @@ public class HttpGetResponse implements GetResponseInter {
 		}
 	}
 
-	@Override
+	
 	public void readHeader() throws IOException, InterruptedException {
 		try {
 			mReader.seek(0);
@@ -111,7 +111,7 @@ public class HttpGetResponse implements GetResponseInter {
 		}
 	}
 
-	@Override
+	
 	public void readBody() throws IOException, InterruptedException {
 		try {
 			int datam = 0;
@@ -132,7 +132,7 @@ public class HttpGetResponse implements GetResponseInter {
 		mVF = mBase.getVF();		
 	}
 
-	@Override
+	
 	public HttpResponse getHttpResponse() throws IOException {
 		return mResponse;
 	}

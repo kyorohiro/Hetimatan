@@ -9,8 +9,8 @@ import java.util.TreeSet;
 import net.hetimatan.io.file.MarkableFileReader;
 import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.net.http.HttpGet;
-import net.hetimatan.net.http.request.GetRequesterInter;
-import net.hetimatan.net.http.request.GetResponseInter;
+import net.hetimatan.net.http.request.HttpGetRequester;
+import net.hetimatan.net.http.request.HttpGetResponse;
 import net.hetimatan.net.torrent.util.metafile.MetaFile;
 
 
@@ -27,7 +27,7 @@ public class TrackerClient extends HttpGet {
 		mRequest
 		.putCompact(1)
 		.putPeerId(peerId)
-		.putHttpVersion(GetRequesterInter.HTTP11)
+		.putHttpVersion(HttpGetRequester.HTTP11)
 		.putHeaderUserAgent("Raider/1.0")
 		;
 		setMetaFile(metafile);
@@ -110,14 +110,14 @@ public class TrackerClient extends HttpGet {
 	}
 
 	@Override
-	public GetRequesterInter createGetRequest() {
+	public HttpGetRequester createGetRequest() {
 		return mRequest.encodeToGetRequester();
 	}
 
 	@Override
 	public void recvBody() throws IOException, InterruptedException {
 		System.out.println("TrackerClient#recvBody()");
-		GetResponseInter mResponse = getGetResponse();
+		HttpGetResponse mResponse = getGetResponse();
 		mResponse.readBody();
 
 		if(isRedirect()) {
