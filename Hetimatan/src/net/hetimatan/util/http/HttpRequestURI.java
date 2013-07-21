@@ -17,6 +17,9 @@ import net.hetimatan.util.io.ByteArrayBuilder;
 // Request-URI    = "*" | absoluteURI | abs_path
 public class HttpRequestUri extends HttpObject {
 	private String mPath = "";
+	private String mHost = "";
+	private int mPort = 80;
+
 	private LinkedHashMap<String, String> mValues = new LinkedHashMap<String, String>();
 
 	// todo throw IOEXception?
@@ -42,6 +45,14 @@ public class HttpRequestUri extends HttpObject {
 		} catch (IOException e) {
 			return "#Failed toString#";
 		}
+	}
+
+	public void setHost(String host) {
+		mHost = host;
+	}
+
+	public void setPort(int port) {
+		mPort = port;
 	}
 
 	public void putVale(String key, String value) {
@@ -114,8 +125,6 @@ public class HttpRequestUri extends HttpObject {
 		}
 	}
 
-	private String mHost = "";
-	private int mPort = 80;
 	
 	public String getHost() {
 		return mHost;

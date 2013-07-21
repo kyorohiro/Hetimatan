@@ -40,6 +40,10 @@ public class HttpRequestLine extends HttpObject {
 		mHTTPVersion = httpVersion;
 	}
 
+	public void setHttpVersion(String version) {
+		mHTTPVersion = version;
+	}
+
 	@Override
 	public String toString() {
 		String ret = ""+mMethod +" "+mRequestURI.toString()+ " "+mHTTPVersion;

@@ -1,0 +1,65 @@
+[httpserver6969]#startAccept:
+[httpserver6969]#startFront:[httpfront:127.0.0.1:57839]
+[httpfront:127.0.0.1:57839]:parse request:GET /announce?info_hash=def&peer_id=xxxx&port=6861&uploaded=0&downloaded=0&left=0&compact=1&event=started HTTP/1.0
+User-Agent: Raider/1.0
+
+
+[httpserver6969]#createResponse:[httpfront:127.0.0.1:57839]
+[httpfront:127.0.0.1:57839]#close:
+[httpserver6969]#close:
+[httpserver6969]#startAccept:
+[httpserver6969]#startFront:[httpfront:127.0.0.1:57845]
+[httpfront:127.0.0.1:57845]:parse request:GET /announce?info_hash=abc&peer_id=xxxx&port=6861&uploaded=0&downloaded=0&left=0&compact=1&event=started HTTP/1.0
+User-Agent: Raider/1.0
+
+
+[httpserver6969]#createResponse:[httpfront:127.0.0.1:57845]
+[httpfront:127.0.0.1:57845]#close:
+[httpserver6969]#close:
+[httpserver6969]#startAccept:
+[httpserver6969]#startFront:[httpfront:127.0.0.1:57853]
+[httpfront:127.0.0.1:57853]:parse request:GET /announce?info_hash=abc&peer_id=xxxx&port=6861&uploaded=0&downloaded=0&left=0&compact=0&event=started HTTP/1.0
+User-Agent: Raider/1.0
+
+
+[httpserver6969]#createResponse:[httpfront:127.0.0.1:57853]
+[httpfront:127.0.0.1:57853]#close:
+[httpserver6969]#close:
+[httpserver6969]#startAccept:
+[httpserver6969]#startFront:[httpfront:127.0.0.1:57862]
+[httpfront:127.0.0.1:57862]:parse request:GET /announce?info_hash=NNNNNNNNN&peer_id=xxxx&port=6861&uploaded=0&downloaded=0&left=0&compact=1&event=started HTTP/1.0
+User-Agent: Raider/1.0
+
+
+[httpserver6969]#createResponse:[httpfront:127.0.0.1:57862]
+[httpfront:127.0.0.1:57862]#close:
+[httpserver6969]#close:
+[httpget 127.0.0.1:6969/announce]#startTask
+[httpget 127.0.0.1:6969/announce]#disconnected
+[httpget 127.0.0.1:6969/announce]#startTask
+[httpget 127.0.0.1:6969/announce]#disconnected
+[httpserver8080]#startAccept:
+[httpget 127.0.0.1:8080/301?mv=http://127.0.0.1:8081]#startTask
+[httpserver8080]#startFront:[httpfront:127.0.0.1:57916]
+[httpget 127.0.0.1:8080/301?mv=http://127.0.0.1:8081]#connected
+[httpfront:127.0.0.1:57916]:parse request:GET /301?mv=http://127.0.0.1:8081 HTTP/1.0
+
+
+[httpserver8080]#createResponse:[httpfront:127.0.0.1:57916]
+[httpfront:127.0.0.1:57916]#close:
+[httpget 127.0.0.1:8080/301?mv=http://127.0.0.1:8081]#recvHeader:
+[httpget 127.0.0.1:8080/301?mv=http://127.0.0.1:8081]#recvBody:
+[httpget 127.0.0.1:8080/301?mv=http://127.0.0.1:8081]#close:
+[httpget 127.0.0.1:8080/301?mv=http://127.0.0.1:8081]#redirect:http://127.0.0.1:8081
+[httpget 127.0.0.1:8081/]#startTask
+[httpget 127.0.0.1:8081/]#connected
+[httpserver8081]#startAccept:
+[httpserver8081]#startFront:[httpfront:127.0.0.1:57917]
+[httpfront:127.0.0.1:57917]:parse request:GET / HTTP/1.0
+
+
+[httpserver8081]#createResponse:[httpfront:127.0.0.1:57917]
+[httpserver8081]#createResponse:[httpfront:127.0.0.1:57917]
+[httpserver8080]#close:
+[httpfront:127.0.0.1:57917]#close:
+[httpserver8081]#close:

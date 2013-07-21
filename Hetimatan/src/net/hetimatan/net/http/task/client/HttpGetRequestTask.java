@@ -13,6 +13,7 @@ public class HttpGetRequestTask extends EventTask {
 	public static final String TAG = "HttpGetRequestTask";
 	private WeakReference<HttpGet> mOwner = null;
 	private EventTask mLast = null;
+
 	public HttpGetRequestTask(HttpGet client, EventTaskRunner runner, EventTask last) {
 		super(runner);
 		mOwner = new WeakReference<HttpGet>(client);

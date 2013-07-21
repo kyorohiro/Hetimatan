@@ -65,7 +65,8 @@ public class TrackerRequest {
 	}
 
 	public HttpGetRequester encodeToGetRequester() {
-		return (new HttpGetRequester())
+		HttpGetRequester ret = (new HttpGetRequester());
+		ret.getUrlBuilder()
 		.setHost(mTrackerHost)
 		.setPath(mPath)
 		.setPort(mTrackerPort)
@@ -79,6 +80,7 @@ public class TrackerRequest {
 		.putValue(KEY_COMPACT, "" + mCompact)
 		.putValue(KEY_EVENT, mEvent)
 		.putHeader(HttpGetRequester.USER_AGENT, mUserAgent);
+		return ret;
 	}
 
 

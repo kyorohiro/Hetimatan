@@ -26,6 +26,7 @@ public class HttpGet {
 
 	public static final String TAG = "HttpGet";
 	public String sId = "[httpget]";
+
 	private HttpGetRequester mCurrentRequest = null;
 	private HttpGetResponse mResponse = null;
 	private KyoroSocket mCurrentSocket = null;
@@ -97,7 +98,8 @@ public class HttpGet {
 	public void connection() throws IOException, InterruptedException {
 		if(Log.ON){Log.v(TAG, "HttpGet#connection()");}
 		mCurrentRequest = createGetRequest();
-		mCurrentRequest.setHost(mHost).setPath(mPath).setPort(mPort);
+		mCurrentRequest.getUrlBuilder()
+		.setHost(mHost).setPath(mPath).setPort(mPort);
 		mCurrentSocket = mCurrentRequest._connectionRequest();
 	}
 
