@@ -13,6 +13,8 @@ public class HttpGetReadHeaderTask extends EventTask {
 	public static final String TAG = "HttpGetReadHeaderTask";
 	private WeakReference<HttpGet> mOwner = null;
 	private EventTask mLast = null;
+	private boolean mHeaderIsReadable = false;
+	private boolean mIsKeep = false;
 
 	public HttpGetReadHeaderTask(HttpGet client, EventTaskRunner runner, EventTask last) {
 		super(runner);
@@ -26,22 +28,25 @@ public class HttpGetReadHeaderTask extends EventTask {
 		return TAG;
 	}
 
-	private boolean mHeaderIsReadable = false;
+	@Override
+	public boolean isKeep() {
+		return mIsKeep;
+	}
+
 	@Override
 	public void action() throws IOException, InterruptedException {
 		if(!mHeaderIsReadable) {
 			mHeaderIsReadable = mOwner.get().headerIsReadeable();
 			if(Log.ON){Log.v("===", "mHeaderIsReadable="+mHeaderIsReadable);}
 			if(!mHeaderIsReadable) {
-				nextAction(this);
-				//nextAction(null);
+				mIsKeep = true;
 				return;
 			}
 		}
 		HttpGet httpget = mOwner.get();
 		if(httpget == null) {return;}
 		httpget.recvHeader();
-		nextAction(new HttpGetReadBodyTask(mOwner.get(), getRunner(), mLast));
+		mIsKeep = false;
 	}
 	
 }

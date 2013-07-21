@@ -10,6 +10,7 @@ import net.hetimatan.io.net.KyoroSocket;
 import net.hetimatan.net.http.request.HttpGetRequester;
 import net.hetimatan.net.http.request.HttpGetResponse;
 import net.hetimatan.net.http.task.client.HttpGetConnectionTask;
+import net.hetimatan.net.http.task.client.HttpGetReadBodyTask;
 import net.hetimatan.net.http.task.client.HttpGetReadHeaderTask;
 import net.hetimatan.net.http.task.client.HttpGetRequestTask;
 import net.hetimatan.util.event.EventTask;
@@ -133,7 +134,9 @@ public class HttpGet {
 		CashKyoroFile cash = getSendCash();
 		request.encode(cash.getLastOutput());
 		mTaskManager.startSendTask(this);
-		mTaskManager.nextTask(new HttpGetReadHeaderTask(this, getRunner(), mTaskManager.mLast));
+		HttpGetReadHeaderTask readHeaderTask = new HttpGetReadHeaderTask(this, getRunner(), mTaskManager.mLast);
+		readHeaderTask.nextAction(new HttpGetReadBodyTask(this, getRunner(), mTaskManager.mLast));
+		mTaskManager.nextTask(readHeaderTask);
 	}
 
 	public boolean headerIsReadeable() throws IOException, InterruptedException {
