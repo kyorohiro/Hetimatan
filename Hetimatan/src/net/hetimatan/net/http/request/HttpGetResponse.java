@@ -35,9 +35,12 @@ public class HttpGetResponse {
 		return mVfOffset;
 	}
 
-	
 	public CashKyoroFile getVF() {
 		return mVF;
+	}
+
+	public HttpResponse getHttpResponse() throws IOException {
+		return mResponse;
 	}
 
 	public void close() {
@@ -111,10 +114,5 @@ public class HttpGetResponse {
 			mReader.close();
 		}
 		mVF = mBase.getVF();		
-	}
-
-	
-	public HttpResponse getHttpResponse() throws IOException {
-		return mResponse;
 	}
 }
