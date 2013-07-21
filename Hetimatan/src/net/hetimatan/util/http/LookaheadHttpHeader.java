@@ -24,6 +24,7 @@ public class LookaheadHttpHeader {
 	public long getStart() {
 		return mStart;
 	}
+
 	public long getElapsedTime() {
 		return System.currentTimeMillis()-mStartTime;
 	}
@@ -90,8 +91,7 @@ public class LookaheadHttpHeader {
 		} while (true);
 	}
 
-	public static boolean readByEndOfHeader(
-			LookaheadHttpHeader headerChunk, MarkableReader currentReader) throws IOException {
+	public static boolean readByEndOfHeader(LookaheadHttpHeader headerChunk, MarkableReader currentReader) throws IOException {
 		if (headerChunk == null) {return true;}
 		int ret = headerChunk.readByEndOfHeader(true);
 		if(ret == LookaheadHttpHeader.CRLF || ret == LookaheadHttpHeader.EOF) {

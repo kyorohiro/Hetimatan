@@ -38,13 +38,6 @@ public class HttpGetReadBodyTask extends EventTask {
 		} else {
 			nextAction(mLast);
 		}
-		//todo 
-//		if(mOwner.get().bodyIsReadeable()) {
-//			nextAction(new HttpGetRecvBodyTask(mOwner.get(), getRunner(), mLast));
-//		} else {
-//			Thread.yield();
-//			nextAction(this);
-//		}
 	}
 	
 }

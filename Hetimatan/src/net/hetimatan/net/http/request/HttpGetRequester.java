@@ -36,7 +36,8 @@ public class HttpGetRequester  {
 			socket = _connectionRequest();
 			_writeRequest(socket);
 			HttpGetResponse res = _getResponse(socket);
-			res.read();
+			res.readHeader();
+			res.readBody();
 			return res;
 		} finally {
 			if (socket != null) {

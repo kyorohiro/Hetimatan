@@ -1,14 +1,12 @@
 package net.hetimatan.net.http.request;
 
-
-import java.io.FileNotFoundException;
 import java.io.IOException;
-
 import net.hetimatan.io.file.KyoroFileForKyoroSocket;
 import net.hetimatan.io.file.MarkableFileReader;
 import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.io.net.KyoroSelector;
 import net.hetimatan.io.net.KyoroSocket;
+import net.hetimatan.util.http.LookaheadHttpBody;
 import net.hetimatan.util.http.LookaheadHttpHeader;
 import net.hetimatan.util.http.HttpRequestHeader;
 import net.hetimatan.util.http.HttpResponse;
@@ -18,11 +16,12 @@ public class HttpGetResponse {
 	private int mVfOffset = 0;
 	private KyoroSocket mSocket = null;
 	private LookaheadHttpHeader mHeaderChunk = null;
-	private LookaheadHttpHeader mBodyChunk = null;
+	private LookaheadHttpBody mBodyChunk = null;
 	private KyoroFileForKyoroSocket mBase = null;
 	private MarkableFileReader mReader = new MarkableFileReader(mBase, 512);
 	private long mContentLength = Integer.MAX_VALUE;
 	private HttpResponse mResponse = null;
+	private long mBodyStart = 0;
 
 	public HttpGetResponse(KyoroSocket socket, KyoroSelector selector) throws IOException {
 		mSocket = socket;
@@ -31,7 +30,6 @@ public class HttpGetResponse {
 		mReader = new MarkableFileReader(mBase, 512*30);
 		mVfOffset = 0;
 	}
-
 	
 	public int getVFOffset() {
 		return mVfOffset;
@@ -42,43 +40,25 @@ public class HttpGetResponse {
 		return mVF;
 	}
 
-	
-	public void read() throws IOException, InterruptedException {
-		readHeader();
-		readBody();
-	}
-
-	
 	public void close() {
-		try {
-			mVF.close();
-		} catch (IOException e) {
-			e.printStackTrace();
+		try { mVF.close();
+		} catch (IOException e) { e.printStackTrace();
 		}
 	}
-
 	
 	public boolean headerIsReadable() throws IOException {		
-		boolean prev = mReader.setBlockOn(false);
-		try {
-			if(mHeaderChunk == null) {
-				mHeaderChunk = new LookaheadHttpHeader(mReader, Integer.MAX_VALUE);
-			}
-			return LookaheadHttpHeader.readByEndOfHeader(mHeaderChunk, mReader);
-		} finally {
-			mReader.setBlockOn(prev);
+		if(mHeaderChunk == null) {
+			mHeaderChunk = new LookaheadHttpHeader(mReader, Integer.MAX_VALUE);
 		}
+		return LookaheadHttpHeader.readByEndOfHeader(mHeaderChunk, mReader);
 	}
 
 	
 	public boolean bodyIsReadable() throws IOException {
-		boolean prev = mReader.setBlockOn(false);
-		try {
-			mBodyChunk = new LookaheadHttpHeader(mReader, (int)mContentLength);
-			return LookaheadHttpHeader.readByEndOfHeader(mBodyChunk, mReader);
-		} finally {
-			mReader.setBlockOn(prev);
+		if(mBodyChunk == null) {
+			mBodyChunk = new LookaheadHttpBody(mReader, mBodyStart, (int)mContentLength);
 		}
+		return mBodyChunk.lookahead();
 	}
 
 	
@@ -86,6 +66,7 @@ public class HttpGetResponse {
 		try {
 			mReader.seek(0);
 			mResponse = HttpResponse.decode(mReader, false);
+			mBodyStart = mReader.getFilePointer();
 			mVfOffset = (int)mReader.getFilePointer();
 			mContentLength = mResponse.getContentSizeFromHeader();
 			{

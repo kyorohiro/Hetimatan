@@ -147,14 +147,6 @@ public class HttpGet {
 		return mResponse.headerIsReadable();
 	}
 
-	public boolean bodyIsReadeable() throws IOException, InterruptedException {
-		if(Log.ON){Log.v(TAG, "HttpGet#bodyIsReadeable()");}
-		if(mResponse == null) {
-			mResponse = mCurrentRequest._getResponse(mCurrentSocket);
-		}
-		return mResponse.bodyIsReadable();
-	}
-
 	public void recvHeader() throws IOException, InterruptedException {
 		if(Log.ON){Log.v(TAG, "HttpGet#revcHeader()");}
 		if(mResponse == null) {
@@ -162,6 +154,14 @@ public class HttpGet {
 		}
 		HttpHistory.get().pushMessage(sId+"#recvHeader:"+"\n");
 		mResponse.readHeader();
+	}
+
+	public boolean bodyIsReadeable() throws IOException, InterruptedException {
+		if(Log.ON){Log.v(TAG, "HttpGet#bodyIsReadeable()");}
+		if(mResponse == null) {
+			mResponse = mCurrentRequest._getResponse(mCurrentSocket);
+		}
+		return mResponse.bodyIsReadable();
 	}
 
 	protected HttpGetResponse getGetResponse() {
