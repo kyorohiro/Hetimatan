@@ -33,6 +33,7 @@ public class TrackerRequest {
 	public final static String EVENT_STARTED   = "started";
 	public final static String EVENT_STOPPED   = "stopped";
 	public final static String EVENT_COMPLETED = "completed";
+	public final static String EVENT_NONE = "none";
 
 
 	private String mPath = "/announce";
@@ -46,7 +47,7 @@ public class TrackerRequest {
 	private long mUploaded = 0;
 	private long mLeft = 0;
 	private int mCompact = 1;
-	private String mEvent = TrackerRequest.EVENT_STARTED;
+	private String mEvent = TrackerRequest.EVENT_NONE;
 	private String mTrackerId = "dummy";
 	private String mTrackerHost = "127.0.0.1";
 	private String mUserAgent = "Raider001";
@@ -81,7 +82,6 @@ public class TrackerRequest {
 			HttpRequestUri uri = HttpRequestUri.decode(reader);
 			request
 			.putTrackerHost(uri.getHost())
-			.putTrackerHost(uri.getHost())
 			.putPath(uri.getPath())
 			.putTrackerPort(uri.getPort())
 			.putInfoHash(metainfo.getInfoSha1AsPercentString());
@@ -103,8 +103,10 @@ public class TrackerRequest {
 		.putValue(KEY_UPLOADED, "" + mUploaded)
 		.putValue(KEY_DOWNLOADED, "" + mDownloaded)
 		.putValue(KEY_LEFT, "" + mLeft)
-		.putValue(KEY_COMPACT, "" + mCompact)
-		.putValue(KEY_EVENT, mEvent);
+		.putValue(KEY_COMPACT, "" + mCompact);
+		if(!TrackerRequest.EVENT_NONE.equals(mEvent)) {
+			builder.putValue(KEY_EVENT, mEvent);
+		}
 		return builder.createHttpRequestUri();
 	}
 
