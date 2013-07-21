@@ -2,11 +2,16 @@ package net.hetimatan.net.torrent.tracker;
 
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
+import net.hetimatan.io.file.MarkableFileReader;
+import net.hetimatan.io.file.MarkableReader;
 import net.hetimatan.net.http.request.HttpGetRequestUriBuilder;
 import net.hetimatan.net.http.request.HttpGetRequester;
 import net.hetimatan.net.http.request.HttpGetRequester;
 import net.hetimatan.net.torrent.client.TorrentPeer;
+import net.hetimatan.net.torrent.util.metafile.MetaFile;
 import net.hetimatan.util.http.HttpObject;
 import net.hetimatan.util.http.HttpRequestLine;
 import net.hetimatan.util.http.HttpRequest;
@@ -68,10 +73,29 @@ public class TrackerRequest {
 		return request;
 	}
 
+	public static TrackerRequest decode(MetaFile metainfo) throws IOException {
+		TrackerRequest request =  new TrackerRequest();
+		String url = metainfo.getAnnounce();
+		MarkableReader reader = new MarkableFileReader(url.getBytes());
+		try {
+			HttpRequestUri uri = HttpRequestUri.decode(reader);
+			request
+			.putTrackerHost(uri.getHost())
+			.putTrackerHost(uri.getHost())
+			.putPath(uri.getPath())
+			.putTrackerPort(uri.getPort())
+			.putInfoHash(metainfo.getInfoSha1AsPercentString());
+			return request;
+		} finally {
+			reader.close();
+		}
+	}
+
 	public HttpRequestUri createUri() throws IOException {
 		HttpGetRequestUriBuilder builder = new HttpGetRequestUriBuilder();
 		builder
 		.setHost(mTrackerHost)
+		.setPath(mPath)
 		.setPort(mTrackerPort)
 		.putValue(KEY_INFO_HASH, mInfoHash)
 		.putValue(KEY_PEER_ID, mPeerId)

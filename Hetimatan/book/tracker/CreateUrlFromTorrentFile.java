@@ -18,7 +18,7 @@ public class CreateUrlFromTorrentFile {
 		try {
 			File single = new File("./testdata/1k.txt.torrent");
 			MetaFile metainfo = MetaFileCreater.createFromTorrentFile(single);
-			TrackerRequest request = new TrackerRequest();
+			TrackerRequest request = TrackerRequest.decode(metainfo);
 			HttpRequestUri uri = request.createUri();
 			System.out.println(""+ uri.toString());
 		} catch (IOException e) {

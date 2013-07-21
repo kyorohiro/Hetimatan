@@ -80,6 +80,9 @@ public class HttpGetRequestUriBuilder {
 
 	public synchronized HttpRequestUri createHttpRequestUri() throws IOException {
 		HttpRequestUri uri = HttpRequestUri.crateHttpGetRequestUri(mPath);
+		for (String key : mValues.keySet()) {
+			uri.putVale(key, mValues.get(key));
+		}
 		uri.setHost(mHost);
 		uri.setPort(mPort);
 		return uri;
