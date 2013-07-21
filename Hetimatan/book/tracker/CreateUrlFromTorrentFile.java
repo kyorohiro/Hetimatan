@@ -20,6 +20,7 @@ public class CreateUrlFromTorrentFile {
 			MetaFile metainfo = MetaFileCreater.createFromTorrentFile(single);
 			TrackerRequest request = TrackerRequest.decode(metainfo);
 			HttpRequestUri uri = request.createUri();
+			uri.IsAbsolutePath(true);
 			System.out.println(""+ uri.toString());
 		} catch (IOException e) {
 			e.printStackTrace();

@@ -71,11 +71,24 @@ public class HttpRequestUri extends HttpObject {
 		return mValues.get(key);
 	}
 
+	private boolean mAbsPath = true;
+	public void IsAbsolutePath(boolean on) {
+		mAbsPath = !on;
+	}
 	//
 	// /test/demo_form.asp?name1=value1&name2=value2
 	//
 	@Override
 	public void encode(OutputStream output) throws IOException {
+		if(mAbsPath) {
+			encodeAbsPath(output);
+		} else {
+			encodeAbsolutePath(output);
+		}
+	}
+
+	public void encodeAbsolutePath(OutputStream output) throws IOException {
+		output.write(("http://"+mHost+":"+mPort).getBytes());
 		encodeAbsPath(output);
 	}
 
