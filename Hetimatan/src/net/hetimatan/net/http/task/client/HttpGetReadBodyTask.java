@@ -14,6 +14,7 @@ public class HttpGetReadBodyTask extends EventTask {
 	private WeakReference<HttpGet> mOwner = null;
 	private EventTask mLast = null;
 	private boolean mHeaderIsReadable = false;
+	private boolean mIsKeep = false;
 
 	public HttpGetReadBodyTask(HttpGet client, EventTaskRunner runner, EventTask last) {
 		super(runner);
@@ -27,10 +28,22 @@ public class HttpGetReadBodyTask extends EventTask {
 		return TAG;
 	}
 
+	@Override
+	public boolean isKeep() {
+		return mIsKeep;
+	}
+
 	//
 	@Override
 	public void action() throws IOException, InterruptedException {
 		HttpGet httpGet = mOwner.get();
+		if(!httpGet.bodyIsReadeable()) {
+			mIsKeep = true;
+			return;
+		} else {
+			mIsKeep = false;
+		}
+
 		httpGet.recvBody();
 		if(httpGet.isRedirect()) {
 			httpGet.updateRedirect(httpGet.getLocation());
