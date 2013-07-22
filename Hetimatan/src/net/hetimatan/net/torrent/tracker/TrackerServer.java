@@ -83,25 +83,29 @@ public class TrackerServer extends HttpServer {
 			trackerData.setInterval(mInterval);
 
 			BenDiction diction = TrackerResponse.createResponce(trackerData, peerInfo, request.getCompact());
-			kickObserver();
+			kickObserver(1);
 			return new CashKyoroFile(BenObject.createEncode(diction));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return newMessageWrongRequest();
 		}
 	}
-
+	@Override
+	public void boot() throws IOException {
+		super.boot();
+		kickObserver(0);
+	}
 	public synchronized void setStatusCheck(StatusCheck observer) {
 		mObserver = observer;
 	}
 
-	public synchronized void kickObserver() {
+	public synchronized void kickObserver(int event) {
 		if(mObserver != null) {
-			mObserver.onUpdate(this);
+			mObserver.onUpdate(this, event);
 		}
 	}
 
 	public interface StatusCheck {
-		void onUpdate(TrackerServer server);
+		void onUpdate(TrackerServer server, int event);
 	}
 }

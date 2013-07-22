@@ -183,7 +183,7 @@ public class HttpServer {
 	//
 	// start task
 	//
-	public void startServer(KyoroSocketEventRunner requestRunner) {
+	public KyoroSocketEventRunner startServer(KyoroSocketEventRunner requestRunner) {
 		if(Log.ON){Log.v(TAG, "HttpServer#startServer()");}
 
 		if (requestRunner != null) {
@@ -198,6 +198,7 @@ public class HttpServer {
 		boot.nextAction(null);
 		mSelector = mRequestRunner.getSelector();
 		mRequestRunner.start(boot);
+		return mRequestRunner;
 	}
 
 }

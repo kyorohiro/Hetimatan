@@ -83,8 +83,9 @@ public class HttpGet {
 		mTaskManager.mLast = last;
 		initForRestart();
 		if(runner == null) {
-			mRunner = runner = new EventTaskRunnerImple();
+			runner = new EventTaskRunnerImple();
 		}
+		mRunner = runner;
 		HttpGetConnectionTask connectionTask = new HttpGetConnectionTask(this, runner, last);
 		connectionTask.nextAction(new HttpGetRequestTask(this, runner, last));
 		runner.start(connectionTask);
