@@ -35,21 +35,13 @@ public class HttpGet {
 	private CashKyoroFile mSendCash = null;
 	private HttpGetTaskManager mTaskManager = new HttpGetTaskManager();
 
+	public HttpGet() throws IOException {}
 
-	public HttpGet() throws IOException {
-	}
+	public EventTaskRunner getRunner() {return mRunner;}
 
-	public EventTaskRunner getRunner() {
-		return mRunner;
-	}
+	public CashKyoroFile getSendCash() {return mSendCash;}
 
-	public CashKyoroFile getSendCash() {
-		return mSendCash;
-	}
-
-	public KyoroSocket getSocket() {
-		return mCurrentSocket;
-	}
+	public KyoroSocket getSocket() {return mCurrentSocket;}
 
 	protected HttpGetRequester createGetRequest() {
 		if (mCurrentRequest == null) {
@@ -57,6 +49,8 @@ public class HttpGet {
 		}
 		return mCurrentRequest;
 	}
+
+	protected HttpGetResponse getGetResponse() {return mResponse;}
 
 	public void update(String host, String path, int port) throws IOException {
 		mHost = host;
@@ -96,25 +90,10 @@ public class HttpGet {
 		if(Log.ON){Log.v(TAG, "HttpGet#connection()");}
 		mCurrentRequest = createGetRequest();
 		mResponse = null;
-		mCurrentRequest.getUrlBuilder()
-		.setHost(mHost).setPath(mPath).setPort(mPort);
+		mCurrentRequest.getUrlBuilder().setHost(mHost).setPath(mPath).setPort(mPort);
 		mCurrentSocket = mCurrentRequest._connectionRequest(null);
 	}
 
-	public boolean isConnected() throws IOException {
-		int state = mCurrentSocket.getConnectionState();
-		switch (state) {
-		case KyoroSocket.CN_CONNECTED:
-			HttpHistory.get().pushMessage(sId+"#connected"+"\n");
-			return true;
-		case KyoroSocket.CN_CONNECTING:
-			return false;
-		case KyoroSocket.CN_DISCONNECTED:
-		default:
-			HttpHistory.get().pushMessage(sId+"#disconnected"+"\n");
-			throw new IOException();
-		}
-	}
 
 	public void send() throws InterruptedException, IOException {
 		if(Log.ON){Log.v(TAG, "HttpGet#send()");}
@@ -130,14 +109,6 @@ public class HttpGet {
 		mTaskManager.nextTask(readHeaderTask);
 	}
 
-	public boolean headerIsReadeable() throws IOException, InterruptedException {
-		if(Log.ON){Log.v(TAG, "HttpGet#headerIsReadeable()");}
-		if(mResponse == null) {
-			mResponse = mCurrentRequest._getResponse(mCurrentSocket);
-		}
-		return mResponse.headerIsReadable();
-	}
-
 	public void recvHeader() throws IOException, InterruptedException {
 		if(Log.ON){Log.v(TAG, "HttpGet#revcHeader()");}
 		if(mResponse == null) {
@@ -145,18 +116,6 @@ public class HttpGet {
 		}
 		HttpHistory.get().pushMessage(sId+"#recvHeader:"+"\n");
 		mResponse.readHeader();
-	}
-
-	public boolean bodyIsReadeable() throws IOException, InterruptedException {
-		if(Log.ON){Log.v(TAG, "HttpGet#bodyIsReadeable()");}
-		if(mResponse == null) {
-			mResponse = mCurrentRequest._getResponse(mCurrentSocket);
-		}
-		return mResponse.bodyIsReadable();
-	}
-
-	protected HttpGetResponse getGetResponse() {
-		return mResponse;
 	}
 
 	public void recvBody() throws IOException, InterruptedException {
@@ -205,11 +164,6 @@ public class HttpGet {
 		}
 	}
 
-	public HttpResponse getHttpResponse() throws IOException {
-		HttpGetResponse response = getGetResponse();
-		return response.getHttpResponse();
-	}
-
 	/**
 	 * you must call dispose too.
 	 * this method don't release response cash 
@@ -232,5 +186,40 @@ public class HttpGet {
 			mResponse = null;
 		}
 	}
+
+	//
+	//
+	//
+
+	public boolean isConnected() throws IOException {
+		switch (mCurrentSocket.getConnectionState()) {
+		case KyoroSocket.CN_CONNECTED:
+			HttpHistory.get().pushMessage(sId+"#connected"+"\n");
+			return true;
+		case KyoroSocket.CN_CONNECTING:
+			return false;
+		case KyoroSocket.CN_DISCONNECTED:
+		default:
+			HttpHistory.get().pushMessage(sId+"#disconnected"+"\n");
+			throw new IOException();
+		}
+	}
+
+	public boolean headerIsReadeable() throws IOException, InterruptedException {
+		if(Log.ON){Log.v(TAG, "HttpGet#headerIsReadeable()");}
+		if(mResponse == null) {
+			mResponse = mCurrentRequest._getResponse(mCurrentSocket);
+		}
+		return mResponse.headerIsReadable();
+	}
+
+	public boolean bodyIsReadeable() throws IOException, InterruptedException {
+		if(Log.ON){Log.v(TAG, "HttpGet#bodyIsReadeable()");}
+		if(mResponse == null) {
+			mResponse = mCurrentRequest._getResponse(mCurrentSocket);
+		}
+		return mResponse.bodyIsReadable();
+	}
+
 }
 
