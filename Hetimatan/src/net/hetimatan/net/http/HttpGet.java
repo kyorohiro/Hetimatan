@@ -19,6 +19,7 @@ import net.hetimatan.util.http.HttpRequestHeader;
 import net.hetimatan.util.http.HttpResponse;
 import net.hetimatan.util.log.Log;
 import net.hetimatan.util.net.KyoroSocketEventRunner;
+import net.hetimatan.util.net.MessageSendTask;
 
 public class HttpGet {
 
@@ -103,10 +104,12 @@ public class HttpGet {
 		HttpRequest request = ((HttpGetRequester)mCurrentRequest).createHttpRequest();
 		CashKyoroFile cash = getSendCash();
 		request.encode(cash.getLastOutput());
-		mTaskManager.startSendTask(this);
+		MessageSendTask sendTask = new MessageSendTask(getSocket(), getSendCash());
 		HttpGetReadHeaderTask readHeaderTask = new HttpGetReadHeaderTask(this, mTaskManager.mLast);
 		readHeaderTask.nextAction(new HttpGetReadBodyTask(this, mTaskManager.mLast));
-		mTaskManager.nextTask(readHeaderTask);
+		sendTask.nextAction(readHeaderTask);
+		getRunner().pushWork(sendTask);
+		mTaskManager.mSendTaskChain = sendTask;
 	}
 
 	public void recvHeader() throws IOException, InterruptedException {
