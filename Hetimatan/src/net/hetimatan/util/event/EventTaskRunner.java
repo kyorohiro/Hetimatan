@@ -13,9 +13,33 @@ public abstract class EventTaskRunner {
 	public abstract void pushWork(EventTask task);
 	public abstract void pushWork(EventTask task, int timeout);
 	public abstract EventTask popWork();
-	public abstract void close();
 	public abstract boolean contains(EventTask task);
 
+	// 
+	private boolean isClosed = false;
+	private Object mCloseLock = new Object();
+	public void close() {
+		synchronized (mCloseLock) {
+			System.out.println("================================----------------------------------------------------------------------------------------");
+			num++;
+			System.out.print("<num>"+num);
+			isClosed = true;
+			mCloseLock.notify();
+		}
+	}
+
+	public static int num = 0;
+	public boolean waitByClose(int timeout) throws InterruptedException {
+		synchronized (mCloseLock) {
+			if(isClosed) {
+				return isClosed;
+			}
+			System.out.println("AAAAAAAAAA================================----------------------------------------------------------------------------------------");
+			mCloseLock.wait(timeout);
+			System.out.println("ZZZZZZZZZZ================================----------------------------------------------------------------------------------------");
+			return isClosed;
+		}
+	}
 
 	//
 	//-------------------------------------

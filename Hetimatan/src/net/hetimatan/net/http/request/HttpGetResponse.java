@@ -31,6 +31,10 @@ public class HttpGetResponse {
 		mVfOffset = 0;
 	}
 	
+	public void todo_setSocket(KyoroSocket socket) {
+		mSocket =socket;
+	}
+
 	public int getVFOffset() {
 		return mVfOffset;
 	}

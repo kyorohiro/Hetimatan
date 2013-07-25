@@ -128,9 +128,6 @@ public class HttpServer {
 		HttpHistory.get().pushMessage(sId+"#close:"+"\n");
 
 		try {
-			if (null != mRequestRunner) {
-				mRequestRunner.close();				
-			}
 			if (null != mServerSocket) {
 				mServerSocket.close();
 			}

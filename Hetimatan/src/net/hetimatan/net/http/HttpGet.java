@@ -67,6 +67,8 @@ public class HttpGet {
 			HttpRequestUri geturi = HttpRequestUri.decode(reader);
 			update(geturi.getHost(), geturi.getMethod(), geturi.getPort());
 		} finally {
+			mResponse.close();
+			mResponse = null;
 			reader.close();
 		}
 	}
@@ -83,7 +85,7 @@ public class HttpGet {
 		mTaskManager.mLast = last;
 		initForRestart();
 		if(runner == null) {
-			runner = new EventTaskRunnerImple();
+			runner = new KyoroSocketEventRunner();
 		}
 		mRunner = runner;
 		HttpGetConnectionTask connectionTask = new HttpGetConnectionTask(this, last);
@@ -144,6 +146,8 @@ public class HttpGet {
 		if(Log.ON){Log.v(TAG, "HttpGet#headerIsReadeable()");}
 		if(mResponse == null) {
 			mResponse = mCurrentRequest._getResponse(mCurrentSocket);
+		} else {
+			mResponse.todo_setSocket(mCurrentSocket);
 		}
 		return mResponse.headerIsReadable();
 	}
@@ -152,6 +156,8 @@ public class HttpGet {
 		if(Log.ON){Log.v(TAG, "HttpGet#revcHeader()");}
 		if(mResponse == null) {
 			mResponse = mCurrentRequest._getResponse(mCurrentSocket);
+		} else {
+			mResponse.todo_setSocket(mCurrentSocket);
 		}
 		HttpHistory.get().pushMessage(sId+"#recvHeader:"+"\n");
 		mResponse.readHeader();
@@ -223,7 +229,7 @@ public class HttpGet {
 	public void close() throws IOException {
 		HttpHistory.get().pushMessage(sId+"#close:"+"\n");
 		mCurrentSocket.close();
-		mCurrentSocket = null;		
+		mCurrentSocket = null;
 	}
 }
 

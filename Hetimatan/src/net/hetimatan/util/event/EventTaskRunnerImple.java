@@ -164,6 +164,7 @@ public class EventTaskRunnerImple extends EventTaskRunner {
 
 	@Override
 	public void close() {
+		super.close();
 		if(Log.ON){Log.v("mm","EventTaskRunner#close");}
 		if(mRunner != null) {
 			mRunner.endTask();

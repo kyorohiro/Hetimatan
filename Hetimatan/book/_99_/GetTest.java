@@ -14,13 +14,14 @@ public class GetTest {
 		GetTest gettest = new GetTest();
 		if(args.length != 1) {
 			try {
-				gettest.showMessage(System.out);
+				GetTest.showMessage(System.out);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 			return;
 		}
 		String address = args[0];
+
 		try {
 			gettest.request(address);
 		} catch (IOException e) {
@@ -32,13 +33,19 @@ public class GetTest {
 		HttpRequestUri uri = HttpRequestUri.crateHttpGetRequestUri(address);
 		HttpGet httpGet = new HttpGet();
 		httpGet.update(uri.getHost(), uri.getPath(), uri.getPort());
-//		CloseTask closeTask = new CloseTask(runner, lasttask)
-		EventTaskRunner runner = httpGet.startTask(null, null);
-		runner.close();
+		CloseTask closeTask = new CloseTask(null);
+		EventTaskRunner runner = httpGet.startTask(null, closeTask);
+		try {
+			runner.waitByClose(Integer.MAX_VALUE);
+			Thread.sleep(10000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+//		runner.close();
 	}
 
-	public void showMessage(OutputStream output) throws IOException {
-		String message = "java " + this.getClass().getName() + " [URL]...";
+	public static void showMessage(OutputStream output) throws IOException {
+		String message = "java " + GetTest.class.getName() + " [URL]...";
 		output.write(message.getBytes());
 	}
 }

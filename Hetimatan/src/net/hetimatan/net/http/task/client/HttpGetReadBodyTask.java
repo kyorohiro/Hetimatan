@@ -48,6 +48,7 @@ public class HttpGetReadBodyTask extends EventTask {
 			httpGet.updateRedirect(httpGet.getLocation());
 			httpGet.startTask(runner, mLast);
 		} else {
+//			System.out.println("-------------------------------------------------------------------------------------------");
 			nextAction(mLast);
 		}
 	}
