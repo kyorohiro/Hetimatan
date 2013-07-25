@@ -20,7 +20,6 @@ public abstract class EventTaskRunner {
 	private Object mCloseLock = new Object();
 	public void close() {
 		synchronized (mCloseLock) {
-			System.out.println("================================----------------------------------------------------------------------------------------");
 			num++;
 			System.out.print("<num>"+num);
 			isClosed = true;
@@ -34,9 +33,7 @@ public abstract class EventTaskRunner {
 			if(isClosed) {
 				return isClosed;
 			}
-			System.out.println("AAAAAAAAAA================================----------------------------------------------------------------------------------------");
 			mCloseLock.wait(timeout);
-			System.out.println("ZZZZZZZZZZ================================----------------------------------------------------------------------------------------");
 			return isClosed;
 		}
 	}

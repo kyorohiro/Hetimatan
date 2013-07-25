@@ -25,13 +25,13 @@ public abstract class EventTask {
 
 	public final void run(EventTaskRunner runner) {
 		try {
-			if(Log.ON){Log.v("mm","["+mid+"]"+"action:"+toString());}
+			if(Log.ON){Log.d("taskrunner","["+mid+"]"+"action:"+toString());}
 			action(runner);
 			if (isKeep()) {
-				if(Log.ON){Log.v("mm","["+mid+"]"+"action: next null");}
+				if(Log.ON){Log.d("taskrunner","["+mid+"]"+"action: next keep");}
 				runner.start(this);				
 			} else if(runner != null&&mNextAction != null&&isNext()) {
-				if(Log.ON){Log.v("mm","["+mid+"]"+"action: next "+mNextAction.toString());}
+				if(Log.ON){Log.d("taskrunner","["+mid+"]"+"action: next "+mNextAction.toString());}
 				runner.start(mNextAction);	
 			} 
 		} catch(Throwable t) {

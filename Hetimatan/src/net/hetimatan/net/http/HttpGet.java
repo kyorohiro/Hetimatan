@@ -1,6 +1,5 @@
 package net.hetimatan.net.http;
 
-
 import java.io.IOException;
 
 import net.hetimatan.io.file.MarkableFileReader;
@@ -67,10 +66,11 @@ public class HttpGet {
 			HttpRequestUri geturi = HttpRequestUri.decode(reader);
 			update(geturi.getHost(), geturi.getMethod(), geturi.getPort());
 		} finally {
-			mResponse.close();
-			mResponse = null;
 			reader.close();
 		}
+		//
+		// todo
+		dispose();
 	}
 
 	protected HttpGetRequester createGetRequest() {
@@ -230,6 +230,10 @@ public class HttpGet {
 		HttpHistory.get().pushMessage(sId+"#close:"+"\n");
 		mCurrentSocket.close();
 		mCurrentSocket = null;
+	}
+	public void dispose() throws IOException {
+		mResponse.close();
+		mResponse = null;
 	}
 }
 

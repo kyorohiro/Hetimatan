@@ -15,6 +15,7 @@ public class Log {
     public static final Log  log = new Log();
     public static final int  mode = 1;//MODE_FILE;
     public static final boolean isTime = false;
+    public static final int loglevel = 5;//8;// 5 v, 8 d
     private CashKyoroFile mLog = null;
   
     public Log() {
@@ -30,6 +31,12 @@ public class Log {
             }
     	}
     	Runtime.getRuntime().addShutdownHook(new Thread(new ShutdonwTask()));
+	}
+
+	public static void d(String tag, String message) {
+		if(loglevel>=8) {
+			v(tag, message);
+		}
 	}
 
 	public static void v(String tag, String message) {
