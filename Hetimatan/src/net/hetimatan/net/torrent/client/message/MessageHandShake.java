@@ -15,10 +15,10 @@ import net.hetimatan.util.url.PercentEncoder;
 public class MessageHandShake extends TorrentMessage {
 	public static final String TAG = "handshake";
 
-	private byte[] mProtocolId = "BitTorrent protocol".getBytes();
-	private byte[] mInfoHash = EMPTY;
-	private byte[] mPeerID = EMPTY;
-	private byte[] mReserved = RESERVED;
+	private byte[] mProtocolId = "BitTorrent protocol".getBytes(); //19byte
+	private byte[] mInfoHash = EMPTY; //20byte
+	private byte[] mPeerID = EMPTY;//20byte
+	private byte[] mReserved = RESERVED; //8byte
 
 	@Override
 	public String toString() {
@@ -50,6 +50,13 @@ public class MessageHandShake extends TorrentMessage {
 		return mPeerID;
 	}
 
+
+	/*
+	 * protocolId 19bytestring "BitTorrent protocol"
+	 * reserved 8bytearray
+	 * infohash 20bytearray
+	 * peerid 20bytearray
+	 */
 	public MessageHandShake(byte[] protocolId, byte[] reserved, byte[] infoHash, byte[] peerID) {
 		super(TorrentMessage.DUMMY_SIGN_SHAKEHAND);
 		mInfoHash = new byte[infoHash.length];

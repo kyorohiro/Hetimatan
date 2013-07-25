@@ -1,4 +1,4 @@
-package metainfo;
+package _01_metainfo;
 
 import java.io.File;
 import java.io.IOException;
