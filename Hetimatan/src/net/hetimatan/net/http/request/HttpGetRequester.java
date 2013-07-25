@@ -34,6 +34,9 @@ public class HttpGetRequester  {
 		mSelector = selector;
 		try {
 			socket = _connectionRequest(null);
+			while(socket.getConnectionState() == KyoroSocket.CN_CONNECTING){
+				Thread.yield();
+				Thread.sleep(0);}
 			_writeRequest(socket);
 			HttpGetResponse res = _getResponse(socket);
 			res.readHeader();
@@ -60,9 +63,6 @@ public class HttpGetRequester  {
 		}
 		socket.setDebug("KyoroSocketGetConnection:"+mBuilder.getHost() +","+ mBuilder.getPort());
 		socket.connect(mBuilder.getHost(), mBuilder.getPort());
-		while(socket.getConnectionState() == KyoroSocket.CN_CONNECTING){
-			Thread.yield();
-			Thread.sleep(0);}
 		return socket;
 	}
 
