@@ -31,11 +31,18 @@ public class KFNextHelper {
 	}
 
 	public static byte[] newBinary(KyoroFile src) throws IOException {
-		int len = (int)src.length();
+		return newBinary(src, 0);
+	}
+
+	public static byte[] newBinary(KyoroFile src, long start) throws IOException {
+		int len = (int)(src.length()-start);
+		if(len<=0) {
+			return new byte[0];
+		}
 		byte[] buffer = new byte[len];
 		long fp = src.getFilePointer();
 		try {
-			src.seek(0);
+			src.seek(start);
 			src.read(buffer);
 		} finally {
 			src.seek(fp);

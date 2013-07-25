@@ -31,7 +31,8 @@ public class TestForHttpGet extends TestCase {
 		runner.waitByClose(10000);
 		HttpGetResponse response = httpget.getGetResponse();
 		
-		System.out.println(new String(KFNextHelper.newBinary(response.getVF())));
+		System.out.println("[A]"+new String(KFNextHelper.newBinary(response.getVF()))+"[A]");
+		assertEquals("check", new String(KFNextHelper.newBinary(response.getVF(), response.getVFOffset())));
 		_3xx.close();
 		rc.close();
 	}
