@@ -13,7 +13,6 @@ public class TorrentFrontFinTrackerTask extends EventTask {
 	private WeakReference<TorrentPeerPiecer> mTorrentScenario = null;
 
 	public TorrentFrontFinTrackerTask(TorrentPeerPiecer scenario, EventTaskRunner runner) {
-		super(runner);
 		mTorrentScenario = new WeakReference<TorrentPeerPiecer>(scenario);
 	}
 
@@ -23,8 +22,7 @@ public class TorrentFrontFinTrackerTask extends EventTask {
 	}
 
 	@Override
-	public void action() throws Throwable {
-		super.action();
+	public void action(EventTaskRunner runner) throws Throwable {
 		TorrentPeerPiecer scenario = mTorrentScenario.get();
 		if(scenario == null) {return;}	
 		scenario.onFinTracker();

@@ -71,7 +71,7 @@ public class KyoroSocketEventRunner extends EventTaskRunnerImple {
 		boolean ret = false;
 		while(mSelector.next()) {
 			ret = true;
-			if(!mSelector.getCurrentSocket().startEventTask(mSelector.getkey())) {
+			if(!mSelector.getCurrentSocket().startEventTask(this, mSelector.getkey())) {
 			//	if(Log.ON){Log.v(TAG,"Wearning not task");}
 			}
 		}
@@ -102,7 +102,6 @@ public class KyoroSocketEventRunner extends EventTaskRunnerImple {
 	public static class SelctorLoopTask extends EventTask {
 		public static final String TAG = "SelctorLoopTask";
 		public SelctorLoopTask(KyoroSocketEventRunner runner) {
-			super(runner);
 		}
 
 		@Override
@@ -111,11 +110,9 @@ public class KyoroSocketEventRunner extends EventTaskRunnerImple {
 		}
 
 		@Override
-		public void action() throws Throwable {
-			super.action();
-			EventTaskRunner runner = getRunner();
+		public void action(EventTaskRunner runner) throws Throwable {
 			if(runner != null) {
-				if(getRunner().numOfWork()!=0){
+				if(runner.numOfWork()!=0){
 					if(((KyoroSocketEventRunner)runner).waitBySelectable(0)){
 					}
 					((KyoroSocketEventRunner)runner).pushWork(this);

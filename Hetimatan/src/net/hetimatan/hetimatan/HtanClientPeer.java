@@ -62,7 +62,7 @@ public class HtanClientPeer {
 			mPeer.close();
 		}
 		if(mRunner != null) {
-			EventTask closeTask = new CloseTask(mRunner, null);
+			EventTask closeTask = new CloseTask(null);
 			mPeer.startTracker(TrackerRequest.EVENT_STOPPED, closeTask);
 		}
 	}

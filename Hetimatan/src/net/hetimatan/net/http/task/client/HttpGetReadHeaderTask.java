@@ -17,7 +17,6 @@ public class HttpGetReadHeaderTask extends EventTask {
 	private boolean mIsKeep = false;
 
 	public HttpGetReadHeaderTask(HttpGet client, EventTaskRunner runner, EventTask last) {
-		super(runner);
 		mOwner = new WeakReference<HttpGet>(client);
 		mLast = last;
 		errorAction(last);
@@ -34,7 +33,7 @@ public class HttpGetReadHeaderTask extends EventTask {
 	}
 
 	@Override
-	public void action() throws IOException, InterruptedException {
+	public void action(EventTaskRunner runner) throws IOException, InterruptedException {
 		if(!mHeaderIsReadable) {
 			mHeaderIsReadable = mOwner.get().headerIsReadeable();
 			if(Log.ON){Log.v("===", "mHeaderIsReadable="+mHeaderIsReadable);}

@@ -14,7 +14,6 @@ public class TorrentPeerStartTracker extends EventTask {
 	private WeakReference<TorrentPeer> mServer = null;
 
 	public TorrentPeerStartTracker(TorrentPeer httpServer, EventTaskRunner runner) {
-		super(runner);
 		mServer = new WeakReference<TorrentPeer>(httpServer);
 	}
 
@@ -24,7 +23,7 @@ public class TorrentPeerStartTracker extends EventTask {
 	}
 
 	@Override
-	public void action() throws Throwable {
+	public void action(EventTaskRunner runner) throws Throwable {
 		TorrentPeer server = mServer.get();
 		if(server.isSeeder()) {
 			server.startTracker(TrackerRequest.EVENT_COMPLETED);

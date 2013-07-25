@@ -15,7 +15,6 @@ public class HttpGetRequestTask extends EventTask {
 	private EventTask mLast = null;
 
 	public HttpGetRequestTask(HttpGet client, EventTaskRunner runner, EventTask last) {
-		super(runner);
 		mOwner = new WeakReference<HttpGet>(client);
 		mLast = last;
 		errorAction(last);
@@ -29,7 +28,7 @@ public class HttpGetRequestTask extends EventTask {
 	//
 	//
 	@Override
-	public void action() throws InterruptedException, IOException {
+	public void action(EventTaskRunner runner) throws InterruptedException, IOException {
 		mOwner.get().send();
 	}
 	

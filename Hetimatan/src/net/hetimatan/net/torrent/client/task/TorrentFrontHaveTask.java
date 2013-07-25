@@ -14,7 +14,6 @@ public class TorrentFrontHaveTask extends EventTask {
 	private int mIndex = 0;
 
 	public TorrentFrontHaveTask(TorrentFront front, EventTaskRunner runner, int index) {
-		super(runner);
 		mIndex = index;
 		mTorrentFront = new WeakReference<TorrentFront>(front);
 	}
@@ -25,7 +24,7 @@ public class TorrentFrontHaveTask extends EventTask {
 	}
 
 	@Override
-	public void action() throws Throwable {
+	public void action(EventTaskRunner runner) throws Throwable {
 		TorrentFront front = mTorrentFront.get();
 		front.sendHave(mIndex);
 	}

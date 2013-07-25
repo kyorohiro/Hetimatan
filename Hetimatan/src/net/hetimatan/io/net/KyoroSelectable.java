@@ -6,6 +6,7 @@ import java.lang.ref.WeakReference;
 import java.nio.channels.SelectableChannel;
 
 import net.hetimatan.util.event.EventTask;
+import net.hetimatan.util.event.EventTaskRunner;
 import net.hetimatan.util.log.Log;
 
 public abstract class KyoroSelectable {
@@ -82,24 +83,24 @@ public abstract class KyoroSelectable {
 		}
 	}
 
-	public boolean startEventTask(int key) {
+	public boolean startEventTask(EventTaskRunner runner, int key) {
 		boolean ret = false;
 		if((key&KyoroSelector.ACCEPT)==KyoroSelector.ACCEPT) {
-			ret |= action(mAcceptTask);
+			ret |= action(runner, mAcceptTask);
 		}
 		if((key&KyoroSelector.READ)==KyoroSelector.READ) {
-			ret |= action(mReadTask);
+			ret |= action(runner, mReadTask);
 		}
 		if((key&KyoroSelector.WRITE)==KyoroSelector.WRITE) {
-			ret |= action(mWriteTask);
+			ret |= action(runner, mWriteTask);
 		}
 		if((key&KyoroSelector.CONNECT)==KyoroSelector.CONNECT) {
-			ret |= action(mConnectTask);
+			ret |= action(runner, mConnectTask);
 		}
-		return true;
+		return ret;
 	}
 
-	private boolean action(WeakReference<EventTask> eventTask ) {
+	private boolean action(EventTaskRunner runner, WeakReference<EventTask> eventTask ) {
 		if(eventTask == null) {
 			return false;
 		}
@@ -108,7 +109,7 @@ public abstract class KyoroSelectable {
 			return false;
 		}
 		Log.v("mm", "selector push:"+"["+task.mid+"]"+task.toString());
-		task.getRunner().start(task);
+		runner.start(task);
 		return true;
 	}
 

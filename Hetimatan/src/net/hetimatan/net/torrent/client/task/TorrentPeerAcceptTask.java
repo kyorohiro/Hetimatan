@@ -13,7 +13,6 @@ public class TorrentPeerAcceptTask extends EventTask {
 	private WeakReference<TorrentPeer> mServer = null;
 
 	public TorrentPeerAcceptTask(TorrentPeer clientServer, EventTaskRunner runner) {
-		super(runner);
 		mServer = new WeakReference<TorrentPeer>(clientServer);
 	}
 
@@ -23,7 +22,7 @@ public class TorrentPeerAcceptTask extends EventTask {
 	}
 
 	@Override
-	public void action() throws Throwable {
+	public void action(EventTaskRunner runner) throws Throwable {
 		TorrentPeer server = mServer.get();
 		server.accept();
 	}

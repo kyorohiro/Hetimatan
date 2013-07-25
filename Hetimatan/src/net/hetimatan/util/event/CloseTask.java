@@ -4,8 +4,7 @@ public class CloseTask extends EventTask {
 	private EventTask mLastTask = null;
 	public final static String TAG = "CloseTask";
 
-	public CloseTask(EventTaskRunner runner, EventTask lasttask) {
-		super(runner);
+	public CloseTask(EventTask lasttask) {
 		mLastTask = lasttask;
 	}
 
@@ -24,14 +23,13 @@ public class CloseTask extends EventTask {
 	}
 
 	@Override
-	public void action() throws Throwable {
-		super.action();
+	public void action(EventTaskRunner runner) throws Throwable {
 		if(mLastTask != null) {
-			mLastTask.action();
+			mLastTask.action(runner);
 			if(mLastTask.isKeep()) {
 				return;
 			}
 		}
-		getRunner().close();
+		runner.close();
 	}
 }

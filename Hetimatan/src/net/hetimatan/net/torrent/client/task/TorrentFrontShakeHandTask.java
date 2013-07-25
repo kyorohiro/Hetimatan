@@ -19,7 +19,6 @@ public class TorrentFrontShakeHandTask extends EventTask {
 	private boolean mIsNext = true;
 
 	public TorrentFrontShakeHandTask(TorrentFront front, EventTaskRunner runner) {
-		super(runner);
 		mTorrentFront = new WeakReference<TorrentFront>(front);
 	}
 
@@ -39,7 +38,7 @@ public class TorrentFrontShakeHandTask extends EventTask {
 	}
 
 	@Override
-	public void action() throws Throwable {
+	public void action(EventTaskRunner runner) throws Throwable {
 		TorrentFront front = mTorrentFront.get();
 
 		TorrentPeer peer = front.getTorrentPeer();

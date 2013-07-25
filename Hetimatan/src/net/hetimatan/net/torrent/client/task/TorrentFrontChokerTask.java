@@ -14,7 +14,6 @@ public class TorrentFrontChokerTask extends EventTask {
 	private boolean mIsChoke = false;
 
 	public TorrentFrontChokerTask(TorrentFront front, EventTaskRunner runner, boolean isChoke) {
-		super(runner);
 		mTorrentFront = new WeakReference<TorrentFront>(front);
 		mIsChoke = isChoke;
 	}
@@ -29,7 +28,7 @@ public class TorrentFrontChokerTask extends EventTask {
 	}
 
 	@Override
-	public void action() throws Throwable {
+	public void action(EventTaskRunner runner) throws Throwable {
 		TorrentFront front = mTorrentFront.get();
 		if(mIsChoke) {
 			front.sendChoke();			

@@ -76,7 +76,7 @@ public class HttpServer {
 		HttpHistory.get().pushMessage(sId+"#startFront:"+front.sId+"\n");
 
 		socket.regist(mSelector, KyoroSelector.READ);
-		HttpFrontRequestTask requestTask = new HttpFrontRequestTask(front, mRequestRunner);
+		HttpFrontRequestTask requestTask = new HttpFrontRequestTask(front);
 		socket.setEventTaskAtWrakReference(requestTask, KyoroSelector.READ);
 		addManagedHttpFront(front);		
 	}

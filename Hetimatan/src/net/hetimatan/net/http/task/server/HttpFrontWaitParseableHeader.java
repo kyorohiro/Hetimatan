@@ -12,9 +12,8 @@ public class HttpFrontWaitParseableHeader extends EventTask {
 	private WeakReference<HttpFront> mClientInfo = null;
 
 	public HttpFrontWaitParseableHeader(HttpFront clientInfo, EventTaskRunner runner) {
-		super(runner);
 		mClientInfo = new WeakReference<HttpFront>(clientInfo);
-		errorAction(new HttpFrontCloseTask(clientInfo, runner));
+		errorAction(new HttpFrontCloseTask(clientInfo));
 	}
 
 	@Override
@@ -23,7 +22,7 @@ public class HttpFrontWaitParseableHeader extends EventTask {
 	}
 
 	@Override
-	public void action() throws Throwable {
+	public void action(EventTaskRunner runner) throws Throwable {
 		HttpFront info = mClientInfo.get();
 		if(info == null) {
 			return;

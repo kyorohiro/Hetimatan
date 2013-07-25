@@ -49,7 +49,7 @@ public class TorrentFrontTaskManager {
 		try {
 			if(peer.getClientRunner().contains(mSendTaskChain)) {
 				do {
-					mSendTaskChain.action();
+					mSendTaskChain.action(peer.getClientRunner());
 				} while(mSendTaskChain.isKeep());
 				peer.getClientRunner().releaseTask(mSendTaskChain);
 			}

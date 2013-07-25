@@ -12,7 +12,6 @@ public class HttpServerBootTask extends EventTask {
 	private WeakReference<HttpServer> mServer = null;
 
 	public HttpServerBootTask(HttpServer httpServer, EventTaskRunner runner) {
-		super(runner);
 		mServer = new WeakReference<HttpServer>(httpServer);
 		errorAction(new HttpServerClose(httpServer, runner));
 	}
@@ -23,7 +22,7 @@ public class HttpServerBootTask extends EventTask {
 	}
 
 	@Override
-	public void action() throws Throwable {
+	public void action(EventTaskRunner runner) throws Throwable {
 		HttpServer server = mServer.get();
 		server.boot();
 	}

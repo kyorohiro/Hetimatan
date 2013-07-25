@@ -12,7 +12,6 @@ public class TorrentFrontReceiverTask extends EventTask {
 	public static final String TAG  = "TorrentFrontReceiverTask";
 	private WeakReference<TorrentFront> mTorrentFront = null;
 	public TorrentFrontReceiverTask(TorrentFront front, EventTaskRunner runner) {
-		super(runner);
 		mTorrentFront = new WeakReference<TorrentFront>(front);
 	}
 
@@ -22,7 +21,7 @@ public class TorrentFrontReceiverTask extends EventTask {
 	}
 
 	@Override
-	public void action() throws Throwable {
+	public void action(EventTaskRunner runner) throws Throwable {
 		TorrentFront front = mTorrentFront.get();
 		front.receive();
 	}

@@ -13,8 +13,7 @@ public class HttpFrontCloseTask extends EventTask {
 	private WeakReference<HttpFront> mClientInfo = null;
 
 	public int mId = sid++;
-	public HttpFrontCloseTask(HttpFront clientInfo, EventTaskRunner runner) {
-		super(runner);
+	public HttpFrontCloseTask(HttpFront clientInfo) {
 		mClientInfo = new WeakReference<HttpFront>(clientInfo);
 	}
 
@@ -24,7 +23,7 @@ public class HttpFrontCloseTask extends EventTask {
 	}
 
 	@Override
-	public void action() throws Throwable {
+	public void action(EventTaskRunner runner) throws Throwable {
 		HttpFront info = mClientInfo.get();
 		if(info == null) {
 			return;

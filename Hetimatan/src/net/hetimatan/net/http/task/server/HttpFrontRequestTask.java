@@ -11,10 +11,9 @@ public class HttpFrontRequestTask extends EventTask {
 	public static final String TAG = "HttpFrontRequestTask";
 	private WeakReference<HttpFront> mClientInfo = null;
 
-	public HttpFrontRequestTask(HttpFront clientInfo, EventTaskRunner runner) {
-		super(runner);
+	public HttpFrontRequestTask(HttpFront clientInfo) {
 		mClientInfo = new WeakReference<HttpFront>(clientInfo);
-		errorAction(new HttpFrontCloseTask(clientInfo, runner));
+		errorAction(new HttpFrontCloseTask(clientInfo));
 		clientInfo.addMyTask(this);
 	}
 
@@ -24,7 +23,7 @@ public class HttpFrontRequestTask extends EventTask {
 	}
 
 	@Override
-	public void action() throws Throwable {
+	public void action(EventTaskRunner runner) throws Throwable {
 		HttpFront info = mClientInfo.get();
 		if(info == null) {
 			return;

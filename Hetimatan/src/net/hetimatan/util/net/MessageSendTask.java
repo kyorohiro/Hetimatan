@@ -15,7 +15,6 @@ public class MessageSendTask extends EventTask {
 	private boolean mIsKeep = false;
 
 	public MessageSendTask(EventTaskRunner runner, KyoroSocket socket, KyoroFile data) {
-		super(runner);
 		mData = data;
 		mSocket = socket;
 	}
@@ -35,9 +34,8 @@ public class MessageSendTask extends EventTask {
 	}
 
 	@Override
-	public void action() throws Throwable {
+	public void action(EventTaskRunner runner) throws Throwable {
 		mIsKeep = false;
-		super.action();
 		int len = (int)mData.length();
 		if (len>mBufferSize) {
 			len = mBufferSize;

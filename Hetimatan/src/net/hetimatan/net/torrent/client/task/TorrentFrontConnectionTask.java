@@ -20,7 +20,6 @@ public class TorrentFrontConnectionTask extends EventTask {
 	public TorrentFrontConnectionTask(
 			TorrentFront front, EventTaskRunner runner,
 			String host, int port) {
-		super(runner);
 		mHost = host;
 		mPort = port;
 		mTorrentFront = new WeakReference<TorrentFront>(front);
@@ -32,7 +31,7 @@ public class TorrentFrontConnectionTask extends EventTask {
 	}
 
 	@Override
-	public void action() throws Throwable {
+	public void action(EventTaskRunner runner) throws Throwable {
 		TorrentFront front = mTorrentFront.get();
 		if(!mIsCon) {
 			front.connect(mHost, mPort);

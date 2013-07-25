@@ -16,7 +16,6 @@ public class HttpGetConnectionTask extends EventTask {
 	private boolean mIsFirst = true;	
 
 	public HttpGetConnectionTask(HttpGet client, EventTaskRunner runner, EventTask last) {
-		super(runner);
 		mOwner = new WeakReference<HttpGet>(client);
 		mLast = last;
 		errorAction(last);
@@ -36,7 +35,7 @@ public class HttpGetConnectionTask extends EventTask {
 
 	//
 	@Override
-	public void action() throws InterruptedException, IOException {
+	public void action(EventTaskRunner runner) throws InterruptedException, IOException {
 		if (true == mIsFirst) {
 			mIsFirst = false;
 			mOwner.get().connection();

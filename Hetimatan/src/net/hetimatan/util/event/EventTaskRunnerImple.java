@@ -154,13 +154,10 @@ public class EventTaskRunnerImple extends EventTaskRunner {
 							}
 						//}
 					} else {
-						task.run();
+						task.run(mRunner.get());
 					}
 				}
-			} catch(InterruptedException e) {
-				//e.printStackTrace();
-			} catch(IOException e) {
-				//e.printStackTrace();
+			} catch(InterruptedException e) {} catch(IOException e) {
 			}
 		}
 	}
