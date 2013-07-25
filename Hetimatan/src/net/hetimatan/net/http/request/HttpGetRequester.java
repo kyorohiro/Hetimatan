@@ -33,7 +33,7 @@ public class HttpGetRequester  {
 		KyoroSocket socket = null;
 		mSelector = selector;
 		try {
-			socket = _connectionRequest();
+			socket = _connectionRequest(null);
 			_writeRequest(socket);
 			HttpGetResponse res = _getResponse(socket);
 			res.readHeader();
@@ -54,10 +54,10 @@ public class HttpGetRequester  {
 		return mBuilder;
 	}
 
-	public KyoroSocket _connectionRequest() throws IOException, InterruptedException {
-//		URL url = new URL(SCHEME_HTTP + "://" + mBuilder.mHost + ":" + mPort+mPath);
-		KyoroSocket socket = null;
-		socket = new KyoroSocketImpl();
+	public KyoroSocket _connectionRequest(KyoroSocket socket) throws IOException, InterruptedException {
+		if(socket == null) {
+			socket = new KyoroSocketImpl();
+		}
 		socket.setDebug("KyoroSocketGetConnection:"+mBuilder.getHost() +","+ mBuilder.getPort());
 		socket.connect(mBuilder.getHost(), mBuilder.getPort());
 		while(socket.getConnectionState() == KyoroSocket.CN_CONNECTING){

@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import net.hetimatan.io.file.MarkableFileReader;
 import net.hetimatan.io.filen.CashKyoroFile;
-import net.hetimatan.io.net.KyoroSelector;
 import net.hetimatan.io.net.KyoroSocket;
 import net.hetimatan.net.http.request.HttpGetRequester;
 import net.hetimatan.net.http.request.HttpGetResponse;
@@ -14,7 +13,6 @@ import net.hetimatan.net.http.task.client.HttpGetReadHeaderTask;
 import net.hetimatan.net.http.task.client.HttpGetRequestTask;
 import net.hetimatan.util.event.EventTask;
 import net.hetimatan.util.event.EventTaskRunner;
-import net.hetimatan.util.event.EventTaskRunnerImple;
 import net.hetimatan.util.http.HttpRequest;
 import net.hetimatan.util.http.HttpRequestUri;
 import net.hetimatan.util.http.HttpRequestHeader;
@@ -37,40 +35,20 @@ public class HttpGet {
 	private CashKyoroFile mSendCash = null;
 	private HttpGetTaskManager mTaskManager = new HttpGetTaskManager();
 
+
 	public HttpGet() throws IOException {
-		mSendCash = new CashKyoroFile(1024, 3);
 	}
 
 	public EventTaskRunner getRunner() {
 		return mRunner;
 	}
+
 	public CashKyoroFile getSendCash() {
 		return mSendCash;
 	}
+
 	public KyoroSocket getSocket() {
 		return mCurrentSocket;
-	}
-
-	public void update(String host, String path, int port) {
-		mHost = host;
-		mPath = path;
-		mPort = port;
-		sId = "[httpget "+mHost+":"+mPort+mPath+"]";
-	}
-
-	public void updateRedirect(String location) throws IOException {
-		HttpHistory.get().pushMessage(sId+"#redirect:"+location+"\n");
-		MarkableFileReader reader = null;
-		try {
-			reader = new MarkableFileReader(location.getBytes());
-			HttpRequestUri geturi = HttpRequestUri.decode(reader);
-			update(geturi.getHost(), geturi.getMethod(), geturi.getPort());
-		} finally {
-			reader.close();
-		}
-		//
-		// todo
-		dispose();
 	}
 
 	protected HttpGetRequester createGetRequest() {
@@ -80,10 +58,30 @@ public class HttpGet {
 		return mCurrentRequest;
 	}
 
-	public EventTaskRunner startTask(EventTaskRunner runner, EventTask last) {
+	public void update(String host, String path, int port) throws IOException {
+		mHost = host;
+		mPath = path;
+		mPort = port;
+		sId = "[httpget "+mHost+":"+mPort+mPath+"]";
+		HttpHistory.get().pushMessage(sId+"#update:"+"\n");
+		dispose();
+		mSendCash = new CashKyoroFile(1024, 3);
+	}
+
+	public void update(String location) throws IOException {
+		MarkableFileReader reader = null;
+		try {
+			reader = new MarkableFileReader(location.getBytes());
+			HttpRequestUri geturi = HttpRequestUri.decode(reader);
+			update(geturi.getHost(), geturi.getMethod(), geturi.getPort());
+		} finally {
+			reader.close();
+		}
+	}
+
+	public KyoroSocketEventRunner startTask(KyoroSocketEventRunner runner, EventTask last) {
 		HttpHistory.get().pushMessage(sId+"#startTask"+"\n");
 		mTaskManager.mLast = last;
-		initForRestart();
 		if(runner == null) {
 			runner = new KyoroSocketEventRunner();
 		}
@@ -94,17 +92,13 @@ public class HttpGet {
 		return runner; 
 	}
 
-	//todo 
-	protected void initForRestart() {
-		mCurrentRequest = null;//todo
-	}
-
 	public void connection() throws IOException, InterruptedException {
 		if(Log.ON){Log.v(TAG, "HttpGet#connection()");}
 		mCurrentRequest = createGetRequest();
+		mResponse = null;
 		mCurrentRequest.getUrlBuilder()
 		.setHost(mHost).setPath(mPath).setPort(mPort);
-		mCurrentSocket = mCurrentRequest._connectionRequest();
+		mCurrentSocket = mCurrentRequest._connectionRequest(null);
 	}
 
 	public boolean isConnected() throws IOException {
@@ -125,14 +119,8 @@ public class HttpGet {
 	public void send() throws InterruptedException, IOException {
 		if(Log.ON){Log.v(TAG, "HttpGet#send()");}
 		KyoroSocketEventRunner runner = KyoroSocketEventRunner.getYourWorker();
-		KyoroSelector selector = null;
-		if(runner != null) {
-			selector = runner.getSelector();
-		}
-		if(selector == null) {
-			selector = new KyoroSelector();
-		}
-		mCurrentRequest.setSelector(selector);
+		
+		mCurrentRequest.setSelector(runner.getSelector());
 		HttpRequest request = ((HttpGetRequester)mCurrentRequest).createHttpRequest();
 		CashKyoroFile cash = getSendCash();
 		request.encode(cash.getLastOutput());
@@ -146,8 +134,6 @@ public class HttpGet {
 		if(Log.ON){Log.v(TAG, "HttpGet#headerIsReadeable()");}
 		if(mResponse == null) {
 			mResponse = mCurrentRequest._getResponse(mCurrentSocket);
-		} else {
-			mResponse.todo_setSocket(mCurrentSocket);
 		}
 		return mResponse.headerIsReadable();
 	}
@@ -156,8 +142,6 @@ public class HttpGet {
 		if(Log.ON){Log.v(TAG, "HttpGet#revcHeader()");}
 		if(mResponse == null) {
 			mResponse = mCurrentRequest._getResponse(mCurrentSocket);
-		} else {
-			mResponse.todo_setSocket(mCurrentSocket);
 		}
 		HttpHistory.get().pushMessage(sId+"#recvHeader:"+"\n");
 		mResponse.readHeader();
@@ -226,14 +210,27 @@ public class HttpGet {
 		return response.getHttpResponse();
 	}
 
+	/**
+	 * you must call dispose too.
+	 * this method don't release response cash 
+	 */
 	public void close() throws IOException {
 		HttpHistory.get().pushMessage(sId+"#close:"+"\n");
-		mCurrentSocket.close();
-		mCurrentSocket = null;
+		if(mCurrentSocket != null) {
+			mCurrentSocket.close();
+			mCurrentSocket = null;
+		}
+		if(mSendCash != null) {
+			mSendCash.close();
+			mSendCash = null;
+		}
 	}
+
 	public void dispose() throws IOException {
-		mResponse.close();
-		mResponse = null;
+		if(mResponse!= null) {
+			mResponse.close();
+			mResponse = null;
+		}
 	}
 }
 

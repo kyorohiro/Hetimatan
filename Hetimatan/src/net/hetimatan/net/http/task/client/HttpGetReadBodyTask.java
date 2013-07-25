@@ -7,6 +7,7 @@ import java.lang.ref.WeakReference;
 import net.hetimatan.net.http.HttpGet;
 import net.hetimatan.util.event.EventTask;
 import net.hetimatan.util.event.EventTaskRunner;
+import net.hetimatan.util.net.KyoroSocketEventRunner;
 
 public class HttpGetReadBodyTask extends EventTask {
 
@@ -45,8 +46,8 @@ public class HttpGetReadBodyTask extends EventTask {
 
 		httpGet.recvBody();
 		if(httpGet.isRedirect()) {
-			httpGet.updateRedirect(httpGet.getLocation());
-			httpGet.startTask(runner, mLast);
+			httpGet.update(httpGet.getLocation());
+			httpGet.startTask((KyoroSocketEventRunner)runner, mLast);
 		} else {
 //			System.out.println("-------------------------------------------------------------------------------------------");
 			nextAction(mLast);

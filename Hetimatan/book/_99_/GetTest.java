@@ -37,11 +37,10 @@ public class GetTest {
 		EventTaskRunner runner = httpGet.startTask(null, closeTask);
 		try {
 			runner.waitByClose(Integer.MAX_VALUE);
-			Thread.sleep(10000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-//		runner.close();
+		httpGet.dispose();
 	}
 
 	public static void showMessage(OutputStream output) throws IOException {
