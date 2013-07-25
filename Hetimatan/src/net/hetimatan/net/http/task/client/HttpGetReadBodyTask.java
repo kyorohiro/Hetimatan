@@ -16,7 +16,7 @@ public class HttpGetReadBodyTask extends EventTask {
 	private boolean mHeaderIsReadable = false;
 	private boolean mIsKeep = false;
 
-	public HttpGetReadBodyTask(HttpGet client, EventTaskRunner runner, EventTask last) {
+	public HttpGetReadBodyTask(HttpGet client, EventTask last) {
 		mOwner = new WeakReference<HttpGet>(client);
 		mLast = last;
 		errorAction(last);

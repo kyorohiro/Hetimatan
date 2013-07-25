@@ -11,7 +11,7 @@ public class HttpFrontWaitParseableHeader extends EventTask {
 	public static final String TAG = "HttpFrontWaitParseableHeader";
 	private WeakReference<HttpFront> mClientInfo = null;
 
-	public HttpFrontWaitParseableHeader(HttpFront clientInfo, EventTaskRunner runner) {
+	public HttpFrontWaitParseableHeader(HttpFront clientInfo) {
 		mClientInfo = new WeakReference<HttpFront>(clientInfo);
 		errorAction(new HttpFrontCloseTask(clientInfo));
 	}

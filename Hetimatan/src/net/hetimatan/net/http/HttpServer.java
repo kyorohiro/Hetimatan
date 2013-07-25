@@ -58,7 +58,7 @@ public class HttpServer {
 	}
 	private void startAcceptTask() {
 		HttpHistory.get().pushMessage(sId+"#startAccept:"+"\n");
-		mAcceptTask = new HttpServerAcceptTask(this, mRequestRunner);
+		mAcceptTask = new HttpServerAcceptTask(this);
 		mServerSocket.setEventTaskAtWrakReference(mAcceptTask, KyoroSelector.ACCEPT);
 	}
 
@@ -194,7 +194,7 @@ public class HttpServer {
 		}
 
 		mRequestRunner.waitIsSelect(true);
-		HttpServerBootTask boot = new HttpServerBootTask(this, mRequestRunner);
+		HttpServerBootTask boot = new HttpServerBootTask(this);
 		boot.nextAction(null);
 		mSelector = mRequestRunner.getSelector();
 		mRequestRunner.start(boot);

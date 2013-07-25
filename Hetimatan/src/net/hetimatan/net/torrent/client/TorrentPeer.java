@@ -99,7 +99,7 @@ public class TorrentPeer {
 	}
 
 	public void startTracker(String event) {
-		mFinTrackerTask = new TorrentFrontFinTrackerTask(mPieceScenario, mMasterRunner);
+		mFinTrackerTask = new TorrentFrontFinTrackerTask(mPieceScenario);
 		startTracker(event, mFinTrackerTask);
 	}
 
@@ -110,15 +110,15 @@ public class TorrentPeer {
 		}
 		runner.waitIsSelect(true);//todo
 		mMasterSelector = runner.getSelector();
-		TorrentPeerBootTask bootTask = new TorrentPeerBootTask(this, runner);
-		bootTask.nextAction(mTrackerTask = new TorrentPeerStartTracker(this, runner));
+		TorrentPeerBootTask bootTask = new TorrentPeerBootTask(this);
+		bootTask.nextAction(mTrackerTask = new TorrentPeerStartTracker(this));
 		runner.start(bootTask);
 		return runner; 
 	}
 
 	public void setTrackerTask(int timeout) {
 		if(mTrackerTask == null) {
-			mTrackerTask = new TorrentPeerStartTracker(this, getClientRunner());
+			mTrackerTask = new TorrentPeerStartTracker(this);
 		}
 		getClientRunner().releaseTask(mTrackerTask);		
 		getClientRunner().pushWork(mTrackerTask, timeout);
@@ -209,7 +209,7 @@ public class TorrentPeer {
 			mMasterSelector = mMasterRunner.getSelector();
 		}
 		serverSocket.regist(mMasterSelector, KyoroSelector.ACCEPT);
-		mAcceptTask = new TorrentPeerAcceptTask(this, mMasterRunner);
+		mAcceptTask = new TorrentPeerAcceptTask(this);
 		serverSocket.setEventTaskAtWrakReference(mAcceptTask, KyoroSelector.ACCEPT);
 		do {
 			try {

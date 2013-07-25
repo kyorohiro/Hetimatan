@@ -8,7 +8,7 @@ public class HttpGetTaskManager {
 	public EventTask mLast = null;
 	public void startSendTask(HttpGet peer) {
 		// if(mSendTaskChain == null) {
-			 mSendTaskChain = new MessageSendTask(peer.getRunner(), peer.getSocket(), peer.getSendCash());
+			 mSendTaskChain = new MessageSendTask(peer.getSocket(), peer.getSendCash());
 		 //}
 
 		 if(!peer.getRunner().contains(mSendTaskChain)) {

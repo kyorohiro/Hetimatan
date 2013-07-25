@@ -11,7 +11,7 @@ public class ScenarioSeeder extends EventTask {
 	public static final String TAG = "ScenarioSeeder";
 	private WeakReference<TorrentPeerPiecer> mTorrentScenario = null;
 
-	public ScenarioSeeder(TorrentPeerPiecer scenario, EventTaskRunner runner) {
+	public ScenarioSeeder(TorrentPeerPiecer scenario) {
 		mTorrentScenario = new WeakReference<TorrentPeerPiecer>(scenario);
 	}
 

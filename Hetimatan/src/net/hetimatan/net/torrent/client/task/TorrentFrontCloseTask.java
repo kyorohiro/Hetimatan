@@ -11,7 +11,7 @@ public class TorrentFrontCloseTask extends EventTask {
 
 	public static final String TAG = "TorrentFrontCloseTask";
 	private WeakReference<TorrentFront> mTorrentFront = null;
-	public TorrentFrontCloseTask(TorrentFront front, EventTaskRunner runner) {
+	public TorrentFrontCloseTask(TorrentFront front) {
 		mTorrentFront = new WeakReference<TorrentFront>(front);
 	}
 

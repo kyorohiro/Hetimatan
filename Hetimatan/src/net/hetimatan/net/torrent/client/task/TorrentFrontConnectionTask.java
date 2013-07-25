@@ -18,7 +18,7 @@ public class TorrentFrontConnectionTask extends EventTask {
 	private boolean mIsKeep = false;
 
 	public TorrentFrontConnectionTask(
-			TorrentFront front, EventTaskRunner runner,
+			TorrentFront front, 
 			String host, int port) {
 		mHost = host;
 		mPort = port;

@@ -14,7 +14,7 @@ public class HttpGetRequestTask extends EventTask {
 	private WeakReference<HttpGet> mOwner = null;
 	private EventTask mLast = null;
 
-	public HttpGetRequestTask(HttpGet client, EventTaskRunner runner, EventTask last) {
+	public HttpGetRequestTask(HttpGet client, EventTask last) {
 		mOwner = new WeakReference<HttpGet>(client);
 		mLast = last;
 		errorAction(last);

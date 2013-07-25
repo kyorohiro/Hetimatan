@@ -12,7 +12,7 @@ public class TorrentFrontFinTrackerTask extends EventTask {
 	public static final String TAG = "TorrentFrontFinTrackerTask";
 	private WeakReference<TorrentPeerPiecer> mTorrentScenario = null;
 
-	public TorrentFrontFinTrackerTask(TorrentPeerPiecer scenario, EventTaskRunner runner) {
+	public TorrentFrontFinTrackerTask(TorrentPeerPiecer scenario) {
 		mTorrentScenario = new WeakReference<TorrentPeerPiecer>(scenario);
 	}
 

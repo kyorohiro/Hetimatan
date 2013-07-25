@@ -11,7 +11,7 @@ public class TorrentPeerBootTask extends EventTask {
 	public static final String TAG = "TorrentPeerBootTask";
 	private WeakReference<TorrentPeer> mServer = null;
 
-	public TorrentPeerBootTask(TorrentPeer httpServer, EventTaskRunner runner) {
+	public TorrentPeerBootTask(TorrentPeer httpServer) {
 		mServer = new WeakReference<TorrentPeer>(httpServer);
 	}
 

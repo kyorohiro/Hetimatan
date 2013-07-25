@@ -24,13 +24,13 @@ public class TorrentPeerPiecer implements TorrentFront.EventListener {
 
 	public TorrentPeerPiecer(TorrentPeer peer) {
 		mUploadTargetPeer = new WeakReference<TorrentPeer>(peer);
-		mSeederTask = new ScenarioSeeder(this, peer.getClientRunner());
+		mSeederTask = new ScenarioSeeder(this);
 	}
 
 	public void sendPiece(TorrentFront front) {
 		TorrentPeer peer = mUploadTargetPeer.get();
 		if(peer == null){return;}
-		TorrentFrontSendPieceTask task = new TorrentFrontSendPieceTask(front, peer.getClientRunner());
+		TorrentFrontSendPieceTask task = new TorrentFrontSendPieceTask(front);
 		peer.getClientRunner().pushWork(task);
 	}
 

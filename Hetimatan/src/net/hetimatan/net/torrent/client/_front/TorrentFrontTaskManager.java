@@ -37,7 +37,7 @@ public class TorrentFrontTaskManager {
 
 	public void startSendTask(TorrentPeer peer, TorrentFront front) {
 		 if(mSendTaskChain == null) {
-			 mSendTaskChain = new MessageSendTask(peer.getClientRunner(), front.getSocket(), front.getSendCash());
+			 mSendTaskChain = new MessageSendTask(front.getSocket(), front.getSendCash());
 		 }
 
 		 if(!peer.getClientRunner().contains(mSendTaskChain)) {
@@ -61,10 +61,10 @@ public class TorrentFrontTaskManager {
 	public void startConnectForAccept(TorrentPeer peer, TorrentFront front) {
 		if(Log.ON){Log.v(TAG, "["+front.getDebug()+"]"+"start accept task");}
 		EventTaskRunner runner = peer.getClientRunner();
-		mStartTask = new TorrentFrontShakeHandTask(front, runner);
-		mFirstAction = new TorrentFrontFirstAction(front, peer.getClientRunner());
+		mStartTask = new TorrentFrontShakeHandTask(front);
+		mFirstAction = new TorrentFrontFirstAction(front);
 		if(mCloseTask == null) {
-			mCloseTask = new TorrentFrontCloseTask(front, peer.getClientRunner());
+			mCloseTask = new TorrentFrontCloseTask(front);
 		}
 		mStartTask.nextAction(mFirstAction);
 		mStartTask.errorAction(mCloseTask);
@@ -73,11 +73,11 @@ public class TorrentFrontTaskManager {
 
 	public void startConnect(TorrentPeer peer, TorrentFront front, String host, int port) throws IOException {
 		if(Log.ON){Log.v(TAG, "["+front.getDebug()+"]"+"start connection task");}
-		mConnection = new TorrentFrontConnectionTask(front, peer.getClientRunner(), host, port);
-		mStartTask = new TorrentFrontShakeHandTask(front, peer.getClientRunner());
-		mFirstAction = new TorrentFrontFirstAction(front, peer.getClientRunner());
+		mConnection = new TorrentFrontConnectionTask(front, host, port);
+		mStartTask = new TorrentFrontShakeHandTask(front);
+		mFirstAction = new TorrentFrontFirstAction(front);
 		if(mCloseTask == null) {
-			mCloseTask = new TorrentFrontCloseTask(front, peer.getClientRunner());
+			mCloseTask = new TorrentFrontCloseTask(front);
 		}
 		mConnection.nextAction(mStartTask);
 		mStartTask.nextAction(mFirstAction);
@@ -90,8 +90,8 @@ public class TorrentFrontTaskManager {
 		if(Log.ON){Log.v(TAG, "["+front.getDebug()+"]"+"start receiver");}
 		if(peer == null) {return;}
 		EventTaskRunner runner = peer.getClientRunner();
-		mReceiverTask = new TorrentFrontReceiverTask(front, runner);
-		mCloseTask = new TorrentFrontCloseTask(front, runner);
+		mReceiverTask = new TorrentFrontReceiverTask(front);
+		mCloseTask = new TorrentFrontCloseTask(front);
 		mReceiverTask.errorAction(mCloseTask);
 		peer.getSelector().wakeup();
 		front.getSocket().regist(peer.getSelector(), KyoroSelector.READ);
@@ -104,10 +104,10 @@ public class TorrentFrontTaskManager {
 		if(peer == null) {return;}
 		if(front.getMyInfo().mInterest == true) {return;}
 		if(mInterestTask == null) {
-			mInterestTask = new TorrentFrontInterestTask(front, peer.getClientRunner());
+			mInterestTask = new TorrentFrontInterestTask(front);
 		}
 		if(mCloseTask == null) {
-			mCloseTask = new TorrentFrontCloseTask(front, peer.getClientRunner());
+			mCloseTask = new TorrentFrontCloseTask(front);
 		}
 		mInterestTask.errorAction(mCloseTask);
 		peer.getClientRunner().pushWork(mInterestTask);
@@ -118,10 +118,10 @@ public class TorrentFrontTaskManager {
 		if(peer == null) {return;}
 		if(front.getMyInfo().mInterest == false) {return;}
 		if(mNotInterestTask == null) {
-			mNotInterestTask = new TorrentFrontNotInterestTask(front, peer.getClientRunner());
+			mNotInterestTask = new TorrentFrontNotInterestTask(front);
 		}
 		if(mCloseTask == null) {
-			mCloseTask = new TorrentFrontCloseTask(front, peer.getClientRunner());
+			mCloseTask = new TorrentFrontCloseTask(front);
 		}
 		mNotInterestTask.errorAction(mCloseTask);
 		peer.getClientRunner().pushWork(mNotInterestTask);
@@ -132,9 +132,9 @@ public class TorrentFrontTaskManager {
 		if(peer.isSeeder()){return;}
 		if(front.getTargetInfo().isChoked() != TorrentFront.FALSE){return;}
 		if(Log.ON){Log.v(TAG, "["+front.getDebug()+"]"+"startDownload");}
-		mRequestTask = new TorrentFrontRequestTask(front, peer.getClientRunner());
+		mRequestTask = new TorrentFrontRequestTask(front);
 		if(mCloseTask == null) {
-			mCloseTask = new TorrentFrontCloseTask(front, peer.getClientRunner());
+			mCloseTask = new TorrentFrontCloseTask(front);
 		}
 		mRequestTask.errorAction(mCloseTask);
 		peer.getClientRunner().pushWork(mRequestTask);
@@ -143,10 +143,10 @@ public class TorrentFrontTaskManager {
 	public void startChoker(TorrentPeer peer, TorrentFront front, boolean isChoke) throws IOException {
 		if(peer == null) {return;}
 		if(mChokerTask == null) {
-			mChokerTask = new TorrentFrontChokerTask(front, peer.getClientRunner(), isChoke);
+			mChokerTask = new TorrentFrontChokerTask(front, isChoke);
 		}
 		if(mCloseTask == null) {
-			mCloseTask = new TorrentFrontCloseTask(front, peer.getClientRunner());
+			mCloseTask = new TorrentFrontCloseTask(front);
 		}
 		mChokerTask.errorAction(mCloseTask);
 		mChokerTask.isChoke(isChoke);
@@ -155,9 +155,9 @@ public class TorrentFrontTaskManager {
 
 	public void startHave(TorrentPeer peer, TorrentFront front, int index) throws IOException {
 		if(peer == null) {return;}
-		mHaveTask = new TorrentFrontHaveTask(front, peer.getClientRunner(), index);
+		mHaveTask = new TorrentFrontHaveTask(front, index);
 		if(mCloseTask == null) {
-			mCloseTask = new TorrentFrontCloseTask(front, peer.getClientRunner());
+			mCloseTask = new TorrentFrontCloseTask(front);
 		}
 		mHaveTask.errorAction(mCloseTask);
 		peer.getClientRunner().pushWork(mHaveTask);

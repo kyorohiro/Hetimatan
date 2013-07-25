@@ -11,7 +11,7 @@ public class HttpServerClose extends EventTask {
 	public static final String TAG = "HttpServerClose";
 	private WeakReference<HttpServer> mServer = null;
 
-	public HttpServerClose(HttpServer httpServer, EventTaskRunner runner) {
+	public HttpServerClose(HttpServer httpServer) {
 		mServer = new WeakReference<HttpServer>(httpServer);
 	}
 

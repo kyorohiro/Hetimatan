@@ -86,8 +86,8 @@ public class HttpGet {
 			runner = new EventTaskRunnerImple();
 		}
 		mRunner = runner;
-		HttpGetConnectionTask connectionTask = new HttpGetConnectionTask(this, runner, last);
-		connectionTask.nextAction(new HttpGetRequestTask(this, runner, last));
+		HttpGetConnectionTask connectionTask = new HttpGetConnectionTask(this, last);
+		connectionTask.nextAction(new HttpGetRequestTask(this, last));
 		runner.start(connectionTask);
 		return runner; 
 	}
@@ -135,8 +135,8 @@ public class HttpGet {
 		CashKyoroFile cash = getSendCash();
 		request.encode(cash.getLastOutput());
 		mTaskManager.startSendTask(this);
-		HttpGetReadHeaderTask readHeaderTask = new HttpGetReadHeaderTask(this, getRunner(), mTaskManager.mLast);
-		readHeaderTask.nextAction(new HttpGetReadBodyTask(this, getRunner(), mTaskManager.mLast));
+		HttpGetReadHeaderTask readHeaderTask = new HttpGetReadHeaderTask(this, mTaskManager.mLast);
+		readHeaderTask.nextAction(new HttpGetReadBodyTask(this, mTaskManager.mLast));
 		mTaskManager.nextTask(readHeaderTask);
 	}
 

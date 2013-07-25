@@ -11,7 +11,7 @@ import net.hetimatan.util.log.Log;
 public class KyoroSocketEventRunner extends EventTaskRunnerImple {
 	public static final String TAG ="looper";
 
-	private SelctorLoopTask mOneShot = new SelctorLoopTask(this);
+	private SelctorLoopTask mOneShot = new SelctorLoopTask();
 	private KyoroSelector mSelector = new KyoroSelector();
 	private boolean mWaitIsSelect = false;
 
@@ -101,7 +101,7 @@ public class KyoroSocketEventRunner extends EventTaskRunnerImple {
 
 	public static class SelctorLoopTask extends EventTask {
 		public static final String TAG = "SelctorLoopTask";
-		public SelctorLoopTask(KyoroSocketEventRunner runner) {
+		public SelctorLoopTask() {
 		}
 
 		@Override

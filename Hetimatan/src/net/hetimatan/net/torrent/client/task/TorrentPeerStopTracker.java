@@ -12,7 +12,7 @@ public class TorrentPeerStopTracker extends EventTask {
 	public static final String TAG = "TorrentPeerStopTracker";
 	private WeakReference<TorrentPeer> mServer = null;
 
-	public TorrentPeerStopTracker(TorrentPeer httpServer, EventTaskRunner runner) {
+	public TorrentPeerStopTracker(TorrentPeer httpServer) {
 		mServer = new WeakReference<TorrentPeer>(httpServer);
 	}
 

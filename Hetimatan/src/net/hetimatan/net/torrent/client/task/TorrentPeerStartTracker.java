@@ -13,7 +13,7 @@ public class TorrentPeerStartTracker extends EventTask {
 
 	private WeakReference<TorrentPeer> mServer = null;
 
-	public TorrentPeerStartTracker(TorrentPeer httpServer, EventTaskRunner runner) {
+	public TorrentPeerStartTracker(TorrentPeer httpServer) {
 		mServer = new WeakReference<TorrentPeer>(httpServer);
 	}
 

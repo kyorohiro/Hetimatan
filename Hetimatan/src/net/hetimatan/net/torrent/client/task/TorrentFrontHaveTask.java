@@ -13,7 +13,7 @@ public class TorrentFrontHaveTask extends EventTask {
 	private WeakReference<TorrentFront> mTorrentFront = null;
 	private int mIndex = 0;
 
-	public TorrentFrontHaveTask(TorrentFront front, EventTaskRunner runner, int index) {
+	public TorrentFrontHaveTask(TorrentFront front, int index) {
 		mIndex = index;
 		mTorrentFront = new WeakReference<TorrentFront>(front);
 	}

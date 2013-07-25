@@ -11,9 +11,9 @@ public class HttpServerAcceptTask extends EventTask {
 	public static final String TAG = "HttpServerAcceptTask";
 	private WeakReference<HttpServer> mServer = null;
 
-	public HttpServerAcceptTask(HttpServer httpServer, EventTaskRunner runner) {
+	public HttpServerAcceptTask(HttpServer httpServer) {
 		mServer = new WeakReference<HttpServer>(httpServer);
-		errorAction(new HttpServerClose(httpServer, runner));
+		errorAction(new HttpServerClose(httpServer));
 	}
 
 	@Override

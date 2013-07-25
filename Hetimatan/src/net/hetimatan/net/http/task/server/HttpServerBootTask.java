@@ -11,9 +11,9 @@ public class HttpServerBootTask extends EventTask {
 	public static final String TAG = "HttpServerBootTask";
 	private WeakReference<HttpServer> mServer = null;
 
-	public HttpServerBootTask(HttpServer httpServer, EventTaskRunner runner) {
+	public HttpServerBootTask(HttpServer httpServer) {
 		mServer = new WeakReference<HttpServer>(httpServer);
-		errorAction(new HttpServerClose(httpServer, runner));
+		errorAction(new HttpServerClose(httpServer));
 	}
 
 	@Override

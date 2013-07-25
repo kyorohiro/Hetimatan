@@ -15,7 +15,7 @@ public class HttpGetConnectionTask extends EventTask {
 	private EventTask mLast = null;
 	private boolean mIsFirst = true;	
 
-	public HttpGetConnectionTask(HttpGet client, EventTaskRunner runner, EventTask last) {
+	public HttpGetConnectionTask(HttpGet client, EventTask last) {
 		mOwner = new WeakReference<HttpGet>(client);
 		mLast = last;
 		errorAction(last);

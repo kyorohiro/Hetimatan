@@ -18,7 +18,7 @@ public class TorrentFrontShakeHandTask extends EventTask {
 	private boolean mIsKeep = true;
 	private boolean mIsNext = true;
 
-	public TorrentFrontShakeHandTask(TorrentFront front, EventTaskRunner runner) {
+	public TorrentFrontShakeHandTask(TorrentFront front) {
 		mTorrentFront = new WeakReference<TorrentFront>(front);
 	}
 

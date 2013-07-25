@@ -14,7 +14,7 @@ public class MessageSendTask extends EventTask {
 	private KyoroSocket mSocket = null;
 	private boolean mIsKeep = false;
 
-	public MessageSendTask(EventTaskRunner runner, KyoroSocket socket, KyoroFile data) {
+	public MessageSendTask(KyoroSocket socket, KyoroFile data) {
 		mData = data;
 		mSocket = socket;
 	}

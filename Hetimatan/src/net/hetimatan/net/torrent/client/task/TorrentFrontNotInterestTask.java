@@ -11,7 +11,7 @@ public class TorrentFrontNotInterestTask extends EventTask {
 
 	public static final String TAG = "TorrentFrontNotInterestTask";
 	private WeakReference<TorrentFront> mTorrentFront = null;
-	public TorrentFrontNotInterestTask(TorrentFront front, EventTaskRunner runner) {
+	public TorrentFrontNotInterestTask(TorrentFront front) {
 		mTorrentFront = new WeakReference<TorrentFront>(front);
 	}
 

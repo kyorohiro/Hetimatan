@@ -13,7 +13,7 @@ public class TorrentFrontChokerTask extends EventTask {
 	private WeakReference<TorrentFront> mTorrentFront = null;
 	private boolean mIsChoke = false;
 
-	public TorrentFrontChokerTask(TorrentFront front, EventTaskRunner runner, boolean isChoke) {
+	public TorrentFrontChokerTask(TorrentFront front, boolean isChoke) {
 		mTorrentFront = new WeakReference<TorrentFront>(front);
 		mIsChoke = isChoke;
 	}
