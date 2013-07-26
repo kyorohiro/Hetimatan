@@ -103,7 +103,7 @@ public class TorrentPeer {
 		startTracker(event, mFinTrackerTask);
 	}
 
-	public EventTaskRunner startTask(KyoroSocketEventRunner runner) {
+	public KyoroSocketEventRunner startTask(KyoroSocketEventRunner runner) {
 		System.out.println("TorrentPeer#startTask:");
 		if(runner == null) {
 			mMasterRunner = runner = new KyoroSocketEventRunner();

@@ -1,4 +1,4 @@
-package _03_handshake;
+package _02_tracker;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,10 +18,10 @@ import net.hetimatan.util.net.KyoroSocketEventRunner;
 
 //
 //[課題]
-// Torrentクライアントとハンドシェークせよ。次にBitfieldメッセージを受信せよ。
-// 相手Torrentが保持しているPieceデータを保持せよ。
+// TracckerにアクセスしてPeerの一覧を取得せよ。
 //
-public class HandShakeTest {
+//
+public class GetPeersFromTracker {
 	public static void main(String[] args) {
 		try {
 			start();
@@ -39,43 +39,22 @@ public class HandShakeTest {
 		String peerId = TorrentPeer.createPeerId();
 		MetaFile metafile = MetaFileCreater.createFromTorrentFile(mTorrent);
 
-
-		// ----------------------------------------------------
-		// boot TorrentClient Server
-		// ----------------------------------------------------
-		TorrentPeer peer = new TorrentPeer(metafile, peerId);
-		peer.boot();
-
-
 		// ----------------------------------------------------
 		// request peerinfo tracker
 		// ----------------------------------------------------
 		TrackerClient client = new TrackerClient(metafile, peerId);
-		client.setClientPort(peer.getServerPort());
+		client.setClientPort(18080);
 		KyoroSocketEventRunner runner = client.startTask(null, new CloseTask(null));
 		runner.waitByClose(Integer.MAX_VALUE);
 
 		Iterator<TrackerPeerInfo> peerInfos = client.getPeer32();
 		TrackerPeerInfo info = null;
 		while(peerInfos.hasNext()) {
+			// ----------------------------------------------------
+			// show peer
+			// ----------------------------------------------------
 			info = peerInfos.next();
+			System.out.println("peers:"+info.getHostName()+":"+info.getPort());
 		}
-
-
-		// ----------------------------------------------------
-		// send shakehand
-		// ----------------------------------------------------
-		client.getPeer32();
-		KyoroSocket socket = new KyoroSocketImpl();
-		TorrentFront front = peer.createFront(socket);
-		front.connect(info.getHostName(), info.getPort());
-		while(!front.isConnect()) {Thread.yield();}
-
-		front.sendShakehand();
-		while(!front.reveiveSH()){Thread.yield();}
-		front.revcShakehand();
-//	
-//		front.receive();
-//		
 	}
 }
