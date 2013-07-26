@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Iterator;
 
+import com.sun.jndi.url.corbaname.corbanameURLContextFactory;
+
 import net.hetimatan.io.net.KyoroSocket;
 import net.hetimatan.io.net.KyoroSocketImpl;
 import net.hetimatan.net.torrent.client.TorrentFront;
@@ -59,6 +61,9 @@ public class HandShakeTest {
 		TrackerPeerInfo info = null;
 		while(peerInfos.hasNext()) {
 			info = peerInfos.next();
+			if(peer.getServerPort()==info.getPort()) {
+				continue;
+			}
 		}
 
 
@@ -72,6 +77,7 @@ public class HandShakeTest {
 		while(!front.isConnect()) {Thread.yield();}
 
 		front.sendShakehand();
+		front.flushSendTask();
 		while(!front.reveiveSH()){Thread.yield();}
 		front.revcShakehand();
 //	

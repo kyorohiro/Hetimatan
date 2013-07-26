@@ -1,0 +1,70 @@
+[httpserver6969]#startAccept:
+[httpget 127.0.0.1:6969/announce]#update:
+[httpget 127.0.0.1:6969/announce]#startTask
+[httpget 127.0.0.1:6969/announce]#connected
+[httpserver6969]#startFront:[httpfront:127.0.0.1:58401]
+[httpfront:127.0.0.1:58401]:parse request:GET /announce?info_hash=%5F%C6%B8%A2dc3%F5c%9DN%95%2B%9B%B8%AD%EE%12%1A%BD&peer_id=%2DKY0114%2D%E8%99%01%D58%1BR%7C%02%AA%F1q&port=6881&uploaded=0&downloaded=0&left=0&compact=1&event=started HTTP/1.1
+User-Agent: Raider/1.0
+
+
+[httpserver6969]#createRes[httpserver6969]#startAccept:
+[httpget 127.0.0.1:6969/announce]#update:
+[httpget 127.0.0.1:6969/announce]#startTask
+[httpget 127.0.0.1:6969/announce]#connected
+[httpserver6969]#startFront:[httpfront:127.0.0.1:58442]
+[httpfront:127.0.0.1:58442]:parse request:GET /announce?info_hash=%5F%C6%B8%A2dc3%F5c%9DN%95%2B%9B%B8%AD%EE%12%1A%BD&peer_id=%2DKY0114%2D%2F%D6%A0%1E%D7T%0D%1B%E1%20On&port=6881&uploaded=0&downloaded=0&left=0&compact=1&event=started HTTP/1.1
+User-Agent: Raider/1.0
+
+
+[httpserver6969]#createRes[httpget 127.0.0.1:6969/announce]#update:
+[httpget 127.0.0.1:6969/announce]#update:
+[httpget 127.0.0.1:6969/announce]#startTask
+[httpget 127.0.0.1:6969/announce]#connected
+[httpget 127.0.0.1:6969/announce]#recvHeader:
+[httpget 127.0.0.1:6969/announce]#close:
+[httpget 127.0.0.1:6969/announce]#update:
+[httpget 127.0.0.1:6969/announce]#update:
+[httpget 127.0.0.1:6969/announce]#startTask
+[httpget 127.0.0.1:6969/announce]#disconnected
+[httpserver6969]#startAccept:
+[httpget 127.0.0.1:6969/announce]#update:
+[httpg[httpget 127.0.0.1:6969/announce]#update:
+[httpget 127.0.0.1:6969/announce]#update:
+[httpget 127.0.0.1:6969/announce]#startTask
+[httpget 127.0.0.1:6969/announce]#connected
+[httpget 127.0.0.1:6969/announce]#recvHeader:
+[httpget 127.0.0.1:6969/announce]#close:
+[httpget 127.0.0.1:6969/announce]#update:
+[httpget 127.0.0.1:6969/announce]#update:
+[httpget 127.0.0.1:6969/announce]#startTask
+[httpget 127.0.0.1:6969/announce]#disconnected
+[httpserver6969]#startAccept:
+[httpget 127.0.0.1:6969/announce]#update:
+[httpg[httpget 127.0.0.1:6969/announce]#update:
+[httpget 127.0.0.1:6969/announce]#update:
+[httpget 127.0.0.1:6969/announce]#startTask
+[httpget 127.0.0.1:6969/announce]#connected
+[httpget 127.0.0.1:6969/announce]#recvHeader:
+[httpget 127.0.0.1:6969/announce]#close:
+[httpserver6969]#startAccept:
+[httpget 127.0.0.1:6969/announce]#update:
+[httpget 127.0.0.1:6969/announce]#startTask
+[httpget 127.0.0.1:6969/announce]#connected
+[httpserver6969]#startFront:[httpfront:127.0.0.1:58517]
+[httpfront:127.0.0.1:58517]:parse request:GET /announce?info_hash=%5F%C6%B8%A2dc3%F5c%9DN%95%2B%9B%B8%AD%EE%12%1A%BD&peer_id=%2DKY0114%2D%89y%1F%9A%F9%87%F7%06d%A6%E8%92&port=6881&uploaded=0&downloaded=0&left=0&compact=1&event=started HTTP/1.1
+User-Agent: Raider/1.0
+
+
+[httpserver6969]#createResponse:[httpfront:127.0.0.1:58517]
+[httpfront:127.0.0.1:58517]#close:
+[httpget 127.0.0.1:6969/announce]#recvHeader:
+[httpget 127.0.0.1:6969/announce]#close:
+[httpserver6969]#startFront:[httpfront:127.0.0.1:58523]
+[httpfront:127.0.0.1:58523]:parse request:GET /announce?info_hash=%5F%C6%B8%A2dc3%F5c%9DN%95%2B%9B%B8%AD%EE%12%1A%BD&peer_id=%2DKY0114%2D%8C%09%7C%2C6s%A4A%C1%1A%11%F5&port=6882&uploaded=0&downloaded=0&left=0&compact=1&event=none HTTP/1.1
+User-Agent: Raider/1.0
+
+
+[httpserver6969]#createResponse:[httpfront:127.0.0.1:58523]
+[httpfront:127.0.0.1:58523]#close:
+[httpserver6969]#startFront:[httpfront:127.0.0.1:58531]
+[httpfront:127.0.0.1:58531]:parse request:GET /announce?info_hash=%5F%C6%B8%A2dc3%F5c%9DN%95%2B%9B%B8%AD%EE%12%1A%BD&peer_id=%2DKY011

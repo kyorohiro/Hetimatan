@@ -5,9 +5,6 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Iterator;
 
-import net.hetimatan.io.net.KyoroSocket;
-import net.hetimatan.io.net.KyoroSocketImpl;
-import net.hetimatan.net.torrent.client.TorrentFront;
 import net.hetimatan.net.torrent.client.TorrentPeer;
 import net.hetimatan.net.torrent.tracker.TrackerClient;
 import net.hetimatan.net.torrent.tracker.TrackerPeerInfo;
@@ -16,6 +13,7 @@ import net.hetimatan.net.torrent.util.metafile.MetaFileCreater;
 import net.hetimatan.util.event.CloseTask;
 import net.hetimatan.util.net.KyoroSocketEventRunner;
 
+//
 //
 //[課題]
 // TracckerにアクセスしてPeerの一覧を取得せよ。
