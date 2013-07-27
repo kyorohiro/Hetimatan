@@ -18,6 +18,7 @@ import net.hetimatan.net.torrent.tracker.db.TrackerData;
 import net.hetimatan.net.torrent.tracker.db.TrackerDatam;
 import net.hetimatan.net.torrent.util.metafile.MetaFile;
 import net.hetimatan.net.torrent.util.metafile.MetaFileCreater;
+import net.hetimatan.util.event.EventTaskRunner;
 
 public class DummyTracker  extends Application implements TrackerServer.StatusCheck {
 
@@ -52,6 +53,12 @@ public class DummyTracker  extends Application implements TrackerServer.StatusCh
 		if(mServer !=  null) {
 			mServer.close();
 		}
+		if(mClient != null) {
+			mClient.close();
+		}
+		if(mRunner != null) {
+			mRunner.close();
+		}
 	}
 
 	
@@ -66,9 +73,11 @@ public class DummyTracker  extends Application implements TrackerServer.StatusCh
 		mServer.setStatusCheck(this);
 	}
 
+	private TorrentPeer mClient = null;
+	private EventTaskRunner mRunner = null;
 	public void startClient() throws IOException, URISyntaxException {
-		TorrentPeer peer = new TorrentPeer(mMetafile, TorrentPeer.createPeerId());
-		peer.startTask(null);
+		mClient = new TorrentPeer(mMetafile, TorrentPeer.createPeerId());
+		mRunner = mClient.startTask(null);
 	}	
 
 	public void onInit(TrackerServer server) {

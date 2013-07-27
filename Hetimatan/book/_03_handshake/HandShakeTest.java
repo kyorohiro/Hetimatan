@@ -15,7 +15,8 @@ import net.hetimatan.net.torrent.tracker.TrackerClient;
 import net.hetimatan.net.torrent.tracker.TrackerPeerInfo;
 import net.hetimatan.net.torrent.util.metafile.MetaFile;
 import net.hetimatan.net.torrent.util.metafile.MetaFileCreater;
-import net.hetimatan.util.event.CloseTask;
+import net.hetimatan.util.bitfield.BitField;
+import net.hetimatan.util.event.CloseRunnerTask;
 import net.hetimatan.util.net.KyoroSocketEventRunner;
 
 //
@@ -36,6 +37,7 @@ public class HandShakeTest {
 		}
 	}
 
+
 	public static void start() throws IOException, URISyntaxException, InterruptedException {
 		File mTorrent = new File("./testdata/1k.txt.torrent");
 		String peerId = TorrentPeer.createPeerId();
@@ -54,7 +56,7 @@ public class HandShakeTest {
 		// ----------------------------------------------------
 		TrackerClient client = new TrackerClient(metafile, peerId);
 		client.setClientPort(peer.getServerPort());
-		KyoroSocketEventRunner runner = client.startTask(null, new CloseTask(null));
+		KyoroSocketEventRunner runner = client.startTask(null, new CloseRunnerTask(null));
 		runner.waitByClose(Integer.MAX_VALUE);
 
 		Iterator<TrackerPeerInfo> peerInfos = client.getPeer32();
@@ -63,6 +65,8 @@ public class HandShakeTest {
 			info = peerInfos.next();
 			if(peer.getServerPort()==info.getPort()) {
 				continue;
+			} else {
+				break;
 			}
 		}
 
@@ -78,10 +82,11 @@ public class HandShakeTest {
 
 		front.sendShakehand();
 		front.flushSendTask();
+
 		while(!front.reveiveSH()){Thread.yield();}
 		front.revcShakehand();
-//	
-//		front.receive();
-//		
+		
+		BitField field = front.getTargetInfo().getBitField();
+		System.out.println("bitfield:"+field.toURLString());
 	}
 }

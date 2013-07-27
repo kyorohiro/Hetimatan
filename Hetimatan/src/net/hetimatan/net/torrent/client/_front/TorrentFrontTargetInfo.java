@@ -21,6 +21,10 @@ public class TorrentFrontTargetInfo {
 		mRequestList.append(pieceStart+start, pieceStart+end);
 	}
 
+	public BitField getBitField() {
+		return mTargetBitField;
+	}
+
 	public int getPieceLength() {
 		return mPieceLength;
 	}

@@ -34,6 +34,7 @@ import net.hetimatan.util.url.PercentEncoder;
 public class TorrentPeer {
 	public static final String TAG              = "TorrentPeer";
 	public static final String PEERID_HEAD      = "-KY0114-";
+	public String sId 							= "none";
 	public static final int TORRENT_PORT_BEGIN  = 6881;
 	public static final int TORRENT_PORT_END    = 6889;
 
@@ -70,10 +71,12 @@ public class TorrentPeer {
 	private TorrentFrontFinTrackerTask mFinTrackerTask = null;
 	private TorrentPeerStartTracker mTrackerTask = null;
 
+	private static int num = 0;
 	public TorrentPeer(MetaFile metafile, String peerId) throws URISyntaxException, IOException {
 		mTrackerClient = new TrackerClient(metafile, peerId);
 		mData = new TorrentData(metafile);
 		mMetaFile = metafile;
+		sId = "["+(num++)+"]"+peerId;
 	}
 
 	public void addDownloaded(int downloaded) {
@@ -199,13 +202,11 @@ public class TorrentPeer {
 
 	public void boot() throws IOException {
 //		if(Log.ON){Log.v(TAG, "TorrentPeer#boot");}
-		TorrentHistory.get().pushMessage("TorrentPeer#boot()\n");
+		TorrentHistory.get().pushMessage(""+sId+"TorrentPeer#boot()\n");
 		mIsBooted = false;
 		KyoroServerSocket serverSocket = new KyoroServerSocketImpl();
 		if(mMasterRunner == null) {
 			mMasterRunner = new KyoroSocketEventRunner();
-		}
-		if(mMasterSelector ==null) {
 			mMasterSelector = mMasterRunner.getSelector();
 		}
 		serverSocket.regist(mMasterSelector, KyoroSelector.ACCEPT);

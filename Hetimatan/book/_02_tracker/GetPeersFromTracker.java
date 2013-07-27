@@ -10,7 +10,7 @@ import net.hetimatan.net.torrent.tracker.TrackerClient;
 import net.hetimatan.net.torrent.tracker.TrackerPeerInfo;
 import net.hetimatan.net.torrent.util.metafile.MetaFile;
 import net.hetimatan.net.torrent.util.metafile.MetaFileCreater;
-import net.hetimatan.util.event.CloseTask;
+import net.hetimatan.util.event.CloseRunnerTask;
 import net.hetimatan.util.net.KyoroSocketEventRunner;
 
 //
@@ -42,7 +42,7 @@ public class GetPeersFromTracker {
 		// ----------------------------------------------------
 		TrackerClient client = new TrackerClient(metafile, peerId);
 		client.setClientPort(18080);
-		KyoroSocketEventRunner runner = client.startTask(null, new CloseTask(null));
+		KyoroSocketEventRunner runner = client.startTask(null, new CloseRunnerTask(null));
 		runner.waitByClose(Integer.MAX_VALUE);
 
 		Iterator<TrackerPeerInfo> peerInfos = client.getPeer32();

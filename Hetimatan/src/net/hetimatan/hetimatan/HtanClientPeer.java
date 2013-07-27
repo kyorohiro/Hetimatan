@@ -13,7 +13,7 @@ import net.hetimatan.net.torrent.tracker.TrackerPeerInfo;
 import net.hetimatan.net.torrent.tracker.TrackerRequest;
 import net.hetimatan.net.torrent.util.metafile.MetaFile;
 import net.hetimatan.net.torrent.util.metafile.MetaFileCreater;
-import net.hetimatan.util.event.CloseTask;
+import net.hetimatan.util.event.CloseRunnerTask;
 import net.hetimatan.util.event.EventTask;
 import net.hetimatan.util.event.EventTaskRunner;
 import net.hetimatan.util.event.GlobalAccessProperty;
@@ -62,7 +62,7 @@ public class HtanClientPeer {
 			mPeer.close();
 		}
 		if(mRunner != null) {
-			EventTask closeTask = new CloseTask(null);
+			EventTask closeTask = new CloseRunnerTask(null);
 			mPeer.startTracker(TrackerRequest.EVENT_STOPPED, closeTask);
 		}
 	}

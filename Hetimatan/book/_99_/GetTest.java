@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import net.hetimatan.net.http.HttpGet;
-import net.hetimatan.util.event.CloseTask;
+import net.hetimatan.util.event.CloseRunnerTask;
 import net.hetimatan.util.event.EventTaskRunner;
 import net.hetimatan.util.http.HttpRequestUri;
 
@@ -33,8 +33,8 @@ public class GetTest {
 		HttpRequestUri uri = HttpRequestUri.crateHttpGetRequestUri(address);
 		HttpGet httpGet = new HttpGet();
 		httpGet.update(uri.getHost(), uri.getPath(), uri.getPort());
-		CloseTask closeTask = new CloseTask(null);
-		EventTaskRunner runner = httpGet.startTask(null, closeTask);
+		CloseRunnerTask closeRunnerTask = new CloseRunnerTask(null);
+		EventTaskRunner runner = httpGet.startTask(null, closeRunnerTask);
 		try {
 			runner.waitByClose(Integer.MAX_VALUE);
 		} catch (InterruptedException e) {

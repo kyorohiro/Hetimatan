@@ -1,10 +1,10 @@
 package net.hetimatan.util.event;
 
-public class CloseTask extends EventTask {
+public class CloseRunnerTask extends EventTask {
 	private EventTask mLastTask = null;
 	public final static String TAG = "CloseTask";
 
-	public CloseTask(EventTask lasttask) {
+	public CloseRunnerTask(EventTask lasttask) {
 		mLastTask = lasttask;
 	}
 
