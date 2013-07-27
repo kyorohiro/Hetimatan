@@ -1,4 +1,4 @@
-package _04_message;
+package _05_senddata;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,8 +25,8 @@ import net.hetimatan.util.net.KyoroSocketEventRunner;
 //[課題]
 // Torrentクライアントとハンドシェークせよ。次にBitfieldメッセージを受信せよ。
 // 相手Torrentが保持しているPieceデータを保持せよ。
-//
-public class ReceiveMessageTest {
+// todo now creating
+public class SendDataTest {
 	public static void main(String[] args) {
 		try {
 			start();
