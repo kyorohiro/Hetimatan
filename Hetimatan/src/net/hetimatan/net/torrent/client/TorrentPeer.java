@@ -26,7 +26,6 @@ import net.hetimatan.net.torrent.tracker.TrackerPeerInfo;
 import net.hetimatan.net.torrent.util.metafile.MetaFile;
 import net.hetimatan.util.event.EventTask;
 import net.hetimatan.util.event.EventTaskRunner;
-import net.hetimatan.util.log.Log;
 import net.hetimatan.util.net.KyoroSocketEventRunner;
 import net.hetimatan.util.url.PercentEncoder;
 

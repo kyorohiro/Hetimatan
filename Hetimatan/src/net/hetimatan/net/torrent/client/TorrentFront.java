@@ -15,7 +15,6 @@ import net.hetimatan.net.torrent.client._front.TorrentFrontMyInfo;
 import net.hetimatan.net.torrent.client._front.TorrentFrontTargetInfo;
 import net.hetimatan.net.torrent.client._front.TorrentFrontTaskManager;
 import net.hetimatan.net.torrent.client.message.HelperLookAheadMessage;
-import net.hetimatan.net.torrent.client.message._HelperLookAheadMessage;
 import net.hetimatan.net.torrent.client.message.HelperLookAheadShakehand;
 import net.hetimatan.net.torrent.client.message.MessageBitField;
 import net.hetimatan.net.torrent.client.message.MessageCancel;
@@ -353,9 +352,9 @@ public class TorrentFront {
 		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"TorrentFront#parseableMessage()");}
 		if(mCurrentMessage == null) {
 			TorrentHistory.get().pushMessage("[receive start]\n");
-			mCurrentMessage = new HelperLookAheadMessage(mReader);
+			mCurrentMessage = new HelperLookAheadMessage();
 		}
-		boolean isEnd = mCurrentMessage.lookahead();
+		boolean isEnd = mCurrentMessage.lookahead(mReader);
 		if(isEnd) {return 0;}
 		else if(mReader.isEOF()){ return -1;}
 		else{return 1;}

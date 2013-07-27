@@ -86,8 +86,9 @@ public class HandShakeTest {
 		while(!front.parseableShakehand()){Thread.yield();}
 		front.revcShakehand();
 
-//		while(!front.receive()){Thread.yield();}
-//		BitField field = front.getTargetInfo().getBitField();
-//		System.out.println("bitfield:"+field.toURLString());
+		while(1==front.parseableMessage()){Thread.yield();}
+		front.receive();
+		BitField field = front.getTargetInfo().getBitField();
+		System.out.println("[[[bitfield]]]]:"+field.toURLString());
 	}
 }
