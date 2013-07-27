@@ -15,6 +15,7 @@ import net.hetimatan.net.torrent.client._front.TorrentFrontMyInfo;
 import net.hetimatan.net.torrent.client._front.TorrentFrontTargetInfo;
 import net.hetimatan.net.torrent.client._front.TorrentFrontTaskManager;
 import net.hetimatan.net.torrent.client.message.HelperLookAheadMessage;
+import net.hetimatan.net.torrent.client.message._HelperLookAheadMessage;
 import net.hetimatan.net.torrent.client.message.HelperLookAheadShakehand;
 import net.hetimatan.net.torrent.client.message.MessageBitField;
 import net.hetimatan.net.torrent.client.message.MessageCancel;
@@ -46,7 +47,7 @@ public class TorrentFront {
 	private MarkableReader mReader = null;
 //	private KyoroSocketOutputStream mOutput = null;
 	private WeakReference<TorrentPeer> mTorrentPeer = null;
-	private HelperLookAheadMessage mCurrentHelper = null;
+	private HelperLookAheadMessage mCurrentMessage = null;
 	private HelperLookAheadShakehand mCurrentSHHelper = null;
 
 	private TorrentFrontTargetInfo mTargetInfo = null;
@@ -203,7 +204,6 @@ public class TorrentFront {
 		TorrentHistory.get().pushSend(this, send);
 		send.encode(mSendCash.getLastOutput());
 		pushflushSendTask();
-//		mOutput.flush();
 	}
 
 	public void flushSendTask() throws IOException {
@@ -216,7 +216,6 @@ public class TorrentFront {
 		MessageBitField bitfield = new MessageBitField(torrentData.getStockedDataInfo());
 		bitfield.encode(mSendCash.getLastOutput());
 		pushflushSendTask();
-//		mOutput.flush();
 		TorrentHistory.get().pushSend(this, bitfield);
 	}
 
@@ -328,7 +327,7 @@ public class TorrentFront {
 		}
 	}
 
-	public boolean reveiveSH() throws IOException {
+	public boolean parseableShakehand() throws IOException {
 		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"TorrentFront#revieceSH()");}
 		if(mCurrentSHHelper == null) {
 			TorrentHistory.get().pushMessage("[receive start]\n");
@@ -346,22 +345,30 @@ public class TorrentFront {
 		}
 	}
 
-	public void receive() throws IOException {
-		if(mCurrentHelper == null) {
+	//
+	// -1 eof
+	//  0 parseable
+	//  1 end
+	public int parseableMessage() throws IOException {
+		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"TorrentFront#parseableMessage()");}
+		if(mCurrentMessage == null) {
 			TorrentHistory.get().pushMessage("[receive start]\n");
-			mCurrentHelper = new HelperLookAheadMessage(mReader.getFilePointer(), mReader);
+			mCurrentMessage = new HelperLookAheadMessage(mReader);
 		}
-		mCurrentHelper.read();
-		if(mReader.isEOF()) { close(); }
-		if(mCurrentHelper.isEnd()) {
+		boolean isEnd = mCurrentMessage.read();
+		if(isEnd) {return 0;}
+		else if(mReader.isEOF()){ return -1;}
+		else{return 1;}
+	}
+
+	public void receive() throws IOException {
+		int parseable = parseableMessage();
+		if(parseable == -1) {
+			close();
+		} else if(parseable == 0) {
 			TorrentHistory.get().pushMessage("[receive end]\n");
-			//mCurrentHelper.printLog();
-			onReceiveMessage(mCurrentHelper);
-			mCurrentHelper.clear(mCurrentHelper.myMessageFP()+mCurrentHelper.getMessageSize()+4);
+			onReceiveMessage(mCurrentMessage.getMessageNull());
 		}
-		//
-		//
-		// todo
 		if(mReader.length()>mReader.getFilePointer()) {
 			if(!mTorrentPeer.get().getClientRunner().contains(mTaskManager.mReceiverTask)) {
 				mTorrentPeer.get().getClientRunner().pushWork(mTaskManager.mReceiverTask);
@@ -375,12 +382,10 @@ public class TorrentFront {
 		return mLastMessage;
 	}
 
-	public void onReceiveMessage(HelperLookAheadMessage messageBase) throws IOException {
-		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"distribute:"+messageBase.getMessageId());}
+	public void onReceiveMessage(MessageNull nullMessage) throws IOException {
+		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"distribute:"+nullMessage.getSign()+":"+nullMessage.getMessageLength());}
 		TorrentMessage message = null;
-		int messageId = messageBase.getMessageId();
-		mReader.seek(messageBase.myMessageFP());
-		switch(messageId) {
+		switch(nullMessage.getSign()) {
 		case TorrentMessage.SIGN_CHOKE:
 			mTargetInfo.isChoke(true);
 			message = MessageChoke.decode(mReader);

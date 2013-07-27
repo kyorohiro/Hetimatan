@@ -53,7 +53,7 @@ public class TorrentFrontShakeHandTask extends EventTask {
 			mIsKeep = false;
 			mIsNext = false;
 		} else {
-			if(front.reveiveSH()) {
+			if(front.parseableShakehand()) {
 				mSocket.regist(peer.getSelector(), KyoroSelector.READ);
 				mSocket.setEventTaskAtWrakReference(null,KyoroSelector.READ);
 				front.revcShakehand();

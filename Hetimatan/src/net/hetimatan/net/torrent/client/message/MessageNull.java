@@ -11,8 +11,21 @@ public class MessageNull extends TorrentMessage {
 
 	public static final String TAG = "nullmessage";
 
-	public MessageNull() {
+	private int mLength = 0;
+	private int mSign = -999;
+
+	public MessageNull(int length, int sign) {
 		super(TorrentMessage.DUMMY_SIGN_NULL);
+		mLength = length;
+		mSign = sign;
+	}
+
+	public int getSign() {
+		return mSign;
+	}
+
+	public int getMessageLength() {
+		return mLength;
 	}
 
 	@Override
@@ -27,9 +40,15 @@ public class MessageNull extends TorrentMessage {
 
 	public static MessageNull decode(MarkableReader reader) throws IOException {
 		int len =_length(reader);
-		for(int i=0;i<len;i++){
-			reader.read();
+		int sign = -999;
+		if(len>0) {
+			sign = reader.read();
 		}
-		return new MessageNull();
+		for(int i=0;i<len;i++){
+			if(-1 == reader.read()){
+				throw new IOException();
+			}
+		}
+		return new MessageNull(len, sign);
 	}
 }

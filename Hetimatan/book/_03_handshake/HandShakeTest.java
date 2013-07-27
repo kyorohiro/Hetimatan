@@ -83,10 +83,11 @@ public class HandShakeTest {
 		front.sendShakehand();
 		front.flushSendTask();
 
-		while(!front.reveiveSH()){Thread.yield();}
+		while(!front.parseableShakehand()){Thread.yield();}
 		front.revcShakehand();
-		
-		BitField field = front.getTargetInfo().getBitField();
-		System.out.println("bitfield:"+field.toURLString());
+
+//		while(!front.receive()){Thread.yield();}
+//		BitField field = front.getTargetInfo().getBitField();
+//		System.out.println("bitfield:"+field.toURLString());
 	}
 }
