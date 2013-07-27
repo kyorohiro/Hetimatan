@@ -7,7 +7,7 @@ import net.hetimatan.io.file.KyoroFile;
 import net.hetimatan.util.event.GlobalAccessProperty;
 
 
-public class KFNextHelper {
+public class CashKyoroFileHelper {
 
 	public final static String GATAG_DEFAULTCASH = "my.tmp";
 	private static int sID = 0;
@@ -55,7 +55,7 @@ public class KFNextHelper {
 			CashKyoroFile src = new CashKyoroFile(srcs[i], 16*1024, 10);
 			long fp = dest.getFilePointer();
 			try {
-				KFNextHelper.copy(src, dest);
+				CashKyoroFileHelper.copy(src, dest);
 				dest.syncWrite();
 			} finally {
 				dest.seek(fp+src.length());
@@ -87,7 +87,7 @@ public class KFNextHelper {
 	}
 
 	public static KyoroFile subSequence(CashKyoroFile file, long start, long end) throws IOException {
-		return new PartReferenceKyoroFile(file, start, end, 256, 3);
+		return new ReferenceModifierKyoroFile(file, start, end, 256, 3);
 	}
 
 }

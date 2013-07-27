@@ -24,17 +24,17 @@ public class CashKyoroFile implements KyoroFile, KyoroByteOutput {
 	private ByteKyoroFile mCurrent = null;
 
 	public CashKyoroFile(byte[] data) throws IOException {
-		this(KFNextHelper.newCashFile(), data.length, 2);
+		this(CashKyoroFileHelper.newCashFile(), data.length, 2);
 		addChunk(data);
 	}
 
 	public CashKyoroFile(int chunkSize) throws IOException {
-		this(KFNextHelper.newCashFile(), chunkSize, 2);
+		this(CashKyoroFileHelper.newCashFile(), chunkSize, 2);
 		mIsCash = true;
 	}
 
 	public CashKyoroFile(int chunkSize, int chunkNum) throws IOException {
-		this(KFNextHelper.newCashFile(), chunkSize, chunkNum);
+		this(CashKyoroFileHelper.newCashFile(), chunkSize, chunkNum);
 		mIsCash = true;
 	}
 

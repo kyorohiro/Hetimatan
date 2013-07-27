@@ -3,7 +3,7 @@ package net.hetimatan.io.filen;
 import java.io.IOException;
 import java.util.Random;
 
-import net.hetimatan.io.filen.PartReferenceKyoroFile;
+import net.hetimatan.io.filen.ReferenceModifierKyoroFile;
 import net.hetimatan.io.filen.CashKyoroFile;
 
 import junit.framework.TestCase;
@@ -19,7 +19,7 @@ public class TestForSubRACashFile extends TestCase {
 			int ret = vf.read(buffer);
 			
 			//=====================
-			PartReferenceKyoroFile scash = new PartReferenceKyoroFile(vf, 10, 100, 10, 3);
+			ReferenceModifierKyoroFile scash = new ReferenceModifierKyoroFile(vf, 10, 100, 10, 3);
 			scash.read(buffer);
 			assertEquals(-1, ret);
 			for(int i=0;i<buffer.length;i++) {assertEquals(0, buffer[0]);}
@@ -40,7 +40,7 @@ public class TestForSubRACashFile extends TestCase {
 			
 			//=====================
 			byte[] buffer = new byte[100];
-			PartReferenceKyoroFile scash = new PartReferenceKyoroFile(vf, 10, 100, 10, 3);
+			ReferenceModifierKyoroFile scash = new ReferenceModifierKyoroFile(vf, 10, 100, 10, 3);
 			ret = scash.read(buffer);
 			assertEquals(90, ret);
 			for(int i=10;i<100;i++) {assertEquals(expected[i], buffer[i-10]);}
@@ -61,7 +61,7 @@ public class TestForSubRACashFile extends TestCase {
 			
 			//=====================
 			byte[] buffer = new byte[12];
-			PartReferenceKyoroFile scash = new PartReferenceKyoroFile(vf, 10, 100, 10, 3);
+			ReferenceModifierKyoroFile scash = new ReferenceModifierKyoroFile(vf, 10, 100, 10, 3);
 			scash.seek(1);
 			ret = scash.read(buffer);
 			assertEquals(12, ret);
@@ -83,7 +83,7 @@ public class TestForSubRACashFile extends TestCase {
 			
 			//=====================
 			byte[] buffer = new byte[1200];
-			PartReferenceKyoroFile scash = new PartReferenceKyoroFile(vf, 10, 100, 10, 3);
+			ReferenceModifierKyoroFile scash = new ReferenceModifierKyoroFile(vf, 10, 100, 10, 3);
 			scash.seek(2);
 			ret = scash.read(buffer);
 			assertEquals(88, ret);

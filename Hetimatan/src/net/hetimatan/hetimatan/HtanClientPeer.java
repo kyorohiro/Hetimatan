@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Iterator;
 
-import net.hetimatan.io.filen.KFNextHelper;
+import net.hetimatan.io.filen.CashKyoroFileHelper;
 import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.net.torrent.client.TorrentPeer;
 import net.hetimatan.net.torrent.tracker.TrackerClient;
@@ -132,7 +132,7 @@ public class HtanClientPeer {
 				cash.addChunk(peerid.getBytes());
 				cash.syncWrite();
 			} else {
-				peerid = new String(KFNextHelper.newBinary(cash));
+				peerid = new String(CashKyoroFileHelper.newBinary(cash));
 			}
 		} catch (IOException e) {
 			peerid=TorrentPeer.createPeerId();

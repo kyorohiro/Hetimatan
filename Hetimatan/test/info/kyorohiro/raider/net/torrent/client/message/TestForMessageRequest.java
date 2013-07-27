@@ -4,7 +4,7 @@ import info.kyorohiro.raider.util.TestUtil;
 import java.io.IOException;
 import junit.framework.TestCase;
 import net.hetimatan.io.file.MarkableFileReader;
-import net.hetimatan.io.filen.KFNextHelper;
+import net.hetimatan.io.filen.CashKyoroFileHelper;
 import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.net.torrent.client.message.MessageBitField;
 import net.hetimatan.net.torrent.client.message.MessageCancel;
@@ -33,7 +33,7 @@ public class TestForMessageRequest extends TestCase {
 		MessageRequest request = new MessageRequest(10, 100, 10300);
 		CashKyoroFile output = new CashKyoroFile(512);
 		request.encode(output.getLastOutput());
-		byte[] target = KFNextHelper.newBinary(output);
+		byte[] target = CashKyoroFileHelper.newBinary(output);
 		TestUtil.assertArrayEquals(this, "", expected, target);
 	}
 

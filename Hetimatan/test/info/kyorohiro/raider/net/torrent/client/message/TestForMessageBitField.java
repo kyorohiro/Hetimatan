@@ -3,7 +3,7 @@ package info.kyorohiro.raider.net.torrent.client.message;
 import info.kyorohiro.raider.util.TestUtil;
 import java.io.IOException;
 import net.hetimatan.io.file.MarkableFileReader;
-import net.hetimatan.io.filen.KFNextHelper;
+import net.hetimatan.io.filen.CashKyoroFileHelper;
 import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.net.torrent.client.message.MessageBitField;
 import net.hetimatan.util.io.ByteArrayBuilder;
@@ -26,7 +26,7 @@ public class TestForMessageBitField extends TestCase {
 		MessageBitField bitfield = new MessageBitField(3);
 		CashKyoroFile output = new CashKyoroFile(512);
 		bitfield.encode(output.getLastOutput());
-		byte[] target = KFNextHelper.newBinary(output);
+		byte[] target = CashKyoroFileHelper.newBinary(output);
 		TestUtil.assertArrayEquals(this, "", expected, target);
 	}
 
@@ -60,7 +60,7 @@ public class TestForMessageBitField extends TestCase {
 			MessageBitField bitfield = new MessageBitField(8);
 			CashKyoroFile output = new CashKyoroFile(512);
 			bitfield.encode(output.getLastOutput());
-			byte[] target = KFNextHelper.newBinary(output);
+			byte[] target = CashKyoroFileHelper.newBinary(output);
 			TestUtil.assertArrayEquals(this, "", expected, target);
 		}
 
@@ -75,7 +75,7 @@ public class TestForMessageBitField extends TestCase {
 			MessageBitField bitfield = new MessageBitField(9);
 			CashKyoroFile output = new CashKyoroFile(512);
 			bitfield.encode(output.getLastOutput());
-			byte[] target = KFNextHelper.newBinary(output);
+			byte[] target = CashKyoroFileHelper.newBinary(output);
 			TestUtil.assertArrayEquals(this, "", expected, target);
 		}
 	}

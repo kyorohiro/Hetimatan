@@ -6,7 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 
-import net.hetimatan.io.filen.KFNextHelper;
+import net.hetimatan.io.filen.CashKyoroFileHelper;
 import net.hetimatan.io.filen.CashKyoroFile;
 
 import junit.framework.TestCase;
@@ -24,8 +24,8 @@ public class TestForKFNextHelper extends TestCase {
 		try {
 			src.write(exp);
 			src.seek(0);
-			KFNextHelper.copy(src, out);
-			byte[] result = KFNextHelper.newBinary(out);
+			CashKyoroFileHelper.copy(src, out);
+			byte[] result = CashKyoroFileHelper.newBinary(out);
 			TestUtil.assertArrayEquals(this, "", exp, result);
 		} finally {
 			src.close();
@@ -57,8 +57,8 @@ public class TestForKFNextHelper extends TestCase {
 
 		try {
 			out.seek(0);
-			KFNextHelper.xcopy(srcs, out);
-			byte[] result = KFNextHelper.newBinary(out);
+			CashKyoroFileHelper.xcopy(srcs, out);
+			byte[] result = CashKyoroFileHelper.newBinary(out);
 			TestUtil.assertArrayEquals(this, "", exp, result);
 		} finally {
 			src1.close();
@@ -81,12 +81,12 @@ public class TestForKFNextHelper extends TestCase {
 			src2.write(exp, exp.length/2, exp.length-exp.length/2);
 			src1.seek(0);
 			src2.seek(0);
-			KFNextHelper.copy(src1, out);
+			CashKyoroFileHelper.copy(src1, out);
 			assertEquals(exp.length/2, src1.length());
 			assertEquals(exp.length/2, src2.length());
 			out.seek(src1.length());
-			KFNextHelper.copy(src2, out);
-			byte[] result = KFNextHelper.newBinary(out);
+			CashKyoroFileHelper.copy(src2, out);
+			byte[] result = CashKyoroFileHelper.newBinary(out);
 			TestUtil.assertArrayEquals(this, "", exp, result);
 		} finally {
 			src1.close();
@@ -108,7 +108,7 @@ public class TestForKFNextHelper extends TestCase {
 		CashKyoroFile out = new CashKyoroFile(16*1024, 10);
 		try {
 			src.seek(0);
-			KFNextHelper.copy(src, out);
+			CashKyoroFileHelper.copy(src, out);
 		} finally {
 			src.close();
 			out.close();

@@ -2,7 +2,7 @@ package net.hetimatan.net.http;
 
 import java.io.IOException;
 
-import net.hetimatan.io.filen.KFNextHelper;
+import net.hetimatan.io.filen.CashKyoroFileHelper;
 import net.hetimatan.net.http.request.HttpGetResponse;
 import net.hetimatan.util.event.CloseRunnerTask;
 import net.hetimatan.util.event.EventTaskRunner;
@@ -31,8 +31,8 @@ public class TestForHttpGet extends TestCase {
 		runner.waitByClose(10000);
 		HttpGetResponse response = httpget.getGetResponse();
 		
-		System.out.println("[A]"+new String(KFNextHelper.newBinary(response.getVF()))+"[A]");
-		assertEquals("check", new String(KFNextHelper.newBinary(response.getVF(), response.getVFOffset())));
+		System.out.println("[A]"+new String(CashKyoroFileHelper.newBinary(response.getVF()))+"[A]");
+		assertEquals("check", new String(CashKyoroFileHelper.newBinary(response.getVF(), response.getVFOffset())));
 		_3xx.close();
 		rc.close();
 	}

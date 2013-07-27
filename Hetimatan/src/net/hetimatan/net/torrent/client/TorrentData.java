@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import net.hetimatan.io.file.KyoroFile;
-import net.hetimatan.io.filen.KFNextHelper;
+import net.hetimatan.io.filen.CashKyoroFileHelper;
 import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.net.torrent.util.metafile.MetaFile;
 import net.hetimatan.util.bitfield.BitField;
@@ -53,7 +53,7 @@ public class TorrentData {
 		PercentEncoder encoder = new PercentEncoder();
 		try {
 			cash = new CashKyoroFile(mHead, 256, 2);
-			byte[] buffer = KFNextHelper.newBinary(cash);
+			byte[] buffer = CashKyoroFileHelper.newBinary(cash);
 			mStockedDataInfo.setBitfield(encoder.decode(buffer));
 			mRequestDataInfo.setBitfield(encoder.decode(buffer));
 		} finally {
@@ -104,7 +104,7 @@ public class TorrentData {
 		}
 		long fp = mCash.getFilePointer();
 		try {
-			KFNextHelper.xcopy(srcs, mCash);
+			CashKyoroFileHelper.xcopy(srcs, mCash);
 			mStockedDataInfo.oneClear();
 			mRequestDataInfo.oneClear();
 			mCash.syncWrite();
@@ -125,17 +125,17 @@ public class TorrentData {
 	}
 
 	public KyoroFile getPiece(int index) throws IOException {
-		return  KFNextHelper.subSequence(mCash, index*mPieceLength,(index+1)*mPieceLength);
+		return  CashKyoroFileHelper.subSequence(mCash, index*mPieceLength,(index+1)*mPieceLength);
 	}
 
 	public KyoroFile getPiece(long start, long end) throws IOException {
-		return  KFNextHelper.subSequence(mCash, start, end);
+		return  CashKyoroFileHelper.subSequence(mCash, start, end);
 	}
 
 	public void setPiece(int index, KyoroFile content) throws IOException {
 		mCash.seek(index*mPieceLength);
 		content.seek(0);
-		KFNextHelper.copy(content, mCash);
+		CashKyoroFileHelper.copy(content, mCash);
 		mStockedDataInfo.isOn(index, true);
 		mRequestDataInfo.isOn(index, true);
 		//following code is for test

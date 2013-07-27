@@ -8,7 +8,7 @@ import java.util.Set;
 import net.hetimatan.io.file.KyoroFile;
 import net.hetimatan.io.file.KyoroFileForFiles;
 import net.hetimatan.io.filen.ByteKyoroFile;
-import net.hetimatan.io.filen.KFNextHelper;
+import net.hetimatan.io.filen.CashKyoroFileHelper;
 import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.io.net.KyoroSocket;
 import net.hetimatan.net.http.HttpFront;
@@ -70,7 +70,7 @@ public class SimpleHttpServer extends HttpServer {
 	}
 
 	public KyoroFile createDefaultResponse(HttpFront front, KyoroSocket socket, HttpRequest uri) throws IOException {
-		KyoroFile content = KFNextHelper.subSequence(mFile, 0, mFile.length());
+		KyoroFile content = CashKyoroFileHelper.subSequence(mFile, 0, mFile.length());
 		KyoroFile header = new ByteKyoroFile();
 		String path =uri.getLine().getRequestURI().getPath();
 		header.addChunk(("HTTP/1.1 200 OK\r\n").getBytes());
@@ -88,7 +88,7 @@ public class SimpleHttpServer extends HttpServer {
 	}
 
 	public KyoroFile createSingleRangeResponse(PieceInfo piece, HttpFront front, KyoroSocket socket, HttpRequest uri) throws IOException {
-		KyoroFile content = KFNextHelper.subSequence(mFile, piece.getStart(), piece.getEnd()+1);
+		KyoroFile content = CashKyoroFileHelper.subSequence(mFile, piece.getStart(), piece.getEnd()+1);
 		KyoroFile header = new ByteKyoroFile();
 		String path =uri.getLine().getRequestURI().getPath();
 		header.addChunk(("HTTP/1.1 206 Partial Content\r\n").getBytes());

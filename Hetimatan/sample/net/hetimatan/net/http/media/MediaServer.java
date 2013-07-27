@@ -6,7 +6,7 @@ import java.io.IOException;
 import net.hetimatan.io.file.KyoroFile;
 import net.hetimatan.io.file.KyoroFileForFiles;
 import net.hetimatan.io.filen.ByteKyoroFile;
-import net.hetimatan.io.filen.KFNextHelper;
+import net.hetimatan.io.filen.CashKyoroFileHelper;
 import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.io.net.KyoroSocket;
 import net.hetimatan.net.http.HttpFront;
@@ -48,7 +48,7 @@ public class MediaServer extends HttpServer {
 
 	@Override
 	public KyoroFile createContent(KyoroSocket socket, HttpRequest uri) throws IOException {
-		return KFNextHelper.subSequence(mFile, 0, mFile.length());
+		return CashKyoroFileHelper.subSequence(mFile, 0, mFile.length());
 	}
 
 	@Override
@@ -96,7 +96,7 @@ public class MediaServer extends HttpServer {
 			header.addChunk(("Content-Type: video/mp4\r\n").getBytes());
 			header.addChunk(("--THIS_STRING_SEPARATES\r\n").getBytes());
 			responses[r++] = header;
-			responses[r++] = KFNextHelper.subSequence(mFile, list.getPieceInfo(i).getStart(), list.getPieceInfo(i).getEnd());
+			responses[r++] = CashKyoroFileHelper.subSequence(mFile, list.getPieceInfo(i).getStart(), list.getPieceInfo(i).getEnd());
 			header = new ByteKyoroFile();		
 			header.addChunk(("\r\n--THIS_STRING_SEPARATES\r\n").getBytes());
 			responses[r++] = header;
