@@ -7,12 +7,10 @@ import java.io.OutputStream;
 import net.hetimatan.io.file.KyoroFile;
 import net.hetimatan.io.file.MarkableFileReader;
 import net.hetimatan.io.file.MarkableReader;
-import net.hetimatan.io.filen.KFNextHelper;
 import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.net.torrent.util.bencode.BenString;
 import net.hetimatan.net.torrent.util.metafile.MetaFile;
 import net.hetimatan.util.io.ByteArrayBuilder;
-import net.hetimatan.util.url.PercentEncoder;
 
 public class MessagePiece extends TorrentMessage {
 
