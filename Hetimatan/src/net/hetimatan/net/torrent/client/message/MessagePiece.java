@@ -59,23 +59,11 @@ public class MessagePiece extends TorrentMessage {
 	@Override
 	public void encode(OutputStream output) throws IOException {
 		int length = 1+4*2+(int)mContent.length();
-		CashKyoroFile vf = new CashKyoroFile(500, 2);
-		vf.write(ByteArrayBuilder.parseInt(length, ByteArrayBuilder.BYTEORDER_BIG_ENDIAN));
-		vf.write(TorrentMessage.SIGN_PIECE);
-		vf.write(ByteArrayBuilder.parseInt(mIndex, ByteArrayBuilder.BYTEORDER_BIG_ENDIAN));
-		vf.write(ByteArrayBuilder.parseInt(mBegin, ByteArrayBuilder.BYTEORDER_BIG_ENDIAN));
-		write(vf.getLastOutput(), mContent, 0, (int)mContent.length());
-//		PercentEncoder en = new PercentEncoder();
-//		System.out.println(""+length+","+KFNextHelper.newBinary(vf).length+","+mContent.length());
-//		System.out.println(en.encode(KFNextHelper.newBinary(vf)));
-		output.write(KFNextHelper.newBinary(vf));
-//		output.write(ByteArrayBuilder.parseInt(length, ByteArrayBuilder.BYTEORDER_BIG_ENDIAN));
-//		output.write(TorrentMessage.SIGN_PIECE);
-//		output.write(ByteArrayBuilder.parseInt(mIndex, ByteArrayBuilder.BYTEORDER_BIG_ENDIAN));
-//		output.write(ByteArrayBuilder.parseInt(mBegin, ByteArrayBuilder.BYTEORDER_BIG_ENDIAN));
-//		System.out.println("ec ##"+mContent.length());
-//		int len =write(output, mContent, 0, (int)mContent.length());
-//		System.out.println("ec ::"+len);		
+		output.write(ByteArrayBuilder.parseInt(length, ByteArrayBuilder.BYTEORDER_BIG_ENDIAN));
+		output.write(TorrentMessage.SIGN_PIECE);
+		output.write(ByteArrayBuilder.parseInt(mIndex, ByteArrayBuilder.BYTEORDER_BIG_ENDIAN));
+		output.write(ByteArrayBuilder.parseInt(mBegin, ByteArrayBuilder.BYTEORDER_BIG_ENDIAN));
+		write(output, mContent, 0, (int)mContent.length());
 	}
 
 	public boolean sha1check(MetaFile file) throws IOException {
