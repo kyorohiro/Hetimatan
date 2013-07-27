@@ -5,11 +5,7 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
-import java.util.WeakHashMap;
-
-import net.hetimatan.util.io.ByteArrayBuilder;
 import net.hetimatan.util.log.Log;
-import net.hetimatan.util.net.KyoroSocketEventRunner;
 
 public class EventTaskRunnerImple extends EventTaskRunner {
 	private static int sID = 0;

@@ -2,7 +2,6 @@ package net.hetimatan.util.event;
 
 
 import java.util.HashMap;
-import java.util.WeakHashMap;
 
 import net.hetimatan.util.io.ByteArrayBuilder;
 

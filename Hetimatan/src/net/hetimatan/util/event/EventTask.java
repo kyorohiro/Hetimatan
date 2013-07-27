@@ -1,10 +1,6 @@
 package net.hetimatan.util.event;
 
-
-import java.lang.ref.WeakReference;
-
 import net.hetimatan.util.log.Log;
-
 
 public abstract class EventTask {
 	public static int sid = 0;
