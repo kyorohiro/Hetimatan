@@ -10,6 +10,7 @@ import net.hetimatan.io.file.KyoroFileForKyoroSocket;
 import net.hetimatan.io.file.MarkableFileReader;
 import net.hetimatan.io.file.MarkableReader;
 import net.hetimatan.io.filen.CashKyoroFile;
+import net.hetimatan.io.net.KyoroSelector;
 import net.hetimatan.io.net.KyoroSocket;
 import net.hetimatan.net.torrent.client._front.TorrentFrontMyInfo;
 import net.hetimatan.net.torrent.client._front.TorrentFrontTargetInfo;
@@ -97,6 +98,10 @@ public class TorrentFront {
 		return mPeer;
 	}
 
+	public MarkableReader getReader() {
+		return mReader;
+	}
+
 	public BitField relativeBitfield() {
 	 	TorrentPeer peer = mTorrentPeer.get();
 		if(peer == null) {return mMyInfo.mRelative;}
@@ -111,6 +116,9 @@ public class TorrentFront {
 
 	public KyoroSocket getSocket() {
 		return mSocket;
+	}
+	public KyoroSelector getSelector() {
+		return getTorrentPeer().getSelector();
 	}
 
 	public TorrentPeer getTorrentPeer() {

@@ -1,4 +1,4 @@
-package _03_handshake;
+package _04_message;
 
 import java.io.File;
 import java.io.IOException;
@@ -7,10 +7,12 @@ import java.util.Iterator;
 
 import com.sun.jndi.url.corbaname.corbanameURLContextFactory;
 
+import net.hetimatan.io.net.KyoroSelector;
 import net.hetimatan.io.net.KyoroSocket;
 import net.hetimatan.io.net.KyoroSocketImpl;
 import net.hetimatan.net.torrent.client.TorrentFront;
 import net.hetimatan.net.torrent.client.TorrentPeer;
+import net.hetimatan.net.torrent.client.message.MessageNull;
 import net.hetimatan.net.torrent.tracker.TrackerClient;
 import net.hetimatan.net.torrent.tracker.TrackerPeerInfo;
 import net.hetimatan.net.torrent.util.metafile.MetaFile;
@@ -24,7 +26,7 @@ import net.hetimatan.util.net.KyoroSocketEventRunner;
 // Torrentクライアントとハンドシェークせよ。次にBitfieldメッセージを受信せよ。
 // 相手Torrentが保持しているPieceデータを保持せよ。
 //
-public class HandShakeTest {
+public class ReceiveMessageTest {
 	public static void main(String[] args) {
 		try {
 			start();
@@ -52,7 +54,7 @@ public class HandShakeTest {
 
 
 		// ----------------------------------------------------
-		// request peerinfo tracker
+		// request peerinfo to tracker
 		// ----------------------------------------------------
 		TrackerClient client = new TrackerClient(metafile, peerId);
 		client.setClientPort(peer.getServerPort());
@@ -84,5 +86,16 @@ public class HandShakeTest {
 
 		while(!front.parseableShakehand()){Thread.yield();}
 		front.revcShakehand();
+
+		// ----------------------------------------------------
+		// send shakehand
+		// ----------------------------------------------------
+		front.getSocket().regist(front.getSelector(), KyoroSelector.READ);
+		do {
+			do{Thread.yield();front.getSelector().select(10000);}
+			while(1==front.parseableMessage());
+			MessageNull message = MessageNull.decode(front.getReader());
+			System.out.println("[[sign]]:"+message.getSign());
+		}while(true);
 	}
 }
