@@ -355,7 +355,7 @@ public class TorrentFront {
 			TorrentHistory.get().pushMessage("[receive start]\n");
 			mCurrentMessage = new HelperLookAheadMessage(mReader);
 		}
-		boolean isEnd = mCurrentMessage.read();
+		boolean isEnd = mCurrentMessage.lookahead();
 		if(isEnd) {return 0;}
 		else if(mReader.isEOF()){ return -1;}
 		else{return 1;}

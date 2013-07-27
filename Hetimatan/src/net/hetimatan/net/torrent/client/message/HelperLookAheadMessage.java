@@ -6,12 +6,10 @@ import net.hetimatan.io.file.MarkableReader;
 
 public class HelperLookAheadMessage {
 
-	private long mStartFP = 0;
-	private MarkableReader mReader = null;
 	private MessageNull mNullMessage = new MessageNull(0, -999);
+	private long mStartFP = 0;
 
-	public HelperLookAheadMessage(MarkableReader _reader) {
-		mReader = _reader;
+	public HelperLookAheadMessage() {
 	}
 
 	public MessageNull getMessageNull() {
@@ -22,15 +20,15 @@ public class HelperLookAheadMessage {
 		return mStartFP;
 	}
 
-	public boolean read() throws IOException {
+	public boolean lookahead(MarkableReader reader) throws IOException {
 		try  {
-			mStartFP = mReader.getFilePointer();
-			mNullMessage = MessageNull.decode(mReader);
+			mStartFP = reader.getFilePointer();
+			mNullMessage = MessageNull.decode(reader);
 			return true;
 		} catch(IOException e) {
 		} catch(NegativeArraySizeException e) {			
 		} finally {
-			mReader.seek(mStartFP);
+			reader.seek(mStartFP);
 		}
 		return false;
 	}
