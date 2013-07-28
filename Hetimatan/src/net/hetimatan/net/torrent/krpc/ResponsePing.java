@@ -31,14 +31,6 @@ public class ResponsePing {
 				}
 			}
 			{
-				BenObject v = diction.getBenValue("q");
-				if(v.getType() == BenObject.TYPE_STRI && "ping".equals(v.toString())) {
-				} else {
-					reader.backToMark();
-					throw new IOException();
-				}
-			}
-			{
 				BenObject v = diction.getBenValue("t");
 				if(v.getType() == BenObject.TYPE_STRI) {
 					transactionid = v.toString();
@@ -48,13 +40,13 @@ public class ResponsePing {
 				}
 			}
 
-			BenObject a = diction.getBenValue("a");
-			if(a.getType() != BenObject.TYPE_DICT) {
+			BenObject r = diction.getBenValue("r");
+			if(r.getType() != BenObject.TYPE_DICT) {
 				reader.backToMark();
 				throw new IOException();
 			}
-			BenObject id = a.getBenValue("id");
-			if(a.getType() != BenObject.TYPE_STRI) {
+			BenObject id = r.getBenValue("id");
+			if(r.getType() != BenObject.TYPE_STRI) {
 				reader.backToMark();
 				throw new IOException();
 			}			
@@ -68,9 +60,9 @@ public class ResponsePing {
 		BenDiction diction = new BenDiction();
 		diction.append("y", new BenString("r"));
 		diction.append("t", new BenString(mTransactionId));
-		BenDiction a = new BenDiction();
-		a.append("id", new BenString(mId));
-		diction.append("a", a);
+		BenDiction r = new BenDiction();
+		r.append("id", new BenString(mId));
+		diction.append("r", r);
 		diction.encode(output);
 	}
 	

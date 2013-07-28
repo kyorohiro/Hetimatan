@@ -17,7 +17,15 @@ public class RequestPing {
 		mTransactionId = transactionId;
 	} 
 
-	public RequestPing decode(MarkableReader reader) throws IOException {
+	public String getTransactionId() {
+		return mTransactionId;
+	}
+
+	public String getId() {
+		return mId;
+	}
+
+	public static RequestPing decode(MarkableReader reader) throws IOException {
 		reader.popMark();
 		String transactionid = "xx";
 		try {
@@ -53,9 +61,9 @@ public class RequestPing {
 				throw new IOException();
 			}
 			BenObject id = a.getBenValue("id");
-			if(a.getType() != BenObject.TYPE_STRI) {
+			if(id.getType() != BenObject.TYPE_STRI) {
 				reader.backToMark();
-				throw new IOException();
+				throw new IOException(""+a.getType());
 			}			
 			return new RequestPing(id.toString(), transactionid);
 		} finally {
