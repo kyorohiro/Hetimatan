@@ -66,11 +66,11 @@ public class ResponsePing {
 
 	public void encode(OutputStream output) throws IOException {
 		BenDiction diction = new BenDiction();
-		diction.append("y", new BenString("r"));
-		diction.append("t", new BenString(mTransactionId));
 		BenDiction r = new BenDiction();
 		r.append("id", new BenString(mId));
 		diction.append("r", r);
+		diction.append("t", new BenString(mTransactionId));
+		diction.append("y", new BenString("r"));
 		diction.encode(output);
 	}
 	
