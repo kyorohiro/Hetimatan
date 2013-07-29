@@ -73,13 +73,14 @@ public class RequestPing {
 
 	public void encode(OutputStream output) throws IOException {
 		BenDiction diction = new BenDiction();
-		diction.append("t", new BenString(mTransactionId));
-		diction.append("y", new BenString("q"));
-		diction.append("q", new BenString("ping"));
 		BenDiction a = new BenDiction();
 		a.append("id", new BenString(mId));
 		diction.append("a", a);
+		diction.append("q", new BenString("ping"));
+		diction.append("t", new BenString(mTransactionId));
+		diction.append("y", new BenString("q"));
 		diction.encode(output);
 	}
+
 	
 }
