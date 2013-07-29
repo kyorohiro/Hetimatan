@@ -4,11 +4,8 @@ import java.io.IOException;
 
 import junit.framework.TestCase;
 
-import net.hetimatan.io.file.KyoroByteOutput;
-import net.hetimatan.io.file.KyoroFile;
 import net.hetimatan.io.file.MarkableFileReader;
 import net.hetimatan.io.file.MarkableReader;
-import net.hetimatan.io.filen.ByteKyoroFile;
 import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.io.filen.CashKyoroFileHelper;
 
