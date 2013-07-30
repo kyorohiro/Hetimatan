@@ -56,11 +56,11 @@ public abstract class BenObject {
 	}
 
 	public BenObject getBenValue(int location) {
-		return null;
+		return new BenObject.NullObject();
 	}
 
 	public BenObject getBenValue(String value) {
-		return null;
+		return new BenObject.NullObject();
 	}
 
 	public int size() {
@@ -124,4 +124,13 @@ public abstract class BenObject {
 		return object.toString();
 	}
 
+	public static class NullObject extends BenObject {
+		public NullObject() {
+			super(-1);
+		}
+
+		@Override
+		public void encode(OutputStream output) throws IOException {
+		}
+	}
 }

@@ -44,6 +44,9 @@ public class BenList extends BenObject {
 	}
 
 	public BenObject getBenValue(int location) {
+		if(location > mList.size()){
+			return new BenObject.NullObject();
+		}
 		return mList.get(location);
 	}
 
@@ -53,10 +56,6 @@ public class BenList extends BenObject {
 			throw new IOException();
 		}
 		return tmp;
-	}
-
-	public BenObject getBenValue(BenObject value) {
-		return null;
 	}
 
 	@Override

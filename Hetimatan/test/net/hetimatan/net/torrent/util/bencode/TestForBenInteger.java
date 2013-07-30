@@ -1,4 +1,4 @@
-package info.kyorohiro.raider.util.bencode;
+package net.hetimatan.net.torrent.util.bencode;
 
 import java.io.File;
 import java.io.IOException;

@@ -41,8 +41,11 @@ public class BenDiction extends BenObject {
 	}
 
 	@Override
-	public BenObject getBenValue(String value) {
-		return mDict.get(value);
+	public BenObject getBenValue(String key) {
+		if(!mDict.containsKey(key)){
+			return new BenObject.NullObject();
+		}
+		return mDict.get(key);
 	}
 
 	public Set<String> getKeys() {
