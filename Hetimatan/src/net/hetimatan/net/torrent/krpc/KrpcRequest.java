@@ -37,6 +37,7 @@ public class KrpcRequest {
 		diction.append("y", new BenString("q"));
 		return diction;
 	}
+
 	public void encode(OutputStream output) throws IOException {
 		BenDiction diction = createDiction();
 		diction.encode(output);
