@@ -3,9 +3,6 @@ package net.hetimatan.net.torrent.krpc;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import com.sun.org.apache.bcel.internal.generic.SIPUSH;
-import com.sun.xml.internal.messaging.saaj.packaging.mime.util.BEncoderStream;
-
 import net.hetimatan.io.file.MarkableReader;
 import net.hetimatan.net.torrent.util.bencode.BenDiction;
 import net.hetimatan.net.torrent.util.bencode.BenObject;
@@ -14,38 +11,28 @@ import net.hetimatan.net.torrent.util.bencode.BenString;
 public class RequestPing extends KrpcRequest {
 
 	private String mId;
-	private String mTransactionId = "xx";
-
 	public RequestPing(String transactionId, String id) {
 		super(transactionId);
 		mId = id;
-		mTransactionId = transactionId;
 	} 
 
 	public RequestPing(String transactionId, BenDiction diction, String id) {
 		super(transactionId, diction);
 		mId = id;
-		mTransactionId = transactionId;
 	}
 
+	@Override
 	public String getTransactionId() {
-		return mTransactionId;
+		return super.getTransactionId();
 	}
 
 	public String getId() {
 		return mId;
 	}
 
-	public static boolean check(BenDiction diction) {
-		if(!KrpcRequest.check(diction)) {
-			return false;
-		}
-		BenDiction args = (BenDiction)diction.getBenValue("a");
-		BenObject id = args.getBenValue("id");
-		if(id.getType() != BenObject.TYPE_STRI) {
-			return false;
-		}
-		return true;
+	public void encode(OutputStream output) throws IOException {
+		BenDiction diction = createDiction();
+		diction.encode(output);
 	}
 
 	public static RequestPing decode(MarkableReader reader) throws IOException {
@@ -63,7 +50,7 @@ public class RequestPing extends KrpcRequest {
 			reader.pushMark();
 		}
 	}
-
+	
 	@Override
 	public BenDiction createDiction() {
 		BenDiction diction = super.createDiction();
@@ -72,9 +59,19 @@ public class RequestPing extends KrpcRequest {
 		return diction;
 	}
 
-	public void encode(OutputStream output) throws IOException {
-		BenDiction diction = createDiction();
-		diction.encode(output);
+
+	public static boolean check(BenDiction diction) {
+		if(!KrpcRequest.check(diction)) {
+			return false;
+		}
+		BenDiction args = (BenDiction)diction.getBenValue("a");
+		BenObject id = args.getBenValue("id");
+		if(id.getType() != BenObject.TYPE_STRI) {
+			return false;
+		}
+		return true;
 	}
+
+
 
 }
