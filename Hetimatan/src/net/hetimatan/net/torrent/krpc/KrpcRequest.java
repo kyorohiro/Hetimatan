@@ -29,12 +29,16 @@ public class KrpcRequest {
 		return mTransactionId;
 	}
 
-	public void encode(OutputStream output) throws IOException {
+	public BenDiction createDiction() {
 		BenDiction diction = new BenDiction();
 		diction.append("a", mArgs);
 		diction.append("q", new BenString("ping"));
 		diction.append("t", new BenString(mTransactionId));
 		diction.append("y", new BenString("q"));
+		return diction;
+	}
+	public void encode(OutputStream output) throws IOException {
+		BenDiction diction = createDiction();
 		diction.encode(output);
 	}
 
@@ -80,14 +84,14 @@ public class KrpcRequest {
 
 	public static boolean checkArg(BenDiction diction) {
 		BenObject args = diction.getBenValue("a");
-		if(args.getType() != BenObject.TYPE_DICT) {
+		if(args.getType() == BenObject.TYPE_DICT) {
 			return true;
 		} else {
 			return false;
 		}
 	}
 
-	public static boolean check(BenDiction diction) throws IOException {
+	public static boolean check(BenDiction diction) {
 		if(!checkActionIsQuery(diction)) {
 			return false;
 		}

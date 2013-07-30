@@ -2,20 +2,31 @@ package net.hetimatan.net.torrent.krpc;
 
 import java.io.IOException;
 import java.io.OutputStream;
+
+import com.sun.org.apache.bcel.internal.generic.SIPUSH;
+import com.sun.xml.internal.messaging.saaj.packaging.mime.util.BEncoderStream;
+
 import net.hetimatan.io.file.MarkableReader;
 import net.hetimatan.net.torrent.util.bencode.BenDiction;
 import net.hetimatan.net.torrent.util.bencode.BenObject;
 import net.hetimatan.net.torrent.util.bencode.BenString;
 
-public class RequestPing {
+public class RequestPing extends KrpcRequest {
 
 	private String mId;
 	private String mTransactionId = "xx";
 
-	public RequestPing(String id, String transactionId) {
+	public RequestPing(String transactionId, String id) {
+		super(transactionId);
 		mId = id;
 		mTransactionId = transactionId;
 	} 
+
+	public RequestPing(String transactionId, BenDiction diction, String id) {
+		super(transactionId, diction);
+		mId = id;
+		mTransactionId = transactionId;
+	}
 
 	public String getTransactionId() {
 		return mTransactionId;
@@ -25,62 +36,45 @@ public class RequestPing {
 		return mId;
 	}
 
+	public static boolean check(BenDiction diction) {
+		if(!KrpcRequest.check(diction)) {
+			return false;
+		}
+		BenDiction args = (BenDiction)diction.getBenValue("a");
+		BenObject id = args.getBenValue("id");
+		if(id.getType() != BenObject.TYPE_STRI) {
+			return false;
+		}
+		return true;
+	}
+
 	public static RequestPing decode(MarkableReader reader) throws IOException {
 		reader.popMark();
-		String transactionid = "xx";
 		try {
 			BenDiction diction = BenDiction.decodeDiction(reader);
-			{
-				BenObject v = diction.getBenValue("y");
-				if(v.getType() == BenObject.TYPE_STRI && "q".equals(v.toString())) {
-				} else {
-					reader.backToMark();
-					throw new IOException();
-				}
-			}
-			{
-				BenObject v = diction.getBenValue("q");
-				if(v.getType() == BenObject.TYPE_STRI && "ping".equals(v.toString())) {
-				} else {
-					reader.backToMark();
-					throw new IOException();
-				}
-			}
-			{
-				BenObject v = diction.getBenValue("t");
-				if(v.getType() == BenObject.TYPE_STRI) {
-					transactionid = v.toString();
-				} else {
-					reader.backToMark();
-					throw new IOException();
-				}
-			}
-			BenObject a = diction.getBenValue("a");
-			if(a.getType() != BenObject.TYPE_DICT) {
-				reader.backToMark();
+			if(!RequestPing.check(diction)){
 				throw new IOException();
 			}
-			BenObject id = a.getBenValue("id");
-			if(id.getType() != BenObject.TYPE_STRI) {
-				reader.backToMark();
-				throw new IOException(""+a.getType());
-			}			
-			return new RequestPing(id.toString(), transactionid);
+			return new RequestPing(diction.getBenValue("t").toString(), (BenDiction)diction.getBenValue("a"),
+					diction.getBenValue("a").getBenValue("id").toString());
+		} catch(IOException e) {
+			throw e;
 		} finally {
 			reader.pushMark();
 		}
 	}
 
-	public void encode(OutputStream output) throws IOException {
-		BenDiction diction = new BenDiction();
-		BenDiction a = new BenDiction();
+	@Override
+	public BenDiction createDiction() {
+		BenDiction diction = super.createDiction();
+		BenDiction a = (BenDiction)diction.getBenValue("a");
 		a.append("id", new BenString(mId));
-		diction.append("a", a);
-		diction.append("q", new BenString("ping"));
-		diction.append("t", new BenString(mTransactionId));
-		diction.append("y", new BenString("q"));
+		return diction;
+	}
+
+	public void encode(OutputStream output) throws IOException {
+		BenDiction diction = createDiction();
 		diction.encode(output);
 	}
 
-	
 }
