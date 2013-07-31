@@ -10,32 +10,21 @@ import net.hetimatan.net.torrent.util.bencode.BenString;
 
 public class RequestPing extends KrpcRequest {
 
-	private String mId;
 	/*
 	 * todo mod id is byte array
 	 */
 	public RequestPing(String transactionId, String id) {
 		super(transactionId);
-		mId = id;
+		getArgs().put("id", new BenString(id));
 	} 
 
 	public RequestPing(String transactionId, BenDiction diction, String id) {
 		super(transactionId, diction);
-		mId = id;
-	}
-
-	@Override
-	public String getTransactionId() {
-		return super.getTransactionId();
+		getArgs().put("id", new BenString(id));
 	}
 
 	public String getId() {
-		return mId;
-	}
-
-	public void encode(OutputStream output) throws IOException {
-		BenDiction diction = createDiction();
-		diction.encode(output);
+		return getArgs().getBenValue("id").toString();
 	}
 
 	public static RequestPing decode(MarkableReader reader) throws IOException {
@@ -45,7 +34,9 @@ public class RequestPing extends KrpcRequest {
 			if(!RequestPing.check(diction)){
 				throw new IOException();
 			}
-			return new RequestPing(diction.getBenValue("t").toString(), (BenDiction)diction.getBenValue("a"),
+			return new RequestPing(
+					diction.getBenValue("t").toString(),
+					(BenDiction)diction.getBenValue("a"),
 					diction.getBenValue("a").getBenValue("id").toString());
 		} catch(IOException e) {
 			throw e;
@@ -53,15 +44,6 @@ public class RequestPing extends KrpcRequest {
 			reader.pushMark();
 		}
 	}
-	
-	@Override
-	public BenDiction createDiction() {
-		BenDiction diction = super.createDiction();
-		BenDiction a = (BenDiction)diction.getBenValue("a");
-		a.append("id", new BenString(mId));
-		return diction;
-	}
-
 
 	public static boolean check(BenDiction diction) {
 		if(!KrpcRequest.check(diction)) {

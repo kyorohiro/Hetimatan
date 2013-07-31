@@ -16,7 +16,7 @@ public class BenDiction extends BenObject {
 		super(TYPE_DICT);
 	}
 
-	public void append(String key, BenObject value) {
+	public void put(String key, BenObject value) {
 		mDict.put(key, value);
 	}
 
@@ -103,7 +103,7 @@ public class BenDiction extends BenObject {
 					throw new IOException();
 				} else {
 					BenObject key = BenString.decodeString(input);
-					list.append(key.toString(), decodeValue(input));
+					list.put(key.toString(), decodeValue(input));
 				}
 			} while(true);
 			return list;

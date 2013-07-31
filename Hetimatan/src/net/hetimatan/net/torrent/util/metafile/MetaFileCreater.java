@@ -74,17 +74,17 @@ public class MetaFileCreater {
 		BenDiction root = new BenDiction();
 		BenDiction info = new BenDiction();
 		BenString pieces = null;
-		root.append(MetaFile.TYPE_ANNOUNCE, new BenString(address));
-		root.append(MetaFile.TYPE_INFO, info);
-		info.append(MetaFile.TYPE_LENGTH, new BenInteger((int) targetFile.length()));
-		info.append(MetaFile.TYPE_NAME, new BenString(targetFile.getName()));
-		info.append(MetaFile.TYPE_PIECE_LENGTH, new BenInteger(MetaFile.DEFAULT_PIECE_LENGTH));
-		info.append(MetaFile.TYPE_PIECES, pieces);
+		root.put(MetaFile.TYPE_ANNOUNCE, new BenString(address));
+		root.put(MetaFile.TYPE_INFO, info);
+		info.put(MetaFile.TYPE_LENGTH, new BenInteger((int) targetFile.length()));
+		info.put(MetaFile.TYPE_NAME, new BenString(targetFile.getName()));
+		info.put(MetaFile.TYPE_PIECE_LENGTH, new BenInteger(MetaFile.DEFAULT_PIECE_LENGTH));
+		info.put(MetaFile.TYPE_PIECES, pieces);
 
 		MarkableFileReader reader = null;
 		try {
 			reader = new MarkableFileReader(targetFile, 512);
-			info.append(MetaFile.TYPE_PIECES, MetaFile.createPieces(reader));
+			info.put(MetaFile.TYPE_PIECES, MetaFile.createPieces(reader));
 			return createFromTorrentDiction(root);
 		} finally {
 			if (reader != null) {
@@ -101,12 +101,12 @@ public class MetaFileCreater {
 		BenDiction root = new BenDiction();
 		BenDiction info = new BenDiction();
 		BenString pieces = null;
-		root.append(MetaFile.TYPE_ANNOUNCE, new BenString(address));
-		root.append(MetaFile.TYPE_INFO, info);
+		root.put(MetaFile.TYPE_ANNOUNCE, new BenString(address));
+		root.put(MetaFile.TYPE_INFO, info);
 
 		//
-		info.append(MetaFile.TYPE_LENGTH, new BenInteger((int) targetDir.length()));
-		info.append(MetaFile.TYPE_NAME, new BenString(targetDir.getName()));
+		info.put(MetaFile.TYPE_LENGTH, new BenInteger((int) targetDir.length()));
+		info.put(MetaFile.TYPE_NAME, new BenString(targetDir.getName()));
 
 		
 		LinkedList<File> findFiles = MetaFile.findFile(targetDir);
@@ -114,20 +114,20 @@ public class MetaFileCreater {
 		for (File f : findFiles) {
 //			System.out.println("FF#"+f.getName());
 			BenDiction file = new BenDiction();
-			file.append(MetaFile.TYPE_LENGTH, new BenInteger((int)f.length()));
-			file.append(MetaFile.TYPE_PATH, MetaFile._filePath(targetDir, f));
+			file.put(MetaFile.TYPE_LENGTH, new BenInteger((int)f.length()));
+			file.put(MetaFile.TYPE_PATH, MetaFile._filePath(targetDir, f));
 			files.append(file);
 		}
-		info.append(MetaFile.TYPE_FILES, files);
+		info.put(MetaFile.TYPE_FILES, files);
 
 		//
-		info.append(MetaFile.TYPE_PIECE_LENGTH, new BenInteger(MetaFile.DEFAULT_PIECE_LENGTH));
-		info.append(MetaFile.TYPE_PIECES, pieces);
+		info.put(MetaFile.TYPE_PIECE_LENGTH, new BenInteger(MetaFile.DEFAULT_PIECE_LENGTH));
+		info.put(MetaFile.TYPE_PIECES, pieces);
 
 		MarkableFileReader reader = null;
 		try {
 			reader = new MarkableFileReader(KyoroFileForFiles.create(findFiles), 512);
-			info.append(MetaFile.TYPE_PIECES, MetaFile.createPieces(reader));
+			info.put(MetaFile.TYPE_PIECES, MetaFile.createPieces(reader));
 			return createFromTorrentDiction(root);
 		} finally {
 			if (reader != null) {

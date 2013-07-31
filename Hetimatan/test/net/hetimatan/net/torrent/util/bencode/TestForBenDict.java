@@ -36,7 +36,7 @@ public class TestForBenDict extends TestCase {
 	}
 	public void testEncode001() throws IOException {
 		BenDiction bDict = new BenDiction();
-		bDict.append("001", new BenInteger(100));
+		bDict.put("001", new BenInteger(100));
 		CashKyoroFile output = new CashKyoroFile(new File("./dummy_002"), 512, 2);
 		try {
 		bDict.encode(output.getLastOutput());
@@ -53,7 +53,7 @@ public class TestForBenDict extends TestCase {
 	public void testEncode002() throws IOException {
 		BenDiction bDict = new BenDiction();
 
-		bDict.append("001", new BenString("abc"));
+		bDict.put("001", new BenString("abc"));
 		CashKyoroFile output = new CashKyoroFile(new File("./dummy_002"), 512, 2);
 		try {
 		bDict.encode(output.getLastOutput());
@@ -69,8 +69,8 @@ public class TestForBenDict extends TestCase {
 
 	public void testEncode003() throws IOException {
 		BenDiction bDict = new BenDiction();
-		bDict.append("001", new BenString("abc"));
-		bDict.append("abcd", new BenString("abc"));
+		bDict.put("001", new BenString("abc"));
+		bDict.put("abcd", new BenString("abc"));
 		CashKyoroFile output = new CashKyoroFile(new File("./dummy_002"), 512, 2);
 		try {
 			bDict.encode(output.getLastOutput());

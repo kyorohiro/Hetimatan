@@ -204,18 +204,18 @@ public class TrackerResponse {
 		int len = data.getPeerInfoAtRamdom(peerInfos);
 
 		BenDiction diction  = new BenDiction();
-		diction.append(KEY_INTERVAL,   new BenInteger(data.getInterval()));
-		diction.append(KEY_COMPLETE,   new BenInteger(data.getComplete()));
-		diction.append(KEY_INCOMPLETE, new BenInteger(data.getIncomplete()));
+		diction.put(KEY_INTERVAL,   new BenInteger(data.getInterval()));
+		diction.put(KEY_COMPLETE,   new BenInteger(data.getComplete()));
+		diction.put(KEY_INCOMPLETE, new BenInteger(data.getIncomplete()));
 
 		if(compact != 1) {
 			BenList peers = new BenList();
-			diction.append(KEY_PEERS, peers);
+			diction.put(KEY_PEERS, peers);
 			for(int i=0;i<len;i++) {
 				BenDiction peer = new BenDiction();
-				peer.append(KEY_PEER_ID, new BenString(peerInfos[i].getPeerId()));
-				peer.append(KEY_IP     , new BenString(peerInfos[i].getIP()));
-				peer.append(KEY_PORT   , new BenInteger(peerInfos[i].getPort()));
+				peer.put(KEY_PEER_ID, new BenString(peerInfos[i].getPeerId()));
+				peer.put(KEY_IP     , new BenString(peerInfos[i].getIP()));
+				peer.put(KEY_PORT   , new BenInteger(peerInfos[i].getPort()));
 				peers.append(peer);
 			}
 		} else {
@@ -232,7 +232,7 @@ public class TrackerResponse {
 				}
 			}
 			byte[] bufferAsArray = buffer.array();
-			diction.append(KEY_PEERS, new BenString(bufferAsArray, 0, buffer.position(), "utf8"));
+			diction.put(KEY_PEERS, new BenString(bufferAsArray, 0, buffer.position(), "utf8"));
 
 		}
 		return diction;

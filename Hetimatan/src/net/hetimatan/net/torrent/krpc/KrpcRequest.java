@@ -31,10 +31,10 @@ public class KrpcRequest {
 
 	public BenDiction createDiction() {
 		BenDiction diction = new BenDiction();
-		diction.append("a", mArgs);
-		diction.append("q", new BenString("ping"));
-		diction.append("t", new BenString(mTransactionId));
-		diction.append("y", new BenString("q"));
+		diction.put("a", mArgs);
+		diction.put("q", new BenString("ping"));
+		diction.put("t", new BenString(mTransactionId));
+		diction.put("y", new BenString("q"));
 		return diction;
 	}
 

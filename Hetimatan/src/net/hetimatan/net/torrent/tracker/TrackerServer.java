@@ -33,7 +33,7 @@ public class TrackerServer extends HttpServer {
 
 	public static KyoroFile newMessageWrongRequest() throws IOException {
 		BenDiction diction = new BenDiction();
-		diction.append(TrackerResponse.KEY_FAILURE_REASON, new BenString(MESSAGE_UNMANAGED_DATA));
+		diction.put(TrackerResponse.KEY_FAILURE_REASON, new BenString(MESSAGE_UNMANAGED_DATA));
 		return new CashKyoroFile(BenObject.createEncode(diction));
 	}
 
