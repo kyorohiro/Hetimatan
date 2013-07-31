@@ -20,7 +20,7 @@ public class QueryFindNode extends KrpcQuery {
 	} 
 
 	public QueryFindNode(String transactionId, BenDiction diction, String id, String targetId) {
-		super(transactionId, diction);
+		super("find_node", transactionId, diction);
 		getArgs().put("id", new BenString(id));
 		getArgs().put("target", new BenString(targetId));
 	}
@@ -29,7 +29,7 @@ public class QueryFindNode extends KrpcQuery {
 		return getArgs().getBenValue("id").toString();
 	}
 
-	public String getTargetId() {
+	public String getTarget() {
 		return getArgs().getBenValue("target").toString();
 	}
 

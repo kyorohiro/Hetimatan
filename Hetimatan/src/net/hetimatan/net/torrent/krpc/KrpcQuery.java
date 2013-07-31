@@ -18,7 +18,8 @@ public class KrpcQuery {
 		mArgs = new BenDiction();
 	} 
 
-	public KrpcQuery(String transactionId, BenDiction diction) {
+	public KrpcQuery(String methodName, String transactionId,BenDiction diction) {
+		mMethodName = methodName;
 		mTransactionId = transactionId;
 		mArgs = diction;
 	} 
@@ -50,7 +51,7 @@ public class KrpcQuery {
 		try {
 			BenDiction diction = BenDiction.decodeDiction(reader);
 			check(diction);
-			return new KrpcQuery(diction.getBenValue("t").toString(), (BenDiction)diction.getBenValue("a"));
+			return new KrpcQuery(diction.getBenValue("q").toString(), diction.getBenValue("t").toString(), (BenDiction)diction.getBenValue("a"));
 		} catch(IOException e){
 			reader.backToMark();
 			throw e;

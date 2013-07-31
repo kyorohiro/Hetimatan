@@ -19,7 +19,7 @@ public class QueryPing extends KrpcQuery {
 	} 
 
 	public QueryPing(String transactionId, BenDiction diction, String id) {
-		super(transactionId, diction);
+		super("ping", transactionId, diction);
 		getArgs().put("id", new BenString(id));
 	}
 

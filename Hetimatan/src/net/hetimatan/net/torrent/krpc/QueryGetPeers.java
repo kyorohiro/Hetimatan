@@ -7,22 +7,23 @@ import net.hetimatan.io.file.MarkableReader;
 import net.hetimatan.net.torrent.util.bencode.BenDiction;
 import net.hetimatan.net.torrent.util.bencode.BenObject;
 import net.hetimatan.net.torrent.util.bencode.BenString;
+import net.hetimatan.net.torrent.util.bencode.BenInteger;
 
-public class QueryGetPeer extends KrpcQuery {
+public class QueryGetPeers extends KrpcQuery {
 	
 	/*
 	 * todo mod id and targetArray is byte array
 	 */
-	public QueryGetPeer(String transactionId, String id, String infoHash) {
+	public QueryGetPeers(String transactionId, String id, String infoHash) {
 		super("get_peers", transactionId);
 		getArgs().put("id", new BenString(id));
 		getArgs().put("info_hash", new BenString(infoHash));
-	} 
+	}
 
-	public QueryGetPeer(String transactionId, BenDiction diction, String id, String targetId) {
-		super(transactionId, diction);
+	public QueryGetPeers(String transactionId, BenDiction diction, String id, String infoHash) {
+		super("get_peers", transactionId, diction);
 		getArgs().put("id", new BenString(id));
-		getArgs().put("target", new BenString(targetId));
+		getArgs().put("info_hash", new BenString(infoHash));
 	}
 
 	public String getId() {
@@ -33,14 +34,14 @@ public class QueryGetPeer extends KrpcQuery {
 		return getArgs().getBenValue("info_hash").toString();
 	}
 
-	public static QueryGetPeer decode(MarkableReader reader) throws IOException {
+	public static QueryGetPeers decode(MarkableReader reader) throws IOException {
 		reader.popMark();
 		try {
 			BenDiction diction = BenDiction.decodeDiction(reader);
-			if(!QueryGetPeer.check(diction)){
+			if(!QueryGetPeers.check(diction)){
 				throw new IOException();
 			}
-			return new QueryGetPeer(diction.getBenValue("t").toString(), (BenDiction)diction.getBenValue("a"),
+			return new QueryGetPeers(diction.getBenValue("t").toString(), (BenDiction)diction.getBenValue("a"),
 					diction.getBenValue("a").getBenValue("id").toString(), 
 					diction.getBenValue("a").getBenValue("info_hash").toString()
 					);
