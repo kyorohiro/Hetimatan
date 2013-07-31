@@ -14,7 +14,7 @@ public class QueryPing extends KrpcQuery {
 	 * todo mod id is byte array
 	 */
 	public QueryPing(String transactionId, String id) {
-		super(transactionId);
+		super("ping", transactionId);
 		getArgs().put("id", new BenString(id));
 	} 
 
@@ -54,9 +54,10 @@ public class QueryPing extends KrpcQuery {
 		if(id.getType() != BenObject.TYPE_STRI) {
 			return false;
 		}
+		if(!diction.getBenValue("q").toString().equals("ping")) {
+			return false;
+		}
 		return true;
 	}
-
-
 
 }

@@ -8,18 +8,18 @@ import net.hetimatan.net.torrent.util.bencode.BenDiction;
 import net.hetimatan.net.torrent.util.bencode.BenObject;
 import net.hetimatan.net.torrent.util.bencode.BenString;
 
-public class QueryFindNode extends KrpcQuery {
+public class QueryGetPeer extends KrpcQuery {
 	
 	/*
 	 * todo mod id and targetArray is byte array
 	 */
-	public QueryFindNode(String transactionId, String id, String targetId) {
-		super("find_node", transactionId);
+	public QueryGetPeer(String transactionId, String id, String infoHash) {
+		super("get_peers", transactionId);
 		getArgs().put("id", new BenString(id));
-		getArgs().put("target", new BenString(targetId));
+		getArgs().put("info_hash", new BenString(infoHash));
 	} 
 
-	public QueryFindNode(String transactionId, BenDiction diction, String id, String targetId) {
+	public QueryGetPeer(String transactionId, BenDiction diction, String id, String targetId) {
 		super(transactionId, diction);
 		getArgs().put("id", new BenString(id));
 		getArgs().put("target", new BenString(targetId));
@@ -29,20 +29,20 @@ public class QueryFindNode extends KrpcQuery {
 		return getArgs().getBenValue("id").toString();
 	}
 
-	public String getTargetId() {
-		return getArgs().getBenValue("target").toString();
+	public String getInfoHash() {
+		return getArgs().getBenValue("info_hash").toString();
 	}
 
-	public static QueryFindNode decode(MarkableReader reader) throws IOException {
+	public static QueryGetPeer decode(MarkableReader reader) throws IOException {
 		reader.popMark();
 		try {
 			BenDiction diction = BenDiction.decodeDiction(reader);
-			if(!QueryFindNode.check(diction)){
+			if(!QueryGetPeer.check(diction)){
 				throw new IOException();
 			}
-			return new QueryFindNode(diction.getBenValue("t").toString(), (BenDiction)diction.getBenValue("a"),
+			return new QueryGetPeer(diction.getBenValue("t").toString(), (BenDiction)diction.getBenValue("a"),
 					diction.getBenValue("a").getBenValue("id").toString(), 
-					diction.getBenValue("a").getBenValue("target").toString()
+					diction.getBenValue("a").getBenValue("info_hash").toString()
 					);
 		} catch(IOException e) {
 			throw e;
@@ -59,10 +59,10 @@ public class QueryFindNode extends KrpcQuery {
 		if(args.getBenValue("id").getType() != BenObject.TYPE_STRI) {
 			return false;
 		}
-		if(args.getBenValue("target").getType() != BenObject.TYPE_STRI) {
+		if(args.getBenValue("info_hash").getType() != BenObject.TYPE_STRI) {
 			return false;
 		}
-		if(!diction.getBenValue("q").toString().equals("find_node")) {
+		if(!diction.getBenValue("q").toString().equals("get_peers")) {
 			return false;
 		}
 		return true;

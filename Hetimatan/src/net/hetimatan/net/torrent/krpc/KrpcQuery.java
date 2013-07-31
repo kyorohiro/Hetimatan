@@ -10,8 +10,10 @@ import net.hetimatan.net.torrent.util.bencode.BenString;
 public class KrpcQuery {
 	private String mTransactionId = "xx";
 	private BenDiction mArgs = null;
+	private String mMethodName = "xx";
 
-	public KrpcQuery(String transactionId) {
+	public KrpcQuery(String methodName, String transactionId) {
+		mMethodName = methodName;
 		mTransactionId = transactionId;
 		mArgs = new BenDiction();
 	} 
@@ -32,7 +34,7 @@ public class KrpcQuery {
 	public BenDiction createDiction() {
 		BenDiction diction = new BenDiction();
 		diction.put("a", mArgs);
-		diction.put("q", new BenString("ping"));
+		diction.put("q", new BenString(mMethodName));
 		diction.put("t", new BenString(mTransactionId));
 		diction.put("y", new BenString("q"));
 		return diction;
@@ -57,8 +59,7 @@ public class KrpcQuery {
 		}
 	}
 	public static boolean checkQueryName(BenDiction diction) {
-		BenObject v = diction.getBenValue("q");
-		if(v.getType() == BenObject.TYPE_STRI && "ping".equals(v.toString())) {
+		if(diction.getBenValue("q").getType() == BenObject.TYPE_STRI) {
 			return true;
 		} else {
 			return false;
@@ -66,8 +67,7 @@ public class KrpcQuery {
 	}
 
 	public static boolean checkQueryTransactionId(BenDiction diction) {
-		BenObject v = diction.getBenValue("t");
-		if(v.getType() == BenObject.TYPE_STRI) {
+		if(diction.getBenValue("t").getType() == BenObject.TYPE_STRI) {
 			return true;
 		} else {
 			return false;
