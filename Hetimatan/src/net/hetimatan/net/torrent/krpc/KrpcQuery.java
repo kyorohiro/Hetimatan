@@ -7,16 +7,16 @@ import net.hetimatan.net.torrent.util.bencode.BenDiction;
 import net.hetimatan.net.torrent.util.bencode.BenObject;
 import net.hetimatan.net.torrent.util.bencode.BenString;
 
-public class KrpcRequest {
+public class KrpcQuery {
 	private String mTransactionId = "xx";
 	private BenDiction mArgs = null;
 
-	public KrpcRequest(String transactionId) {
+	public KrpcQuery(String transactionId) {
 		mTransactionId = transactionId;
 		mArgs = new BenDiction();
 	} 
 
-	public KrpcRequest(String transactionId, BenDiction diction) {
+	public KrpcQuery(String transactionId, BenDiction diction) {
 		mTransactionId = transactionId;
 		mArgs = diction;
 	} 
@@ -43,12 +43,12 @@ public class KrpcRequest {
 		diction.encode(output);
 	}
 
-	public static KrpcRequest decode(MarkableReader reader) throws IOException {
+	public static KrpcQuery decode(MarkableReader reader) throws IOException {
 		reader.pushMark();
 		try {
 			BenDiction diction = BenDiction.decodeDiction(reader);
 			check(diction);
-			return new KrpcRequest(diction.getBenValue("t").toString(), (BenDiction)diction.getBenValue("a"));
+			return new KrpcQuery(diction.getBenValue("t").toString(), (BenDiction)diction.getBenValue("a"));
 		} catch(IOException e){
 			reader.backToMark();
 			throw e;

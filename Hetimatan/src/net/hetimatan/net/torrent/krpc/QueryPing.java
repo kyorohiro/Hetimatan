@@ -8,17 +8,17 @@ import net.hetimatan.net.torrent.util.bencode.BenDiction;
 import net.hetimatan.net.torrent.util.bencode.BenObject;
 import net.hetimatan.net.torrent.util.bencode.BenString;
 
-public class RequestPing extends KrpcRequest {
+public class QueryPing extends KrpcQuery {
 
 	/*
 	 * todo mod id is byte array
 	 */
-	public RequestPing(String transactionId, String id) {
+	public QueryPing(String transactionId, String id) {
 		super(transactionId);
 		getArgs().put("id", new BenString(id));
 	} 
 
-	public RequestPing(String transactionId, BenDiction diction, String id) {
+	public QueryPing(String transactionId, BenDiction diction, String id) {
 		super(transactionId, diction);
 		getArgs().put("id", new BenString(id));
 	}
@@ -27,14 +27,14 @@ public class RequestPing extends KrpcRequest {
 		return getArgs().getBenValue("id").toString();
 	}
 
-	public static RequestPing decode(MarkableReader reader) throws IOException {
+	public static QueryPing decode(MarkableReader reader) throws IOException {
 		reader.popMark();
 		try {
 			BenDiction diction = BenDiction.decodeDiction(reader);
-			if(!RequestPing.check(diction)){
+			if(!QueryPing.check(diction)){
 				throw new IOException();
 			}
-			return new RequestPing(
+			return new QueryPing(
 					diction.getBenValue("t").toString(),
 					(BenDiction)diction.getBenValue("a"),
 					diction.getBenValue("a").getBenValue("id").toString());
@@ -46,7 +46,7 @@ public class RequestPing extends KrpcRequest {
 	}
 
 	public static boolean check(BenDiction diction) {
-		if(!KrpcRequest.check(diction)) {
+		if(!KrpcQuery.check(diction)) {
 			return false;
 		}
 		BenDiction args = (BenDiction)diction.getBenValue("a");

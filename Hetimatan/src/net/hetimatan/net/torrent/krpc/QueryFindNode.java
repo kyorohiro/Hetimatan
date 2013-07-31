@@ -8,18 +8,18 @@ import net.hetimatan.net.torrent.util.bencode.BenDiction;
 import net.hetimatan.net.torrent.util.bencode.BenObject;
 import net.hetimatan.net.torrent.util.bencode.BenString;
 
-public class RequestFindNode extends KrpcRequest {
+public class QueryFindNode extends KrpcQuery {
 	
 	/*
 	 * todo mod id and targetArray is byte array
 	 */
-	public RequestFindNode(String transactionId, String id, String targetId) {
+	public QueryFindNode(String transactionId, String id, String targetId) {
 		super(transactionId);
 		getArgs().put("id", new BenString(id));
 		getArgs().put("target", new BenString(targetId));
 	} 
 
-	public RequestFindNode(String transactionId, BenDiction diction, String id, String targetId) {
+	public QueryFindNode(String transactionId, BenDiction diction, String id, String targetId) {
 		super(transactionId, diction);
 		getArgs().put("id", new BenString(id));
 		getArgs().put("target", new BenString(targetId));
@@ -33,14 +33,14 @@ public class RequestFindNode extends KrpcRequest {
 		return getArgs().getBenValue("target").toString();
 	}
 
-	public static RequestFindNode decode(MarkableReader reader) throws IOException {
+	public static QueryFindNode decode(MarkableReader reader) throws IOException {
 		reader.popMark();
 		try {
 			BenDiction diction = BenDiction.decodeDiction(reader);
-			if(!RequestFindNode.check(diction)){
+			if(!QueryFindNode.check(diction)){
 				throw new IOException();
 			}
-			return new RequestFindNode(diction.getBenValue("t").toString(), (BenDiction)diction.getBenValue("a"),
+			return new QueryFindNode(diction.getBenValue("t").toString(), (BenDiction)diction.getBenValue("a"),
 					diction.getBenValue("a").getBenValue("id").toString(), 
 					diction.getBenValue("a").getBenValue("target").toString()
 					);
@@ -52,7 +52,7 @@ public class RequestFindNode extends KrpcRequest {
 	}
 
 	public static boolean check(BenDiction diction) {
-		if(!KrpcRequest.check(diction)) {
+		if(!KrpcQuery.check(diction)) {
 			return false;
 		}
 		BenDiction args = (BenDiction)diction.getBenValue("a");
