@@ -19,7 +19,7 @@ public class QueryAnnouncePeer extends KrpcQuery {
 		getArgs().put("id", new BenString(id));
 		getArgs().put("info_hash", new BenString(infoHash));
 		getArgs().put("port", new BenInteger(port));
-		getArgs().put("token", new BenString(infoHash));
+		getArgs().put("token", new BenString(token));
 
 	} 
 	public QueryAnnouncePeer(String transactionId, BenDiction diction, String id, String infoHash, int port, String token) {
@@ -27,7 +27,7 @@ public class QueryAnnouncePeer extends KrpcQuery {
 		getArgs().put("id", new BenString(id));
 		getArgs().put("info_hash", new BenString(infoHash));
 		getArgs().put("port", new BenInteger(port));
-		getArgs().put("token", new BenString(infoHash));
+		getArgs().put("token", new BenString(token));
 	}
 
 	public String getId() {
