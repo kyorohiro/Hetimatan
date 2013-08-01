@@ -22,7 +22,7 @@ public class TestForResponsePing extends TestCase {
 	}
 
 	public void testEncode() throws IOException {
-		ResponsePing ping = new ResponsePing("mnopqrstuvwxyz123456", "aa");
+		ResponsePing ping = new ResponsePing("aa", "mnopqrstuvwxyz123456");
 		CashKyoroFile output = new CashKyoroFile(1*1024);
 		try {
 			ping.encode(output.getLastOutput());
