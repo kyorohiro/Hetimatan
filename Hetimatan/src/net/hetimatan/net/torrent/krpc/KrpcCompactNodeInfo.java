@@ -2,10 +2,10 @@ package net.hetimatan.net.torrent.krpc;
 
 import net.hetimatan.util.http.HttpObject;
 
-public class CompactNodeInfo {
+public class KrpcCompactNodeInfo {
 
 	byte[] mInfo = new byte[26];
-	public CompactNodeInfo(byte[] info) {
+	public KrpcCompactNodeInfo(byte[] info) {
 		mInfo = info;
 	}
 
