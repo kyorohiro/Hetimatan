@@ -1,4 +1,4 @@
-package info.kyorohiro.raider.net.torrent.client.message;
+package net.hetimatan.net.torrent.client.message;
 
 import info.kyorohiro.raider.util.TestUtil;
 import java.io.IOException;
@@ -9,36 +9,47 @@ import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.net.torrent.client.message.MessageBitField;
 import net.hetimatan.net.torrent.client.message.MessageCancel;
 import net.hetimatan.net.torrent.client.message.MessageChoke;
-import net.hetimatan.net.torrent.client.message.MessageUnchoke;
+import net.hetimatan.net.torrent.client.message.MessageRequest;
 import net.hetimatan.net.torrent.client.message.TorrentMessage;
 import net.hetimatan.util.io.ByteArrayBuilder;
 
-public class TestForMessageUnchoke extends TestCase {
+public class TestForMessageRequest extends TestCase {
 
-	public void hello() {
-		;
+	public void testHello() {
+		assertEquals(6, TorrentMessage.SIGN_REQUEST);
 	}
 
 	public void testEncode() throws IOException {
+//		request: <len=0013><id=6><index><begin><length>
 		ByteArrayBuilder builder = new ByteArrayBuilder();
-		builder.appendInt(1);
-		builder.append(MessageBitField.SIGN_UNCHOKE);
+		builder.appendInt(13);
+		builder.append(TorrentMessage.SIGN_REQUEST);
+		builder.appendInt(10);
+		builder.appendInt(100);
+		builder.appendInt(10300);
+
 		byte[] expected = builder.createBuffer();
 
-		MessageUnchoke choke = new MessageUnchoke();
+		MessageRequest request = new MessageRequest(10, 100, 10300);
 		CashKyoroFile output = new CashKyoroFile(512);
-		choke.encode(output.getLastOutput());
+		request.encode(output.getLastOutput());
 		byte[] target = CashKyoroFileHelper.newBinary(output);
 		TestUtil.assertArrayEquals(this, "", expected, target);
 	}
 
 	public void testDecode() throws IOException {
 		ByteArrayBuilder builder = new ByteArrayBuilder();
-		builder.appendInt(1);
-		builder.append(TorrentMessage.SIGN_UNCHOKE);
+		builder.appendInt(13);
+		builder.append(TorrentMessage.SIGN_REQUEST);
+		builder.appendInt(10);
+		builder.appendInt(100);
+		builder.appendInt(10300);
 
 		MarkableFileReader reader = new MarkableFileReader(builder.createBuffer());
-		MessageUnchoke.decode(reader);
+		MessageRequest request = MessageRequest.decode(reader);
+		assertEquals(10, request.getIndex());
+		assertEquals(100, request.getBegin());
+		assertEquals(10300, request.getLength());
 	}
 
 }

@@ -1,4 +1,4 @@
-package info.kyorohiro.raider.net.torrent.client.message;
+package net.hetimatan.net.torrent.client.message;
 
 import info.kyorohiro.raider.util.TestUtil;
 import java.io.IOException;

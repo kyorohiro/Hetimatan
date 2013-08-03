@@ -1,4 +1,4 @@
-package info.kyorohiro.raider.net.torrent.client.message;
+package net.hetimatan.net.torrent.client.message;
 
 import info.kyorohiro.raider.util.TestUtil;
 import java.io.IOException;
@@ -8,46 +8,37 @@ import net.hetimatan.io.filen.CashKyoroFileHelper;
 import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.net.torrent.client.message.MessageBitField;
 import net.hetimatan.net.torrent.client.message.MessageCancel;
+import net.hetimatan.net.torrent.client.message.MessageChoke;
 import net.hetimatan.net.torrent.client.message.TorrentMessage;
 import net.hetimatan.util.io.ByteArrayBuilder;
 
-public class TestForMessageCancel extends TestCase {
 
-	public void testHello() {
-		assertEquals(8, TorrentMessage.SIGN_CANCEL);
+public class TestForMessageChoke extends TestCase {
+
+	public void hello() {
+		;
 	}
 
 	public void testEncode() throws IOException {
-//		cancel: <len=0013><id=8><index><begin><length>
 		ByteArrayBuilder builder = new ByteArrayBuilder();
-		builder.appendInt(13);
-		builder.append(TorrentMessage.SIGN_CANCEL);
-		builder.appendInt(10);
-		builder.appendInt(100);
-		builder.appendInt(10300);
-
+		builder.appendInt(1);
+		builder.append(MessageBitField.SIGN_CHOKE);
 		byte[] expected = builder.createBuffer();
 
-		MessageCancel cancel = new MessageCancel(10, 100, 10300);
+		MessageChoke choke = new MessageChoke();
 		CashKyoroFile output = new CashKyoroFile(512);
-		cancel.encode(output.getLastOutput());
+		choke.encode(output.getLastOutput());
 		byte[] target = CashKyoroFileHelper.newBinary(output);
 		TestUtil.assertArrayEquals(this, "", expected, target);
 	}
 
 	public void testDecode() throws IOException {
 		ByteArrayBuilder builder = new ByteArrayBuilder();
-		builder.appendInt(13);
-		builder.append(TorrentMessage.SIGN_CANCEL);
-		builder.appendInt(10);
-		builder.appendInt(100);
-		builder.appendInt(10300);
+		builder.appendInt(1);
+		builder.append(TorrentMessage.SIGN_CHOKE);
 
 		MarkableFileReader reader = new MarkableFileReader(builder.createBuffer());
-		MessageCancel cancel = MessageCancel.decode(reader);
-		assertEquals(10, cancel.getIndex());
-		assertEquals(100, cancel.getBegin());
-		assertEquals(10300, cancel.getLength());
+		MessageChoke.decode(reader);
 	}
 
 }

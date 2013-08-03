@@ -1,4 +1,4 @@
-package info.kyorohiro.raider.net.torrent.client.message;
+package net.hetimatan.net.torrent.client.message;
 
 import info.kyorohiro.raider.util.TestUtil;
 import java.io.IOException;
@@ -9,12 +9,12 @@ import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.net.torrent.client.message.MessageBitField;
 import net.hetimatan.net.torrent.client.message.MessageCancel;
 import net.hetimatan.net.torrent.client.message.MessageChoke;
-import net.hetimatan.net.torrent.client.message.MessageHave;
+import net.hetimatan.net.torrent.client.message.MessageInterested;
 import net.hetimatan.net.torrent.client.message.TorrentMessage;
 import net.hetimatan.util.io.ByteArrayBuilder;
+import junit.framework.TestCase;
 
-//have: <len=0005><id=4><piece index>
-public class TestForMessageHave extends TestCase {
+public class TestForMessageNotInterested extends TestCase {
 
 	public void hello() {
 		;
@@ -22,27 +22,24 @@ public class TestForMessageHave extends TestCase {
 
 	public void testEncode() throws IOException {
 		ByteArrayBuilder builder = new ByteArrayBuilder();
-		builder.appendInt(5);
-		builder.append(TorrentMessage.SIGN_HAVE);
-		builder.appendInt(5);
+		builder.appendInt(1);
+		builder.append(MessageBitField.SIGN_INTERESTED);
 		byte[] expected = builder.createBuffer();
 
-		MessageHave have = new MessageHave(5);
+		MessageInterested interest = new MessageInterested();
 		CashKyoroFile output = new CashKyoroFile(512);
-		have.encode(output.getLastOutput());
+		interest.encode(output.getLastOutput());
 		byte[] target = CashKyoroFileHelper.newBinary(output);
 		TestUtil.assertArrayEquals(this, "", expected, target);
 	}
 
 	public void testDecode() throws IOException {
 		ByteArrayBuilder builder = new ByteArrayBuilder();
-		builder.appendInt(5);
-		builder.append(TorrentMessage.SIGN_HAVE);
-		builder.appendInt(5);
+		builder.appendInt(1);
+		builder.append(TorrentMessage.SIGN_INTERESTED);
 
 		MarkableFileReader reader = new MarkableFileReader(builder.createBuffer());
-		MessageHave have = MessageHave.decode(reader);
-		assertEquals(5, have.getIndex());
+		MessageInterested.decode(reader);
 	}
 
 }

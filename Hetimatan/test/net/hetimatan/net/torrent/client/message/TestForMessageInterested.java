@@ -1,4 +1,4 @@
-package info.kyorohiro.raider.net.torrent.client.message;
+package net.hetimatan.net.torrent.client.message;
 
 import info.kyorohiro.raider.util.TestUtil;
 import java.io.IOException;
@@ -9,12 +9,12 @@ import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.net.torrent.client.message.MessageBitField;
 import net.hetimatan.net.torrent.client.message.MessageCancel;
 import net.hetimatan.net.torrent.client.message.MessageChoke;
-import net.hetimatan.net.torrent.client.message.MessageInterested;
+import net.hetimatan.net.torrent.client.message.MessageNotInterested;
 import net.hetimatan.net.torrent.client.message.TorrentMessage;
 import net.hetimatan.util.io.ByteArrayBuilder;
 import junit.framework.TestCase;
 
-public class TestForMessageNotInterested extends TestCase {
+public class TestForMessageInterested extends TestCase {
 
 	public void hello() {
 		;
@@ -23,10 +23,10 @@ public class TestForMessageNotInterested extends TestCase {
 	public void testEncode() throws IOException {
 		ByteArrayBuilder builder = new ByteArrayBuilder();
 		builder.appendInt(1);
-		builder.append(MessageBitField.SIGN_INTERESTED);
+		builder.append(MessageBitField.SIGN_NOTINTERESTED);
 		byte[] expected = builder.createBuffer();
 
-		MessageInterested interest = new MessageInterested();
+		MessageNotInterested interest = new MessageNotInterested();
 		CashKyoroFile output = new CashKyoroFile(512);
 		interest.encode(output.getLastOutput());
 		byte[] target = CashKyoroFileHelper.newBinary(output);
@@ -36,10 +36,10 @@ public class TestForMessageNotInterested extends TestCase {
 	public void testDecode() throws IOException {
 		ByteArrayBuilder builder = new ByteArrayBuilder();
 		builder.appendInt(1);
-		builder.append(TorrentMessage.SIGN_INTERESTED);
+		builder.append(TorrentMessage.SIGN_NOTINTERESTED);
 
 		MarkableFileReader reader = new MarkableFileReader(builder.createBuffer());
-		MessageInterested.decode(reader);
+		MessageNotInterested.decode(reader);
 	}
 
 }
