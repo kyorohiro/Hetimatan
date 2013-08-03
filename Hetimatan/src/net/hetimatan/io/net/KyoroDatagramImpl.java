@@ -24,6 +24,10 @@ public class KyoroDatagramImpl extends KyoroSelectable {
 		return mChannel;
 	}
 
+	public void bind(int port) throws IOException {
+		mChannel.socket().bind(new InetSocketAddress(port));
+	}
+
 	public byte[] receive() throws IOException {
 		SocketAddress address = mChannel.receive(mBuffer);
 		byte[] ret = new byte[4];
@@ -40,6 +44,11 @@ public class KyoroDatagramImpl extends KyoroSelectable {
 		buffer.put(message, 0, message.length);
 		buffer.flip();
 		return mChannel.send(buffer, iad);
+	}
+
+	public void regist(KyoroSelector selector, int key) throws IOException {
+		mChannel.register(selector.getSelector(), key);
+		selector.putClient(this);
 	}
 
 	InetSocketAddress getInetSocketAddress(byte[] info) {
