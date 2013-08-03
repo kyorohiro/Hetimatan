@@ -6,6 +6,7 @@ import net.hetimatan.io.file.MarkableFileReader;
 import net.hetimatan.io.file.MarkableReader;
 import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.io.filen.CashKyoroFileHelper;
+import net.hetimatan.net.torrent.krpc.message.ResponseGetPeersPatNodes;
 import junit.framework.TestCase;
 
 public class TestForResponseGetPeersPatNodes extends TestCase {

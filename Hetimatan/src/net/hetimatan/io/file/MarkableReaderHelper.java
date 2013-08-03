@@ -3,6 +3,7 @@ package net.hetimatan.io.file;
 
 import java.io.IOException;
 
+import net.hetimatan.util.http.HttpObject;
 import net.hetimatan.util.io.ByteArrayBuilder;
 
 public class MarkableReaderHelper {
@@ -109,6 +110,12 @@ public class MarkableReaderHelper {
 	public static int readInt(MarkableReader reader, int order) throws IOException {
 		byte[] buffer = readBuffer(reader, 4);
 		return ByteArrayBuilder.parseInt(buffer, order);
+	}
+
+	//ByteArrayBuilder.BYTEORDER_BIG_ENDIAN
+	public static int readShort(MarkableReader reader, int order) throws IOException {
+		byte[] buffer = readBuffer(reader, 2);
+		return ByteArrayBuilder.parseShort(buffer, 0, order);
 	}
 
 	public static byte[] readBuffer(MarkableReader reader, int length) throws IOException {

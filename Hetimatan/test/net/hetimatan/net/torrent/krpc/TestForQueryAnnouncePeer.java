@@ -8,6 +8,7 @@ import net.hetimatan.io.file.MarkableFileReader;
 import net.hetimatan.io.file.MarkableReader;
 import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.io.filen.CashKyoroFileHelper;
+import net.hetimatan.net.torrent.krpc.message.QueryAnnouncePeer;
 
 public class TestForQueryAnnouncePeer extends TestCase {
 	public void testDecode() throws IOException {

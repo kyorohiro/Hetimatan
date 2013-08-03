@@ -1,4 +1,4 @@
-package net.hetimatan.net.torrent.krpc;
+package net.hetimatan.net.torrent.krpc.message;
 
 import java.io.IOException;
 import net.hetimatan.io.file.MarkableReader;
@@ -6,9 +6,9 @@ import net.hetimatan.net.torrent.util.bencode.BenDiction;
 import net.hetimatan.net.torrent.util.bencode.BenObject;
 import net.hetimatan.net.torrent.util.bencode.BenString;
 
-public class ResponsePing extends KrpcResponse {
+public class ResponseAnnouncePeer extends KrpcResponse {
 
-	public ResponsePing(String transactionId, String id) {
+	public ResponseAnnouncePeer(String transactionId, String id) {
 		super(transactionId);
 		getArgs().put("id", new BenString(id));
 	} 
@@ -28,7 +28,7 @@ public class ResponsePing extends KrpcResponse {
 		return true;
 	}
 
-	public static ResponsePing decode(MarkableReader reader) throws IOException {
+	public static ResponseAnnouncePeer decode(MarkableReader reader) throws IOException {
 		reader.popMark();
 		try {
 			BenDiction diction = BenDiction.decodeDiction(reader);
@@ -37,7 +37,7 @@ public class ResponsePing extends KrpcResponse {
 				throw new IOException();
 			}
 			
-			return new ResponsePing(diction.getBenValue("t").toString(), 
+			return new ResponseAnnouncePeer(diction.getBenValue("t").toString(), 
 					diction.getBenValue("r").getBenValue("id").toString());
 		} finally {
 			reader.pushMark();

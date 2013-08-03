@@ -1,18 +1,19 @@
-package net.hetimatan.net.torrent.krpc;
+package net.hetimatan.net.torrent.krpc.message;
 
 import java.io.IOException;
 import net.hetimatan.io.file.MarkableReader;
 import net.hetimatan.net.torrent.util.bencode.BenDiction;
+import net.hetimatan.net.torrent.util.bencode.BenList;
 import net.hetimatan.net.torrent.util.bencode.BenObject;
 import net.hetimatan.net.torrent.util.bencode.BenString;
 
-public class ResponseGetPeersPatNodes extends KrpcResponse {
+public class ResponseGetPeersPatValues extends KrpcResponse {
 
-	public ResponseGetPeersPatNodes(String transactionId, String id, String token, String nodes) {
+	public ResponseGetPeersPatValues(String transactionId, String id, String token, BenList values) {
 		super(transactionId);
 		getArgs().put("id", new BenString(id));
-		getArgs().put("nodes", new BenString(nodes));
 		getArgs().put("token", new BenString(token));
+		getArgs().put("values", values);
 	} 
 
 	public String getId() {
@@ -23,8 +24,8 @@ public class ResponseGetPeersPatNodes extends KrpcResponse {
 		return getArgs().getBenValue("token").toString();
 	}
 
-	public String getNodes() {
-		return getArgs().getBenValue("nodes").toString();
+	public BenList getValues() {
+		return (BenList)getArgs().getBenValue("values");
 	}
 
 
@@ -35,16 +36,16 @@ public class ResponseGetPeersPatNodes extends KrpcResponse {
 		if(diction.getBenValue("r").getBenValue("id").getType() != BenObject.TYPE_STRI) {
 			return false;
 		}
-		if(diction.getBenValue("r").getBenValue("nodes").getType() != BenObject.TYPE_STRI) {
+		if(diction.getBenValue("r").getBenValue("token").getType() != BenObject.TYPE_STRI) {
 			return false;
 		}	
-		if(diction.getBenValue("r").getBenValue("token").getType() != BenObject.TYPE_STRI) {
+		if(diction.getBenValue("r").getBenValue("values").getType() != BenObject.TYPE_LIST) {
 			return false;
 		}	
 		return true;
 	}
 
-	public static ResponseGetPeersPatNodes decode(MarkableReader reader) throws IOException {
+	public static ResponseGetPeersPatValues decode(MarkableReader reader) throws IOException {
 		reader.popMark();
 		try {
 			BenDiction diction = BenDiction.decodeDiction(reader);
@@ -53,10 +54,10 @@ public class ResponseGetPeersPatNodes extends KrpcResponse {
 				throw new IOException();
 			}
 			
-			return new ResponseGetPeersPatNodes(diction.getBenValue("t").toString(), 
+			return new ResponseGetPeersPatValues(diction.getBenValue("t").toString(), 
 					diction.getBenValue("r").getBenValue("id").toString(),
 					diction.getBenValue("r").getBenValue("token").toString(),				
-					diction.getBenValue("r").getBenValue("nodes").toString()
+					(BenList)diction.getBenValue("r").getBenValue("values")
 					);
 		} finally {
 			reader.pushMark();

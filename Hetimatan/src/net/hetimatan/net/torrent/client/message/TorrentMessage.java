@@ -24,6 +24,7 @@ public abstract class TorrentMessage {
 	public static final byte SIGN_REQUEST = 6;
 	public static final byte SIGN_PIECE = 7;
 	public static final byte SIGN_CANCEL = 8;
+	public static final byte SIGN_PORT = 9;// For MDHT 
 
 
 	private int mType = 0;

@@ -1,4 +1,4 @@
-package net.hetimatan.net.torrent.krpc;
+package net.hetimatan.net.torrent.krpc.message;
 
 import java.io.IOException;
 import java.io.OutputStream;

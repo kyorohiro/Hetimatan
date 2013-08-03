@@ -6,8 +6,8 @@ import net.hetimatan.io.file.MarkableFileReader;
 import net.hetimatan.io.file.MarkableReader;
 import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.io.filen.CashKyoroFileHelper;
+import net.hetimatan.net.torrent.krpc.message.ResponseGetPeersPatValues;
 import net.hetimatan.net.torrent.util.bencode.BenList;
-import net.hetimatan.net.torrent.util.bencode.BenObject;
 import net.hetimatan.net.torrent.util.bencode.BenString;
 import junit.framework.TestCase;
 
@@ -32,7 +32,6 @@ public class TestForResponseGetPeersPatValues extends TestCase {
 		String transactionId = "aa";
 		String id = "abcdefghij0123456789";
 		String token = "aoeusnth";
-		String nodes = "A123456789B123456789C12345";
 		BenList list = new BenList();
 		list.append(new BenString("axje.u"));
 		list.append(new BenString("idhtnm"));
