@@ -28,8 +28,16 @@ public class KyoroDatagramImpl extends KyoroSelectable {
 		mChannel.socket().bind(new InetSocketAddress(port));
 	}
 
+	public byte[] getByte() {
+		return mBuffer.array();
+	}
+
 	public byte[] receive() throws IOException {
+		mBuffer.flip();
 		SocketAddress address = mChannel.receive(mBuffer);
+		if(address == null) {
+			return null;
+		}
 		byte[] ret = new byte[4];
 		byte[] ad = ((InetSocketAddress)address).getAddress().getAddress();
 		int port =  ((InetSocketAddress)address).getPort();
