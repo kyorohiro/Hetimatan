@@ -10,6 +10,7 @@ import net.hetimatan.util.event.EventTask;
 import net.hetimatan.util.event.EventTaskRunner;
 import net.hetimatan.util.log.Log;
 import net.hetimatan.util.net.KyoroSocketEventRunner;
+import net.hetimatan.util.url.PercentEncoder;
 
 public class KrpcTracker {
 	private int mPort = 10001;
@@ -23,13 +24,13 @@ public class KrpcTracker {
 	public void boot() throws IOException {
 		if(mReceiver == null) {
 			mReceiver = new KyoroDatagramImpl();
-		}
-		for(int i=0;i<100;i++) {
-			try {
-				mReceiver.bind(mPort);
-				return;
-			} catch(IOException e) {
-				mPort++;
+			for(int i=0;i<100;i++) {
+				try {
+					mReceiver.bind(mPort);
+					return;
+				} catch(IOException e) {
+					mPort++;
+				}
 			}
 		}
 		throw new IOException();
@@ -48,6 +49,7 @@ public class KrpcTracker {
 		if(runner == null) {
 			runner = new KyoroSocketEventRunner();
 		}
+		boot();
 		mReceiver.regist(runner.getSelector(), KyoroSelector.READ);
 		mReceiver.setEventTaskAtWrakReference(mReceiveTask, KyoroSelector.READ);
 		return runner;
@@ -59,8 +61,13 @@ public class KrpcTracker {
 			return;
 		}
 		MarkableFileReader reader = new MarkableFileReader(mReceiver.getByte());
-		BenDiction diction = BenDiction.decodeDiction(reader);
-		Log.v("test", diction.toString());
+		try {
+			BenDiction diction = BenDiction.decodeDiction(reader);
+			Log.v("test", diction.toString());
+		} catch(IOException e) {
+			PercentEncoder encoder = new PercentEncoder();
+			Log.v("test", encoder.encode(mReceiver.getByte()));			
+		}
 	}
 
 	public class Receivetask extends EventTask {
