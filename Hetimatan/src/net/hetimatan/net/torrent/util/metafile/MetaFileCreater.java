@@ -28,7 +28,7 @@ public class MetaFileCreater {
 		Long[] fileLengthList = null;
 
 		// when single file
-		if (null == info.getBenValue(MetaFile.TYPE_FILES)) {
+		if (info.getBenValue(MetaFile.TYPE_FILES).getType() == BenObject.TYPE_NULL) {
 			BenInteger length = (BenInteger) info.getBenValue(MetaFile.TYPE_LENGTH, BenObject.TYPE_INTE);
 			fileNameList = new String[1];
 			fileNameList[0] = name.toString();

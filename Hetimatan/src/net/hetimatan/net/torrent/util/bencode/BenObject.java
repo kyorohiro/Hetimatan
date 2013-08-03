@@ -15,6 +15,7 @@ public abstract class BenObject {
 	public static final int TYPE_INTE  = 1;
 	public static final int TYPE_LIST  = 2;
 	public static final int TYPE_DICT  = 3;
+	public static final int TYPE_NULL  = -1;
 
 	public static void log(CharSequence log) {
 //		System.out.println("bencode_log:"+log);

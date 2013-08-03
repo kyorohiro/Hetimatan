@@ -3,7 +3,6 @@ package net.hetimatan.io.net;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.channels.ClosedChannelException;
-import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
@@ -11,8 +10,6 @@ import java.nio.channels.SocketChannel;
 public class KyoroServerSocketImpl extends KyoroServerSocket {
 
 	private ServerSocketChannel mServerChannel = null;
-	private Selector mSelector = null;
-	private boolean mOwnSelector = false;
 
 	public KyoroServerSocketImpl() throws IOException {
 		this(null);
@@ -20,24 +17,12 @@ public class KyoroServerSocketImpl extends KyoroServerSocket {
 
 	public KyoroServerSocketImpl(Selector selector) throws IOException {
 		 mServerChannel = ServerSocketChannel.open();
-		 if(selector == null) {
-			 mSelector = Selector.open();
-			 mOwnSelector = true;
-		 } else {
-			 mSelector = selector;
-		 }
 		 mServerChannel.configureBlocking(false);
-	}
-
-	@Override
-	public int select(int timeout) throws IOException {
-		return mSelector.select(timeout);
 	}
 
 	@Override
 	public void bind(int port) throws IOException {
 		mServerChannel.socket().bind(new InetSocketAddress(port));
-		mServerChannel.register(mSelector, SelectionKey.OP_ACCEPT);
 		mIsBinded = true;
 	}
 
@@ -46,6 +31,7 @@ public class KyoroServerSocketImpl extends KyoroServerSocket {
 	public boolean isBinded() {
 		return mIsBinded;
 	}
+
 	@Override
 	public int getPort() throws IOException {
 		return mServerChannel.socket().getLocalPort();
@@ -65,9 +51,6 @@ public class KyoroServerSocketImpl extends KyoroServerSocket {
 	public void close() throws IOException {
 		if(mServerChannel != null) {
 			mServerChannel.close();
-		}
-		if(true == mOwnSelector&& mSelector != null) {
-			mSelector.close();
 		}
 		super.close();
 	}

@@ -11,7 +11,7 @@ import net.hetimatan.net.torrent.client.message.TorrentMessage;
 import net.hetimatan.util.http.HttpObject;
 import net.hetimatan.util.io.ByteArrayBuilder;
 
-//have: <len=0003><id=9><port number>
+//port: <len=0003><id=9><port number>
 public class TestForMessagePort extends TestCase {
 
 	public void hello() {
