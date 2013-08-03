@@ -11,8 +11,8 @@ public class ResponseGetPeersPatNodes extends KrpcResponse {
 	public ResponseGetPeersPatNodes(String transactionId, String id, String token, String nodes) {
 		super(transactionId);
 		getArgs().put("id", new BenString(id));
-		getArgs().put("token", new BenString(token));
 		getArgs().put("nodes", new BenString(nodes));
+		getArgs().put("token", new BenString(token));
 	} 
 
 	public String getId() {
