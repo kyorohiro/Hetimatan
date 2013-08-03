@@ -6,11 +6,12 @@ import net.hetimatan.net.torrent.util.bencode.BenDiction;
 import net.hetimatan.net.torrent.util.bencode.BenObject;
 import net.hetimatan.net.torrent.util.bencode.BenString;
 
-public class ResponseFindResponse extends KrpcResponse {
+public class ResponseFindNode extends KrpcResponse {
 
-	public ResponseFindResponse(String transactionId, String id, String nodes) {
+	public ResponseFindNode(String transactionId, String id, String nodes) {
 		super(transactionId);
 		getArgs().put("id", new BenString(id));
+		getArgs().put("nodes", new BenString(nodes));
 	} 
 
 	public String getId() {
@@ -35,7 +36,7 @@ public class ResponseFindResponse extends KrpcResponse {
 		return true;
 	}
 
-	public static ResponseFindResponse decode(MarkableReader reader) throws IOException {
+	public static ResponseFindNode decode(MarkableReader reader) throws IOException {
 		reader.popMark();
 		try {
 			BenDiction diction = BenDiction.decodeDiction(reader);
@@ -44,7 +45,7 @@ public class ResponseFindResponse extends KrpcResponse {
 				throw new IOException();
 			}
 			
-			return new ResponseFindResponse(diction.getBenValue("t").toString(), 
+			return new ResponseFindNode(diction.getBenValue("t").toString(), 
 					diction.getBenValue("r").getBenValue("id").toString(),
 					diction.getBenValue("r").getBenValue("nodes").toString()				
 					);
