@@ -52,10 +52,11 @@ public class KrpcTracker {
 	public KyoroSocketEventRunner start (KyoroSocketEventRunner runner) throws IOException {
 		if(runner == null) {
 			runner = new KyoroSocketEventRunner();
+			runner.waitIsSelect(true);
 		}
 		boot();
 		mReceiver.regist(runner.getSelector(), KyoroSelector.READ);
-		mReceiver.setEventTaskAtWrakReference(mReceiveTask, KyoroSelector.READ);
+		mReceiver.setEventTaskAtWrakReference(mReceiveTask = new Receivetask(), KyoroSelector.READ);
 		return runner;
 	}
 

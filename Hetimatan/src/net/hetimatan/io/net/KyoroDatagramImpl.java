@@ -29,16 +29,18 @@ public class KyoroDatagramImpl extends KyoroSelectable {
 	}
 
 	public byte[] getByte() {
+		System.out.println("-----"+mBuffer.position());
 		return mBuffer.array();
 	}
 
 	public byte[] receive() throws IOException {
-		mBuffer.flip();
+		mBuffer.position(0);
+//		mBuffer = ByteBuffer.allocate(8192);
 		SocketAddress address = mChannel.receive(mBuffer);
 		if(address == null) {
 			return null;
 		}
-		byte[] ret = new byte[4];
+		byte[] ret = new byte[6];
 		byte[] ad = ((InetSocketAddress)address).getAddress().getAddress();
 		int port =  ((InetSocketAddress)address).getPort();
 		System.arraycopy(ad, 0, ret, 0, 4);
@@ -51,7 +53,9 @@ public class KyoroDatagramImpl extends KyoroSelectable {
 		ByteBuffer buffer = ByteBuffer.allocate(message.length);
 		buffer.put(message, 0, message.length);
 		buffer.flip();
-		return mChannel.send(buffer, iad);
+		int ret =  mChannel.send(buffer, iad);
+		System.out.println("---ss--"+mBuffer.position()+".."+ret);
+		return ret;
 	}
 
 	public void regist(KyoroSelector selector, int key) throws IOException {

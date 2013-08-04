@@ -86,6 +86,15 @@ public abstract class HttpObject {
 	    }
 	}
 
+	public static byte[] address(String ip, int port) throws UnknownHostException {
+		byte[] a = aton(ip);
+		byte[] p = portToB(port);
+		byte[] ret = new byte[6];
+		System.arraycopy(a, 0, ret, 0, 4);
+		System.arraycopy(p, 0, ret, 4, 2);
+		return ret;
+	}
+
 	public static String ntoa(byte[] b) {
 	    try {
 	        return InetAddress.getByAddress(b).getHostAddress();
