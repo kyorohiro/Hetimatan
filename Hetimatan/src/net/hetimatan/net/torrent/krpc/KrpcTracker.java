@@ -30,12 +30,16 @@ public class KrpcTracker {
 					return;
 				} catch(IOException e) {
 					mPort++;
+					mReceiver = null;
 				}
 			}
 		}
 		throw new IOException();
 	}
 
+	public boolean isBoot() {
+		return (mReceiver==null?false:true); 
+	}
 	public void close() {
 		try {
 			mReceiver.close();

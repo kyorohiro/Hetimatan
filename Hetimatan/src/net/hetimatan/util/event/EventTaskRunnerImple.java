@@ -56,6 +56,7 @@ public class EventTaskRunnerImple extends EventTaskRunner {
 			if(time<=0) {
 				pushWork(task.getEventTask());
 				mDefferTasks.remove(i);
+				ret = 0;
 			} else {
 				if(ret==-1) {
 					ret = time;					
@@ -86,7 +87,9 @@ public class EventTaskRunnerImple extends EventTaskRunner {
 		super.start(task);
 		//pushWork(task);
 //		mTasks.addLast(task);
-		mTasks.add(task);
+		if (task != null) {
+			mTasks.add(task);
+		}
 		if (mRunner == null || !mRunner.isAlive()) {
 			mRunner = new SingleTaskRunner();
 			mRunner.startTask(mWorker = new Worker(this));
@@ -112,7 +115,9 @@ public class EventTaskRunnerImple extends EventTaskRunner {
 			//Thread.sleep(10000);
 			wait(10000);
 		} else {
-			wait(time);
+			if(time > 0) {
+				wait(time);
+			}
 			//Thread.sleep(time);			
 		}
 	}
