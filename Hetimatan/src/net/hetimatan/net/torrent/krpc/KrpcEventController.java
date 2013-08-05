@@ -6,6 +6,7 @@ import net.hetimatan.io.filen.ByteKyoroFile;
 import net.hetimatan.io.net.KyoroDatagramImpl;
 import net.hetimatan.net.torrent.krpc.message.KrpcQuery;
 import net.hetimatan.net.torrent.krpc.message.KrpcResponse;
+import net.hetimatan.net.torrent.krpc.message.QueryFindNode;
 import net.hetimatan.net.torrent.krpc.message.QueryPing;
 import net.hetimatan.net.torrent.krpc.message.ResponsePing;
 import net.hetimatan.net.torrent.util.bencode.BenDiction;
@@ -40,6 +41,9 @@ public class KrpcEventController {
 		if("ping".equals(methodName)) {
 			onReceiveQureyPing(address, QueryPing.decode(query));
 		}
+		if("find_node".equals(methodName)) {
+			onReceiveQureyFindNode(address, QueryFindNode.decode(query));
+		}
 	}
 
 	// 
@@ -48,4 +52,12 @@ public class KrpcEventController {
 		ResponsePing response = new ResponsePing(query.getTransactionId(), _TODO_mMYID_);
 		sendResponse(address, response);
 	}
+
+	//
+	//
+	protected void onReceiveQureyFindNode(byte[] address, QueryFindNode query) throws IOException {
+		ResponsePing response = new ResponsePing(query.getTransactionId(), _TODO_mMYID_);
+		sendResponse(address, response);
+	}
+
 }

@@ -33,10 +33,8 @@ public class QueryFindNode extends KrpcQuery {
 		return getArgs().getBenValue("target").toString();
 	}
 
-	public static QueryFindNode decode(MarkableReader reader) throws IOException {
-		reader.popMark();
+	public static QueryFindNode decode(BenDiction diction) throws IOException {
 		try {
-			BenDiction diction = BenDiction.decodeDiction(reader);
 			if(!QueryFindNode.check(diction)){
 				throw new IOException();
 			}
@@ -44,6 +42,15 @@ public class QueryFindNode extends KrpcQuery {
 					diction.getBenValue("a").getBenValue("id").toString(), 
 					diction.getBenValue("a").getBenValue("target").toString()
 					);
+		} catch(IOException e) {
+			throw e;
+		}
+	}
+
+	public static QueryFindNode decode(MarkableReader reader) throws IOException {
+		reader.popMark();
+		try {
+			return decode(BenDiction.decodeDiction(reader));
 		} catch(IOException e) {
 			throw e;
 		} finally {
