@@ -27,17 +27,20 @@ public class QueryPing extends KrpcQuery {
 		return getArgs().getBenValue("id").toString();
 	}
 
+	public static QueryPing decode(BenDiction diction) throws IOException {
+		if(!QueryPing.check(diction)){
+			throw new IOException();
+		}
+		return new QueryPing(
+				diction.getBenValue("t").toString(),
+				(BenDiction)diction.getBenValue("a"),
+				diction.getBenValue("a").getBenValue("id").toString());
+
+	}
 	public static QueryPing decode(MarkableReader reader) throws IOException {
 		reader.popMark();
 		try {
-			BenDiction diction = BenDiction.decodeDiction(reader);
-			if(!QueryPing.check(diction)){
-				throw new IOException();
-			}
-			return new QueryPing(
-					diction.getBenValue("t").toString(),
-					(BenDiction)diction.getBenValue("a"),
-					diction.getBenValue("a").getBenValue("id").toString());
+			return decode(BenDiction.decodeDiction(reader));
 		} catch(IOException e) {
 			throw e;
 		} finally {

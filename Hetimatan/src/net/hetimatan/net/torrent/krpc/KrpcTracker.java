@@ -3,17 +3,22 @@ package net.hetimatan.net.torrent.krpc;
 import java.io.IOException;
 
 import net.hetimatan.io.file.MarkableFileReader;
+import net.hetimatan.io.filen.ByteKyoroFile;
 import net.hetimatan.io.net.KyoroDatagramImpl;
 import net.hetimatan.io.net.KyoroSelector;
+import net.hetimatan.net.torrent.krpc.message.KrpcQuery;
+import net.hetimatan.net.torrent.krpc.message.KrpcResponse;
 import net.hetimatan.net.torrent.util.bencode.BenDiction;
 import net.hetimatan.util.event.EventTask;
 import net.hetimatan.util.event.EventTaskRunner;
+import net.hetimatan.util.http.HttpObject;
 import net.hetimatan.util.log.Log;
 import net.hetimatan.util.net.KyoroSocketEventRunner;
 import net.hetimatan.util.url.PercentEncoder;
 
 public class KrpcTracker {
 	private int mPort = 10001;
+	private KrpcEventController mEventManager = new KrpcEventController();
 	private KyoroDatagramImpl mReceiver = null;
 	private EventTask mReceiveTask = null;
 
@@ -68,11 +73,21 @@ public class KrpcTracker {
 		MarkableFileReader reader = new MarkableFileReader(mReceiver.getByte());
 		try {
 			BenDiction diction = BenDiction.decodeDiction(reader);
+			if(KrpcQuery.check(diction)) {
+				mEventManager.query(address, diction);
+			}
+			else if(KrpcResponse.check(diction)) {
+				mEventManager.reponse(address, diction);
+			}
 			Log.v("test", diction.toString());
 		} catch(IOException e) {
 			PercentEncoder encoder = new PercentEncoder();
 			Log.v("test", encoder.encode(mReceiver.getByte()));			
 		}
+	}
+
+	public void sendQuery(byte[] address, KrpcQuery query) throws IOException {
+		mEventManager.sendQuery(address, query);
 	}
 
 	public class Receivetask extends EventTask {

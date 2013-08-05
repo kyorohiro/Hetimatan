@@ -2,10 +2,12 @@ package net.hetimatan.io.filen;
 
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.RandomAccessFile;
 
 import net.hetimatan.io.file.KyoroByteOutput;
 import net.hetimatan.io.file.KyoroFile;
+import net.hetimatan.io.filen.CashKyoroFile.MyOutputStream;
 import net.hetimatan.util.io.ByteArrayBuilder;
 
 public class ByteKyoroFile implements KyoroFile, KyoroByteOutput {
@@ -233,7 +235,24 @@ public class ByteKyoroFile implements KyoroFile, KyoroByteOutput {
 		return write(data, 0, data.length);
 	}
 
+	private OutputStream mLastOutput = null;
+	public OutputStream getLastOutput() {
+		if(mLastOutput == null) {
+			mLastOutput = new MyOutputStream();
+		}
+		return mLastOutput;
+	}
 
+	public class MyOutputStream extends OutputStream {
+		private byte[] buffer = new byte[1];
+		@Override
+		public synchronized void write(int b) throws IOException {
+			KyoroFile file = ByteKyoroFile.this;
+			buffer[0] = (byte)(0xFF&b);
+			file.addChunk(buffer);
+		}
+		
+	}
 
 /*
 	@Override

@@ -49,12 +49,15 @@ public class KyoroDatagramImpl extends KyoroSelectable {
 	}
 
 	public int send(byte[] message, byte[] address) throws IOException {
+		return send(message, 0, message.length, address);
+	}
+
+	public int send(byte[] message, int start, int length, byte[] address) throws IOException {
 		InetSocketAddress iad = getInetSocketAddress(address);
-		ByteBuffer buffer = ByteBuffer.allocate(message.length);
-		buffer.put(message, 0, message.length);
+		ByteBuffer buffer = ByteBuffer.allocate(length);
+		buffer.put(message, start, length);
 		buffer.flip();
 		int ret =  mChannel.send(buffer, iad);
-		System.out.println("---ss--"+mBuffer.position()+".."+ret);
 		return ret;
 	}
 

@@ -59,6 +59,11 @@ public class KrpcQuery {
 			reader.popMark();
 		}
 	}
+
+	public static String getQueryName(BenDiction diction) {
+		return diction.getBenValue("q").toString();
+	}
+	
 	public static boolean checkQueryName(BenDiction diction) {
 		if(diction.getBenValue("q").getType() == BenObject.TYPE_STRI) {
 			return true;
