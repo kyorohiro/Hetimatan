@@ -12,18 +12,23 @@ import net.hetimatan.net.torrent.util.bencode.BenDiction;
 import net.hetimatan.util.event.EventTask;
 import net.hetimatan.util.event.EventTaskRunner;
 import net.hetimatan.util.http.HttpObject;
+import net.hetimatan.util.io.ByteArrayBuilder;
 import net.hetimatan.util.log.Log;
 import net.hetimatan.util.net.KyoroSocketEventRunner;
 import net.hetimatan.util.url.PercentEncoder;
 
 public class KrpcTracker {
 	private int mPort = 10001;
-	private KrpcEventController mEventManager = new KrpcEventController();
+	private KrpcEventController mEventManager = null;
 	private KyoroDatagramImpl mReceiver = null;
 	private EventTask mReceiveTask = null;
 
 	public int getPort() {
 		return mPort;
+	}
+
+	public KyoroDatagramImpl getDatagram() {
+		return mReceiver;
 	}
 
 	public void boot() throws IOException {
@@ -32,6 +37,7 @@ public class KrpcTracker {
 			for(int i=0;i<100;i++) {
 				try {
 					mReceiver.bind(mPort);
+					mEventManager = new KrpcEventController(mReceiver);
 					return;
 				} catch(IOException e) {
 					mPort++;
@@ -80,6 +86,8 @@ public class KrpcTracker {
 				mEventManager.reponse(address, diction);
 			}
 			Log.v("test", diction.toString());
+			PercentEncoder e = new PercentEncoder();
+			Log.v("test",""+new String(e.encode(address))+""+HttpObject.ntoa(address)+":"+ByteArrayBuilder.parseShort(address, 4, ByteArrayBuilder.BYTEORDER_BIG_ENDIAN));
 		} catch(IOException e) {
 			PercentEncoder encoder = new PercentEncoder();
 			Log.v("test", encoder.encode(mReceiver.getByte()));			

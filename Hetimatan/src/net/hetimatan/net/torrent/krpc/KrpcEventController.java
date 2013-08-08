@@ -10,13 +10,19 @@ import net.hetimatan.net.torrent.krpc.message.QueryFindNode;
 import net.hetimatan.net.torrent.krpc.message.QueryPing;
 import net.hetimatan.net.torrent.krpc.message.ResponsePing;
 import net.hetimatan.net.torrent.util.bencode.BenDiction;
+import net.hetimatan.net.torrent.util.bencode.BenString;
 
 public class KrpcEventController {
 
 	private String _TODO_mMYID_ = "";
 	private ByteKyoroFile mSendOutput = new ByteKyoroFile();
+	KyoroDatagramImpl mSend = null;
+	public KrpcEventController(KyoroDatagramImpl bootedSocket) {
+		mSend = bootedSocket;
+	}
+
 	public void sendQuery(byte[] address, KrpcQuery query) throws IOException {
-		KyoroDatagramImpl send = new KyoroDatagramImpl();
+		KyoroDatagramImpl send = mSend;///new KyoroDatagramImpl();
 		mSendOutput.seek(0);
 		query.encode(mSendOutput.getLastOutput());
 		int len = (int)mSendOutput.length();
@@ -24,7 +30,7 @@ public class KrpcEventController {
 	}
 
 	public void sendResponse(byte[] address, KrpcResponse response) throws IOException {
-		KyoroDatagramImpl send = new KyoroDatagramImpl();
+		KyoroDatagramImpl send = mSend;//new KyoroDatagramImpl();
 		mSendOutput.seek(0);
 		response.encode(mSendOutput.getLastOutput());
 		int len = (int)mSendOutput.length();
@@ -49,14 +55,17 @@ public class KrpcEventController {
 	// 
 	// if recv ping then send pine response
 	protected void onReceiveQureyPing(byte[] address, QueryPing query) throws IOException {
-		ResponsePing response = new ResponsePing(query.getTransactionId(), _TODO_mMYID_);
+		ResponsePing response = new ResponsePing(new BenString(query.getTransactionId()), 
+				new BenString(_TODO_mMYID_));
 		sendResponse(address, response);
 	}
 
 	//
 	//
 	protected void onReceiveQureyFindNode(byte[] address, QueryFindNode query) throws IOException {
-		ResponsePing response = new ResponsePing(query.getTransactionId(), _TODO_mMYID_);
+		ResponsePing response = new ResponsePing(
+				new BenString(query.getTransactionId()),
+				new BenString(_TODO_mMYID_));
 		sendResponse(address, response);
 	}
 

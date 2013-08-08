@@ -35,7 +35,7 @@ public class UdpTest {
 		@Override
 		public void action(EventTaskRunner runner) throws Throwable {
 			System.out.println("---a----");
-			KyoroDatagramImpl send = new KyoroDatagramImpl();
+			KyoroDatagramImpl send =mTracker.getDatagram();// new KyoroDatagramImpl();
 			send.send("d1:t1:ye".getBytes(), HttpObject.address("127.0.0.1", mTracker.getPort()));
 			runner.pushWork(this, 3000);
 		}

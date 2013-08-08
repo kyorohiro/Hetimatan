@@ -8,23 +8,23 @@ import net.hetimatan.net.torrent.util.bencode.BenString;
 
 public class ResponseGetPeersPatNodes extends KrpcResponse {
 
-	public ResponseGetPeersPatNodes(String transactionId, String id, String token, String nodes) {
-		super(transactionId);
-		getArgs().put("id", new BenString(id));
-		getArgs().put("nodes", new BenString(nodes));
-		getArgs().put("token", new BenString(token));
+	public ResponseGetPeersPatNodes(BenString transactionId, BenString id, BenString token, BenString nodes) {
+		super(transactionId.toString() );
+		getArgs().put("id", id);
+		getArgs().put("nodes", nodes);
+		getArgs().put("token", token);
 	} 
 
-	public String getId() {
-		return getArgs().getBenValue("id").toString();
+	public BenString getId() {
+		return (BenString)getArgs().getBenValue("id");
 	}
 
-	public String getToken() {
-		return getArgs().getBenValue("token").toString();
+	public BenString getToken() {
+		return (BenString)getArgs().getBenValue("token");
 	}
 
-	public String getNodes() {
-		return getArgs().getBenValue("nodes").toString();
+	public BenString getNodes() {
+		return (BenString)getArgs().getBenValue("nodes");
 	}
 
 
@@ -53,10 +53,10 @@ public class ResponseGetPeersPatNodes extends KrpcResponse {
 				throw new IOException();
 			}
 			
-			return new ResponseGetPeersPatNodes(diction.getBenValue("t").toString(), 
-					diction.getBenValue("r").getBenValue("id").toString(),
-					diction.getBenValue("r").getBenValue("token").toString(),				
-					diction.getBenValue("r").getBenValue("nodes").toString()
+			return new ResponseGetPeersPatNodes((BenString)diction.getBenValue("t"), 
+					(BenString)diction.getBenValue("r").getBenValue("id"),
+					(BenString)diction.getBenValue("r").getBenValue("token"),				
+					(BenString)diction.getBenValue("r").getBenValue("nodes")
 					);
 		} finally {
 			reader.pushMark();

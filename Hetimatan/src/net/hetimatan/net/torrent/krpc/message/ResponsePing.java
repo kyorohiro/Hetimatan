@@ -8,13 +8,13 @@ import net.hetimatan.net.torrent.util.bencode.BenString;
 
 public class ResponsePing extends KrpcResponse {
 
-	public ResponsePing(String transactionId, String id) {
-		super(transactionId);
-		getArgs().put("id", new BenString(id));
+	public ResponsePing(BenString transactionId, BenString id) {
+		super(transactionId.toString());
+		getArgs().put("id", id);
 	} 
 
-	public String getId() {
-		return getArgs().getBenValue("id").toString();
+	public BenString getId() {
+		return (BenString)getArgs().getBenValue("id");
 	}
 
 
@@ -37,8 +37,9 @@ public class ResponsePing extends KrpcResponse {
 				throw new IOException();
 			}
 			
-			return new ResponsePing(diction.getBenValue("t").toString(), 
-					diction.getBenValue("r").getBenValue("id").toString());
+			return new ResponsePing(
+					(BenString)diction.getBenValue("t"), 
+					(BenString)diction.getBenValue("r").getBenValue("id"));
 		} finally {
 			reader.pushMark();
 		}

@@ -96,12 +96,11 @@ public abstract class HttpObject {
 	}
 
 	public static String ntoa(byte[] b) {
-	    try {
-	        return InetAddress.getByAddress(b).getHostAddress();
-	    } catch (UnknownHostException e) {
-	        //No way here
-	        return null;
-	    }
+		if(b == null || b.length<4) {
+			return null;
+		} else {
+			return ""+(0xFF&b[0])+"."+(0xFF&b[1])+"."+(0xFF&b[2])+"."+(0xFF&b[3]);
+		}
 	}
 
 	public static byte[] portToB(int port) {

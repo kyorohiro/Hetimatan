@@ -4,6 +4,7 @@ package net.hetimatan.net.torrent.util.bencode;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.sql.NClob;
 import java.util.Arrays;
 
 import net.hetimatan.io.file.MarkableReader;
@@ -19,15 +20,13 @@ public class BenString extends BenObject {
 		super(TYPE_STRI);
 		mValue = new byte[end-begin];
 		System.arraycopy(buffer, begin, mValue, 0, end-begin);
-//		if(end-begin>=6){
-//			System.out.println("XxxX#:"+mValue[4]+"-"+mValue[5]+"-----------------------");
-//		}
+		mCharset = charset;
 	}
 
 	public BenString(String value) {
 		super(TYPE_STRI);
 		try {
-			mValue = value.getBytes("utf8");
+			mValue = value.getBytes(mCharset);
 		} catch (UnsupportedEncodingException e) {
 			mValue = value.getBytes();
 		}
