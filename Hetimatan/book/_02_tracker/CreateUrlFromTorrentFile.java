@@ -6,7 +6,7 @@ import java.io.IOException;
 import net.hetimatan.net.torrent.tracker.TrackerRequest;
 import net.hetimatan.net.torrent.util.metafile.MetaFile;
 import net.hetimatan.net.torrent.util.metafile.MetaFileCreater;
-import net.hetimatan.util.http.HttpRequestUri;
+import net.hetimatan.util.http.HttpRequestUri_;
 
 //
 //[課題]
@@ -19,7 +19,7 @@ public class CreateUrlFromTorrentFile {
 			File single = new File("./testdata/1k.txt.torrent");
 			MetaFile metainfo = MetaFileCreater.createFromTorrentFile(single);
 			TrackerRequest request = TrackerRequest.decode(metainfo);
-			HttpRequestUri uri = request.createUri();
+			HttpRequestUri_ uri = request.createUri();
 			uri.IsAbsolutePath(true);
 			System.out.println(""+ uri.toString());
 		} catch (IOException e) {

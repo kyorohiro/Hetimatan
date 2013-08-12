@@ -5,7 +5,7 @@ import java.util.LinkedHashMap;
 
 import net.hetimatan.util.http.HttpRequest;
 import net.hetimatan.util.http.HttpRequestLine;
-import net.hetimatan.util.http.HttpRequestUri;
+import net.hetimatan.util.http.HttpRequestUri_;
 
 public class HttpGetRequestUriBuilder {
 	public static final String REQUEST_METHOD_GET = "GET";
@@ -72,14 +72,14 @@ public class HttpGetRequestUriBuilder {
 			request.putValue(key, mValues.get(key));
 		}
 		request.getLine().setHttpVersion(mHttpVersion);
-		HttpRequestUri uri = request.getLine().getRequestURI();
+		HttpRequestUri_ uri = request.getLine().getRequestURI();
 		uri.setHost(mHost);
 		uri.setPort(mPort);
 		return request;
 	}
 
-	public synchronized HttpRequestUri createHttpRequestUri() throws IOException {
-		HttpRequestUri uri = HttpRequestUri.crateHttpGetRequestUri(mPath);
+	public synchronized HttpRequestUri_ createHttpRequestUri() throws IOException {
+		HttpRequestUri_ uri = HttpRequestUri_.crateHttpGetRequestUri(mPath);
 		for (String key : mValues.keySet()) {
 			uri.putVale(key, mValues.get(key));
 		}

@@ -2,7 +2,7 @@ package net.hetimatan.util.http;
 
 import net.hetimatan.io.file.MarkableFileReader;
 import net.hetimatan.io.filen.CashKyoroFile;
-import net.hetimatan.util.http.HttpRequestUri;
+import net.hetimatan.util.http.HttpRequestUri_;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -18,7 +18,7 @@ public class TestForHttpRequestUri  extends TestCase {
 	public void testDecodeFragment() throws IOException {
 		{
 			MarkableFileReader reader = new MarkableFileReader("#nononono".getBytes());
-			assertEquals("#nononono", HttpRequestUri.fragment(reader));
+			assertEquals("#nononono", HttpRequestUri_.fragment(reader));
 			reader.close();
 		}	
 	}
@@ -26,7 +26,7 @@ public class TestForHttpRequestUri  extends TestCase {
 	public void testDecodePath() throws IOException {
 		{
 			MarkableFileReader reader = new MarkableFileReader("/test/xxx.html".getBytes());
-			assertEquals("/test/xxx.html", HttpRequestUri.path(reader));
+			assertEquals("/test/xxx.html", HttpRequestUri_.path(reader));
 			reader.close();
 		}
 
@@ -34,7 +34,7 @@ public class TestForHttpRequestUri  extends TestCase {
 	public void testDecodePort() throws IOException {
 		{
 			MarkableFileReader reader = new MarkableFileReader("8080".getBytes());
-			assertEquals(8080, HttpRequestUri.port(reader));
+			assertEquals(8080, HttpRequestUri_.port(reader));
 			reader.close();
 		}
 
@@ -42,7 +42,7 @@ public class TestForHttpRequestUri  extends TestCase {
 		{
 			MarkableFileReader reader = new MarkableFileReader("808080808080808080808080".getBytes());
 			try {
-				HttpRequestUri.port(reader);
+				HttpRequestUri_.port(reader);
 				assertTrue(false);
 			} catch(NumberFormatException e) {
 				assertEquals(0, reader.getFilePointer());
@@ -56,19 +56,19 @@ public class TestForHttpRequestUri  extends TestCase {
 	public void testDecodeHost() throws IOException {
 		{
 			MarkableFileReader reader = new MarkableFileReader("127.0.0.1".getBytes());
-			assertEquals("127.0.0.1", HttpRequestUri.host(reader));
+			assertEquals("127.0.0.1", HttpRequestUri_.host(reader));
 			reader.close();
 		}
 
 		{
 			MarkableFileReader reader = new MarkableFileReader("xxx.yyyy.xxx:".getBytes());
-			assertEquals("xxx.yyyy.xxx", HttpRequestUri.host(reader));
+			assertEquals("xxx.yyyy.xxx", HttpRequestUri_.host(reader));
 			reader.close();
 		}
 
 		{
 			MarkableFileReader reader = new MarkableFileReader(":xxx.yyyy.xxx:".getBytes());
-			assertEquals("", HttpRequestUri.host(reader));
+			assertEquals("", HttpRequestUri_.host(reader));
 			reader.close();
 		}
 	}
@@ -76,20 +76,20 @@ public class TestForHttpRequestUri  extends TestCase {
 	public void testDecodeScheme() throws IOException {
 		{
 			MarkableFileReader reader = new MarkableFileReader("http".getBytes());
-			assertEquals("http", HttpRequestUri.scheme(reader));
+			assertEquals("http", HttpRequestUri_.scheme(reader));
 			reader.close();
 		}
 
 		{
 			MarkableFileReader reader = new MarkableFileReader("https".getBytes());
-			assertEquals("https", HttpRequestUri.scheme(reader));
+			assertEquals("https", HttpRequestUri_.scheme(reader));
 			reader.close();
 		}
 
 		{
 			MarkableFileReader reader = new MarkableFileReader("htt".getBytes());
 			try {
-			assertEquals("htt", HttpRequestUri.scheme(reader));
+			assertEquals("htt", HttpRequestUri_.scheme(reader));
 			assertTrue(false);
 			} catch(IOException e) {
 				
@@ -99,7 +99,7 @@ public class TestForHttpRequestUri  extends TestCase {
 	}
 
 	public void testEncode001() throws IOException {
-		HttpRequestUri uri = new HttpRequestUri("*");
+		HttpRequestUri_ uri = new HttpRequestUri_("*");
 		CashKyoroFile output = new CashKyoroFile(512);
 		uri.encode(output.getLastOutput());
 		output.seek(0);
@@ -110,7 +110,7 @@ public class TestForHttpRequestUri  extends TestCase {
 	}
 
 	public void testEncode002() throws IOException {
-		HttpRequestUri uri = new HttpRequestUri("/announce");
+		HttpRequestUri_ uri = new HttpRequestUri_("/announce");
 		uri.putVale("01", "value01");
 
 		CashKyoroFile output = new CashKyoroFile(512);
@@ -123,7 +123,7 @@ public class TestForHttpRequestUri  extends TestCase {
 	}
 
 	public void testEncode003() throws IOException {
-		HttpRequestUri uri = new HttpRequestUri("/announce");
+		HttpRequestUri_ uri = new HttpRequestUri_("/announce");
 		uri.putVale("01", "value01");
 		uri.putVale("02", "value02");
 		uri.putVale("03", "value03");
@@ -141,7 +141,7 @@ public class TestForHttpRequestUri  extends TestCase {
 		base.addChunk("*".getBytes());
 		MarkableFileReader reader = new MarkableFileReader(base, 512);
 
-		HttpRequestUri value = HttpRequestUri.decode(reader);
+		HttpRequestUri_ value = HttpRequestUri_.decode(reader);
 		assertEquals("*", value.getPath());
 	}
 
@@ -150,7 +150,7 @@ public class TestForHttpRequestUri  extends TestCase {
 		base.addChunk("/announce?01=value01".getBytes());
 		MarkableFileReader reader = new MarkableFileReader(base, 512);
 
-		HttpRequestUri value = HttpRequestUri.decode(reader);
+		HttpRequestUri_ value = HttpRequestUri_.decode(reader);
 		assertEquals("/announce", value.getPath());
 		Iterator<String> keys = value.keySet().iterator();
 		assertEquals("/announce", value.getPath());
@@ -165,7 +165,7 @@ public class TestForHttpRequestUri  extends TestCase {
 		base.addChunk("/announce?01=value01&02=value02&03=value03".getBytes());
 		MarkableFileReader reader = new MarkableFileReader(base, 512);
 
-		HttpRequestUri value = HttpRequestUri.decode(reader);
+		HttpRequestUri_ value = HttpRequestUri_.decode(reader);
 		assertEquals("/announce", value.getPath());
 
 		Iterator<String> keys = value.keySet().iterator();

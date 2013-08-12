@@ -2,7 +2,7 @@ package net.hetimatan.net.torrent.tracker.db;
 
 import net.hetimatan.net.torrent.client.TorrentPeer;
 import net.hetimatan.net.torrent.tracker.TrackerRequest;
-import net.hetimatan.util.http.HttpRequestUri;
+import net.hetimatan.util.http.HttpRequestUri_;
 import net.hetimatan.util.http.HttpObject;
 import net.hetimatan.util.http.HttpRequestLine;
 import net.hetimatan.util.http.HttpRequest;
@@ -82,7 +82,7 @@ public class TrackerDatam {
 
 	public static TrackerDatam updatePeerInfo(TrackerDatam peerInfo, HttpRequest uri, String ip, int port) {
 		HttpRequestLine line   = uri.getLine();
-		HttpRequestUri path = line.getRequestURI();
+		HttpRequestUri_ path = line.getRequestURI();
 		peerInfo.mDownloaded = HttpObject.parseInt(path.getValue(TrackerRequest.KEY_DOWNLOADED), peerInfo.mDownloaded);
 		peerInfo.mLeft       = HttpObject.parseInt(path.getValue(TrackerRequest.KEY_LEFT), peerInfo.mLeft);
 		peerInfo.mUploaded   = HttpObject.parseInt(path.getValue(TrackerRequest.KEY_UPLOADED), peerInfo.mUploaded);

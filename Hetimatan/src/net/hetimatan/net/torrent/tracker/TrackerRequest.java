@@ -15,7 +15,7 @@ import net.hetimatan.net.torrent.util.metafile.MetaFile;
 import net.hetimatan.util.http.HttpObject;
 import net.hetimatan.util.http.HttpRequestLine;
 import net.hetimatan.util.http.HttpRequest;
-import net.hetimatan.util.http.HttpRequestUri;
+import net.hetimatan.util.http.HttpRequestUri_;
 
 
 public class TrackerRequest {
@@ -79,7 +79,7 @@ public class TrackerRequest {
 		String url = metainfo.getAnnounce();
 		MarkableReader reader = new MarkableFileReader(url.getBytes());
 		try {
-			HttpRequestUri uri = HttpRequestUri.decode(reader);
+			HttpRequestUri_ uri = HttpRequestUri_.decode(reader);
 			request
 			.putTrackerHost(uri.getHost())
 			.putPath(uri.getPath())
@@ -91,7 +91,7 @@ public class TrackerRequest {
 		}
 	}
 
-	public HttpRequestUri createUri() throws IOException {
+	public HttpRequestUri_ createUri() throws IOException {
 		HttpGetRequestUriBuilder builder = new HttpGetRequestUriBuilder();
 		builder
 		.setHost(mTrackerHost)

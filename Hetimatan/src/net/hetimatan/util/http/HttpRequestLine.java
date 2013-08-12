@@ -12,7 +12,7 @@ import net.hetimatan.io.filen.CashKyoroFile;
 //Request-Line   = Method SP Request-URI SP HTTP-Version CRLF
 public class HttpRequestLine extends HttpObject {
 	private String mMethod = "";
-	private HttpRequestUri mRequestURI = null;
+	private HttpRequestUri_ mRequestURI = null;
 	private String mHTTPVersion = "";
 
 	public static final String HTTP11 = "HTTP/1.1";
@@ -29,14 +29,14 @@ public class HttpRequestLine extends HttpObject {
 			'U', 'V', 'W', 'X', 'Y', 'Z',
 			'.', '-', '/', '_'
 	};
-	public HttpRequestLine(String method, HttpRequestUri requestURI, String httpVersion) {
+	public HttpRequestLine(String method, HttpRequestUri_ requestURI, String httpVersion) {
 		mMethod = method;
 		mRequestURI = requestURI;
 		mHTTPVersion = httpVersion;
 	}
 	public HttpRequestLine(String method, String requestUri, String httpVersion) {
 		mMethod = method;
-		mRequestURI = HttpRequestUri.crateHttpGetRequestUri(requestUri);
+		mRequestURI = HttpRequestUri_.crateHttpGetRequestUri(requestUri);
 		mHTTPVersion = httpVersion;
 	}
 
@@ -59,7 +59,7 @@ public class HttpRequestLine extends HttpObject {
 		return mMethod;
 	}
 
-	public HttpRequestUri getRequestURI() {
+	public HttpRequestUri_ getRequestURI() {
 		return mRequestURI;
 	}
 	
@@ -89,7 +89,7 @@ public class HttpRequestLine extends HttpObject {
 			reader.pushMark();
 			String method = _metod(reader);
 			_sp(reader);
-			HttpRequestUri requestUri = HttpRequestUri.decode(reader);
+			HttpRequestUri_ requestUri = HttpRequestUri_.decode(reader);
 			_sp(reader);
 			String httpVersion = _httpVersion(reader);
 			_crlf(reader);
