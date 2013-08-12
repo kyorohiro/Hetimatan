@@ -8,15 +8,15 @@ import net.hetimatan.net.torrent.util.bencode.BenObject;
 import net.hetimatan.net.torrent.util.bencode.BenString;
 
 public class KrpcResponse {
-	private String mTransactionId = "xx";
+	private BenString mTransactionId = new BenString("xx");
 	private BenDiction mArgs = null;
 
-	public KrpcResponse(String transactionId) {
+	public KrpcResponse(BenString transactionId) {
 		mTransactionId = transactionId;
 		mArgs = new BenDiction();
 	} 
 
-	public KrpcResponse(String transactionId,BenDiction diction) {
+	public KrpcResponse(BenString transactionId,BenDiction diction) {
 		mTransactionId = transactionId;
 		mArgs = diction;
 	} 
@@ -25,14 +25,14 @@ public class KrpcResponse {
 		return mArgs;
 	}
 
-	public String getTransactionId() {
+	public BenString getTransactionId() {
 		return mTransactionId;
 	}
 
 	public BenDiction createDiction() {
 		BenDiction diction = new BenDiction();
 		diction.put("r", mArgs);
-		diction.put("t", new BenString(mTransactionId));
+		diction.put("t", mTransactionId);
 		diction.put("y", new BenString("r"));
 		return diction;
 	}
@@ -47,7 +47,9 @@ public class KrpcResponse {
 		try {
 			BenDiction diction = BenDiction.decodeDiction(reader);
 			check(diction);
-			return new KrpcResponse(diction.getBenValue("t").toString(), (BenDiction)diction.getBenValue("r"));
+			return new KrpcResponse(
+					(BenString)diction.getBenValue("t"), 
+					(BenDiction)diction.getBenValue("r"));
 		} catch(IOException e){
 			reader.backToMark();
 			throw e;

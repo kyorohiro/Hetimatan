@@ -17,7 +17,7 @@ public class TestForResponsePing extends TestCase {
 		try {
 			ResponsePing response = ResponsePing.decode(reader);
 			assertEquals("mnopqrstuvwxyz123456", response.getId().toString());
-			assertEquals("aa", response.getTransactionId());
+			assertEquals("aa", response.getTransactionId().toString());
 		} finally {
 			reader.close();
 		}

@@ -9,19 +9,19 @@ import net.hetimatan.net.torrent.util.bencode.BenString;
 
 public class ResponseGetPeersPatValues extends KrpcResponse {
 
-	public ResponseGetPeersPatValues(String transactionId, String id, String token, BenList values) {
+	public ResponseGetPeersPatValues(BenString transactionId, BenString id, BenString token, BenList values) {
 		super(transactionId);
-		getArgs().put("id", new BenString(id));
-		getArgs().put("token", new BenString(token));
+		getArgs().put("id", id);
+		getArgs().put("token", token);
 		getArgs().put("values", values);
 	} 
 
-	public String getId() {
-		return getArgs().getBenValue("id").toString();
+	public BenString getId() {
+		return (BenString)getArgs().getBenValue("id");
 	}
 
-	public String getToken() {
-		return getArgs().getBenValue("token").toString();
+	public BenString getToken() {
+		return (BenString)getArgs().getBenValue("token");
 	}
 
 	public BenList getValues() {
@@ -54,9 +54,10 @@ public class ResponseGetPeersPatValues extends KrpcResponse {
 				throw new IOException();
 			}
 			
-			return new ResponseGetPeersPatValues(diction.getBenValue("t").toString(), 
-					diction.getBenValue("r").getBenValue("id").toString(),
-					diction.getBenValue("r").getBenValue("token").toString(),				
+			return new ResponseGetPeersPatValues(
+					(BenString)diction.getBenValue("t"), 
+					(BenString)diction.getBenValue("r").getBenValue("id"),
+					(BenString)diction.getBenValue("r").getBenValue("token"),				
 					(BenList)diction.getBenValue("r").getBenValue("values")
 					);
 		} finally {

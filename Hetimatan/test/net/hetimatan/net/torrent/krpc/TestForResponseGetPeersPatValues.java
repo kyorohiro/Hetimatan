@@ -17,21 +17,21 @@ public class TestForResponseGetPeersPatValues extends TestCase {
 		MarkableReader reader = new MarkableFileReader("d1:rd2:id20:abcdefghij01234567895:token8:aoeusnth6:valuesl6:axje.u6:idhtnmee1:t2:aa1:y1:re".getBytes());
 		try {
 			ResponseGetPeersPatValues response = ResponseGetPeersPatValues.decode(reader);
-			assertEquals("abcdefghij0123456789", response.getId());
+			assertEquals("abcdefghij0123456789", response.getId().toString());
 			assertEquals(2, response.getValues().size());
 			assertEquals("axje.u", response.getValues().getBenValue(0).toString());
 			assertEquals("idhtnm", response.getValues().getBenValue(1).toString());
-			assertEquals("aoeusnth", response.getToken());
-			assertEquals("aa", response.getTransactionId());
+			assertEquals("aoeusnth", response.getToken().toString());
+			assertEquals("aa", response.getTransactionId().toString());
 		} finally {
 			reader.close();
 		}
 	}
 
 	public void testEncode() throws IOException {
-		String transactionId = "aa";
-		String id = "abcdefghij0123456789";
-		String token = "aoeusnth";
+		BenString transactionId = new BenString("aa");
+		BenString id = new BenString("abcdefghij0123456789");
+		BenString token = new BenString("aoeusnth");
 		BenList list = new BenList();
 		list.append(new BenString("axje.u"));
 		list.append(new BenString("idhtnm"));

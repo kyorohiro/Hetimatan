@@ -9,7 +9,7 @@ import net.hetimatan.net.torrent.util.bencode.BenString;
 public class ResponseGetPeersPatNodes extends KrpcResponse {
 
 	public ResponseGetPeersPatNodes(BenString transactionId, BenString id, BenString token, BenString nodes) {
-		super(transactionId.toString() );
+		super(transactionId);
 		getArgs().put("id", id);
 		getArgs().put("nodes", nodes);
 		getArgs().put("token", token);

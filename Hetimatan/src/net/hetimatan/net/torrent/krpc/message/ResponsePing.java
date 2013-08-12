@@ -9,7 +9,7 @@ import net.hetimatan.net.torrent.util.bencode.BenString;
 public class ResponsePing extends KrpcResponse {
 
 	public ResponsePing(BenString transactionId, BenString id) {
-		super(transactionId.toString());
+		super(transactionId);
 		getArgs().put("id", id);
 	} 
 

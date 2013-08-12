@@ -11,7 +11,7 @@ import net.hetimatan.util.io.ByteArrayBuilder;
 public class ResponseFindNode extends KrpcResponse {
 
 	public ResponseFindNode(BenString transactionId, BenString id, BenString nodes) {
-		super(transactionId.toString());
+		super(transactionId);
 		getArgs().put("id", id);
 		getArgs().put("nodes", nodes);
 	}
