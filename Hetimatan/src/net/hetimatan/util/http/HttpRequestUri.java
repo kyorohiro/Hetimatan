@@ -15,7 +15,7 @@ import net.hetimatan.util.io.ByteArrayBuilder;
 // GET request
 // http://www.w3schools.com/tags/ref_httpmethods.asp
 // Request-URI    = "*" | absoluteURI | abs_path
-public class HttpRequestUri_ extends HttpObject {
+public class HttpRequestUri extends HttpObject {
 	private String mPath = "";
 	private String mHost = "";
 	private int mPort = 80;
@@ -23,17 +23,17 @@ public class HttpRequestUri_ extends HttpObject {
 	private LinkedHashMap<String, String> mValues = new LinkedHashMap<String, String>();
 
 	// todo throw IOEXception?
-	public static HttpRequestUri_ crateHttpGetRequestUri(String requestPath) {
+	public static HttpRequestUri crateHttpGetRequestUri(String requestPath) {
 		try {
 			CashKyoroFile base = new CashKyoroFile(requestPath.getBytes());
 			MarkableReader reader  = new MarkableFileReader(base, 100);
-			return HttpRequestUri_.decode(reader);
+			return HttpRequestUri.decode(reader);
 		} catch(Exception e) {
-			return new HttpRequestUri_(requestPath);
+			return new HttpRequestUri(requestPath);
 		}
 	}
 
-	public HttpRequestUri_(String path) {
+	public HttpRequestUri(String path) {
 		mPath = path;
 	}
 
@@ -109,7 +109,7 @@ public class HttpRequestUri_ extends HttpObject {
 		}
 	}
 
-	public static HttpRequestUri_ decode(MarkableReader reader) throws IOException {
+	public static HttpRequestUri decode(MarkableReader reader) throws IOException {
 		try {
 			return astarisk(reader);
 		} catch(IOException e) {
@@ -153,13 +153,13 @@ public class HttpRequestUri_ extends HttpObject {
 		return mPath;
 	}
 
-	public static HttpRequestUri_ astarisk(MarkableReader reader) throws IOException  {
+	public static HttpRequestUri astarisk(MarkableReader reader) throws IOException  {
 		MarkableReaderHelper.match(reader, "*".getBytes());
-		HttpRequestUri_ ret = new HttpRequestUri_("*");
+		HttpRequestUri ret = new HttpRequestUri("*");
 		return ret;
 	}
 
-	public static HttpRequestUri_ absPath(MarkableReader reader) throws IOException {
+	public static HttpRequestUri absPath(MarkableReader reader) throws IOException {
 		String path = "/";
 		try {
 			path = path(reader);
@@ -167,7 +167,7 @@ public class HttpRequestUri_ extends HttpObject {
 			;
 		}
 		
-		HttpRequestUri_ ret = new HttpRequestUri_(path);
+		HttpRequestUri ret = new HttpRequestUri(path);
 
 		try {
 			MarkableReaderHelper.match(reader, "?".getBytes());
@@ -183,7 +183,7 @@ public class HttpRequestUri_ extends HttpObject {
 		return ret;
 	}
 
-	public static HttpRequestUri_ absoluteUri(MarkableReader reader) throws IOException {
+	public static HttpRequestUri absoluteUri(MarkableReader reader) throws IOException {
 		int port = 80;
 		String path = "/";
 		scheme(reader); 
@@ -200,7 +200,7 @@ public class HttpRequestUri_ extends HttpObject {
 			;
 		}
 		
-		HttpRequestUri_ ret = new HttpRequestUri_(path);
+		HttpRequestUri ret = new HttpRequestUri(path);
 		ret.mHost = host;
 		ret.mPort = port;
 
@@ -227,7 +227,7 @@ public class HttpRequestUri_ extends HttpObject {
 		}
 	}
 
-	public static void query(MarkableReader reader, HttpRequestUri_ uri) throws IOException {
+	public static void query(MarkableReader reader, HttpRequestUri uri) throws IOException {
 		boolean first = true;
 		do {
 			try {

@@ -7,7 +7,7 @@ import net.hetimatan.console.MainCreateTorrentFile;
 import net.hetimatan.net.torrent.tracker.TrackerRequest;
 import net.hetimatan.net.torrent.util.metafile.MetaFile;
 import net.hetimatan.net.torrent.util.metafile.MetaFileCreater;
-import net.hetimatan.util.http.HttpRequestUri_;
+import net.hetimatan.util.http.HttpRequestUri;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -68,7 +68,7 @@ public class TrackerUrlTest extends Application {
 	public String getUrl() throws IOException {
 		MetaFile metainfo = MetaFileCreater.createFromTorrentFile(mInput);
 		TrackerRequest request = TrackerRequest.decode(metainfo);
-		HttpRequestUri_ uri = request.createUri();
+		HttpRequestUri uri = request.createUri();
 		uri.IsAbsolutePath(true);
 		return uri.toString();
 	}

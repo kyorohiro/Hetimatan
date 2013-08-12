@@ -6,7 +6,7 @@ import java.io.OutputStream;
 import net.hetimatan.net.http.HttpGet;
 import net.hetimatan.util.event.CloseRunnerTask;
 import net.hetimatan.util.event.EventTaskRunner;
-import net.hetimatan.util.http.HttpRequestUri_;
+import net.hetimatan.util.http.HttpRequestUri;
 
 public class GetTest {
 
@@ -30,7 +30,7 @@ public class GetTest {
 	}
 	
 	public void request(String address) throws IOException {
-		HttpRequestUri_ uri = HttpRequestUri_.crateHttpGetRequestUri(address);
+		HttpRequestUri uri = HttpRequestUri.crateHttpGetRequestUri(address);
 		HttpGet httpGet = new HttpGet();
 		httpGet.update(uri.getHost(), uri.getPath(), uri.getPort());
 		CloseRunnerTask closeRunnerTask = new CloseRunnerTask(null);

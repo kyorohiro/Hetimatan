@@ -14,7 +14,7 @@ import net.hetimatan.net.http.task.client.HttpGetRequestTask;
 import net.hetimatan.util.event.EventTask;
 import net.hetimatan.util.event.EventTaskRunner;
 import net.hetimatan.util.http.HttpRequest;
-import net.hetimatan.util.http.HttpRequestUri_;
+import net.hetimatan.util.http.HttpRequestUri;
 import net.hetimatan.util.http.HttpRequestHeader;
 import net.hetimatan.util.http.HttpResponse;
 import net.hetimatan.util.log.Log;
@@ -67,7 +67,7 @@ public class HttpGet {
 		MarkableFileReader reader = null;
 		try {
 			reader = new MarkableFileReader(location.getBytes());
-			HttpRequestUri_ geturi = HttpRequestUri_.decode(reader);
+			HttpRequestUri geturi = HttpRequestUri.decode(reader);
 			update(geturi.getHost(), geturi.getMethod(), geturi.getPort());
 		} finally {
 			reader.close();
