@@ -14,24 +14,24 @@ public class QueryGetPeers extends KrpcQuery {
 	/*
 	 * todo mod id and targetArray is byte array
 	 */
-	public QueryGetPeers(BenString transactionId, String id, String infoHash) {
+	public QueryGetPeers(BenString transactionId, BenString id, BenString infoHash) {
 		super("get_peers", transactionId);
-		getArgs().put("id", new BenString(id));
-		getArgs().put("info_hash", new BenString(infoHash));
+		getArgs().put("id", id);
+		getArgs().put("info_hash", infoHash);
 	}
 
-	public QueryGetPeers(BenString transactionId, BenDiction diction, String id, String infoHash) {
+	public QueryGetPeers(BenString transactionId, BenDiction diction, BenString id, BenString infoHash) {
 		super("get_peers", transactionId, diction);
-		getArgs().put("id", new BenString(id));
-		getArgs().put("info_hash", new BenString(infoHash));
+		getArgs().put("id", id);
+		getArgs().put("info_hash", infoHash);
 	}
 
-	public String getId() {
-		return getArgs().getBenValue("id").toString();
+	public BenString getId() {
+		return (BenString)getArgs().getBenValue("id");
 	}
 
-	public String getInfoHash() {
-		return getArgs().getBenValue("info_hash").toString();
+	public BenString getInfoHash() {
+		return (BenString)getArgs().getBenValue("info_hash");
 	}
 
 	public static QueryGetPeers decode(MarkableReader reader) throws IOException {
@@ -43,8 +43,8 @@ public class QueryGetPeers extends KrpcQuery {
 			}
 			return new QueryGetPeers(
 					(BenString)diction.getBenValue("t"), (BenDiction)diction.getBenValue("a"),
-					diction.getBenValue("a").getBenValue("id").toString(), 
-					diction.getBenValue("a").getBenValue("info_hash").toString()
+					(BenString)diction.getBenValue("a").getBenValue("id"),
+					(BenString)diction.getBenValue("a").getBenValue("info_hash")
 					);
 		} catch(IOException e) {
 			throw e;

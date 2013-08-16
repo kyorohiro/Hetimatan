@@ -16,16 +16,16 @@ public class TestForQueryGetPeers extends TestCase {
 				"d1:ad2:id20:abcdefghij01234567899:info_hash20:mnopqrstuvwxyz123456e1:q9:get_peers1:t2:aa1:y1:qe".getBytes());
 		try {
 			QueryGetPeers query = QueryGetPeers.decode(reader);
-			assertEquals("aa", query.getTransactionId().toString());
-			assertEquals("abcdefghij0123456789", query.getId());
-			assertEquals("mnopqrstuvwxyz123456", query.getInfoHash());
+			assertEquals("aa", query.getTransactionId().toString().toString());
+			assertEquals("abcdefghij0123456789", query.getId().toString());
+			assertEquals("mnopqrstuvwxyz123456", query.getInfoHash().toString());
 		} finally {
 			reader.close();
 		}
 	}
 
 	public void testEncode() throws IOException {
-		QueryGetPeers query = new QueryGetPeers(new BenString("aa"), "abcdefghij0123456789", "mnopqrstuvwxyz123456");
+		QueryGetPeers query = new QueryGetPeers(new BenString("aa"), new BenString("abcdefghij0123456789"), new BenString("mnopqrstuvwxyz123456"));
 		CashKyoroFile output = new CashKyoroFile(12*1000);
 		try {
 			query.encode(output.getLastOutput());

@@ -13,18 +13,18 @@ public class QueryPing extends KrpcQuery {
 	/*
 	 * todo mod id is byte array
 	 */
-	public QueryPing(BenString transactionId, String id) {
+	public QueryPing(BenString transactionId, BenString id) {
 		super("ping", transactionId);
-		getArgs().put("id", new BenString(id));
+		getArgs().put("id", id);
 	} 
 
-	public QueryPing(BenString transactionId, BenDiction diction, String id) {
+	public QueryPing(BenString transactionId, BenDiction diction, BenString id) {
 		super("ping", transactionId, diction);
-		getArgs().put("id", new BenString(id));
+		getArgs().put("id", id);
 	}
 
-	public String getId() {
-		return getArgs().getBenValue("id").toString();
+	public BenString getId() {
+		return (BenString)getArgs().getBenValue("id");
 	}
 
 	public static QueryPing decode(BenDiction diction) throws IOException {
@@ -34,7 +34,7 @@ public class QueryPing extends KrpcQuery {
 		return new QueryPing(
 				(BenString)diction.getBenValue("t"),
 				(BenDiction)diction.getBenValue("a"),
-				diction.getBenValue("a").getBenValue("id").toString());
+				(BenString)diction.getBenValue("a").getBenValue("id"));
 
 	}
 	public static QueryPing decode(MarkableReader reader) throws IOException {

@@ -16,14 +16,14 @@ public class TestForQueryPing extends TestCase {
 		try {
 			QueryPing pingRequest = QueryPing.decode(reader);
 			assertEquals("aa", pingRequest.getTransactionId().toString());
-			assertEquals("abcdefghij0123456789", pingRequest.getId());
+			assertEquals("abcdefghij0123456789", pingRequest.getId().toString());
 		} finally {
 			reader.close();
 		}
 	}
 
 	public void testEncode() throws IOException {
-		QueryPing ping = new QueryPing(new BenString("aa"), "abcdefghij0123456789");
+		QueryPing ping = new QueryPing(new BenString("aa"), new BenString("abcdefghij0123456789"));
 		CashKyoroFile output = new CashKyoroFile(12*1000);
 		try {
 			ping.encode(output.getLastOutput());
