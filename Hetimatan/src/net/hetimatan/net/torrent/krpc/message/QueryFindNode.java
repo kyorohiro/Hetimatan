@@ -13,13 +13,13 @@ public class QueryFindNode extends KrpcQuery {
 	/*
 	 * todo mod id and targetArray is byte array
 	 */
-	public QueryFindNode(String transactionId, String id, String targetId) {
+	public QueryFindNode(BenString transactionId, String id, String targetId) {
 		super("find_node", transactionId);
 		getArgs().put("id", new BenString(id));
 		getArgs().put("target", new BenString(targetId));
 	} 
 
-	public QueryFindNode(String transactionId, BenDiction diction, String id, String targetId) {
+	public QueryFindNode(BenString transactionId, BenDiction diction, String id, String targetId) {
 		super("find_node", transactionId, diction);
 		getArgs().put("id", new BenString(id));
 		getArgs().put("target", new BenString(targetId));
@@ -38,7 +38,7 @@ public class QueryFindNode extends KrpcQuery {
 			if(!QueryFindNode.check(diction)){
 				throw new IOException();
 			}
-			return new QueryFindNode(diction.getBenValue("t").toString(), (BenDiction)diction.getBenValue("a"),
+			return new QueryFindNode((BenString)diction.getBenValue("t"), (BenDiction)diction.getBenValue("a"),
 					diction.getBenValue("a").getBenValue("id").toString(), 
 					diction.getBenValue("a").getBenValue("target").toString()
 					);

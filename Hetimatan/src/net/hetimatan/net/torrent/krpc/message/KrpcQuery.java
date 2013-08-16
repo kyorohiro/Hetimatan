@@ -8,17 +8,17 @@ import net.hetimatan.net.torrent.util.bencode.BenObject;
 import net.hetimatan.net.torrent.util.bencode.BenString;
 
 public class KrpcQuery {
-	private String mTransactionId = "xx";
+	private BenString mTransactionId = null;
 	private BenDiction mArgs = null;
 	private String mMethodName = "xx";
 
-	public KrpcQuery(String methodName, String transactionId) {
+	public KrpcQuery(String methodName, BenString transactionId) {
 		mMethodName = methodName;
 		mTransactionId = transactionId;
 		mArgs = new BenDiction();
 	} 
 
-	public KrpcQuery(String methodName, String transactionId,BenDiction diction) {
+	public KrpcQuery(String methodName, BenString transactionId,BenDiction diction) {
 		mMethodName = methodName;
 		mTransactionId = transactionId;
 		mArgs = diction;
@@ -28,7 +28,7 @@ public class KrpcQuery {
 		return mArgs;
 	}
 
-	public String getTransactionId() {
+	public BenString getTransactionId() {
 		return mTransactionId;
 	}
 
@@ -36,7 +36,7 @@ public class KrpcQuery {
 		BenDiction diction = new BenDiction();
 		diction.put("a", mArgs);
 		diction.put("q", new BenString(mMethodName));
-		diction.put("t", new BenString(mTransactionId));
+		diction.put("t", mTransactionId);
 		diction.put("y", new BenString("q"));
 		return diction;
 	}
@@ -51,7 +51,7 @@ public class KrpcQuery {
 		try {
 			BenDiction diction = BenDiction.decodeDiction(reader);
 			check(diction);
-			return new KrpcQuery(diction.getBenValue("q").toString(), diction.getBenValue("t").toString(), (BenDiction)diction.getBenValue("a"));
+			return new KrpcQuery(diction.getBenValue("q").toString(), (BenString)diction.getBenValue("t"), (BenDiction)diction.getBenValue("a"));
 		} catch(IOException e){
 			reader.backToMark();
 			throw e;

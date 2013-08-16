@@ -14,7 +14,7 @@ public class QueryAnnouncePeer extends KrpcQuery {
 	/*
 	 * todo mod id and targetArray is byte array
 	 */
-	public QueryAnnouncePeer(String transactionId, String id, String infoHash, int port, String token) {
+	public QueryAnnouncePeer(BenString transactionId, String id, String infoHash, int port, String token) {
 		super("announce_peer", transactionId);
 		getArgs().put("id", new BenString(id));
 		getArgs().put("info_hash", new BenString(infoHash));
@@ -22,7 +22,7 @@ public class QueryAnnouncePeer extends KrpcQuery {
 		getArgs().put("token", new BenString(token));
 
 	} 
-	public QueryAnnouncePeer(String transactionId, BenDiction diction, String id, String infoHash, int port, String token) {
+	public QueryAnnouncePeer(BenString transactionId, BenDiction diction, String id, String infoHash, int port, String token) {
 		super("announce_peer", transactionId, diction);
 		getArgs().put("id", new BenString(id));
 		getArgs().put("info_hash", new BenString(infoHash));
@@ -53,7 +53,8 @@ public class QueryAnnouncePeer extends KrpcQuery {
 			if(!QueryAnnouncePeer.check(diction)){
 				throw new IOException();
 			}
-			return new QueryAnnouncePeer(diction.getBenValue("t").toString(), (BenDiction)diction.getBenValue("a"),
+			return new QueryAnnouncePeer(
+					(BenString)diction.getBenValue("t"), (BenDiction)diction.getBenValue("a"),
 					diction.getBenValue("a").getBenValue("id").toString(), 
 					diction.getBenValue("a").getBenValue("info_hash").toString(),
 					diction.getBenValue("a").getBenValue("port").toInteger(),

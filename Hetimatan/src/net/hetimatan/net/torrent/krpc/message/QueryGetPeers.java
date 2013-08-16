@@ -14,13 +14,13 @@ public class QueryGetPeers extends KrpcQuery {
 	/*
 	 * todo mod id and targetArray is byte array
 	 */
-	public QueryGetPeers(String transactionId, String id, String infoHash) {
+	public QueryGetPeers(BenString transactionId, String id, String infoHash) {
 		super("get_peers", transactionId);
 		getArgs().put("id", new BenString(id));
 		getArgs().put("info_hash", new BenString(infoHash));
 	}
 
-	public QueryGetPeers(String transactionId, BenDiction diction, String id, String infoHash) {
+	public QueryGetPeers(BenString transactionId, BenDiction diction, String id, String infoHash) {
 		super("get_peers", transactionId, diction);
 		getArgs().put("id", new BenString(id));
 		getArgs().put("info_hash", new BenString(infoHash));
@@ -41,7 +41,8 @@ public class QueryGetPeers extends KrpcQuery {
 			if(!QueryGetPeers.check(diction)){
 				throw new IOException();
 			}
-			return new QueryGetPeers(diction.getBenValue("t").toString(), (BenDiction)diction.getBenValue("a"),
+			return new QueryGetPeers(
+					(BenString)diction.getBenValue("t"), (BenDiction)diction.getBenValue("a"),
 					diction.getBenValue("a").getBenValue("id").toString(), 
 					diction.getBenValue("a").getBenValue("info_hash").toString()
 					);

@@ -55,7 +55,7 @@ public class KrpcEventController {
 	// 
 	// if recv ping then send pine response
 	protected void onReceiveQureyPing(byte[] address, QueryPing query) throws IOException {
-		ResponsePing response = new ResponsePing(new BenString(query.getTransactionId()), 
+		ResponsePing response = new ResponsePing(query.getTransactionId(), 
 				new BenString(_TODO_mMYID_));
 		sendResponse(address, response);
 	}
@@ -64,7 +64,7 @@ public class KrpcEventController {
 	//
 	protected void onReceiveQureyFindNode(byte[] address, QueryFindNode query) throws IOException {
 		ResponsePing response = new ResponsePing(
-				new BenString(query.getTransactionId()),
+				query.getTransactionId(),
 				new BenString(_TODO_mMYID_));
 		sendResponse(address, response);
 	}

@@ -13,12 +13,12 @@ public class QueryPing extends KrpcQuery {
 	/*
 	 * todo mod id is byte array
 	 */
-	public QueryPing(String transactionId, String id) {
+	public QueryPing(BenString transactionId, String id) {
 		super("ping", transactionId);
 		getArgs().put("id", new BenString(id));
 	} 
 
-	public QueryPing(String transactionId, BenDiction diction, String id) {
+	public QueryPing(BenString transactionId, BenDiction diction, String id) {
 		super("ping", transactionId, diction);
 		getArgs().put("id", new BenString(id));
 	}
@@ -32,7 +32,7 @@ public class QueryPing extends KrpcQuery {
 			throw new IOException();
 		}
 		return new QueryPing(
-				diction.getBenValue("t").toString(),
+				(BenString)diction.getBenValue("t"),
 				(BenDiction)diction.getBenValue("a"),
 				diction.getBenValue("a").getBenValue("id").toString());
 
