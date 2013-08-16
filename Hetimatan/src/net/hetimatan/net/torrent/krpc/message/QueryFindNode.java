@@ -13,24 +13,24 @@ public class QueryFindNode extends KrpcQuery {
 	/*
 	 * todo mod id and targetArray is byte array
 	 */
-	public QueryFindNode(BenString transactionId, String id, String targetId) {
+	public QueryFindNode(BenString transactionId, BenString id, BenString targetId) {
 		super("find_node", transactionId);
-		getArgs().put("id", new BenString(id));
-		getArgs().put("target", new BenString(targetId));
+		getArgs().put("id", id);
+		getArgs().put("target", targetId);
 	} 
 
-	public QueryFindNode(BenString transactionId, BenDiction diction, String id, String targetId) {
+	public QueryFindNode(BenString transactionId, BenDiction diction, BenString id, BenString targetId) {
 		super("find_node", transactionId, diction);
-		getArgs().put("id", new BenString(id));
-		getArgs().put("target", new BenString(targetId));
+		getArgs().put("id", id);
+		getArgs().put("target", targetId);
 	}
 
-	public String getId() {
-		return getArgs().getBenValue("id").toString();
+	public BenString getId() {
+		return (BenString)getArgs().getBenValue("id");
 	}
 
-	public String getTarget() {
-		return getArgs().getBenValue("target").toString();
+	public BenString getTarget() {
+		return (BenString)getArgs().getBenValue("target");
 	}
 
 	public static QueryFindNode decode(BenDiction diction) throws IOException {
@@ -38,9 +38,10 @@ public class QueryFindNode extends KrpcQuery {
 			if(!QueryFindNode.check(diction)){
 				throw new IOException();
 			}
-			return new QueryFindNode((BenString)diction.getBenValue("t"), (BenDiction)diction.getBenValue("a"),
-					diction.getBenValue("a").getBenValue("id").toString(), 
-					diction.getBenValue("a").getBenValue("target").toString()
+			return new QueryFindNode(
+					(BenString)diction.getBenValue("t"), (BenDiction)diction.getBenValue("a"),
+					(BenString)diction.getBenValue("a").getBenValue("id"), 
+					(BenString)diction.getBenValue("a").getBenValue("target")
 					);
 		} catch(IOException e) {
 			throw e;

@@ -17,15 +17,15 @@ public class TestForQueryFindNode extends TestCase {
 		try {
 			QueryFindNode query = QueryFindNode.decode(reader);
 			assertEquals("aa", query.getTransactionId().toString());
-			assertEquals("abcdefghij0123456789", query.getId());
-			assertEquals("mnopqrstuvwxyz123456", query.getTarget());
+			assertEquals("abcdefghij0123456789", query.getId().toString());
+			assertEquals("mnopqrstuvwxyz123456", query.getTarget().toString());
 		} finally {
 			reader.close();
 		}
 	}
 
 	public void testEncode() throws IOException {
-		QueryFindNode query = new QueryFindNode(new BenString("aa"), "abcdefghij0123456789", "mnopqrstuvwxyz123456");
+		QueryFindNode query = new QueryFindNode(new BenString("aa"), new BenString("abcdefghij0123456789"), new BenString("mnopqrstuvwxyz123456"));
 		CashKyoroFile output = new CashKyoroFile(12*1000);
 		try {
 			query.encode(output.getLastOutput());
