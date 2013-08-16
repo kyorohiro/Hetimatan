@@ -14,36 +14,36 @@ public class QueryAnnouncePeer extends KrpcQuery {
 	/*
 	 * todo mod id and targetArray is byte array
 	 */
-	public QueryAnnouncePeer(BenString transactionId, String id, String infoHash, int port, String token) {
+	public QueryAnnouncePeer(BenString transactionId, BenString id, BenString infoHash, int port, BenString token) {
 		super("announce_peer", transactionId);
-		getArgs().put("id", new BenString(id));
-		getArgs().put("info_hash", new BenString(infoHash));
+		getArgs().put("id", id);
+		getArgs().put("info_hash", infoHash);
 		getArgs().put("port", new BenInteger(port));
-		getArgs().put("token", new BenString(token));
-
+		getArgs().put("token", token);
 	} 
-	public QueryAnnouncePeer(BenString transactionId, BenDiction diction, String id, String infoHash, int port, String token) {
+
+	public QueryAnnouncePeer(BenString transactionId, BenDiction diction, BenString id, BenString infoHash, int port, BenString token) {
 		super("announce_peer", transactionId, diction);
-		getArgs().put("id", new BenString(id));
-		getArgs().put("info_hash", new BenString(infoHash));
+		getArgs().put("id", id);
+		getArgs().put("info_hash", infoHash);
 		getArgs().put("port", new BenInteger(port));
-		getArgs().put("token", new BenString(token));
+		getArgs().put("token", token);
 	}
 
-	public String getId() {
-		return getArgs().getBenValue("id").toString();
+	public BenString getId() {
+		return (BenString)getArgs().getBenValue("id");
 	}
 
-	public String getInfoHash() {
-		return getArgs().getBenValue("info_hash").toString();
+	public BenString getInfoHash() {
+		return (BenString)getArgs().getBenValue("info_hash");
 	}
 
 	public int getPort() {
 		return getArgs().getBenValue("port").toInteger();
 	}
 
-	public String getToken() {
-		return getArgs().getBenValue("token").toString();
+	public BenString getToken() {
+		return (BenString)getArgs().getBenValue("token");
 	}
 
 	public static QueryAnnouncePeer decode(MarkableReader reader) throws IOException {
@@ -55,10 +55,10 @@ public class QueryAnnouncePeer extends KrpcQuery {
 			}
 			return new QueryAnnouncePeer(
 					(BenString)diction.getBenValue("t"), (BenDiction)diction.getBenValue("a"),
-					diction.getBenValue("a").getBenValue("id").toString(), 
-					diction.getBenValue("a").getBenValue("info_hash").toString(),
+					(BenString)diction.getBenValue("a").getBenValue("id"), 
+					(BenString)diction.getBenValue("a").getBenValue("info_hash"),
 					diction.getBenValue("a").getBenValue("port").toInteger(),
-					diction.getBenValue("a").getBenValue("token").toString()
+ 					(BenString)diction.getBenValue("a").getBenValue("token")
 					);
 		} catch(IOException e) {
 			throw e;

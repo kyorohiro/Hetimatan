@@ -17,17 +17,17 @@ public class TestForQueryAnnouncePeer extends TestCase {
 		try {
 			QueryAnnouncePeer query = QueryAnnouncePeer.decode(reader);
 			assertEquals("aa", query.getTransactionId().toString());
-			assertEquals("abcdefghij0123456789", query.getId());
-			assertEquals("mnopqrstuvwxyz123456", query.getInfoHash());
+			assertEquals("abcdefghij0123456789", query.getId().toString());
+			assertEquals("mnopqrstuvwxyz123456", query.getInfoHash().toString());
 			assertEquals(6881, query.getPort());
-			assertEquals("aoeusnth", query.getToken());
+			assertEquals("aoeusnth", query.getToken().toString());
 		} finally {
 			reader.close();
 		}
 	}
 
 	public void testEncode() throws IOException {
-		QueryAnnouncePeer query = new QueryAnnouncePeer(new BenString("aa"), "abcdefghij0123456789", "mnopqrstuvwxyz123456", 6881, "aoeusnth");
+		QueryAnnouncePeer query = new QueryAnnouncePeer(new BenString("aa"), new BenString("abcdefghij0123456789"), new BenString("mnopqrstuvwxyz123456"), 6881, new BenString("aoeusnth"));
 		CashKyoroFile output = new CashKyoroFile(12*1000);
 		try {
 			query.encode(output.getLastOutput());
