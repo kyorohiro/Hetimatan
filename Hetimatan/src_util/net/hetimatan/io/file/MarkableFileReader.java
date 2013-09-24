@@ -6,8 +6,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.LinkedList;
 
-import javax.management.MXBean;
-
 import net.hetimatan.io.filen.CashKyoroFile;
 
 public class MarkableFileReader implements MarkableReader {
@@ -18,7 +16,6 @@ public class MarkableFileReader implements MarkableReader {
 	private LinkedList<Long> mMark = new LinkedList<Long>();
 	private boolean mLogOn =  false;
 	private boolean mBlockOn = true;
-	private int mCurLen = 0;
 
 	public boolean setBlockOn(boolean on) {
 		boolean tmp = mBlockOn;
@@ -131,7 +128,6 @@ public class MarkableFileReader implements MarkableReader {
 				first = false;
 				waitForUnreadable(TIMEOUT);
 			} while(true);
-			mCurLen = ret;
 			if(ret>0) {
 				seek(mFilePointer + 1);
 			}
@@ -162,7 +158,6 @@ public class MarkableFileReader implements MarkableReader {
 				first = false;
 				waitForUnreadable(TIMEOUT);
 			} while(true);
-			mCurLen = ret;
 			if(ret>0) {
 				mFilePointer += ret;
 			}
@@ -188,9 +183,5 @@ public class MarkableFileReader implements MarkableReader {
 		return mIsEOF;
 	}
 
-	@Override
-	public int isCurLen() throws IOException {
-		return mCurLen;
-	}
 
 }

@@ -9,15 +9,17 @@ import net.hetimatan.io.net.KyoroSelector;
 import net.hetimatan.io.net.KyoroSocket;
 import net.hetimatan.util.log.Log;
 
-//
-// write is not socket write
-//
-@Deprecated
+/**
+ * 
+ * 
+ *
+ */
 public class KyoroFileForKyoroSocket extends OutputStream implements KyoroFile {
 
 	private KyoroSocket mSocket = null;
 	private CashKyoroFile mVf = null;
 	private KyoroSelector mSelector = null;
+	private byte[] mChunk = new byte[16*1024];
 
 	public KyoroFileForKyoroSocket(KyoroSocket socket, int writeCashSize) throws IOException {
 		mSocket = socket;
@@ -47,23 +49,18 @@ public class KyoroFileForKyoroSocket extends OutputStream implements KyoroFile {
 		return mVf.length();
 	}
 
-	private byte[] mChunk = new byte[16*1024];
 
 	private synchronized void addChunk(int size) throws IOException {
 		int addedSize = 0;
 		while (true) {
 			int len = mChunk.length;
 			len = mSocket.read(mChunk, 0, len);
-//			System.out.println("len="+len);
 			if (len <= 0) {
 				break;
 			}
 			mVf.addChunk(mChunk, 0, len);
 			addedSize += len;
 			size -= addedSize;
-//			if (size <= 0) {
-//				break;
-//			}
 			if(addedSize>=0) {
 				break;
 			}

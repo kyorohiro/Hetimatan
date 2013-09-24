@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-import net.hetimatan.app.gui.HtanClientPeer.StatusCheck;
+import net.hetimatan.hetimatan.HtanClientPeer.StatusCheck;
 import net.hetimatan.util.event.GlobalAccessProperty;
 import javafx.application.Application;
 import javafx.event.ActionEvent;

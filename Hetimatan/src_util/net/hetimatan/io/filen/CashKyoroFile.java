@@ -260,7 +260,7 @@ public class CashKyoroFile implements KyoroFile, KyoroByteOutput {
 		private byte[] buffer = new byte[1];
 		@Override
 		public synchronized void write(int b) throws IOException {
-			CashKyoroFile file = CashKyoroFile.this;
+			KyoroFile file = CashKyoroFile.this;
 			buffer[0] = (byte)(0xFF&b);
 			file.addChunk(buffer);
 		}

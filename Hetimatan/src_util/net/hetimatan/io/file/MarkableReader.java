@@ -30,6 +30,5 @@ public interface MarkableReader {
 
 	// option
 	public boolean isEOF() throws IOException;
-	public int isCurLen() throws IOException;
 
 }
