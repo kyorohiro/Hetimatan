@@ -20,7 +20,7 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-public class HtanToolMain extends Application {
+public class HtanTorrentFileCreatorMain extends Application {
 
 	private File mInput = (new File("d")).getAbsoluteFile().getParentFile();
 	private Text mText = new Text(""+mInput.getAbsolutePath());

@@ -27,7 +27,7 @@ public class UdpTest {
 		KyoroSocketEventRunner runner = tracker.start(null);
 		runner.start(null);
 		mTrackerRunner = runner;
-		runner.pushWork(new TimerTask(), 3000);
+		runner.pushTask(new TimerTask(), 3000);
 		mTracker = tracker;
 	}
 
@@ -37,7 +37,7 @@ public class UdpTest {
 			System.out.println("---a----");
 			KyoroDatagramImpl send =mTracker.getDatagram();// new KyoroDatagramImpl();
 			send.send("d1:t1:ye".getBytes(), HttpObject.address("127.0.0.1", mTracker.getPort()));
-			runner.pushWork(this, 3000);
+			runner.pushTask(this, 3000);
 		}
 	}
 }

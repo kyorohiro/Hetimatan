@@ -108,7 +108,7 @@ public class HttpGet {
 		HttpGetReadHeaderTask readHeaderTask = new HttpGetReadHeaderTask(this, mTaskManager.mLast);
 		readHeaderTask.nextAction(new HttpGetReadBodyTask(this, mTaskManager.mLast));
 		sendTask.nextAction(readHeaderTask);
-		getRunner().pushWork(sendTask);
+		getRunner().pushTask(sendTask);
 		mTaskManager.mSendTaskChain = sendTask;
 	}
 

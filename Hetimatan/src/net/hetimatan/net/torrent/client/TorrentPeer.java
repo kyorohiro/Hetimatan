@@ -123,7 +123,7 @@ public class TorrentPeer {
 			mTrackerTask = new TorrentPeerStartTracker(this);
 		}
 		getClientRunner().releaseTask(mTrackerTask);		
-		getClientRunner().pushWork(mTrackerTask, timeout);
+		getClientRunner().pushTask(mTrackerTask, timeout);
 	}
 
 	public void startConnect(TrackerPeerInfo peer) throws IOException {
@@ -187,7 +187,7 @@ public class TorrentPeer {
 	}
 
 	public void addClientTask(EventTask task) {
-		mMasterRunner.pushWork(task);
+		mMasterRunner.pushTask(task);
 	}
 
 	public EventTaskRunner getClientRunner() {

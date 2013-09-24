@@ -31,7 +31,7 @@ public class TorrentPeerPiecer implements TorrentFront.EventListener {
 		TorrentPeer peer = mUploadTargetPeer.get();
 		if(peer == null){return;}
 		TorrentFrontSendPieceTask task = new TorrentFrontSendPieceTask(front);
-		peer.getClientRunner().pushWork(task);
+		peer.getClientRunner().pushTask(task);
 	}
 
 	//

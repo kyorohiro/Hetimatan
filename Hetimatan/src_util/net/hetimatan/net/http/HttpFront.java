@@ -89,7 +89,7 @@ public class HttpFront {
 		kfiles.seek(0);
 		MessageSendTask task = new MessageSendTask(info.mSocket, kfiles);
 		task.nextAction(new HttpFrontCloseTask(this));
-		server.getEventRunner().pushWork(task);
+		server.getEventRunner().pushTask(task);
 	}
 
 	public void action() throws Throwable {

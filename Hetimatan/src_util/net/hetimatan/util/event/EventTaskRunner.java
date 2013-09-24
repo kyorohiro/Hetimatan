@@ -9,31 +9,28 @@ import net.hetimatan.util.io.ByteArrayBuilder;
 public abstract class EventTaskRunner {
 	public abstract int numOfWork();
 	public abstract void releaseTask(EventTask task);
-	public abstract void pushWork(EventTask task);
-	public abstract void pushWork(EventTask task, int timeout);
-	public abstract EventTask popWork();
+	public abstract void pushTask(EventTask task);
+	public abstract void pushTask(EventTask task, int timeout);
+	public abstract EventTask popTask();
 	public abstract boolean contains(EventTask task);
 
 	// 
-	private boolean isClosed = false;
+	private boolean mIsClosed = false;
 	private Object mCloseLock = new Object();
 	public void close() {
 		synchronized (mCloseLock) {
-			num++;
-			System.out.print("<num>"+num);
-			isClosed = true;
+			mIsClosed = true;
 			mCloseLock.notify();
 		}
 	}
 
-	public static int num = 0;
 	public boolean waitByClose(int timeout) throws InterruptedException {
 		synchronized (mCloseLock) {
-			if(isClosed) {
-				return isClosed;
+			if(mIsClosed) {
+				return mIsClosed;
 			}
 			mCloseLock.wait(timeout);
-			return isClosed;
+			return mIsClosed;
 		}
 	}
 

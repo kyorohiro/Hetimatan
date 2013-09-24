@@ -30,11 +30,11 @@ public class EventTaskRunnerImple extends EventTaskRunner {
 		return mRunner.isAlive();
 	}
 
-	public synchronized void pushWork(EventTask task) {
+	public synchronized void pushTask(EventTask task) {
 		start(task);
 	}
 
-	public synchronized void pushWork(EventTask task, int timeout) {
+	public synchronized void pushTask(EventTask task, int timeout) {
 		mDefferTasks.add(new DefferTask(task, timeout));
 		kickWorker();
 	}
@@ -54,7 +54,7 @@ public class EventTaskRunnerImple extends EventTaskRunner {
 			DefferTask task = mDefferTasks.get(i);
 			time = task.deffer(curTime);
 			if(time<=0) {
-				pushWork(task.getEventTask());
+				pushTask(task.getEventTask());
 				mDefferTasks.remove(i);
 				ret = 0;
 			} else {
@@ -69,7 +69,7 @@ public class EventTaskRunnerImple extends EventTaskRunner {
 		return (int)ret;
 	}
 
-	public synchronized EventTask popWork() {
+	public synchronized EventTask popTask() {
 		try {
 		if (mTasks.size() > 0) {
 			return mTasks.remove(0);//removeFirst();
@@ -145,7 +145,7 @@ public class EventTaskRunnerImple extends EventTaskRunner {
 					if (null == runner||runner.mRunner == null) {
 						break;
 					}
-					EventTask task = runner.popWork();
+					EventTask task = runner.popTask();
 					if (task == null) {
 						//synchronized(runner){
 							synchronized(this){

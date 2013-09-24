@@ -37,7 +37,7 @@ public class KyoroSocketEventRunner extends EventTaskRunnerImple {
 		waitBySelectable(timeout);///) {
 			//
 		if(numOfWork() != 0) {
-			pushWork(mOneShot);
+			pushTask(mOneShot);
 		}
 		//}
 	}
@@ -115,7 +115,7 @@ public class KyoroSocketEventRunner extends EventTaskRunnerImple {
 				if(runner.numOfWork()!=0){
 					if(((KyoroSocketEventRunner)runner).waitBySelectable(0)){
 					}
-					((KyoroSocketEventRunner)runner).pushWork(this);
+					((KyoroSocketEventRunner)runner).pushTask(this);
 				}
 			}
 		}

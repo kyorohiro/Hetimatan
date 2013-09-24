@@ -41,7 +41,7 @@ public class TorrentFrontTaskManager {
 		 }
 
 		 if(!peer.getClientRunner().contains(mSendTaskChain)) {
-			 peer.getClientRunner().pushWork(mSendTaskChain);
+			 peer.getClientRunner().pushTask(mSendTaskChain);
 		 }
 	}
 
@@ -68,7 +68,7 @@ public class TorrentFrontTaskManager {
 		}
 		mStartTask.nextAction(mFirstAction);
 		mStartTask.errorAction(mCloseTask);
-		runner.pushWork(mStartTask);
+		runner.pushTask(mStartTask);
 	}
 
 	public void startConnect(TorrentPeer peer, TorrentFront front, String host, int port) throws IOException {
@@ -96,7 +96,7 @@ public class TorrentFrontTaskManager {
 		peer.getSelector().wakeup();
 		front.getSocket().regist(peer.getSelector(), KyoroSelector.READ);
 		front.getSocket().setEventTaskAtWrakReference(mReceiverTask, KyoroSelector.READ);
-		runner.pushWork(mReceiverTask);
+		runner.pushTask(mReceiverTask);
 	}
 
 	public void startInterest(TorrentPeer peer, TorrentFront front) {
@@ -110,7 +110,7 @@ public class TorrentFrontTaskManager {
 			mCloseTask = new TorrentFrontCloseTask(front);
 		}
 		mInterestTask.errorAction(mCloseTask);
-		peer.getClientRunner().pushWork(mInterestTask);
+		peer.getClientRunner().pushTask(mInterestTask);
 	}
 
 	public void startNotInterest(TorrentPeer peer, TorrentFront front) {
@@ -124,7 +124,7 @@ public class TorrentFrontTaskManager {
 			mCloseTask = new TorrentFrontCloseTask(front);
 		}
 		mNotInterestTask.errorAction(mCloseTask);
-		peer.getClientRunner().pushWork(mNotInterestTask);
+		peer.getClientRunner().pushTask(mNotInterestTask);
 	}
 
 	public void startDownload(TorrentPeer peer, TorrentFront front) throws IOException {
@@ -137,7 +137,7 @@ public class TorrentFrontTaskManager {
 			mCloseTask = new TorrentFrontCloseTask(front);
 		}
 		mRequestTask.errorAction(mCloseTask);
-		peer.getClientRunner().pushWork(mRequestTask);
+		peer.getClientRunner().pushTask(mRequestTask);
 	}
 
 	public void startChoker(TorrentPeer peer, TorrentFront front, boolean isChoke) throws IOException {
@@ -150,7 +150,7 @@ public class TorrentFrontTaskManager {
 		}
 		mChokerTask.errorAction(mCloseTask);
 		mChokerTask.isChoke(isChoke);
-		peer.getClientRunner().pushWork(mChokerTask);
+		peer.getClientRunner().pushTask(mChokerTask);
 	}
 
 	public void startHave(TorrentPeer peer, TorrentFront front, int index) throws IOException {
@@ -160,7 +160,7 @@ public class TorrentFrontTaskManager {
 			mCloseTask = new TorrentFrontCloseTask(front);
 		}
 		mHaveTask.errorAction(mCloseTask);
-		peer.getClientRunner().pushWork(mHaveTask);
+		peer.getClientRunner().pushTask(mHaveTask);
 	}
 
 }

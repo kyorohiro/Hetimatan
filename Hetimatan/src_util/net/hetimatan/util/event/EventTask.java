@@ -3,8 +3,9 @@ package net.hetimatan.util.event;
 import net.hetimatan.util.log.Log;
 
 public abstract class EventTask {
-	public static int sid = 0;
+	private static int sid = 0;
 	public int mid = sid++;
+
 	private EventTask mNextAction = null;
 	private EventTask mErrorAction = null;
 	public EventTask() {
@@ -18,7 +19,6 @@ public abstract class EventTask {
 		return true;
 	}
 
-
 	public final void run(EventTaskRunner runner) {
 		try {
 			if(Log.ON){Log.d("taskrunner","["+mid+"]"+"action:"+toString());}
@@ -31,7 +31,6 @@ public abstract class EventTask {
 				runner.start(mNextAction);	
 			} 
 		} catch(Throwable t) {
-			// for debug
 			t.printStackTrace();
 			if(mErrorAction != null) {
 				runner.start(mErrorAction);

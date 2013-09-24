@@ -378,7 +378,7 @@ public class TorrentFront {
 		}
 		if(mReader.length()>mReader.getFilePointer()) {
 			if(!mTorrentPeer.get().getClientRunner().contains(mTaskManager.mReceiverTask)) {
-				mTorrentPeer.get().getClientRunner().pushWork(mTaskManager.mReceiverTask);
+				mTorrentPeer.get().getClientRunner().pushTask(mTaskManager.mReceiverTask);
 			}			
 		}
 	}
