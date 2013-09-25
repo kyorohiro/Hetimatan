@@ -37,11 +37,19 @@ public class HttpServer {
 	private KyoroServerSocket mServerSocket = null;
 	private KyoroSelector mSelector = null;
 
+	//
+	// Task Runner
+	//
+	public KyoroSocketEventRunner getEventRunner() {
+		return mRequestRunner;
+	}
+
 	public boolean isBinded() {
 		if(mServerSocket == null) {
 			return false;
+		} else {
+			return mServerSocket.isBinded();
 		}
-		return mServerSocket.isBinded();
 	}
 
 	public void setPort(int port) {
@@ -77,12 +85,14 @@ public class HttpServer {
 
 		socket.regist(mSelector, KyoroSelector.READ);
 		HttpFrontRequestTask requestTask = new HttpFrontRequestTask(front);
+		front.addMyTask(requestTask);
 		socket.setEventTaskAtWrakReference(requestTask, KyoroSelector.READ);
 		addManagedHttpFront(front);		
 	}
 
-	//
-	// this method is overrided
+	/**
+	 * this method is overrided
+	 */
 	public ByteArrayBuilder createHeader(KyoroSocket socket, HttpRequest uri, KyoroFile responce) throws IOException {
 		if(Log.ON){Log.v(TAG, "HttpServer#createHeader");}
 		try {
@@ -99,6 +109,14 @@ public class HttpServer {
 	}
 
 
+	/**
+	 * this method is overrided
+	 * @param front
+	 * @param socket
+	 * @param uri
+	 * @return
+	 * @throws IOException
+	 */
 	public KyoroFile createResponse(HttpFront front, KyoroSocket socket, HttpRequest uri) throws IOException {
 		HttpHistory.get().pushMessage(sId+"#createResponse:"+front.sId+"\n");
 		KyoroFile responce = createContent(socket, uri);
@@ -113,8 +131,13 @@ public class HttpServer {
 		return kfiles;
 	}
 
-	//
-	// this method is overrided
+	/**
+	 * this method is overrided
+	 * @param socket
+	 * @param uri
+	 * @return
+	 * @throws IOException
+	 */
 	public KyoroFile createContent(KyoroSocket socket, HttpRequest uri) throws IOException {
 		if(Log.ON){Log.v(TAG, "HttpServer#createResponse");}
 		try {
@@ -149,33 +172,19 @@ public class HttpServer {
 		}
 	}
 
-	//
-	// Task Runner
-	//
-	public KyoroSocketEventRunner getEventRunner() {
-		return mRequestRunner;
+
+	public void addManagedHttpFront(HttpFront front) {
+		if(mClientInfos != null && front != null) {
+			mClientInfos.addLast(front);
+		}
 	}
 
-	//
-	// HttpServer HttpFront list
-	//
-	public void addManagedHttpFront(HttpFront info) {
-		mClientInfos.addLast(info);
-	}
-
-	public void removeList(HttpFront front) {
+	public void removeManagedHttpFront(HttpFront front) {
 		if(mClientInfos != null && front != null) {
 			mClientInfos.remove(front);
 		}
 	}
 
-	public HttpFront removeFirst() {
-		if(mClientInfos.size() > 0) {
-			return mClientInfos.removeFirst();
-		} else {
-			return null;
-		}
-	}
 
 	//
 	// start task

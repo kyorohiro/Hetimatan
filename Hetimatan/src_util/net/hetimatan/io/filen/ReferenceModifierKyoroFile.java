@@ -73,18 +73,9 @@ public class ReferenceModifierKyoroFile implements KyoroFile {
 
 	@Override
 	public int read(byte[] buffer, int start, int buffLen) throws IOException {
-	/*	mRAFile.seek(getFilePointer());
-		int ret =  mRAFile.read(buffer, buffLen);
-		if(ret>0) {
-			mFilePointer += ret;
-		}
-		return ret;*/
-///*
   		int len = 0;
 		long remain = length() - getFilePointer();
-//		System.out.println("###"+remain+"="+length()+"-"+getFilePointer());
 		if (remain<buffLen) {
-//			System.out.println("###"+remain+"<"+buffLen);
 			buffLen = (int)remain;
 		}
 		if (remain<=0) {
@@ -96,14 +87,12 @@ public class ReferenceModifierKyoroFile implements KyoroFile {
 			if (_len>file.getBuffer().length-(getFilePointer()-file.skip()+mStart)) {
 				_len = (int)(file.getBuffer().length-(getFilePointer()-file.skip()+mStart));
 			}
-//			System.out.println(file.getBuffer().length+","+ getFilePointer()+"-"+file.skip()+"+"+mStart+","+
-//					buffer.length+","+ len+","+ _len);
 			System.arraycopy(file.getBuffer(), (int)(getFilePointer()-file.skip()+mStart),
 					buffer, len+start, _len);
 			len += _len;
 			mFilePointer +=_len;
 		} while(len<buffLen);
-		return buffLen;//todo(int)remain;//		*/
+		return buffLen;
 	}
 
 	public ByteKyoroFile getCash() throws IOException {
@@ -112,13 +101,11 @@ public class ReferenceModifierKyoroFile implements KyoroFile {
 		for(int i=0;i<size;i++){
 			ByteKyoroFile cash = mCash.get(i);
 			if(cash.skip()<=fp&&fp<(cash.skip()+mChunkSize)){
-//				System.out.println("###"+cash.skip()+"#"+mChunkSize+","+i+","+getFilePointer());
 				return cash;
 			}
 		}
 		ByteKyoroFile ret = mCash.remove(0);
 		mCash.addLast(ret);
-//		System.out.println("#"+getFilePointer()+"#"+mChunkSize);
 		ret.reset(mStart+getFilePointer()-(getFilePointer()%mChunkSize));
 		ret.update(mRAFile);
 		return ret;
@@ -129,6 +116,5 @@ public class ReferenceModifierKyoroFile implements KyoroFile {
 	public void addChunk(byte[] buffer) throws IOException {}
 	@Override
 	public void syncWrite() throws IOException {}
-	@Override
-	public void setLogOn(boolean on) {}
+
 }

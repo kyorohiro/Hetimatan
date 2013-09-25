@@ -127,11 +127,6 @@ public class KyoroFileForKyoroSocket extends OutputStream implements KyoroFile {
 	}
 
 	@Override
-	public void setLogOn(boolean on) {
-		mVf.setLogOn(on);
-	}
-
-	@Override
 	public int waitForUnreadable(int timeout) throws IOException {
 		if(mSelector == null){
 			return 1;

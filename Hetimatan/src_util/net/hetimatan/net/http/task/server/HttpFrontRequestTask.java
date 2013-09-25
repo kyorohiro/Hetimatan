@@ -14,7 +14,6 @@ public class HttpFrontRequestTask extends EventTask {
 	public HttpFrontRequestTask(HttpFront clientInfo) {
 		mClientInfo = new WeakReference<HttpFront>(clientInfo);
 		errorAction(new HttpFrontCloseTask(clientInfo));
-		clientInfo.addMyTask(this);
 	}
 
 	@Override

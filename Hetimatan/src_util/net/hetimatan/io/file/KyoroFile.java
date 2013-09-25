@@ -22,6 +22,5 @@ public interface KyoroFile {
 	public void addChunk(byte[] buffer) throws IOException;
 
 	public void syncWrite() throws IOException;
-	void setLogOn(boolean on);
 
 }

@@ -23,11 +23,6 @@ public class MarkableFileReader implements MarkableReader {
 		return tmp;
 	}
 
-	public void setLogOn(boolean on) {
-		mLogOn = on;
-		mFile.setLogOn(mLogOn);
-	}
-
 	public void pushMark() {
 		try {
 			mMark.addLast(getFilePointer());

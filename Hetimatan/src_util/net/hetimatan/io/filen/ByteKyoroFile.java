@@ -227,8 +227,6 @@ public class ByteKyoroFile implements KyoroFile, KyoroByteOutput {
 	public int waitForUnreadable(int timeout) throws IOException {return 1;}
 	@Override
 	public void syncWrite() throws IOException {}
-	@Override
-	public void setLogOn(boolean on) {}
 
 	@Override
 	public int write(byte[] data) throws IOException {

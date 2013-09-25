@@ -140,8 +140,5 @@ public class KyoroFileForFiles implements KyoroFile {
 		}
 	}
 
-	@Override
-	public void setLogOn(boolean on) {
-	}
 
 }

@@ -244,9 +244,6 @@ public class CashKyoroFile implements KyoroFile, KyoroByteOutput {
 		return file;
 	}
 
-	@Override
-	public void setLogOn(boolean on) {}
-
 
 	private OutputStream mLastOutput = null;
 	public OutputStream getLastOutput() {
