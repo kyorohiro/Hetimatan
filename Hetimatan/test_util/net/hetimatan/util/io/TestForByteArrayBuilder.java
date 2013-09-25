@@ -1,4 +1,4 @@
-package info.kyorohiro.helloworld.util.arraybuilder;
+package net.hetimatan.util.io;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
