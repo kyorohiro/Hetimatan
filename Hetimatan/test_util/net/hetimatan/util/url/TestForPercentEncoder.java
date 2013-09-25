@@ -1,4 +1,4 @@
-package info.kyorohiro.raider.util.net;
+package net.hetimatan.util.url;
 
 
 import java.io.IOException;
@@ -7,10 +7,6 @@ import net.hetimatan.util.url.PercentEncoder;
 import junit.framework.TestCase;
 
 public class TestForPercentEncoder extends TestCase {
-
-	public void testHello() {
-		
-	}
 
 	public void testOne() throws IOException {
 		PercentEncoder encoder = new PercentEncoder();
