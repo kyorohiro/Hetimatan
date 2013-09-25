@@ -1,4 +1,4 @@
-package net.hetimatan.util.net;
+package net.hetimatan.util.event.net;
 
 import java.io.IOException;
 import net.hetimatan.io.net.KyoroSelector;

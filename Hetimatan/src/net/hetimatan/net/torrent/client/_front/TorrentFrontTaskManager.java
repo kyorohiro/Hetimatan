@@ -16,8 +16,8 @@ import net.hetimatan.net.torrent.client.task.TorrentFrontReceiverTask;
 import net.hetimatan.net.torrent.client.task.TorrentFrontRequestTask;
 import net.hetimatan.net.torrent.client.task.TorrentFrontShakeHandTask;
 import net.hetimatan.util.event.EventTaskRunner;
+import net.hetimatan.util.event.net.MessageSendTask;
 import net.hetimatan.util.log.Log;
-import net.hetimatan.util.net.MessageSendTask;
 
 public class TorrentFrontTaskManager {
 	public static final String TAG = "TorrentFrontTask";

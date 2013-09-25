@@ -7,7 +7,7 @@ import java.lang.ref.WeakReference;
 import net.hetimatan.net.http.HttpGet;
 import net.hetimatan.util.event.EventTask;
 import net.hetimatan.util.event.EventTaskRunner;
-import net.hetimatan.util.net.KyoroSocketEventRunner;
+import net.hetimatan.util.event.net.KyoroSocketEventRunner;
 
 public class HttpGetReadBodyTask extends EventTask {
 

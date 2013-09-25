@@ -17,7 +17,7 @@ import net.hetimatan.net.torrent.util.metafile.MetaFile;
 import net.hetimatan.net.torrent.util.metafile.MetaFileCreater;
 import net.hetimatan.util.bitfield.BitField;
 import net.hetimatan.util.event.CloseRunnerTask;
-import net.hetimatan.util.net.KyoroSocketEventRunner;
+import net.hetimatan.util.event.net.KyoroSocketEventRunner;
 
 //
 //[課題]

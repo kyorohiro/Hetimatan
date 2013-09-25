@@ -7,8 +7,8 @@ import net.hetimatan.io.net.KyoroDatagramImpl;
 import net.hetimatan.net.torrent.krpc.KrpcTracker;
 import net.hetimatan.util.event.EventTask;
 import net.hetimatan.util.event.EventTaskRunner;
+import net.hetimatan.util.event.net.KyoroSocketEventRunner;
 import net.hetimatan.util.http.HttpObject;
-import net.hetimatan.util.net.KyoroSocketEventRunner;
 
 public class UdpTest {
 

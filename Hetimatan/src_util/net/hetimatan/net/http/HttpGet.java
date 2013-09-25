@@ -13,13 +13,13 @@ import net.hetimatan.net.http.task.client.HttpGetReadHeaderTask;
 import net.hetimatan.net.http.task.client.HttpGetRequestTask;
 import net.hetimatan.util.event.EventTask;
 import net.hetimatan.util.event.EventTaskRunner;
+import net.hetimatan.util.event.net.KyoroSocketEventRunner;
+import net.hetimatan.util.event.net.MessageSendTask;
 import net.hetimatan.util.http.HttpRequest;
 import net.hetimatan.util.http.HttpRequestUri;
 import net.hetimatan.util.http.HttpRequestHeader;
 import net.hetimatan.util.http.HttpResponse;
 import net.hetimatan.util.log.Log;
-import net.hetimatan.util.net.KyoroSocketEventRunner;
-import net.hetimatan.util.net.MessageSendTask;
 
 public class HttpGet {
 

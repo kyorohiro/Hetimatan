@@ -11,10 +11,10 @@ import net.hetimatan.net.torrent.krpc.message.KrpcResponse;
 import net.hetimatan.net.torrent.util.bencode.BenDiction;
 import net.hetimatan.util.event.EventTask;
 import net.hetimatan.util.event.EventTaskRunner;
+import net.hetimatan.util.event.net.KyoroSocketEventRunner;
 import net.hetimatan.util.http.HttpObject;
 import net.hetimatan.util.io.ByteArrayBuilder;
 import net.hetimatan.util.log.Log;
-import net.hetimatan.util.net.KyoroSocketEventRunner;
 import net.hetimatan.util.url.PercentEncoder;
 
 public class KrpcTracker {

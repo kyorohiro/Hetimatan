@@ -5,6 +5,11 @@ import java.io.IOException;
 import net.hetimatan.util.io.ByteArrayBuilder;
 
 
+/**
+ * PerentEncoder
+ * 
+ * 80% 
+ */
 public class PercentEncoder {
 	private ByteArrayBuilder mBuilder = new ByteArrayBuilder();
 	private static final byte[] sEncodeMap = {
