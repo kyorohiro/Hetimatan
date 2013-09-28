@@ -44,14 +44,14 @@ public class HttpGet {
 
 	public KyoroSocket getSocket() {return mCurrentSocket;}
 
+	protected HttpGetResponse getGetResponse() {return mResponse;}
+
 	protected HttpGetRequester createGetRequest() {
 		if (mCurrentRequest == null) {
 			mCurrentRequest = new HttpGetRequester();
 		}
 		return mCurrentRequest;
 	}
-
-	protected HttpGetResponse getGetResponse() {return mResponse;}
 
 	public void update(String host, String path, int port) throws IOException {
 		mHost = host;
@@ -92,9 +92,8 @@ public class HttpGet {
 		mCurrentRequest = createGetRequest();
 		mResponse = null;
 		mCurrentRequest.getUrlBuilder().setHost(mHost).setPath(mPath).setPort(mPort);
-		mCurrentSocket = mCurrentRequest._connectionRequest(null);
+		mCurrentSocket = mCurrentRequest.connect(null);
 	}
-
 
 	public void send() throws InterruptedException, IOException {
 		if(Log.ON){Log.v(TAG, "HttpGet#send()");}
@@ -193,7 +192,6 @@ public class HttpGet {
 	//
 	//
 	//
-
 	public boolean isConnected() throws IOException {
 		switch (mCurrentSocket.getConnectionState()) {
 		case KyoroSocket.CN_CONNECTED:

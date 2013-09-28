@@ -28,36 +28,12 @@ public class HttpGetRequester  {
 	public static void log(String message) {
 		System.out.println("KyoroSocketGetRequester#"  + message);
 	}
-	
-	public HttpGetResponse doRequest(KyoroSelector selector) throws IOException, InterruptedException {
-		KyoroSocket socket = null;
-		mSelector = selector;
-		try {
-			socket = _connectionRequest(null);
-			while(socket.getConnectionState() == KyoroSocket.CN_CONNECTING){
-				Thread.yield();
-				Thread.sleep(0);}
-			_writeRequest(socket);
-			HttpGetResponse res = _getResponse(socket);
-			res.readHeader();
-			res.readBody();
-			return res;
-		} finally {
-			if (socket != null) {
-				socket.close();
-			}
-		}
-	}
-
-	public HttpGetResponse doRequest() throws IOException, InterruptedException {
-		return doRequest(new KyoroSelector());
-	}
 
 	public HttpGetRequestUriBuilder getUrlBuilder() {
 		return mBuilder;
 	}
 
-	public KyoroSocket _connectionRequest(KyoroSocket socket) throws IOException, InterruptedException {
+	public KyoroSocket connect(KyoroSocket socket) throws IOException, InterruptedException {
 		if(socket == null) {
 			socket = new KyoroSocketImpl();
 		}
@@ -95,4 +71,27 @@ public class HttpGetRequester  {
 		mSelector = selector;
 	}
 
+	public static HttpGetResponse syncRequest(HttpGetRequester requester, KyoroSelector selector) throws IOException, InterruptedException {
+		KyoroSocket socket = null;
+		requester.setSelector(selector);
+		try {
+			socket = requester.connect(null);
+			while(socket.getConnectionState() == KyoroSocket.CN_CONNECTING){
+				Thread.yield();
+				Thread.sleep(0);}
+			requester._writeRequest(socket);
+			HttpGetResponse res = requester._getResponse(socket);
+			res.readHeader();
+			res.readBody();
+			return res;
+		} finally {
+			if (socket != null) {
+				socket.close();
+			}
+		}
+	}
+
+	public static HttpGetResponse doRequest(HttpGetRequester requester) throws IOException, InterruptedException {
+		return syncRequest(requester, new KyoroSelector());
+	}
 }

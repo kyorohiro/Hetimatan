@@ -45,7 +45,7 @@ public class TestForTrackerServer extends TestCase {
 
 			System.out.println("###doRequest");
 			// done
-			HttpGetResponse response = requester.doRequest();
+			HttpGetResponse response = HttpGetRequester.doRequest(requester);
 
 			
 		} finally {
@@ -81,7 +81,7 @@ public class TestForTrackerServer extends TestCase {
 			.setPort(TrackerServer.DEFAULT_TRACKER_PORT);
 
 			// done
-			HttpGetResponse response = requester.doRequest();
+			HttpGetResponse response = HttpGetRequester.doRequest(requester);
 			System.out.println("offset::"+response.getVFOffset());
 			CashKyoroFile vf = response.getVF();
 			byte[] buffer = null;
@@ -127,7 +127,7 @@ public class TestForTrackerServer extends TestCase {
 			.setPort(TrackerServer.DEFAULT_TRACKER_PORT);
 
 			// done
-			HttpGetResponse response = requester.doRequest();
+			HttpGetResponse response = HttpGetRequester.doRequest(requester);
 			CashKyoroFile vf = response.getVF();
 			byte[] buffer = null;
 			try {
@@ -189,7 +189,7 @@ public class TestForTrackerServer extends TestCase {
 			.setPort(TrackerServer.DEFAULT_TRACKER_PORT);
 
 			// done
-			HttpGetResponse response = requester.doRequest();
+			HttpGetResponse response = HttpGetRequester.doRequest(requester);
 			CashKyoroFile vf = response.getVF();
 			byte[] buffer = null;
 			try {
