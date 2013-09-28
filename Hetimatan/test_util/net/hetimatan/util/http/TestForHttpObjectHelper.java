@@ -1,6 +1,6 @@
 package net.hetimatan.util.http;
 
-import info.kyorohiro.raider.util.TestUtil;
+import net.hetimatan.util.test.TestUtil;
 import junit.framework.TestCase;
 
 public class TestForHttpObjectHelper extends TestCase {

@@ -1,14 +1,12 @@
 package net.hetimatan.io.filen;
 
-import info.kyorohiro.raider.util.TestUtil;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 
 import net.hetimatan.io.filen.CashKyoroFileHelper;
 import net.hetimatan.io.filen.CashKyoroFile;
-
+import net.hetimatan.util.test.TestUtil;
 import junit.framework.TestCase;
 
 public class TestForKFNextHelper extends TestCase {

@@ -1,7 +1,7 @@
 package net.hetimatan.net.torrent.client.message;
 
-import info.kyorohiro.raider.util.TestUtil;
 import java.io.IOException;
+
 import junit.framework.TestCase;
 import net.hetimatan.io.file.KyoroFile;
 import net.hetimatan.io.file.MarkableFileReader;
@@ -13,6 +13,7 @@ import net.hetimatan.net.torrent.client.message.MessageChoke;
 import net.hetimatan.net.torrent.client.message.MessagePiece;
 import net.hetimatan.net.torrent.client.message.TorrentMessage;
 import net.hetimatan.util.io.ByteArrayBuilder;
+import net.hetimatan.util.test.TestUtil;
 
 import java.io.IOException;
 

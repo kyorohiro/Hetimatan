@@ -1,7 +1,7 @@
 package net.hetimatan.net.torrent.client.message;
 
-import info.kyorohiro.raider.util.TestUtil;
 import java.io.IOException;
+
 import junit.framework.TestCase;
 import net.hetimatan.io.file.MarkableFileReader;
 import net.hetimatan.io.filen.CashKyoroFileHelper;
@@ -10,6 +10,7 @@ import net.hetimatan.net.torrent.client.message.MessagePort;
 import net.hetimatan.net.torrent.client.message.TorrentMessage;
 import net.hetimatan.util.http.HttpObject;
 import net.hetimatan.util.io.ByteArrayBuilder;
+import net.hetimatan.util.test.TestUtil;
 
 //port: <len=0003><id=9><port number>
 public class TestForMessagePort extends TestCase {

@@ -1,7 +1,5 @@
 package net.hetimatan.net.torrent.krpc;
 
-import info.kyorohiro.raider.util.TestUtil;
-
 import java.io.IOException;
 
 import net.hetimatan.io.file.MarkableFileReader;
@@ -12,6 +10,7 @@ import net.hetimatan.net.torrent.krpc.message.ResponseFindNode;
 import net.hetimatan.net.torrent.util.bencode.BenString;
 import net.hetimatan.util.http.HttpObject;
 import net.hetimatan.util.io.ByteArrayBuilder;
+import net.hetimatan.util.test.TestUtil;
 import junit.framework.TestCase;
 
 public class TestForResponseFindNode extends TestCase {

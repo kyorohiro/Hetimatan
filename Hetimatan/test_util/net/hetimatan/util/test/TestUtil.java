@@ -1,4 +1,4 @@
-package info.kyorohiro.raider.util;
+package net.hetimatan.util.test;
 
 import java.io.IOException;
 
