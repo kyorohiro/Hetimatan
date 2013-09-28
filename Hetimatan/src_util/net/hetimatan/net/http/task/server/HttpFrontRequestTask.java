@@ -27,6 +27,6 @@ public class HttpFrontRequestTask extends EventTask {
 		if(info == null) {
 			return;
 		} 
-		info.action();
+		info.executeFrontWork();
 	}
 }

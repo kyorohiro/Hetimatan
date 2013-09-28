@@ -64,11 +64,6 @@ public class HttpServer {
 		sId = "[httpserver"+mPort+"]";
 		startAcceptTask();
 	}
-	private void startAcceptTask() {
-		HttpHistory.get().pushMessage(sId+"#startAccept:"+"\n");
-		mAcceptTask = new HttpServerAcceptTask(this);
-		mServerSocket.setEventTaskAtWrakReference(mAcceptTask, KyoroSelector.ACCEPT);
-	}
 
 	public void accept() throws IOException {
 		if(Log.ON){Log.v(TAG, "HttpServer#accept():");}
@@ -76,10 +71,16 @@ public class HttpServer {
 		if(socket == null) {
 			return;
 		}
-		startFront(socket);
+		startStartFrontTask(socket);
 	}
 
-	private void startFront(KyoroSocket socket) throws IOException {
+	private void startAcceptTask() {
+		HttpHistory.get().pushMessage(sId+"#startAccept:"+"\n");
+		mAcceptTask = new HttpServerAcceptTask(this);
+		mServerSocket.setEventTaskAtWrakReference(mAcceptTask, KyoroSelector.ACCEPT);
+	}
+
+	private void startStartFrontTask(KyoroSocket socket) throws IOException {
 		HttpFront front = new HttpFront(this, socket);
 		HttpHistory.get().pushMessage(sId+"#startFront:"+front.sId+"\n");
 
@@ -111,11 +112,6 @@ public class HttpServer {
 
 	/**
 	 * this method is overrided
-	 * @param front
-	 * @param socket
-	 * @param uri
-	 * @return
-	 * @throws IOException
 	 */
 	public KyoroFile createResponse(HttpFront front, KyoroSocket socket, HttpRequest uri) throws IOException {
 		HttpHistory.get().pushMessage(sId+"#createResponse:"+front.sId+"\n");
@@ -133,10 +129,6 @@ public class HttpServer {
 
 	/**
 	 * this method is overrided
-	 * @param socket
-	 * @param uri
-	 * @return
-	 * @throws IOException
 	 */
 	public KyoroFile createContent(KyoroSocket socket, HttpRequest uri) throws IOException {
 		if(Log.ON){Log.v(TAG, "HttpServer#createResponse");}
@@ -186,9 +178,9 @@ public class HttpServer {
 	}
 
 
-	//
-	// start task
-	//
+	/**
+	 * start http server.
+	 */
 	public KyoroSocketEventRunner startServer(KyoroSocketEventRunner requestRunner) {
 		if(Log.ON){Log.v(TAG, "HttpServer#startServer()");}
 

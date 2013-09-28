@@ -8,14 +8,11 @@ import net.hetimatan.io.file.KyoroFile;
 import net.hetimatan.io.file.KyoroFileForKyoroSocket;
 import net.hetimatan.io.file.MarkableFileReader;
 import net.hetimatan.io.file.MarkableReader;
-import net.hetimatan.io.net.KyoroSelector;
 import net.hetimatan.io.net.KyoroSocket;
 import net.hetimatan.net.http.task.server.HttpFrontCloseTask;
 import net.hetimatan.util.event.EventTask;
-import net.hetimatan.util.event.net.KyoroSocketEventRunner;
 import net.hetimatan.util.event.net.MessageSendTask;
 import net.hetimatan.util.http.LookaheadHttpHeader;
-import net.hetimatan.util.http.HttpObject;
 import net.hetimatan.util.http.HttpRequest;
 import net.hetimatan.util.log.Log;
 
@@ -48,7 +45,7 @@ public class HttpFront {
 		mMyTask.add(task);
 	}
 
-	public boolean isOkToParseHeader() throws IOException {
+	public boolean parseableHeader() throws IOException {
 		boolean prev = mCurrentReader.setBlockOn(false);
 		try {
 			if(mHeaderChunk == null) {
@@ -76,7 +73,7 @@ public class HttpFront {
 	}
 
 
-	public void doResponse() throws IOException {
+	public void startResponseTask() throws IOException {
 		if(Log.ON){Log.v(TAG, "HttpFront#doRespose");}
 		HttpFront info = this;
 		HttpServer server = mServer.get();
@@ -90,11 +87,12 @@ public class HttpFront {
 		server.getEventRunner().pushTask(task);
 	}
 
-	public void action() throws Throwable {
+	public boolean executeFrontWork() throws Throwable {
 		if(Log.ON){Log.v(TAG, "HttpServer#doRequestTask()");}
-		if(!isOkToParseHeader()){return;}
+		if(!parseableHeader()){return false;}
 		parseHeader();
-		doResponse();
+		startResponseTask();
+		return true;
 	}
 
 	public void close() throws IOException {

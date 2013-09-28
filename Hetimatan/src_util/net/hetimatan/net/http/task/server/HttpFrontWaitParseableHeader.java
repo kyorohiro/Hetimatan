@@ -27,7 +27,7 @@ public class HttpFrontWaitParseableHeader extends EventTask {
 		if(info == null) {
 			return;
 		} 
-		if(info.isOkToParseHeader()) {
+		if(info.parseableHeader()) {
 			nextAction(this);
 		} else {
 			nextAction(this);
