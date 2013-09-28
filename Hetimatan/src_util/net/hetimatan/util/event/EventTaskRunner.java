@@ -63,6 +63,9 @@ public abstract class EventTaskRunner {
 		}
 	}
 
+	//
+	// Thread dependent variable byte array
+	//
 	private ByteArrayBuilder mTemp = new ByteArrayBuilder(); 
 	public ByteArrayBuilder getTemp() {
 		return mTemp;
