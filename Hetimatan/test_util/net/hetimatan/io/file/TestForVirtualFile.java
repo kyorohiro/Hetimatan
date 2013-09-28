@@ -1,9 +1,11 @@
 package net.hetimatan.io.file;
-/*
+
 import java.io.File;
 import java.io.IOException;
 
 
+
+import net.hetimatan.io.filen.CashKyoroFile;
 import junit.framework.TestCase;
 public class TestForVirtualFile extends TestCase {
 
@@ -17,11 +19,11 @@ public class TestForVirtualFile extends TestCase {
 
 	public void testZeroByte() throws IOException {
 		File testPath = new File(getFile(),"__001__.txt");
-		VirtualFile vf = null;
+		CashKyoroFile vf = null;
 		try {
 			testPath.delete();
 			testPath.createNewFile();
-			vf = new VirtualFile(testPath, 200);
+			vf = new CashKyoroFile(testPath, 1024, 3);
 			byte[] buffer = new byte[101];
 			for(int i=0;i<buffer.length;i++) {
 				buffer[0] = 0;
@@ -36,29 +38,23 @@ public class TestForVirtualFile extends TestCase {
 			assertTrue(false);
 		} finally {
 			if(vf != null) {
-				vf.setIsDelteFileWhenClose(true);
+				vf.isCashMode(false);
 				vf.close();
 			}
 		}
 	}
 
+	
 	public void testSync() throws IOException {
 		File testPath = new File(getFile(),"__001__.txt");
-		VirtualFile vf = null;
+		CashKyoroFile vf = null;
 		try {
 			testPath.delete();
 			testPath.createNewFile();
 			byte[] add = {1, 2, 3, 4, 5};
-			vf = new VirtualFile(testPath, 200);
+			vf = new CashKyoroFile(testPath, 1024, 5);
 			byte[] read = new byte[6];
 			vf.addChunk(add, 0, 5);
-			assertEquals(0, vf.getStartChunk());
-			assertEquals(1, vf.getChunkCash(0));
-			assertEquals(2, vf.getChunkCash(1));
-			assertEquals(3, vf.getChunkCash(2));
-			assertEquals(4, vf.getChunkCash(3));
-			assertEquals(5, vf.getChunkCash(4));
-			assertEquals(0, vf.getChunkCash(6));
 
 			int ret = vf.read(read);
 			assertEquals(1, read[0]);
@@ -70,31 +66,25 @@ public class TestForVirtualFile extends TestCase {
 			assertEquals(5, ret);
 		} finally {
 			if(vf != null) {
-				vf.setIsDelteFileWhenClose(true);
+				vf.isCashMode(false);
 				vf.close();
 			}
 		}
 	}
+
+
 	public void testUnsync() throws IOException {
 		File testPath = new File(getFile(),"__001__.txt");
-		VirtualFile vf = null;
+		CashKyoroFile vf = null;
 		try {
 			testPath.delete();
 			testPath.createNewFile();
 			byte[] add = {1, 2, 3, 4, 5};
-			vf = new VirtualFile(testPath, 200);
+			vf = new CashKyoroFile(testPath, 1024, 5);
 			byte[] read = new byte[6];
 			vf.addChunk(add, 0, 5);
 			vf.syncWrite();
-			assertEquals(5, vf.getStartChunk());
-			assertEquals(0, vf.getChunkCash(0));
-			assertEquals(0, vf.getChunkCash(1));
-			assertEquals(0, vf.getChunkCash(2));
-			assertEquals(0, vf.getChunkCash(3));
-			assertEquals(0, vf.getChunkCash(4));
-			assertEquals(0, vf.getChunkCash(6));
 			vf.addChunk(add, 0, 1);
-
 			int ret = vf.read(read);
 			assertEquals(1, read[0]);
 			assertEquals(2, read[1]);
@@ -110,6 +100,7 @@ public class TestForVirtualFile extends TestCase {
 		}
 	}
 
+
 	public void testSecound() {
 		File testPath = new File(getFile(),"__001__.txt");
 		String testdata= 
@@ -117,11 +108,11 @@ public class TestForVirtualFile extends TestCase {
 		 "きょうは歌舞伎座の切符が二枚手に入ったから一緒に見に行か"+
 		 "ないか。午後一時の開場だから十時頃の電車で銀座あたりへ来"+
 		 "てくれるといい。君の知っているカフェーかレストランがあるだろう」";
-		VirtualFile vf = null;
+		CashKyoroFile vf = null;
 		try {
 			testPath.delete();
 			testPath.createNewFile();
-			vf = new VirtualFile(testPath, 101);
+			vf = new CashKyoroFile(testPath, 1024, 5);
 			byte[] buffer = new byte[1000];
 			for(int i=0;i<buffer.length;i++) {
 				buffer[0] = 0;
@@ -139,9 +130,6 @@ public class TestForVirtualFile extends TestCase {
 				String result = new String(buffer, 0 , ret);
 				assertEquals(testdata, result);
 
-				assertEquals(ret-ret%vf.getCashMax()
-						//VirtualFile.CHUNK_SIZE,
-						,vf.getStartChunk());
 				// second read
 				{
 					for(int i=0;i<buffer.length;i++) {
@@ -149,7 +137,6 @@ public class TestForVirtualFile extends TestCase {
 					}
 					ret = vf.read(buffer);
 					assertEquals(-1, ret);					
-					assertEquals(buff.length, vf.getStartChunk()+vf.getChunkSize());
 				}
 			}
 			{
@@ -176,6 +163,7 @@ public class TestForVirtualFile extends TestCase {
 			}
 		}
 	}
+
 
 	public void testThird() {
 		File testPath = new File(getFile(),"__001__.txt");
@@ -200,11 +188,11 @@ public class TestForVirtualFile extends TestCase {
 						+"お"
 						+"したように白鷹先生の話が出て来るじゃないの。おかしいわ……」\r\n"
 						+"「そりゃあ庚戌会がその頃にあるからさ」\r\n";
-		VirtualFile vf = null;
+		CashKyoroFile vf = null;
 		try {
 			testPath.delete();
 			testPath.createNewFile();
-			vf = new VirtualFile(testPath, 101);
+			vf = new CashKyoroFile(testPath, 1024, 3);
 			byte[] buffer = new byte[1300];
 			for(int i=0;i<buffer.length;i++) {
 				buffer[0] = 0;
@@ -223,8 +211,6 @@ public class TestForVirtualFile extends TestCase {
 				ret = vf.read(buffer);
 				String result = new String(buffer, 0 , ret);
 				assertEquals(testdata, result);
-				assertEquals(""+ret+","+vf.getCashMax()+"#",1100//%VirtualFile.CHUNK_SIZE
-						, vf.getStartChunk());
 
 				// second read
 				{
@@ -233,7 +219,6 @@ public class TestForVirtualFile extends TestCase {
 					}
 					ret = vf.read(buffer);
 					assertEquals(-1, ret);					
-					assertEquals(testdataBuffer.length, vf.getStartChunk()+vf.getChunkSize());
 				}
 			}
 			{
@@ -261,6 +246,7 @@ public class TestForVirtualFile extends TestCase {
 		}
 	}
 
+
 	public void testExtra1() {
 		File testPath = new File(getFile(),"__001__.txt");
 		String[] testdata= {
@@ -277,7 +263,7 @@ public class TestForVirtualFile extends TestCase {
 		try {
 			testPath.delete();
 			testPath.createNewFile();
-			VirtualFile vf = new VirtualFile(testPath, 501);
+			CashKyoroFile vf = new CashKyoroFile(testPath, 1024, 5);
 			byte[] buffer = new byte[1300];
 			for(int i=0;i<buffer.length;i++) {
 				buffer[0] = 0;
@@ -304,9 +290,7 @@ public class TestForVirtualFile extends TestCase {
 				ret = vf.read(buffer);
 				String result = new String(buffer, 0 , ret);
 				assertEquals(expected.toString(), result);
-				assertEquals("check:start chunk",0, vf.getStartChunk());
 				assertEquals("check:file pointer",ret, vf.getFilePointer());
-				assertEquals("check:start chunk",ret, vf.getChunkSize());
 				assertEquals("check:length",ret, vf.length());
 
 			}
@@ -327,10 +311,9 @@ public class TestForVirtualFile extends TestCase {
 			assertTrue(false);
 		}
 	}
-
+//*/
 	public File getFile() {
 		return new File(".");
 	}
 }
 
-*/
