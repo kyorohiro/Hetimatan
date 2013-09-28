@@ -1,4 +1,4 @@
-package info.kyorohiro.helloworld.io;
+package net.hetimatan.io.file;
 /*
 import java.io.File;
 import java.io.IOException;
