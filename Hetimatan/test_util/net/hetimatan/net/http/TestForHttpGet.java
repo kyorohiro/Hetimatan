@@ -25,8 +25,6 @@ public class TestForHttpGet extends TestCase {
 		HttpGet httpget = new HttpGet();
 		httpget.update("127.0.0.1", "/301?mv=http://127.0.0.1:8081", 8080);
 		EventTaskRunner runner = httpget.startTask(null, new CloseRunnerTask(null));
-		
-		while(true){if(rc.getResponseNumber() >= 1){break;} Thread.sleep(0);}
 
 		runner.waitByClose(10000);
 		HttpGetResponse response = httpget.getGetResponse();
