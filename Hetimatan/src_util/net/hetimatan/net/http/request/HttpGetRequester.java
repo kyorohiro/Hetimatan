@@ -2,14 +2,11 @@ package net.hetimatan.net.http.request;
 
 
 import java.io.IOException;
-import java.net.URL;
-import java.util.LinkedHashMap;
 
 import net.hetimatan.io.net.KyoroSelector;
 import net.hetimatan.io.net.KyoroSocket;
 import net.hetimatan.io.net.KyoroSocketImpl;
 import net.hetimatan.util.http.HttpObject;
-import net.hetimatan.util.http.HttpRequestLine;
 import net.hetimatan.util.http.HttpRequest;
 
 
@@ -42,21 +39,20 @@ public class HttpGetRequester  {
 		return socket;
 	}
 
-	public void _writeRequest(KyoroSocket socket) throws IOException {
+	public void request(KyoroSocket socket) throws IOException {
 		log("_writeRequest()");
 		byte[] buffer = createRequest();
 		log(new String(buffer));
+		//
+		// todo
 		socket.write(buffer, 0, buffer.length);
 	}
 
-	public HttpGetResponse _getResponse(KyoroSocket socket) throws IOException, InterruptedException {
+	public HttpGetResponse getResponse(KyoroSocket socket) throws IOException, InterruptedException {
 		HttpGetResponse response = new HttpGetResponse(socket, mSelector);
 		return response;
 	}	
 
-
-	//
-	//
 	public synchronized HttpRequest createHttpRequest() throws IOException {
 		return mBuilder.createHttpRequest();
 	}
@@ -66,11 +62,13 @@ public class HttpGetRequester  {
 		return HttpObject.createEncode(uri).getBytes();
 	}
 
-	
 	public void setSelector(KyoroSelector selector) throws IOException {
 		mSelector = selector;
 	}
 
+	/**
+	 * テスト用
+	 */
 	public static HttpGetResponse syncRequest(HttpGetRequester requester, KyoroSelector selector) throws IOException, InterruptedException {
 		KyoroSocket socket = null;
 		requester.setSelector(selector);
@@ -79,8 +77,8 @@ public class HttpGetRequester  {
 			while(socket.getConnectionState() == KyoroSocket.CN_CONNECTING){
 				Thread.yield();
 				Thread.sleep(0);}
-			requester._writeRequest(socket);
-			HttpGetResponse res = requester._getResponse(socket);
+			requester.request(socket);
+			HttpGetResponse res = requester.getResponse(socket);
 			res.readHeader();
 			res.readBody();
 			return res;
@@ -91,6 +89,9 @@ public class HttpGetRequester  {
 		}
 	}
 
+	/**
+	 * テスト用
+	 */
 	public static HttpGetResponse doRequest(HttpGetRequester requester) throws IOException, InterruptedException {
 		return syncRequest(requester, new KyoroSelector());
 	}
