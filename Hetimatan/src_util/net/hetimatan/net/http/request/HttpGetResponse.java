@@ -4,7 +4,6 @@ import java.io.IOException;
 import net.hetimatan.io.file.KyoroFileForKyoroSocket;
 import net.hetimatan.io.file.MarkableFileReader;
 import net.hetimatan.io.filen.CashKyoroFile;
-import net.hetimatan.io.net.KyoroSelector;
 import net.hetimatan.io.net.KyoroSocket;
 import net.hetimatan.util.http.LookaheadHttpBody;
 import net.hetimatan.util.http.LookaheadHttpHeader;
@@ -23,10 +22,9 @@ public class HttpGetResponse {
 	private HttpResponse mResponse = null;
 	private long mBodyStart = 0;
 
-	public HttpGetResponse(KyoroSocket socket, KyoroSelector selector) throws IOException {
+	public HttpGetResponse(KyoroSocket socket) throws IOException {
 		mSocket = socket;
 		mBase = new KyoroFileForKyoroSocket(mSocket, 512*30);
-		mBase.setSelector(selector);
 		mReader = new MarkableFileReader(mBase, 512*30);
 		mVfOffset = 0;
 	}

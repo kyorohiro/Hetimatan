@@ -22,7 +22,6 @@ public class HttpGetRequester  {
 	public static final String USER_AGENT = "User-Agent";
 	public static final String CONTENT_LENGTH = "Content-Length";
 
-	private KyoroSelector mSelector = null;
 	private HttpGetRequestUriBuilder mBuilder = new HttpGetRequestUriBuilder();
 	private MessageSendTask mTask = null;
 
@@ -57,7 +56,7 @@ public class HttpGetRequester  {
 	}
 
 	public HttpGetResponse getResponse(KyoroSocket socket) throws IOException, InterruptedException {
-		HttpGetResponse response = new HttpGetResponse(socket, mSelector);
+		HttpGetResponse response = new HttpGetResponse(socket);
 		return response;
 	}	
 
@@ -70,17 +69,12 @@ public class HttpGetRequester  {
 		return HttpObject.createEncode(uri).getBytes();
 	}
 
-	public void setSelector(KyoroSelector selector) throws IOException {
-		mSelector = selector;
-	}
-
 	/**
 	 * テスト用
 	 * @throws Throwable 
 	 */
 	public static HttpGetResponse syncRequest(HttpGetRequester requester, KyoroSelector selector) throws Throwable {
 		KyoroSocket socket = null;
-		requester.setSelector(selector);
 		try {
 			socket = requester.connect(null);
 			while(socket.getConnectionState() == KyoroSocket.CN_CONNECTING){
@@ -93,7 +87,9 @@ public class HttpGetRequester  {
 			
 			//
 			HttpGetResponse res = requester.getResponse(socket);
+			while(!res.headerIsReadable()){;}
 			res.readHeader();
+			while(!res.bodyIsReadable()){;}
 			res.readBody();
 			return res;
 		} finally {

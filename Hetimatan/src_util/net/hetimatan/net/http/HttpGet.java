@@ -98,8 +98,6 @@ public class HttpGet {
 	public void send() throws InterruptedException, IOException {
 		if(Log.ON){Log.v(TAG, "HttpGet#send()");}
 		KyoroSocketEventRunner runner = KyoroSocketEventRunner.getYourWorker();
-		
-		mCurrentRequest.setSelector(runner.getSelector());
 		HttpRequest request = ((HttpGetRequester)mCurrentRequest).createHttpRequest();
 		CashKyoroFile cash = getSendCash();
 		request.encode(cash.getLastOutput());
