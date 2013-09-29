@@ -74,7 +74,7 @@ public class TorrentFront {
 		mSocket = socket;
 		mTargetInfo = new TorrentFrontTargetInfo(peer.getPieceLength());
 		KyoroFileForKyoroSocket kf = new KyoroFileForKyoroSocket(socket, 512*30);
-		kf.setSelector(peer.getSelector());
+		//kf.setSelector(peer.getSelector());
 		mReader = new MarkableFileReader(kf, 512);
 //		mOutput = new KyoroSocketOutputStream(socket);
 		mTorrentPeer = new WeakReference<TorrentPeer>(peer);
@@ -157,7 +157,7 @@ public class TorrentFront {
 	public void revcShakehand() throws IOException {
 		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"TorrentFrontTask#shakehand");}
 		try {
-			mReader.setBlockOn(true);
+			//mReader.setBlockOn(true);
 			MessageHandShake recv = MessageHandShake.decode(mReader);
 			TorrentHistory.get().pushReceive(this, recv);
 //			recv.printLog();

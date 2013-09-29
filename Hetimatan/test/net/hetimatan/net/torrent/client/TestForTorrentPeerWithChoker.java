@@ -28,6 +28,7 @@ public class TestForTorrentPeerWithChoker extends TestCase {
 		//Thread.sleep(1000);//todo
 		front.sendShakehand();
 		front.flushSendTask();
+		while(!front.parseableShakehand()) {;}
 		front.revcShakehand();
 		front.sendBitfield();
 		front.flushSendTask();
@@ -40,6 +41,7 @@ public class TestForTorrentPeerWithChoker extends TestCase {
 		testPeer.getTorrentPeerManager().getTorrentFront(testPeer.getTorrentPeerManager().getFrontPeer(0)).getTargetInfo().isChoked());
 
 		front.sendChoke();
+		front.flushSendTask();
 		testPeer.getTorrentPeerManager().getTorrentFront(testPeer.getTorrentPeerManager().getFrontPeer(0))
 		.waitMessage(TorrentMessage.SIGN_CHOKE, 3000);
 		assertEquals(1, testPeer.getTorrentPeerManager().numOfFront());
@@ -101,6 +103,12 @@ public class TestForTorrentPeerWithChoker extends TestCase {
 		front004.flushSendTask();
 		front005.flushSendTask();
 		
+		while(!front001.parseableShakehand()) {;}
+		while(!front002.parseableShakehand()) {;}
+		while(!front003.parseableShakehand()) {;}
+		while(!front004.parseableShakehand()) {;}
+		while(!front005.parseableShakehand()) {;}
+
 		front001.revcShakehand();
 		front002.revcShakehand();
 		front003.revcShakehand();
