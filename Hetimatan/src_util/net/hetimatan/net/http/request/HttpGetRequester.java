@@ -24,6 +24,10 @@ public class HttpGetRequester  {
 
 	private HttpGetRequestUriBuilder mBuilder = new HttpGetRequestUriBuilder();
 	private MessageSendTask mTask = null;
+	private CashKyoroFile mSendCash = null;
+
+	public HttpGetRequester() {
+	}
 
 	public static void log(String message) {
 		System.out.println("KyoroSocketGetRequester#"  + message);
@@ -48,8 +52,12 @@ public class HttpGetRequester  {
 		log(new String(buffer));
 		//
 		// todo
+		if(mSendCash == null) {
+			mSendCash = new CashKyoroFile(1024, 3);
+		}
 		if(mTask == null) {
-			mTask = new MessageSendTask(socket, new CashKyoroFile(buffer));
+			mSendCash.addChunk(buffer);
+			mTask = new MessageSendTask(socket, mSendCash);
 		}
 		//socket.write(buffer, 0, buffer.length);
 		return mTask;

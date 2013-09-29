@@ -33,14 +33,14 @@ public class HttpGet {
 	private String mPath = "/";
 	private int mPort = 80;
 	private EventTaskRunner mRunner = null;
-	private CashKyoroFile mSendCash = null;
+//	private CashKyoroFile mSendCash = null;
 	private HttpGetTaskManager mTaskManager = new HttpGetTaskManager();
 
 	public HttpGet() throws IOException {}
 
 	public EventTaskRunner getRunner() {return mRunner;}
 
-	public CashKyoroFile getSendCash() {return mSendCash;}
+//	public CashKyoroFile getSendCash() {return mSendCash;}
 
 	public KyoroSocket getSocket() {return mCurrentSocket;}
 
@@ -60,7 +60,7 @@ public class HttpGet {
 		sId = "[httpget "+mHost+":"+mPort+mPath+"]";
 		HttpHistory.get().pushMessage(sId+"#update:"+"\n");
 		dispose();
-		mSendCash = new CashKyoroFile(1024, 3);
+//		mSendCash = new CashKyoroFile(1024, 3);
 	}
 
 	public void update(String location) throws IOException {
@@ -97,11 +97,13 @@ public class HttpGet {
 
 	public void send() throws InterruptedException, IOException {
 		if(Log.ON){Log.v(TAG, "HttpGet#send()");}
-		KyoroSocketEventRunner runner = KyoroSocketEventRunner.getYourWorker();
-		HttpRequest request = ((HttpGetRequester)mCurrentRequest).createHttpRequest();
-		CashKyoroFile cash = getSendCash();
-		request.encode(cash.getLastOutput());
-		MessageSendTask sendTask = new MessageSendTask(getSocket(), getSendCash());
+//		KyoroSocketEventRunner runner = KyoroSocketEventRunner.getYourWorker();
+//		HttpRequest request = ((HttpGetRequester)mCurrentRequest).createHttpRequest();
+//		CashKyoroFile cash = getSendCash();
+//		request.encode(cash.getLastOutput());
+//		MessageSendTask sendTask = new MessageSendTask(getSocket(), getSendCash());
+		
+		MessageSendTask sendTask = mCurrentRequest.request(getSocket());
 		HttpGetReadHeaderTask readHeaderTask = new HttpGetReadHeaderTask(this, mTaskManager.mLast);
 		readHeaderTask.nextAction(new HttpGetReadBodyTask(this, mTaskManager.mLast));
 		sendTask.nextAction(readHeaderTask);
@@ -174,10 +176,10 @@ public class HttpGet {
 			mCurrentSocket.close();
 			mCurrentSocket = null;
 		}
-		if(mSendCash != null) {
-			mSendCash.close();
-			mSendCash = null;
-		}
+//		if(mSendCash != null) {
+//			mSendCash.close();
+//			mSendCash = null;
+//		}
 	}
 
 	public void dispose() throws IOException {
