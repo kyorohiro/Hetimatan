@@ -7,7 +7,6 @@ import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.io.net.KyoroSelector;
 import net.hetimatan.io.net.KyoroSocket;
 import net.hetimatan.io.net.KyoroSocketImpl;
-import net.hetimatan.util.event.EventTask;
 import net.hetimatan.util.event.net.MessageSendTask;
 import net.hetimatan.util.http.HttpObject;
 import net.hetimatan.util.http.HttpRequest;
@@ -46,12 +45,10 @@ public class HttpGetRequester  {
 		return socket;
 	}
 
-	public MessageSendTask request(KyoroSocket socket) throws IOException {
+	public MessageSendTask getRequestTask(KyoroSocket socket) throws IOException {
 		log("_writeRequest()");
 		byte[] buffer = createRequest();
 		log(new String(buffer));
-		//
-		// todo
 		if(mSendCash == null) {
 			mSendCash = new CashKyoroFile(1024, 3);
 		}
@@ -59,7 +56,6 @@ public class HttpGetRequester  {
 			mSendCash.addChunk(buffer);
 			mTask = new MessageSendTask(socket, mSendCash);
 		}
-		//socket.write(buffer, 0, buffer.length);
 		return mTask;
 	}
 
@@ -77,6 +73,15 @@ public class HttpGetRequester  {
 		return HttpObject.createEncode(uri).getBytes();
 	}
 
+	public void close() {
+		try {
+			if(mSendCash != null) {
+				mSendCash.close();
+			}
+		} catch(IOException e) {
+
+		}
+	}
 	/**
 	 * テスト用
 	 * @throws Throwable 
@@ -88,7 +93,7 @@ public class HttpGetRequester  {
 			while(socket.getConnectionState() == KyoroSocket.CN_CONNECTING){
 				Thread.yield();
 				Thread.sleep(0);}
-			MessageSendTask sendTask= requester.request(socket);
+			MessageSendTask sendTask= requester.getRequestTask(socket);
 			do {
 				sendTask.action(null);
 			} while(sendTask.isKeep());

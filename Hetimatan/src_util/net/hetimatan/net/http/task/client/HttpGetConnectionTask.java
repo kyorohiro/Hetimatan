@@ -38,7 +38,7 @@ public class HttpGetConnectionTask extends EventTask {
 	public void action(EventTaskRunner runner) throws InterruptedException, IOException {
 		if (true == mIsFirst) {
 			mIsFirst = false;
-			mOwner.get().connection();
+			mOwner.get().connect();
 		}
 		if(mOwner.get().isConnected()) {
 			mIsKeep = false;

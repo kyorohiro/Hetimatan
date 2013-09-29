@@ -26,25 +26,22 @@ public class HttpGet {
 	public static final String TAG = "HttpGet";
 	public String sId = "[httpget]";
 
-	private HttpGetRequester mCurrentRequest = null;
-	private HttpGetResponse mResponse = null;
-	private KyoroSocket mCurrentSocket = null;
+	private HttpGetRequester mCurrentRequest  = null;
+	private HttpGetResponse  mCurrentResponse = null;
+	private KyoroSocket      mCurrentSocket   = null;
 	private String mHost = "127.0.0.1";
 	private String mPath = "/";
 	private int mPort = 80;
 	private EventTaskRunner mRunner = null;
-//	private CashKyoroFile mSendCash = null;
 	private HttpGetTaskManager mTaskManager = new HttpGetTaskManager();
 
 	public HttpGet() throws IOException {}
 
 	public EventTaskRunner getRunner() {return mRunner;}
 
-//	public CashKyoroFile getSendCash() {return mSendCash;}
-
 	public KyoroSocket getSocket() {return mCurrentSocket;}
 
-	protected HttpGetResponse getGetResponse() {return mResponse;}
+	protected HttpGetResponse getGetResponse() {return mCurrentResponse;}
 
 	protected HttpGetRequester createGetRequest() {
 		if (mCurrentRequest == null) {
@@ -60,7 +57,6 @@ public class HttpGet {
 		sId = "[httpget "+mHost+":"+mPort+mPath+"]";
 		HttpHistory.get().pushMessage(sId+"#update:"+"\n");
 		dispose();
-//		mSendCash = new CashKyoroFile(1024, 3);
 	}
 
 	public void update(String location) throws IOException {
@@ -87,23 +83,17 @@ public class HttpGet {
 		return runner; 
 	}
 
-	public void connection() throws IOException, InterruptedException {
+	public void connect() throws IOException, InterruptedException {
 		if(Log.ON){Log.v(TAG, "HttpGet#connection()");}
 		mCurrentRequest = createGetRequest();
-		mResponse = null;
+		mCurrentResponse = null;
 		mCurrentRequest.getUrlBuilder().setHost(mHost).setPath(mPath).setPort(mPort);
 		mCurrentSocket = mCurrentRequest.connect(null);
 	}
 
 	public void send() throws InterruptedException, IOException {
 		if(Log.ON){Log.v(TAG, "HttpGet#send()");}
-//		KyoroSocketEventRunner runner = KyoroSocketEventRunner.getYourWorker();
-//		HttpRequest request = ((HttpGetRequester)mCurrentRequest).createHttpRequest();
-//		CashKyoroFile cash = getSendCash();
-//		request.encode(cash.getLastOutput());
-//		MessageSendTask sendTask = new MessageSendTask(getSocket(), getSendCash());
-		
-		MessageSendTask sendTask = mCurrentRequest.request(getSocket());
+		MessageSendTask sendTask = mCurrentRequest.getRequestTask(getSocket());
 		HttpGetReadHeaderTask readHeaderTask = new HttpGetReadHeaderTask(this, mTaskManager.mLast);
 		readHeaderTask.nextAction(new HttpGetReadBodyTask(this, mTaskManager.mLast));
 		sendTask.nextAction(readHeaderTask);
@@ -113,26 +103,26 @@ public class HttpGet {
 
 	public void recvHeader() throws IOException, InterruptedException {
 		if(Log.ON){Log.v(TAG, "HttpGet#revcHeader()");}
-		if(mResponse == null) {
-			mResponse = mCurrentRequest.getResponse(mCurrentSocket);
+		if(mCurrentResponse == null) {
+			mCurrentResponse = mCurrentRequest.getResponse(mCurrentSocket);
 		}
 		HttpHistory.get().pushMessage(sId+"#recvHeader:"+"\n");
-		mResponse.readHeader();
+		mCurrentResponse.readHeader();
 	}
 
 	public void recvBody() throws IOException, InterruptedException {
 		HttpHistory.get().pushMessage(sId+"#recvBody:"+"\n");
-		mResponse.readBody();
+		mCurrentResponse.readBody();
 
 		try {
-			CashKyoroFile vf = mResponse.getVF();
-			vf.seek(mResponse.getVFOffset());
+			CashKyoroFile vf = mCurrentResponse.getVF();
+			vf.seek(mCurrentResponse.getVFOffset());
 			int len = (int)vf.length();
 			byte[] buffer = new byte[len];
 			vf.read(buffer, 0, len);
-			System.out.println("@1:"+new String(buffer, 0, mResponse.getVFOffset()));
+			System.out.println("@1:"+new String(buffer, 0, mCurrentResponse.getVFOffset()));
 			System.out.println("@2:"+new String(buffer));
-			System.out.println("@3:"+mResponse.getVFOffset()+","+buffer.length);
+			System.out.println("@3:"+mCurrentResponse.getVFOffset()+","+buffer.length);
 
 		} finally {
 			close();
@@ -176,16 +166,16 @@ public class HttpGet {
 			mCurrentSocket.close();
 			mCurrentSocket = null;
 		}
-//		if(mSendCash != null) {
-//			mSendCash.close();
-//			mSendCash = null;
-//		}
+		if(mCurrentRequest != null) {
+			mCurrentRequest.close();
+			mCurrentRequest = null;
+		}
 	}
 
 	public void dispose() throws IOException {
-		if(mResponse!= null) {
-			mResponse.close();
-			mResponse = null;
+		if(mCurrentResponse!= null) {
+			mCurrentResponse.close();
+			mCurrentResponse = null;
 		}
 	}
 
@@ -208,18 +198,18 @@ public class HttpGet {
 
 	public boolean headerIsReadeable() throws IOException, InterruptedException {
 		if(Log.ON){Log.v(TAG, "HttpGet#headerIsReadeable()");}
-		if(mResponse == null) {
-			mResponse = mCurrentRequest.getResponse(mCurrentSocket);
+		if(mCurrentResponse == null) {
+			mCurrentResponse = mCurrentRequest.getResponse(mCurrentSocket);
 		}
-		return mResponse.headerIsReadable();
+		return mCurrentResponse.headerIsReadable();
 	}
 
 	public boolean bodyIsReadeable() throws IOException, InterruptedException {
 		if(Log.ON){Log.v(TAG, "HttpGet#bodyIsReadeable()");}
-		if(mResponse == null) {
-			mResponse = mCurrentRequest.getResponse(mCurrentSocket);
+		if(mCurrentResponse == null) {
+			mCurrentResponse = mCurrentRequest.getResponse(mCurrentSocket);
 		}
-		return mResponse.bodyIsReadable();
+		return mCurrentResponse.bodyIsReadable();
 	}
 
 }
