@@ -6,7 +6,11 @@ import net.hetimatan.util.event.EventTask;
 import net.hetimatan.util.event.EventTaskRunner;
 import net.hetimatan.util.io.ByteArrayBuilder;
 
-
+/**
+ * 
+ * 
+ *
+ */
 public class MessageSendTask extends EventTask {
 	public static final String TAG = "MessageSendTask";
 	private int mBufferSize = 512;

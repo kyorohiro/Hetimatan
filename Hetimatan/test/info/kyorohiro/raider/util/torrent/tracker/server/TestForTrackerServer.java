@@ -24,7 +24,7 @@ public class TestForTrackerServer extends TestCase {
 		assertTrue(tcpPortIsUseable(TrackerServer.DEFAULT_TRACKER_PORT));		
 	}
 
-	public void testGet001() throws InterruptedException, IOException {
+	public void testGet001() throws Throwable {
 		TrackerServer server = null;
 		HttpGetRequester requester = null;
 		try {
@@ -53,7 +53,7 @@ public class TestForTrackerServer extends TestCase {
 		}
 	}
 
-	public void testGet002_unmanaged_InfoHash() throws InterruptedException, IOException {
+	public void testGet002_unmanaged_InfoHash() throws Throwable {
 		TrackerServer server = null;
 		HttpGetRequester requester = null;
 		
@@ -100,7 +100,7 @@ public class TestForTrackerServer extends TestCase {
 	}
 
 
-	public void testGet003_firstAccess() throws InterruptedException, IOException {
+	public void testGet003_firstAccess() throws Throwable {
 		TrackerServer server = null;
 		HttpGetRequester requester = null;
 
@@ -160,7 +160,7 @@ public class TestForTrackerServer extends TestCase {
 		}
 	}
 
-	public void testGet003_compactOff() throws InterruptedException, IOException {
+	public void testGet003_compactOff() throws Throwable {
 		testHello();
 		TrackerServer server = null;
 		HttpGetRequester requester = null;

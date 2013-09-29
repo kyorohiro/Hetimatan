@@ -82,6 +82,8 @@ public class HttpFront {
 		}
 		KyoroFile kfiles = server.createResponse(this, info.mSocket, info.mUri);
 		kfiles.seek(0);
+		//
+		// todo 
 		MessageSendTask task = new MessageSendTask(info.mSocket, kfiles);
 		task.nextAction(new HttpFrontCloseTask(this));
 		server.getEventRunner().pushTask(task);
