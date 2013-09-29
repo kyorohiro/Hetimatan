@@ -17,13 +17,11 @@ import net.hetimatan.net.torrent.util.piece.PieceInfo;
 import net.hetimatan.net.torrent.util.piece.PieceInfoList;
 import net.hetimatan.util.http.HttpObjectHelper;
 import net.hetimatan.util.http.HttpRequest;
-import net.hetimatan.util.io.ByteArrayBuilder;
 
 //@todo
 public class SimpleHttpServer extends HttpServer {
 
 	private CashKyoroFile mFile = null;
-	private int mMaxOfRenge = 5;
 	private LinkedHashMap<String, String> mMimetype = new LinkedHashMap<String,String>();
 	{
 		mMimetype.put("mp4", "video/mp4");

@@ -35,7 +35,6 @@ public class HttpServer {
 	private KyoroSocketEventRunner mRequestRunner = null;
 	private boolean mMyReqRunner = false;
 	private KyoroServerSocket mServerSocket = null;
-	private KyoroSelector mSelector = null;
 
 	//
 	// Task Runner
@@ -60,7 +59,7 @@ public class HttpServer {
 		if(Log.ON){Log.v(TAG, "HttpServer#boot():"+mPort);}
 		mServerSocket = new KyoroServerSocketImpl();
 		mServerSocket.bind(mPort);
-		mServerSocket.regist(mSelector, KyoroSelector.ACCEPT);
+		mServerSocket.regist(mRequestRunner.getSelector(), KyoroSelector.ACCEPT);
 		sId = "[httpserver"+mPort+"]";
 		startAcceptTask();
 	}
@@ -84,7 +83,7 @@ public class HttpServer {
 		HttpFront front = new HttpFront(this, socket);
 		HttpHistory.get().pushMessage(sId+"#startFront:"+front.sId+"\n");
 
-		socket.regist(mSelector, KyoroSelector.READ);
+		socket.regist(mRequestRunner.getSelector(), KyoroSelector.READ);
 		HttpFrontRequestTask requestTask = new HttpFrontRequestTask(front);
 		front.addMyTask(requestTask);
 		socket.setEventTaskAtWrakReference(requestTask, KyoroSelector.READ);
@@ -146,9 +145,6 @@ public class HttpServer {
 			if (null != mServerSocket) {
 				mServerSocket.close();
 			}
-			if(null != mSelector) {
-				mSelector.close();
-			}
 			if(mClientInfos != null) {
 				while (0<mClientInfos.size()) {
 					HttpFront front = mClientInfos.removeFirst();
@@ -194,7 +190,6 @@ public class HttpServer {
 		mRequestRunner.waitIsSelect(true);
 		HttpServerBootTask boot = new HttpServerBootTask(this);
 		boot.nextAction(null);
-		mSelector = mRequestRunner.getSelector();
 		mRequestRunner.start(boot);
 		return mRequestRunner;
 	}

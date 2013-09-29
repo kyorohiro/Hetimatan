@@ -15,7 +15,6 @@ import net.hetimatan.util.event.EventTask;
 import net.hetimatan.util.event.EventTaskRunner;
 import net.hetimatan.util.event.net.KyoroSocketEventRunner;
 import net.hetimatan.util.event.net.MessageSendTask;
-import net.hetimatan.util.http.HttpRequest;
 import net.hetimatan.util.http.HttpRequestUri;
 import net.hetimatan.util.http.HttpRequestHeader;
 import net.hetimatan.util.http.HttpResponse;
