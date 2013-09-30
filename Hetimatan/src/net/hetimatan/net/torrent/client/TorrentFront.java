@@ -171,7 +171,7 @@ public class TorrentFront {
 				}
 			}
 		} finally {
-			mReader.setBlockOn(false);
+//			mReader.setBlockOn(false);
 			Log.v(TAG, "/TorrentFrontTask#shakehand");
 		}
 	}
