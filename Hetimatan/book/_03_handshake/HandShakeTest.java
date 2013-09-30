@@ -25,6 +25,9 @@ import net.hetimatan.util.event.net.KyoroSocketEventRunner;
 // 相手Torrentが保持しているPieceデータを保持せよ。
 //
 public class HandShakeTest {
+	//
+	// このアプリを起動する前に、DummyTrackerを起動してください
+	//
 	public static void main(String[] args) {
 		try {
 			start();
