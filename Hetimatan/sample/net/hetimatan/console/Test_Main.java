@@ -1,5 +1,8 @@
 package net.hetimatan.console;
 
+import net.hetimatan.appcui.MainStartClient;
+import net.hetimatan.appcui.MainStartTracker;
+
 public class Test_Main {
 	public static final String COMMAND_CLIENT   = "client";
 	public static final String COMMAND_UPLOADER = "uploader";
