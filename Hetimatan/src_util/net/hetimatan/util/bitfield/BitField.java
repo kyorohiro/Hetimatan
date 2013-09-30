@@ -83,6 +83,7 @@ public class BitField {
 			shufflelist[tmp1] = tmp2;
 		}
 	}
+
 	public int getPieceAtRandomPerByte(int numPerByte) {
 		int byteLength  = lengthPerByte();
 		if(byteLength<=0) {

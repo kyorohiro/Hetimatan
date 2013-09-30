@@ -24,6 +24,9 @@ public class TrackerServer extends HttpServer {
 	public static final int DEFAULT_TRACKER_PORT      = 6969;
 	public static final String MESSAGE_UNMANAGED_DATA = "your ainfo_hash is unmanaged";
 	public static final String MESSAGE_WRONG_REQUEST  = "your request is wrong";
+	public static final int STATUS_BOOT = 0;
+	public static final int STATUS_RESPONSE = 1;
+	
 
 	private StatusCheck mObserver = null;
 	private TrackerDB mDB = new TrackerDB();
@@ -83,7 +86,7 @@ public class TrackerServer extends HttpServer {
 			trackerData.setInterval(mInterval);
 
 			BenDiction diction = TrackerResponse.createResponce(trackerData, peerInfo, request.getCompact());
-			kickObserver(1);
+			kickObserver(STATUS_RESPONSE);
 			return new CashKyoroFile(BenObject.createEncode(diction));
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -93,7 +96,7 @@ public class TrackerServer extends HttpServer {
 	@Override
 	public void boot() throws IOException {
 		super.boot();
-		kickObserver(0);
+		kickObserver(STATUS_BOOT);
 	}
 	public synchronized void setStatusCheck(StatusCheck observer) {
 		mObserver = observer;

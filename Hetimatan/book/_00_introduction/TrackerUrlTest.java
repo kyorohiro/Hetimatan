@@ -36,6 +36,7 @@ public class TrackerUrlTest extends Application {
 		primaryStage.show();
 		buttonSetting();
 	}
+
 	public void buttonSetting() {
 		mOpenFile.setOnAction(new EventHandler<ActionEvent>() {
 			@Override

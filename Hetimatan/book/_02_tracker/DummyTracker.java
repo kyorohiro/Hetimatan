@@ -111,11 +111,13 @@ public class DummyTracker  extends Application implements TrackerServer.StatusCh
 		mInfo.setText(builder.toString());		
 	}
 
+	//
+	// TrackerServer.StatusCheck
 	@Override
 	public void onUpdate(TrackerServer server, int event) {
-		if(event == 0) {
+		if(event == TrackerServer.STATUS_BOOT) {
 			onInit(server);
-		} else {
+		} else {// TrackerServer.STATUS_RESPONSE
 			onRequested(server);
 		}
 	}
