@@ -4,9 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Iterator;
-
-import com.sun.jndi.url.corbaname.corbanameURLContextFactory;
-
 import net.hetimatan.io.net.KyoroSelector;
 import net.hetimatan.io.net.KyoroSocket;
 import net.hetimatan.io.net.KyoroSocketImpl;
@@ -17,7 +14,6 @@ import net.hetimatan.net.torrent.tracker.TrackerClient;
 import net.hetimatan.net.torrent.tracker.TrackerPeerInfo;
 import net.hetimatan.net.torrent.util.metafile.MetaFile;
 import net.hetimatan.net.torrent.util.metafile.MetaFileCreater;
-import net.hetimatan.util.bitfield.BitField;
 import net.hetimatan.util.event.CloseRunnerTask;
 import net.hetimatan.util.event.net.KyoroSocketEventRunner;
 
@@ -87,15 +83,18 @@ public class ReceiveMessageTest {
 		while(!front.parseableShakehand()){Thread.yield();}
 		front.revcShakehand();
 
+
 		// ----------------------------------------------------
 		// recv message
 		// ----------------------------------------------------
 		front.getSocket().regist(front.getSelector(), KyoroSelector.READ);
 		do {
-			do{Thread.yield();front.getSelector().select(10000);}
-			while(1==front.parseableMessage());
+			do {
+				Thread.yield();
+				front.getSelector().select(10000);
+			} while(1==front.parseableMessage());
 			MessageNull message = MessageNull.decode(front.getReader());
 			System.out.println("[[sign]]:"+message.getSign());
-		}while(true);
+		} while(true);
 	}
 }
