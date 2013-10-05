@@ -13,7 +13,6 @@ import net.hetimatan.net.torrent.util.bencode.BenDiction;
 import net.hetimatan.net.torrent.util.bencode.BenObject;
 import net.hetimatan.net.torrent.util.bencode.BenString;
 import net.hetimatan.net.torrent.util.metafile.MetaFile;
-import net.hetimatan.util.event.SingleTaskRunner;
 import net.hetimatan.util.http.HttpRequestUri;
 import net.hetimatan.util.http.HttpRequestLine;
 import net.hetimatan.util.http.HttpRequest;
@@ -21,6 +20,7 @@ import net.hetimatan.util.url.PercentEncoder;
 
 
 public class TrackerServer extends HttpServer {
+
 	public static final int DEFAULT_TRACKER_PORT      = 6969;
 	public static final String MESSAGE_UNMANAGED_DATA = "your ainfo_hash is unmanaged";
 	public static final String MESSAGE_WRONG_REQUEST  = "your request is wrong";
@@ -93,11 +93,13 @@ public class TrackerServer extends HttpServer {
 			return newMessageWrongRequest();
 		}
 	}
+
 	@Override
 	public void boot() throws IOException {
 		super.boot();
 		kickObserver(STATUS_BOOT);
 	}
+
 	public synchronized void setStatusCheck(StatusCheck observer) {
 		mObserver = observer;
 	}
@@ -111,4 +113,5 @@ public class TrackerServer extends HttpServer {
 	public interface StatusCheck {
 		void onUpdate(TrackerServer server, int event);
 	}
+
 }

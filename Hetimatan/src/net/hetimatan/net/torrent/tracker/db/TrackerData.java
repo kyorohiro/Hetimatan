@@ -1,10 +1,8 @@
 package net.hetimatan.net.torrent.tracker.db;
 
 
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.Random;
 import java.util.Set;
 

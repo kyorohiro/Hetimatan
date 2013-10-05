@@ -174,7 +174,10 @@ public class TrackerClient extends HttpGet {
 			mObserver.onUpdate(this);
 		}
 	}
+
 	public interface StatusCheck {
+		//
+		// call this method when received response  
 		void onUpdate(TrackerClient client);
 	}
 }

@@ -2,7 +2,6 @@ package net.hetimatan.net.torrent.tracker.db;
 
 
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 
 import net.hetimatan.util.url.PercentEncoder;

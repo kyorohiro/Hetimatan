@@ -6,7 +6,9 @@ import net.hetimatan.util.http.HttpObject;
 import net.hetimatan.util.io.ByteArrayBuilder;
 
 public class TrackerPeerInfo implements Comparable<TrackerPeerInfo> {
+
 	private byte[] mBuffer = null;
+
 	public TrackerPeerInfo(String host, int port) throws UnknownHostException {
 		this(HttpObject.aton(host), HttpObject.portToB(port));
 	}
@@ -40,6 +42,7 @@ public class TrackerPeerInfo implements Comparable<TrackerPeerInfo> {
 			return false;
 		}
 	}
+
 	@Override
 	public int compareTo(TrackerPeerInfo o) {
 		if(mBuffer.length<o.mBuffer.length) {
@@ -65,6 +68,7 @@ public class TrackerPeerInfo implements Comparable<TrackerPeerInfo> {
 		System.arraycopy(mBuffer, 4, port, 0, 2);
 		return HttpObject.ntoa(host);
 	}
+
 	public int getPort() {
 		byte[] host = new byte[4];
 		byte[] port = new byte[2];
@@ -72,4 +76,5 @@ public class TrackerPeerInfo implements Comparable<TrackerPeerInfo> {
 		System.arraycopy(mBuffer, 4, port, 0, 2);
 		return HttpObject.bToPort(port);		
 	}
+
 }
