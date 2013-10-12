@@ -106,18 +106,25 @@ public class TorrentPeer {
 
 	/**
 	 * start Torrent Client. 
-	 * 1. start torrent server
-	 * 2. request torrent list to tracker
+	 * - start torrent server
+	 * - request torrent list to tracker
 	 * @param runner
 	 * @return
+	 * @throws IOException 
 	 */
-	public KyoroSocketEventRunner startTask(KyoroSocketEventRunner runner) {
+	public KyoroSocketEventRunner startTask(KyoroSocketEventRunner runner) throws IOException {
 		System.out.println("TorrentPeer#startTask:");
 		if(runner == null) {runner = new KyoroSocketEventRunner();}
 		mMasterRunner = runner;
 		runner.waitIsSelect(true);//todo
+		
+		//
+		// regist boot task, request tacker task, accept event
 		TorrentPeerBootTask bootTask = new TorrentPeerBootTask(this);
 		bootTask.nextAction(mTrackerTask = new TorrentPeerStartTracker(this));
+		mServerSocket = new KyoroServerSocketImpl();
+		mServerSocket.setEventTaskAtWrakReference(mMasterRunner.getSelector(), mAcceptTask= new TorrentPeerAcceptTask(this), KyoroSelector.ACCEPT);
+
 		runner.start(bootTask);
 		return runner; 
 	}
@@ -209,19 +216,21 @@ public class TorrentPeer {
 	 * @throws IOException
 	 */
 	public void boot() throws IOException {
-//		if(Log.ON){Log.v(TAG, "TorrentPeer#boot");}
 		TorrentHistory.get().pushMessage(""+sId+"TorrentPeer#boot()\n");
 		mIsBooted = false;
-		KyoroServerSocket serverSocket = new KyoroServerSocketImpl();
-		if(mMasterRunner == null) {
-			mMasterRunner = new KyoroSocketEventRunner();
+
+		// todo delete null checl
+		if(mMasterRunner == null) {mMasterRunner = new KyoroSocketEventRunner();}
+		if(mServerSocket == null) {
+			mServerSocket = new KyoroServerSocketImpl();
+			mServerSocket.regist(mMasterRunner.getSelector(), KyoroSelector.ACCEPT);
 		}
-		serverSocket.regist(mMasterRunner.getSelector(), KyoroSelector.ACCEPT);
-		serverSocket.setEventTaskAtWrakReference(mAcceptTask= new TorrentPeerAcceptTask(this), KyoroSelector.ACCEPT);
+//		mServerSocket.setEventTaskAtWrakReference(mMasterRunner.getSelector(), mAcceptTask= new TorrentPeerAcceptTask(this), KyoroSelector.ACCEPT);
+
+		// boot
 		do {
 			try {
-				serverSocket.bind(mPort);
-				mServerSocket = serverSocket;
+				mServerSocket.bind(mPort);
 				mTrackerClient.setClientPort(mPort);
 				mIsBooted = true;
 				return;

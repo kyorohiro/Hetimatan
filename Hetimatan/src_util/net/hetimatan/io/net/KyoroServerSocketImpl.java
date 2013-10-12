@@ -3,19 +3,16 @@ package net.hetimatan.io.net;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.channels.ClosedChannelException;
-import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
+
+import net.hetimatan.util.event.EventTask;
 
 public class KyoroServerSocketImpl extends KyoroServerSocket {
 
 	private ServerSocketChannel mServerChannel = null;
 
 	public KyoroServerSocketImpl() throws IOException {
-		this(null);
-	}
-
-	public KyoroServerSocketImpl(Selector selector) throws IOException {
 		 mServerChannel = ServerSocketChannel.open();
 		 mServerChannel.configureBlocking(false);
 	}
@@ -59,6 +56,11 @@ public class KyoroServerSocketImpl extends KyoroServerSocket {
 	public void regist(KyoroSelector selector, int key) throws ClosedChannelException, IOException {
 		mServerChannel.register(selector.getSelector(), key);
 		selector.putClient(this);
+	}
+
+	public void setEventTaskAtWrakReference(KyoroSelector selector, EventTask task, int state) throws ClosedChannelException, IOException {	
+		regist(selector, state);
+		setEventTaskAtWrakReference(task, state);
 	}
 
 	public ServerSocketChannel getRawChannel() {
