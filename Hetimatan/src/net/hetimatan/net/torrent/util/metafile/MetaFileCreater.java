@@ -15,7 +15,9 @@ import net.hetimatan.net.torrent.util.bencode.BenObject;
 import net.hetimatan.net.torrent.util.bencode.BenString;
 
 public class MetaFileCreater {
+
 	public static MetaFile createFromTorrentDiction(BenDiction diction) throws IOException {
+
 		// extract basic info
 		BenString announce = (BenString) diction.getBenValue(MetaFile.TYPE_ANNOUNCE, BenObject.TYPE_STRI);
 		BenDiction info = (BenDiction) diction.getBenValue(MetaFile.TYPE_INFO, BenObject.TYPE_DICT);

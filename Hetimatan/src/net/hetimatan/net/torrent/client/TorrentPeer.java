@@ -40,7 +40,6 @@ public class TorrentPeer {
 
 	private KyoroServerSocket mServerSocket         = null;
 	private KyoroSocketEventRunner mMasterRunner    = null;
-	private KyoroSelector mMasterSelector           = null;
 
 	// ---
 	// property
@@ -87,7 +86,7 @@ public class TorrentPeer {
 	}
 
 	public KyoroSelector getSelector() {
-		return mMasterSelector;
+		return mMasterRunner.getSelector();
 	}
 
 	public TorrentPeerSetting getSetting() {
@@ -105,13 +104,18 @@ public class TorrentPeer {
 		startTracker(event, mFinTrackerTask);
 	}
 
+	/**
+	 * start Torrent Client. 
+	 * 1. start torrent server
+	 * 2. request torrent list to tracker
+	 * @param runner
+	 * @return
+	 */
 	public KyoroSocketEventRunner startTask(KyoroSocketEventRunner runner) {
 		System.out.println("TorrentPeer#startTask:");
-		if(runner == null) {
-			mMasterRunner = runner = new KyoroSocketEventRunner();
-		}
+		if(runner == null) {runner = new KyoroSocketEventRunner();}
+		mMasterRunner = runner;
 		runner.waitIsSelect(true);//todo
-		mMasterSelector = runner.getSelector();
 		TorrentPeerBootTask bootTask = new TorrentPeerBootTask(this);
 		bootTask.nextAction(mTrackerTask = new TorrentPeerStartTracker(this));
 		runner.start(bootTask);
@@ -199,6 +203,11 @@ public class TorrentPeer {
 		} catch (IOException e) { return 0;}
 	}
 
+	/**
+	 * boot torrent server. 
+	 * 
+	 * @throws IOException
+	 */
 	public void boot() throws IOException {
 //		if(Log.ON){Log.v(TAG, "TorrentPeer#boot");}
 		TorrentHistory.get().pushMessage(""+sId+"TorrentPeer#boot()\n");
@@ -206,11 +215,9 @@ public class TorrentPeer {
 		KyoroServerSocket serverSocket = new KyoroServerSocketImpl();
 		if(mMasterRunner == null) {
 			mMasterRunner = new KyoroSocketEventRunner();
-			mMasterSelector = mMasterRunner.getSelector();
 		}
-		serverSocket.regist(mMasterSelector, KyoroSelector.ACCEPT);
-		mAcceptTask = new TorrentPeerAcceptTask(this);
-		serverSocket.setEventTaskAtWrakReference(mAcceptTask, KyoroSelector.ACCEPT);
+		serverSocket.regist(mMasterRunner.getSelector(), KyoroSelector.ACCEPT);
+		serverSocket.setEventTaskAtWrakReference(mAcceptTask= new TorrentPeerAcceptTask(this), KyoroSelector.ACCEPT);
 		do {
 			try {
 				serverSocket.bind(mPort);
