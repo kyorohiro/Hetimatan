@@ -11,6 +11,7 @@ import net.hetimatan.util.event.EventTask;
 public class KyoroServerSocketImpl extends KyoroServerSocket {
 
 	private ServerSocketChannel mServerChannel = null;
+	private boolean mIsBinded = false;
 
 	public KyoroServerSocketImpl() throws IOException {
 		 mServerChannel = ServerSocketChannel.open();
@@ -23,7 +24,6 @@ public class KyoroServerSocketImpl extends KyoroServerSocket {
 		mIsBinded = true;
 	}
 
-	private boolean mIsBinded = false;
 	@Override
 	public boolean isBinded() {
 		return mIsBinded;

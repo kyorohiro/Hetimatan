@@ -77,20 +77,16 @@ public class TorrentPeer {
 		sId = "["+(num++)+"]"+peerId;
 	}
 
-	public void addDownloaded(int downloaded) {
-		mDownloaded += downloaded;
-	}
-
-	public void addUploaded(int uploaded) {
-		mUploaded += uploaded;
-	}
-
-	public KyoroSelector getSelector() {
-		return mMasterRunner.getSelector();
-	}
-
-	public TorrentPeerSetting getSetting() {
-		return mSetting;
+	// peerid is random 20 byte string.  
+	// the first character in the peer-id is PEERID_HEAD
+	// BEP20
+	public static String createPeerId() {
+		byte[] peerId = new byte[20]; 
+		Random random = new Random(System.currentTimeMillis());
+		random.nextBytes(peerId);
+		System.arraycopy(PEERID_HEAD.getBytes(), 0, peerId, 0, 8);
+		PercentEncoder encoder = new PercentEncoder();
+		return encoder.encode(peerId);
 	}
 
 	public void startTracker(String event, EventTask last) {
@@ -129,14 +125,6 @@ public class TorrentPeer {
 		return runner; 
 	}
 
-	public void setTrackerTask(int timeout) {
-		if(mTrackerTask == null) {
-			mTrackerTask = new TorrentPeerStartTracker(this);
-		}
-		getClientRunner().releaseTask(mTrackerTask);		
-		getClientRunner().pushTask(mTrackerTask, timeout);
-	}
-
 	public void startConnect(TrackerPeerInfo peer) throws IOException {
 		if(getTorrentPeerManager().contain(peer)) {return;}
 		TorrentFront front = createFront(peer);
@@ -145,6 +133,30 @@ public class TorrentPeer {
 			front.startConnect(peer.getHostName(), peer.getPort());
 			addObserver(front);
 		}
+	}
+
+	public void setTrackerTask(int timeout) {
+		if(mTrackerTask == null) {
+			mTrackerTask = new TorrentPeerStartTracker(this);
+		}
+		getClientRunner().releaseTask(mTrackerTask);		
+		getClientRunner().pushTask(mTrackerTask, timeout);
+	}
+
+	public void addDownloaded(int downloaded) {
+		mDownloaded += downloaded;
+	}
+
+	public void addUploaded(int uploaded) {
+		mUploaded += uploaded;
+	}
+
+	public KyoroSelector getSelector() {
+		return mMasterRunner.getSelector();
+	}
+
+	public TorrentPeerSetting getSetting() {
+		return mSetting;
 	}
 
 	public void updateOptimusUnchokePeer(TorrentFront front) throws IOException {
@@ -225,7 +237,6 @@ public class TorrentPeer {
 			mServerSocket = new KyoroServerSocketImpl();
 			mServerSocket.regist(mMasterRunner.getSelector(), KyoroSelector.ACCEPT);
 		}
-//		mServerSocket.setEventTaskAtWrakReference(mMasterRunner.getSelector(), mAcceptTask= new TorrentPeerAcceptTask(this), KyoroSelector.ACCEPT);
 
 		// boot
 		do {
@@ -289,16 +300,5 @@ public class TorrentPeer {
 		return mFrontManager;
 	}
 
-	// peerid is random 20 byte string.  
-	// the first character in the peer-id is PEERID_HEAD
-	// BEP20
-	public static String createPeerId() {
-		byte[] peerId = new byte[20]; 
-		Random random = new Random(System.currentTimeMillis());
-		random.nextBytes(peerId);
-		System.arraycopy(PEERID_HEAD.getBytes(), 0, peerId, 0, 8);
-		PercentEncoder encoder = new PercentEncoder();
-		return encoder.encode(peerId);
-	}
 
 }

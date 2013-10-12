@@ -12,7 +12,6 @@ public abstract class KyoroSocket extends KyoroSelectable {
 	public abstract int getConnectionState();
 	public abstract int write(byte[] buffer, int start, int length) throws IOException;
 	public abstract int read(byte[] buffer, int start, int length) throws IOException;
-//	public abstract void close() throws IOException;
 	
 	// property
 	public abstract String getHost() throws IOException;
