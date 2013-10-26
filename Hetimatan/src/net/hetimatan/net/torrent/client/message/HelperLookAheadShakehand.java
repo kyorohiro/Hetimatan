@@ -20,7 +20,7 @@ public class HelperLookAheadShakehand {
 		mIsEnd = false;
 	}
 	
-	public boolean isEnd() {
+	public boolean parseable() {
 		return mIsEnd;
 	}
 	

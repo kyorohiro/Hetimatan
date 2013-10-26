@@ -11,15 +11,15 @@ import net.hetimatan.net.torrent.client.message.MessageHandShake;
 import net.hetimatan.util.log.Log;
 import net.hetimatan.util.url.PercentEncoder;
 
-//
-// 各機能は、個々のクラスに委譲する予定
-// このクラスもそのひとつ
-//
-// Tracker
-// HandShake
-// Request/Piece
-// 
-//
+/**
+ * - how to use
+ * sendShakehand();
+ * while(!parseableShakehand()) {};
+ * rescShakehand();
+ *
+ * - EventTask
+ * TorrentFrontShakeHandTask
+ */
 public class TorrentFrontShakeHandSenario {
 	private HelperLookAheadShakehand mCurrentSHHelper = null;
 
@@ -32,49 +32,30 @@ public class TorrentFrontShakeHandSenario {
 	}
 
 	public boolean parseableShakehand(TorrentFront front) throws IOException {
-		String TAG = TorrentFront.TAG;
-		String DEBUG = front.mDebug;
+		if(Log.ON){Log.v(TorrentFront.TAG, "["+front.mDebug+"]"+"TorrentFront#revieceSH()");}
 		MarkableReader reader = front.getReader();
-
-		if(Log.ON){Log.v(TAG, "["+DEBUG+"]"+"TorrentFront#revieceSH()");}
 		HelperLookAheadShakehand currentSHHelper = getHelper(reader);
 		currentSHHelper.read();
 
 		if(reader.isEOF()){ front.close(); return true;}
-		if(currentSHHelper.isEnd()) {
-			return true;
-		} else {
-			return false;
-		}
+		if(currentSHHelper.parseable()) {return true;} else {return false;}
 	}
 
-
 	public void revcShakehand(TorrentFront front) throws IOException {
-		String TAG = TorrentFront.TAG;
-		String DEBUG = front.mDebug;
-		MarkableReader reader = front.getReader();
+		if(Log.ON){Log.v(TorrentFront.TAG, "["+front.mDebug+"]"+"TorrentFrontTask#shakehand");}
 
-		if(Log.ON){Log.v(TAG, "["+DEBUG+"]"+"TorrentFrontTask#shakehand");}
-		try {
-			MessageHandShake recv = MessageHandShake.decode(reader);
-			TorrentHistory.get().pushReceive(front, recv);
-			{
-				TorrentClient peer = front.getTorrentPeer();
-				PercentEncoder encoder = new PercentEncoder();
-				if (peer.getPeerId().equals(encoder.encode(recv.getPeerId()))) {	
-					throw new IOException();
-				}
-			}
-		} finally {
-			Log.v(TAG, "/TorrentFrontTask#shakehand");
+		MarkableReader reader = front.getReader();
+		MessageHandShake recv = MessageHandShake.decode(reader);
+		TorrentHistory.get().pushReceive(front, recv);
+		TorrentClient peer = front.getTorrentPeer();
+		PercentEncoder encoder = new PercentEncoder();
+		if (peer.getPeerId().equals(encoder.encode(recv.getPeerId()))) {	
+			throw new IOException();
 		}
 	}
 
 	public void sendShakehand(TorrentFront front) throws IOException {
-		String TAG = TorrentFront.TAG;
-		String DEBUG = front.mDebug;
-		if(Log.ON){Log.v(TAG, "["+DEBUG+"]"+"TorrentFrontTask#sendShakehand");}
-
+		if(Log.ON){Log.v(TorrentFront.TAG, "["+front.mDebug+"]"+"TorrentFrontTask#sendShakehand");}
 		PercentEncoder encoder = new PercentEncoder();
 		TorrentClient torentPeer = front.getTorrentPeer();
 		byte[] infoHash = encoder.decode(torentPeer.getInfoHash().getBytes());
@@ -84,5 +65,6 @@ public class TorrentFrontShakeHandSenario {
 		send.encode(front.getSendCash().getLastOutput());
 		front.pushflushSendTask();
 	}
+
 
 }
