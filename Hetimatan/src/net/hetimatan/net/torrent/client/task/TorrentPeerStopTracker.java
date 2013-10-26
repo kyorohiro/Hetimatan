@@ -3,17 +3,17 @@ package net.hetimatan.net.torrent.client.task;
 
 import java.lang.ref.WeakReference;
 
-import net.hetimatan.net.torrent.client.TorrentPeer;
+import net.hetimatan.net.torrent.client.TorrentClient;
 import net.hetimatan.net.torrent.tracker.TrackerRequest;
 import net.hetimatan.util.event.EventTask;
 import net.hetimatan.util.event.EventTaskRunner;
 
 public class TorrentPeerStopTracker extends EventTask {
 	public static final String TAG = "TorrentPeerStopTracker";
-	private WeakReference<TorrentPeer> mServer = null;
+	private WeakReference<TorrentClient> mServer = null;
 
-	public TorrentPeerStopTracker(TorrentPeer httpServer) {
-		mServer = new WeakReference<TorrentPeer>(httpServer);
+	public TorrentPeerStopTracker(TorrentClient httpServer) {
+		mServer = new WeakReference<TorrentClient>(httpServer);
 	}
 
 	@Override
@@ -23,7 +23,7 @@ public class TorrentPeerStopTracker extends EventTask {
 
 	@Override
 	public void action(EventTaskRunner runner) throws Throwable {
-		TorrentPeer server = mServer.get();
+		TorrentClient server = mServer.get();
 		server.startTracker(TrackerRequest.EVENT_STOPPED);
 	}
 }

@@ -7,7 +7,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import net.hetimatan.net.torrent.client.TorrentFront;
-import net.hetimatan.net.torrent.client.TorrentPeer;
+import net.hetimatan.net.torrent.client.TorrentClient;
 import net.hetimatan.net.torrent.client.message.TorrentMessage;
 import net.hetimatan.net.torrent.client.task.TorrentFrontSendPieceTask;
 import net.hetimatan.net.torrent.tracker.TrackerClient;
@@ -18,17 +18,17 @@ import net.hetimatan.net.torrent.tracker.TrackerPeerInfo;
 // 
 public class TorrentPeerPiecer implements TorrentFront.EventListener {
 
-	private WeakReference<TorrentPeer> mUploadTargetPeer = null;
+	private WeakReference<TorrentClient> mUploadTargetPeer = null;
 	private LinkedList<TorrentFrontSendPieceTask> mScenarioList = new LinkedList<TorrentFrontSendPieceTask>();
 	private ScenarioSeeder mSeederTask = null;
 
-	public TorrentPeerPiecer(TorrentPeer peer) {
-		mUploadTargetPeer = new WeakReference<TorrentPeer>(peer);
+	public TorrentPeerPiecer(TorrentClient peer) {
+		mUploadTargetPeer = new WeakReference<TorrentClient>(peer);
 		mSeederTask = new ScenarioSeeder(this);
 	}
 
 	public void sendPiece(TorrentFront front) {
-		TorrentPeer peer = mUploadTargetPeer.get();
+		TorrentClient peer = mUploadTargetPeer.get();
 		if(peer == null){return;}
 		TorrentFrontSendPieceTask task = new TorrentFrontSendPieceTask(front);
 		peer.getClientRunner().pushTask(task);
@@ -38,7 +38,7 @@ public class TorrentPeerPiecer implements TorrentFront.EventListener {
 	// upload data as Seeder
 	// recreate . some torrent client receive only requested piece.
 	public void distributeInOrder() throws IOException {
-		TorrentPeer peer = mUploadTargetPeer.get();
+		TorrentClient peer = mUploadTargetPeer.get();
 		
 		if(peer == null) {
 			return;
@@ -65,7 +65,7 @@ public class TorrentPeerPiecer implements TorrentFront.EventListener {
 	 */
 	@Override
 	public void onReceiveMessage(TorrentFront front, TorrentMessage message) {
-	 	TorrentPeer peer = mUploadTargetPeer.get();
+	 	TorrentClient peer = mUploadTargetPeer.get();
 		if(peer == null) {return;}
 		if(peer.getClientRunner().contains(mSeederTask)){
 			return;
@@ -78,7 +78,7 @@ public class TorrentPeerPiecer implements TorrentFront.EventListener {
 	 * getted peers from tracker. 
 	 */
 	public void onFinTracker() throws IOException {
-	 	TorrentPeer peer = mUploadTargetPeer.get();
+	 	TorrentClient peer = mUploadTargetPeer.get();
 	 	if(peer.isSeeder()) {
 	 		return ;
 	 	}

@@ -3,16 +3,16 @@ package net.hetimatan.net.torrent.client.task;
 
 import java.lang.ref.WeakReference;
 
-import net.hetimatan.net.torrent.client.TorrentPeer;
+import net.hetimatan.net.torrent.client.TorrentClient;
 import net.hetimatan.util.event.EventTask;
 import net.hetimatan.util.event.EventTaskRunner;
 
 public class TorrentPeerBootTask extends EventTask {
 	public static final String TAG = "TorrentPeerBootTask";
-	private WeakReference<TorrentPeer> mServer = null;
+	private WeakReference<TorrentClient> mServer = null;
 
-	public TorrentPeerBootTask(TorrentPeer httpServer) {
-		mServer = new WeakReference<TorrentPeer>(httpServer);
+	public TorrentPeerBootTask(TorrentClient httpServer) {
+		mServer = new WeakReference<TorrentClient>(httpServer);
 	}
 
 	@Override
@@ -22,7 +22,7 @@ public class TorrentPeerBootTask extends EventTask {
 
 	@Override
 	public void action(EventTaskRunner runner) throws Throwable {
-		TorrentPeer server = mServer.get();
+		TorrentClient server = mServer.get();
 		server.boot();
 	}
 }

@@ -67,8 +67,14 @@ public class MetaFileCreater {
 		}
 	}
 
-	//
-	// support single file only
+	/**
+	 *  create metafile from target file.
+	 *  
+	 * @param targetFile
+	 * @param address
+	 * @return
+	 * @throws IOException
+	 */
 	public static MetaFile createFromTargetFile(File targetFile, String address) throws IOException {
 		if (targetFile.isDirectory() || !targetFile.exists()) {
 			throw new IOException();
@@ -94,8 +100,14 @@ public class MetaFileCreater {
 		}
 	}
 
-	//
-	// multi file 
+	/**
+	 *  create metafile from target dir.
+	 *  
+	 * @param targetDir
+	 * @param address
+	 * @return
+	 * @throws IOException
+	 */
 	public static MetaFile createFromTargetDir(File targetDir, String address) throws IOException {
 		if (!targetDir.isDirectory() || !targetDir.exists()) {
 			throw new IOException();
@@ -103,18 +115,19 @@ public class MetaFileCreater {
 		BenDiction root = new BenDiction();
 		BenDiction info = new BenDiction();
 		BenString pieces = null;
+		//
+		// set announce
 		root.put(MetaFile.TYPE_ANNOUNCE, new BenString(address));
 		root.put(MetaFile.TYPE_INFO, info);
 
 		//
+		// set file
 		info.put(MetaFile.TYPE_LENGTH, new BenInteger((int) targetDir.length()));
 		info.put(MetaFile.TYPE_NAME, new BenString(targetDir.getName()));
 
-		
 		LinkedList<File> findFiles = MetaFile.findFile(targetDir);
 		BenList files = new BenList(); 
 		for (File f : findFiles) {
-//			System.out.println("FF#"+f.getName());
 			BenDiction file = new BenDiction();
 			file.put(MetaFile.TYPE_LENGTH, new BenInteger((int)f.length()));
 			file.put(MetaFile.TYPE_PATH, MetaFile._filePath(targetDir, f));
@@ -123,9 +136,12 @@ public class MetaFileCreater {
 		info.put(MetaFile.TYPE_FILES, files);
 
 		//
+		// set piece
 		info.put(MetaFile.TYPE_PIECE_LENGTH, new BenInteger(MetaFile.DEFAULT_PIECE_LENGTH));
 		info.put(MetaFile.TYPE_PIECES, pieces);
 
+		//
+		// generate
 		MarkableFileReader reader = null;
 		try {
 			reader = new MarkableFileReader(KyoroFileForFiles.create(findFiles), 512);

@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Iterator;
 
-import net.hetimatan.net.torrent.client.TorrentPeer;
+import net.hetimatan.net.torrent.client.TorrentClient;
 import net.hetimatan.net.torrent.tracker.TrackerClient;
 import net.hetimatan.net.torrent.tracker.TrackerPeerInfo;
 import net.hetimatan.net.torrent.util.metafile.MetaFile;
@@ -34,7 +34,7 @@ public class GetPeersFromTracker {
 
 	public static void start() throws IOException, URISyntaxException, InterruptedException {
 		File mTorrent = new File("./testdata/1k.txt.torrent");
-		String peerId = TorrentPeer.createPeerId();
+		String peerId = TorrentClient.createPeerId();
 		MetaFile metafile = MetaFileCreater.createFromTorrentFile(mTorrent);
 
 		// ----------------------------------------------------

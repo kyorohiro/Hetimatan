@@ -5,7 +5,7 @@ import java.lang.ref.WeakReference;
 
 import net.hetimatan.net.torrent.client.TorrentData;
 import net.hetimatan.net.torrent.client.TorrentFront;
-import net.hetimatan.net.torrent.client.TorrentPeer;
+import net.hetimatan.net.torrent.client.TorrentClient;
 import net.hetimatan.net.torrent.client.message.MessageHave;
 import net.hetimatan.net.torrent.client.message.MessagePiece;
 import net.hetimatan.net.torrent.client.message.TorrentMessage;
@@ -13,14 +13,14 @@ import net.hetimatan.net.torrent.tracker.TrackerRequest;
 import net.hetimatan.util.bitfield.BitField;
 
 public class TorrentPeerRequester implements TorrentFront.EventListener {
-	private WeakReference<TorrentPeer> mOwner = null;
+	private WeakReference<TorrentClient> mOwner = null;
 
-	public TorrentPeerRequester(TorrentPeer peer) {
-		mOwner = new WeakReference<TorrentPeer>(peer);
+	public TorrentPeerRequester(TorrentClient peer) {
+		mOwner = new WeakReference<TorrentClient>(peer);
 	}
 
 	public int nextPieceId() {
-		TorrentPeer peer = mOwner.get();
+		TorrentClient peer = mOwner.get();
 		TorrentData data = peer.getTorrentData();
 		BitField bitfield = data.getRequestedDataInfo();
 		int nextId = bitfield.getPieceAtRandom();
@@ -29,7 +29,7 @@ public class TorrentPeerRequester implements TorrentFront.EventListener {
 	}
 
 	private void sendHave(int index) {
-	 	TorrentPeer peer = mOwner.get();
+	 	TorrentClient peer = mOwner.get();
 		if(peer == null) {return;}
 		for(int i=0;i<peer.getTorrentPeerManager().numOfFront();i++) {
 			TorrentFront front = peer.getTorrentPeerManager().getTorrentFront(i);
@@ -49,7 +49,7 @@ public class TorrentPeerRequester implements TorrentFront.EventListener {
 	 */
 	@Override
 	public void onReceiveMessage(TorrentFront front, TorrentMessage message) {
-	 	TorrentPeer peer = mOwner.get();
+	 	TorrentClient peer = mOwner.get();
 		if(peer == null) {return;}
 
 		if(message.getType()==TorrentMessage.SIGN_PIECE) {

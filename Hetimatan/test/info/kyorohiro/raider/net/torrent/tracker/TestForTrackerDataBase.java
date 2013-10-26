@@ -3,7 +3,7 @@ package info.kyorohiro.raider.net.torrent.tracker;
 import java.io.IOException;
 
 import net.hetimatan.io.file.MarkableFileReader;
-import net.hetimatan.net.torrent.client.TorrentPeer;
+import net.hetimatan.net.torrent.client.TorrentClient;
 import net.hetimatan.net.torrent.tracker.TrackerRequest;
 import net.hetimatan.net.torrent.tracker.TrackerResponse;
 import net.hetimatan.net.torrent.tracker.TrackerServer;
@@ -26,7 +26,7 @@ public class TestForTrackerDataBase extends TestCase {
 		String targetFileHash = MetaFile
 				.createPieces(new MarkableFileReader(targetFileContent))
 				.toPercentString();
-		String peerId = TorrentPeer.createPeerId();
+		String peerId = TorrentClient.createPeerId();
 		HttpRequest uri = HttpRequest.newInstance("dummy", "/announce", "dummy")
 		.putValue(TrackerRequest.KEY_COMPACT, "1")
 		.putValue(TrackerRequest.KEY_DOWNLOADED, "1")

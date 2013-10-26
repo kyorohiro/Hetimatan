@@ -11,7 +11,7 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-import net.hetimatan.net.torrent.client.TorrentPeer;
+import net.hetimatan.net.torrent.client.TorrentClient;
 import net.hetimatan.net.torrent.tracker.TrackerServer;
 import net.hetimatan.net.torrent.tracker.db.TrackerDB;
 import net.hetimatan.net.torrent.tracker.db.TrackerData;
@@ -73,11 +73,11 @@ public class DummyTracker  extends Application implements TrackerServer.StatusCh
 		mServer.setStatusCheck(this);
 	}
 
-	private TorrentPeer mClient = null;
+	private TorrentClient mClient = null;
 	private EventTaskRunner mRunner = null;
 	public void startClient() throws IOException, URISyntaxException {
-		mClient = new TorrentPeer(mMetafile, TorrentPeer.createPeerId());
-		mRunner = mClient.startTask(null);
+		mClient = new TorrentClient(mMetafile, TorrentClient.createPeerId());
+		mRunner = mClient.startTorrentClient(null);
 	}	
 
 	public void onInit(TrackerServer server) {

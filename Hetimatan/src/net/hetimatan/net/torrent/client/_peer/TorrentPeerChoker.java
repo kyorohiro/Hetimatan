@@ -6,21 +6,21 @@ import java.util.LinkedList;
 import java.util.Random;
 
 import net.hetimatan.net.torrent.client.TorrentFront;
-import net.hetimatan.net.torrent.client.TorrentPeer;
+import net.hetimatan.net.torrent.client.TorrentClient;
 import net.hetimatan.net.torrent.tracker.TrackerPeerInfo;
 
 public class TorrentPeerChoker {
 
-	private WeakReference<TorrentPeer> mOwner = null;
+	private WeakReference<TorrentClient> mOwner = null;
 	private LinkedList<TrackerPeerInfo> mOptimusUnchokePeer    = new LinkedList<>();
 
-	public TorrentPeerChoker(TorrentPeer owner) {
-		mOwner = new WeakReference<TorrentPeer>(owner);
+	public TorrentPeerChoker(TorrentClient owner) {
+		mOwner = new WeakReference<TorrentClient>(owner);
 	}
 
 	public void updateOptimusUnchokePeer() throws IOException {
 		
-		TorrentPeer torrentPeer = mOwner.get();if(torrentPeer == null) {return;}
+		TorrentClient torrentPeer = mOwner.get();if(torrentPeer == null) {return;}
 		TorrentPeerSetting mSetting = torrentPeer.getSetting();
 		int numOfUnchokerNow = mOptimusUnchokePeer.size();
 		int maxOfUnchoker = mSetting.getNumOfUnchoker();
@@ -43,7 +43,7 @@ public class TorrentPeerChoker {
 	}
 
 	public void onStartTorrentFront(TorrentFront front) throws IOException {
-		TorrentPeer torrentPeer = mOwner.get();if(torrentPeer == null) {return;}
+		TorrentClient torrentPeer = mOwner.get();if(torrentPeer == null) {return;}
 		TorrentPeerSetting mSetting = torrentPeer.getSetting();
 		int numOfUnchokerNow = mOptimusUnchokePeer.size();
 		int maxOfUnchoker = mSetting.getNumOfUnchoker();

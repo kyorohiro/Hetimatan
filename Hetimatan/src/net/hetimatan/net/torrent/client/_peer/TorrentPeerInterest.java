@@ -5,7 +5,7 @@ import java.lang.ref.WeakReference;
 import java.util.LinkedList;
 
 import net.hetimatan.net.torrent.client.TorrentFront;
-import net.hetimatan.net.torrent.client.TorrentPeer;
+import net.hetimatan.net.torrent.client.TorrentClient;
 import net.hetimatan.net.torrent.client.message.MessageHave;
 import net.hetimatan.net.torrent.client.message.TorrentMessage;
 import net.hetimatan.net.torrent.client.task.TorrentFrontSendPieceTask;
@@ -16,11 +16,11 @@ import net.hetimatan.util.bitfield.BitField;
 // 
 public class TorrentPeerInterest implements TorrentFront.EventListener {
 
-	private WeakReference<TorrentPeer> mUploadTargetPeer = null;
+	private WeakReference<TorrentClient> mUploadTargetPeer = null;
 	private LinkedList<TorrentFrontSendPieceTask> mScenarioList = new LinkedList<TorrentFrontSendPieceTask>();
 
-	public TorrentPeerInterest(TorrentPeer peer) {
-		mUploadTargetPeer = new WeakReference<TorrentPeer>(peer);
+	public TorrentPeerInterest(TorrentClient peer) {
+		mUploadTargetPeer = new WeakReference<TorrentClient>(peer);
 	}
 
 	/*
@@ -28,7 +28,7 @@ public class TorrentPeerInterest implements TorrentFront.EventListener {
 	 */
 	@Override
 	public void onReceiveMessage(TorrentFront front, TorrentMessage message) {
-	 	TorrentPeer peer = mUploadTargetPeer.get();
+	 	TorrentClient peer = mUploadTargetPeer.get();
 		if(peer == null) {return;}
 		if(message.getType() == TorrentMessage.SIGN_BITFIELD) {
 			BitField relative = front.relativeBitfield();

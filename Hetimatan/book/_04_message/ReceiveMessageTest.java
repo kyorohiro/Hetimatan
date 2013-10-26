@@ -8,7 +8,7 @@ import net.hetimatan.io.net.KyoroSelector;
 import net.hetimatan.io.net.KyoroSocket;
 import net.hetimatan.io.net.KyoroSocketImpl;
 import net.hetimatan.net.torrent.client.TorrentFront;
-import net.hetimatan.net.torrent.client.TorrentPeer;
+import net.hetimatan.net.torrent.client.TorrentClient;
 import net.hetimatan.net.torrent.client.message.MessageNull;
 import net.hetimatan.net.torrent.tracker.TrackerClient;
 import net.hetimatan.net.torrent.tracker.TrackerPeerInfo;
@@ -38,14 +38,14 @@ public class ReceiveMessageTest {
 
 	public static void start() throws IOException, URISyntaxException, InterruptedException {
 		File mTorrent = new File("./testdata/1k.txt.torrent");
-		String peerId = TorrentPeer.createPeerId();
+		String peerId = TorrentClient.createPeerId();
 		MetaFile metafile = MetaFileCreater.createFromTorrentFile(mTorrent);
 
 
 		// ----------------------------------------------------
 		// boot TorrentClient Server
 		// ----------------------------------------------------
-		TorrentPeer peer = new TorrentPeer(metafile, peerId);
+		TorrentClient peer = new TorrentClient(metafile, peerId);
 		peer.boot();
 
 

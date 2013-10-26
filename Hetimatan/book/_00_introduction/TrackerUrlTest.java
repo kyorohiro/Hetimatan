@@ -3,7 +3,7 @@ package _00_introduction;
 import java.io.File;
 import java.io.IOException;
 
-import net.hetimatan.net.torrent.client.TorrentPeer;
+import net.hetimatan.net.torrent.client.TorrentClient;
 import net.hetimatan.net.torrent.tracker.TrackerRequest;
 import net.hetimatan.net.torrent.util.metafile.MetaFile;
 import net.hetimatan.net.torrent.util.metafile.MetaFileCreater;
@@ -67,7 +67,7 @@ public class TrackerUrlTest extends Application {
 	public String getUrl() throws IOException {
 		MetaFile metainfo = MetaFileCreater.createFromTorrentFile(mInput);
 		TrackerRequest request = TrackerRequest.decode(metainfo);
-		request.putPeerId(TorrentPeer.createPeerId());
+		request.putPeerId(TorrentClient.createPeerId());
 		HttpRequestUri uri = request.createUri();
 		uri.IsAbsolutePath(true);
 		return uri.toString();

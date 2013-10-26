@@ -15,11 +15,11 @@ public class TestForTorrentPeerWithChoker extends TestCase {
 	public void testChoke() throws Throwable {
 		File metafile = new File("./testdata/1m_a.txt.torrent");
 		MetaFile metainfo = MetaFileCreater.createFromTorrentFile(metafile);
-		TorrentPeer testPeer = new TorrentPeer(metainfo, TorrentPeer.createPeerId());
-		testPeer.startTask(null);
+		TorrentClient testPeer = new TorrentClient(metainfo, TorrentClient.createPeerId());
+		testPeer.startTorrentClient(null);
 		while(!testPeer.isBooted()){Thread.sleep(0);Thread.yield();}
 
-		TorrentPeer compe = new TorrentPeer(metainfo, TorrentPeer.createPeerId());
+		TorrentClient compe = new TorrentClient(metainfo, TorrentClient.createPeerId());
 		compe.boot();
 		TrackerPeerInfo peer = new TrackerPeerInfo("127.0.0.1", testPeer.getServerPort());
 		TorrentFront front = compe.createFront(peer);
@@ -55,17 +55,17 @@ public class TestForTorrentPeerWithChoker extends TestCase {
 	public void testChoker() throws IOException, URISyntaxException, InterruptedException {
 		File metafile = new File("./testdata/1m_a.txt.torrent");
 		MetaFile metainfo = MetaFileCreater.createFromTorrentFile(metafile);
-		TorrentPeer testPeer = new TorrentPeer(metainfo, TorrentPeer.createPeerId());
+		TorrentClient testPeer = new TorrentClient(metainfo, TorrentClient.createPeerId());
 		File[] f = new File[1];f[0] = new File("./testdata/1mb/1m_a.txt");
 		testPeer.setMasterFile(f);
-		testPeer.startTask(null);
+		testPeer.startTorrentClient(null);
 		while(!testPeer.isBooted()){Thread.sleep(0);Thread.yield();}
 
-		TorrentPeer compe001 = new TorrentPeer(metainfo, TorrentPeer.createPeerId());
-		TorrentPeer compe002 = new TorrentPeer(metainfo, TorrentPeer.createPeerId());
-		TorrentPeer compe003 = new TorrentPeer(metainfo, TorrentPeer.createPeerId());
-		TorrentPeer compe004 = new TorrentPeer(metainfo, TorrentPeer.createPeerId());
-		TorrentPeer compe005 = new TorrentPeer(metainfo, TorrentPeer.createPeerId());
+		TorrentClient compe001 = new TorrentClient(metainfo, TorrentClient.createPeerId());
+		TorrentClient compe002 = new TorrentClient(metainfo, TorrentClient.createPeerId());
+		TorrentClient compe003 = new TorrentClient(metainfo, TorrentClient.createPeerId());
+		TorrentClient compe004 = new TorrentClient(metainfo, TorrentClient.createPeerId());
+		TorrentClient compe005 = new TorrentClient(metainfo, TorrentClient.createPeerId());
 		compe001.boot();
 		compe002.boot();
 		compe003.boot();

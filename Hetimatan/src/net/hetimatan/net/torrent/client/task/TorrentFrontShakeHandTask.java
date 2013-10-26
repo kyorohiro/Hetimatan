@@ -6,7 +6,7 @@ import java.lang.ref.WeakReference;
 import net.hetimatan.io.net.KyoroSelector;
 import net.hetimatan.io.net.KyoroSocket;
 import net.hetimatan.net.torrent.client.TorrentFront;
-import net.hetimatan.net.torrent.client.TorrentPeer;
+import net.hetimatan.net.torrent.client.TorrentClient;
 import net.hetimatan.util.event.EventTask;
 import net.hetimatan.util.event.EventTaskRunner;
 
@@ -41,7 +41,7 @@ public class TorrentFrontShakeHandTask extends EventTask {
 	public void action(EventTaskRunner runner) throws Throwable {
 		TorrentFront front = mTorrentFront.get();
 
-		TorrentPeer peer = front.getTorrentPeer();
+		TorrentClient peer = front.getTorrentPeer();
 		KyoroSocket mSocket = front.getSocket();
 		if(mIsFirst) {
 			System.out.println("-----sesefirst----"+front.getDebug());

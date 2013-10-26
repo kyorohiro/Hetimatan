@@ -7,7 +7,7 @@ import java.util.Iterator;
 
 import net.hetimatan.io.filen.CashKyoroFileHelper;
 import net.hetimatan.io.filen.CashKyoroFile;
-import net.hetimatan.net.torrent.client.TorrentPeer;
+import net.hetimatan.net.torrent.client.TorrentClient;
 import net.hetimatan.net.torrent.tracker.TrackerClient;
 import net.hetimatan.net.torrent.tracker.TrackerPeerInfo;
 import net.hetimatan.net.torrent.tracker.TrackerRequest;
@@ -21,7 +21,7 @@ import net.hetimatan.util.event.GlobalAccessProperty;
 public class HtanClientPeer {
 
 	private File mTorrentFile = null;
-	private TorrentPeer mPeer = null;
+	private TorrentClient mPeer = null;
 	private EventTaskRunner mRunner = null;
 	private StatusCheck mObserver = null;
 	private MetaFile mMetafile = null;
@@ -48,12 +48,12 @@ public class HtanClientPeer {
 
 		if(mPeer == null) {
 			String peerId = getPeerId();
-			mPeer = new TorrentPeer(mMetafile, peerId);
+			mPeer = new TorrentClient(mMetafile, peerId);
 		}
 		try {
 		mPeer.getTorrentData().load();
 		} catch(IOException e) {e.printStackTrace();}
-		mRunner = mPeer.startTask(null);
+		mRunner = mPeer.startTorrentClient(null);
 		mPeer.getTracker().setStatusCheck(new TrackerStatus());
 	}
 
@@ -72,7 +72,7 @@ public class HtanClientPeer {
 		fs[0] = source;
 		if(mPeer == null) {
 			String peerId = getPeerId();
-			mPeer = new TorrentPeer(mMetafile, peerId);
+			mPeer = new TorrentClient(mMetafile, peerId);
 		}
 		mPeer.setMasterFile(fs);
 	}
@@ -128,14 +128,14 @@ public class HtanClientPeer {
 		try {
 			cash = new CashKyoroFile(sPeerIdSt,10,2);
 			if(cash.length() == 0) {
-				peerid = TorrentPeer.createPeerId();
+				peerid = TorrentClient.createPeerId();
 				cash.addChunk(peerid.getBytes());
 				cash.syncWrite();
 			} else {
 				peerid = new String(CashKyoroFileHelper.newBinary(cash));
 			}
 		} catch (IOException e) {
-			peerid=TorrentPeer.createPeerId();
+			peerid=TorrentClient.createPeerId();
 		} finally {
 			if(cash != null) {
 				try {cash.close();

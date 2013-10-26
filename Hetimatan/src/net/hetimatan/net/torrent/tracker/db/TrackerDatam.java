@@ -1,6 +1,6 @@
 package net.hetimatan.net.torrent.tracker.db;
 
-import net.hetimatan.net.torrent.client.TorrentPeer;
+import net.hetimatan.net.torrent.client.TorrentClient;
 import net.hetimatan.net.torrent.tracker.TrackerRequest;
 import net.hetimatan.util.http.HttpRequestUri;
 import net.hetimatan.util.http.HttpObject;
@@ -13,7 +13,7 @@ public class TrackerDatam {
 	private String mPeerId = "";
 	private String mKey = "";
 	private String mTrackerId = "";
-	private int mPort = TorrentPeer.TORRENT_PORT_BEGIN;
+	private int mPort = TorrentClient.TORRENT_PORT_BEGIN;
 	private int mUploaded = 0;
 	private int mDownloaded = 0;
 	private int mLeft = 0;

@@ -5,24 +5,20 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Iterator;
 
-import com.sun.jndi.url.corbaname.corbanameURLContextFactory;
-
 import net.hetimatan.io.net.KyoroSocket;
 import net.hetimatan.io.net.KyoroSocketImpl;
 import net.hetimatan.net.torrent.client.TorrentFront;
-import net.hetimatan.net.torrent.client.TorrentPeer;
+import net.hetimatan.net.torrent.client.TorrentClient;
 import net.hetimatan.net.torrent.tracker.TrackerClient;
 import net.hetimatan.net.torrent.tracker.TrackerPeerInfo;
 import net.hetimatan.net.torrent.util.metafile.MetaFile;
 import net.hetimatan.net.torrent.util.metafile.MetaFileCreater;
-import net.hetimatan.util.bitfield.BitField;
 import net.hetimatan.util.event.CloseRunnerTask;
 import net.hetimatan.util.event.net.KyoroSocketEventRunner;
 
 //
 //[課題]
-// Torrentクライアントとハンドシェークせよ。次にBitfieldメッセージを受信せよ。
-// 相手Torrentが保持しているPieceデータを保持せよ。
+// Torrentクライアントとハンドシェークせよ。
 //
 public class HandShakeTest {
 	//
@@ -43,14 +39,14 @@ public class HandShakeTest {
 
 	public static void start() throws IOException, URISyntaxException, InterruptedException {
 		File mTorrent = new File("./testdata/1k.txt.torrent");
-		String peerId = TorrentPeer.createPeerId();
+		String peerId = TorrentClient.createPeerId();
 		MetaFile metafile = MetaFileCreater.createFromTorrentFile(mTorrent);
 
 
 		// ----------------------------------------------------
 		// boot TorrentClient Server
 		// ----------------------------------------------------
-		TorrentPeer peer = new TorrentPeer(metafile, peerId);
+		TorrentClient peer = new TorrentClient(metafile, peerId);
 		peer.boot();
 
 
@@ -85,6 +81,9 @@ public class HandShakeTest {
 		front.sendShakehand();
 		front.flushSendTask();
 
+		// ----------------------------------------------------
+		// receive shakehand
+		// ----------------------------------------------------
 		while(!front.parseableShakehand()){Thread.yield();}
 		front.revcShakehand();
 	}

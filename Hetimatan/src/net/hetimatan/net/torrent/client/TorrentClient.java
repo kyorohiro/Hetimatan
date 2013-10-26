@@ -29,8 +29,17 @@ import net.hetimatan.util.event.EventTaskRunner;
 import net.hetimatan.util.event.net.KyoroSocketEventRunner;
 import net.hetimatan.util.url.PercentEncoder;
 
-
-public class TorrentPeer {
+/**
+ * - start torrent client
+ *   TorrentClient c = new TorrentClient()
+ *   c.startTorrentClient(null);
+ * 
+ * - 
+ * 
+ * @author kiyohiro
+ *
+ */
+public class TorrentClient {
 	public static final String TAG              = "TorrentPeer";
 	public static final String PEERID_HEAD      = "-KY0114-";
 	public String sId 							= "none";
@@ -70,7 +79,7 @@ public class TorrentPeer {
 	private TorrentPeerStartTracker mTrackerTask = null;
 
 	private static int num = 0;
-	public TorrentPeer(MetaFile metafile, String peerId) throws URISyntaxException, IOException {
+	public TorrentClient(MetaFile metafile, String peerId) throws URISyntaxException, IOException {
 		mTrackerClient = new TrackerClient(metafile, peerId);
 		mData = new TorrentData(metafile);
 		mMetaFile = metafile;
@@ -108,7 +117,7 @@ public class TorrentPeer {
 	 * @return
 	 * @throws IOException 
 	 */
-	public KyoroSocketEventRunner startTask(KyoroSocketEventRunner runner) throws IOException {
+	public KyoroSocketEventRunner startTorrentClient(KyoroSocketEventRunner runner) throws IOException {
 		System.out.println("TorrentPeer#startTask:");
 		if(runner == null) {runner = new KyoroSocketEventRunner();}
 		mMasterRunner = runner;

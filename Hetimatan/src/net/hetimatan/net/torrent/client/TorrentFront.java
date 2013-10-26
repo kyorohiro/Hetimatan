@@ -46,7 +46,7 @@ public class TorrentFront {
 
 	private MarkableReader mReader = null;
 //	private KyoroSocketOutputStream mOutput = null;
-	private WeakReference<TorrentPeer> mTorrentPeer = null;
+	private WeakReference<TorrentClient> mTorrentPeer = null;
 	private HelperLookAheadMessage mCurrentMessage = null;
 	private HelperLookAheadShakehand mCurrentSHHelper = null;
 
@@ -70,14 +70,14 @@ public class TorrentFront {
 		return mSendCash;
 	}
 
-	public TorrentFront(TorrentPeer peer, KyoroSocket socket) throws IOException {
+	public TorrentFront(TorrentClient peer, KyoroSocket socket) throws IOException {
 		mSocket = socket;
 		mTargetInfo = new TorrentFrontTargetInfo(peer.getPieceLength());
 		KyoroFileForKyoroSocket kf = new KyoroFileForKyoroSocket(socket, 512*30);
 		//kf.setSelector(peer.getSelector());
 		mReader = new MarkableFileReader(kf, 512);
 //		mOutput = new KyoroSocketOutputStream(socket);
-		mTorrentPeer = new WeakReference<TorrentPeer>(peer);
+		mTorrentPeer = new WeakReference<TorrentClient>(peer);
 		mTargetInfo.mTargetBitField = new BitField(peer.getNumOfPieces());
 		mTargetInfo.mTargetBitField.zeroClear();
 		mMyInfo = new TorrentFrontMyInfo();
@@ -103,7 +103,7 @@ public class TorrentFront {
 	}
 
 	public BitField relativeBitfield() {
-	 	TorrentPeer peer = mTorrentPeer.get();
+	 	TorrentClient peer = mTorrentPeer.get();
 		if(peer == null) {return mMyInfo.mRelative;}
 		TorrentData data = peer.getTorrentData();
 		BitField myInfo = data.getStockedDataInfo();
@@ -121,7 +121,7 @@ public class TorrentFront {
 		return getTorrentPeer().getSelector();
 	}
 
-	public TorrentPeer getTorrentPeer() {
+	public TorrentClient getTorrentPeer() {
 		return mTorrentPeer.get();
 	}
 
@@ -138,7 +138,7 @@ public class TorrentFront {
 
 	public void close() throws IOException {
 		TorrentHistory.get().pushMessage("["+mDebug+"]"+"TorrentFront#close()\n");
-		TorrentPeer peer = mTorrentPeer.get();
+		TorrentClient peer = mTorrentPeer.get();
 		if(peer != null) {
 			peer.getTorrentPeerManager().removeTorrentFront(this);
 		}
@@ -162,7 +162,7 @@ public class TorrentFront {
 			TorrentHistory.get().pushReceive(this, recv);
 //			recv.printLog();
 			{//todo
-				TorrentPeer peer = getTorrentPeer();
+				TorrentClient peer = getTorrentPeer();
 				PercentEncoder encoder = new PercentEncoder();
 				if(
 						peer.getPeerId()
@@ -204,7 +204,7 @@ public class TorrentFront {
 
 	public void sendShakehand() throws IOException {
 		PercentEncoder encoder = new PercentEncoder();
-		TorrentPeer torentPeer = mTorrentPeer.get();
+		TorrentClient torentPeer = mTorrentPeer.get();
 		byte[] infoHash = encoder.decode(torentPeer.getInfoHash().getBytes());
 		byte[] peerId = encoder.decode(torentPeer.getPeerId().getBytes());
 		MessageHandShake send = new MessageHandShake(infoHash, peerId);
@@ -218,7 +218,7 @@ public class TorrentFront {
 	}
 
 	public void sendBitfield() throws IOException {
-		TorrentPeer torentPeer = mTorrentPeer.get();
+		TorrentClient torentPeer = mTorrentPeer.get();
 		TorrentData torrentData = torentPeer.getTorrentData();
 		MessageBitField bitfield = new MessageBitField(torrentData.getStockedDataInfo());
 		bitfield.encode(mSendCash.getLastOutput());
@@ -287,7 +287,7 @@ public class TorrentFront {
 		int pieceLength = -1;
 		try {
 			if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"TorrentFront#sendRequest() ");}
-			TorrentPeer peer = mTorrentPeer.get();
+			TorrentClient peer = mTorrentPeer.get();
 			if(peer==null){if(Log.ON){Log.v(TAG, "--1--");}
 				return;}
 			if(getTargetInfo().isChoked() == TorrentFront.TRUE) {if(Log.ON){Log.v(TAG, "--2--");}
@@ -307,7 +307,7 @@ public class TorrentFront {
 	}
 
 	public void sendPiece() throws IOException {
-		TorrentPeer peer = mTorrentPeer.get();
+		TorrentClient peer = mTorrentPeer.get();
 		if(peer==null){return;}
 		PieceInfo info = mTargetInfo.popPieceInfo();
 		long start = info.getStart();
@@ -344,7 +344,7 @@ public class TorrentFront {
 		mCurrentSHHelper.read();
 		if(mReader.isEOF()){close(); return true;}
 		
-	 	TorrentPeer peer = mTorrentPeer.get();
+	 	TorrentClient peer = mTorrentPeer.get();
 		if(mCurrentSHHelper.isEnd()) {
 			return true;
 		} else {
@@ -430,7 +430,7 @@ public class TorrentFront {
 			MessagePiece piece = MessagePiece.decode(mReader);
 			message = piece;
 			{
-				TorrentPeer peer = mTorrentPeer.get();
+				TorrentClient peer = mTorrentPeer.get();
 				if(peer == null) {return;}
 				TorrentData data = peer.getTorrentData();
 				data.setPiece(piece.getIndex(), piece.getCotent());
@@ -451,7 +451,7 @@ public class TorrentFront {
 			break;
 		}
 
-		TorrentPeer peer = mTorrentPeer.get();
+		TorrentClient peer = mTorrentPeer.get();
 		if(peer != null) {
 			TorrentHistory.get().pushReceive(this, message);
 		}

@@ -10,7 +10,7 @@ import net.hetimatan.io.file.MarkableReader;
 import net.hetimatan.net.http.request.HttpGetRequestUriBuilder;
 import net.hetimatan.net.http.request.HttpGetRequester;
 import net.hetimatan.net.http.request.HttpGetRequester;
-import net.hetimatan.net.torrent.client.TorrentPeer;
+import net.hetimatan.net.torrent.client.TorrentClient;
 import net.hetimatan.net.torrent.util.metafile.MetaFile;
 import net.hetimatan.util.http.HttpObject;
 import net.hetimatan.util.http.HttpRequestLine;
@@ -41,7 +41,7 @@ public class TrackerRequest {
 	private String mInfoHash = "dummy";
 	private String mPeerId = "dummy";
 	private int mTrackerPort = TrackerServer.DEFAULT_TRACKER_PORT;
-	private int mClientPort = TorrentPeer.TORRENT_PORT_BEGIN;
+	private int mClientPort = TorrentClient.TORRENT_PORT_BEGIN;
 	
 	private long mDownloaded = 0;
 	private long mUploaded = 0;
