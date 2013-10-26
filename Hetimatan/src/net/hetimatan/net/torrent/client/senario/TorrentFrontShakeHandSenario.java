@@ -1,4 +1,4 @@
-package net.hetimatan.net.torrent.client._front;
+package net.hetimatan.net.torrent.client.senario;
 
 import java.io.IOException;
 

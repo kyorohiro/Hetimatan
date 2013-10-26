@@ -11,10 +11,16 @@ public abstract class EventTask {
 	public EventTask() {
 	}
 
+	//
+	// when return false, add next event task to event runner
+	//
 	public boolean isKeep() {
 		return false;
 	}
 
+	//
+	// when return false, kick event task from another kicker .
+	// 
 	public boolean isNext() {
 		return true;
 	}

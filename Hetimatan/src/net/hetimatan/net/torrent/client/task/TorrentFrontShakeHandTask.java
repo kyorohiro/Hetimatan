@@ -44,12 +44,12 @@ public class TorrentFrontShakeHandTask extends EventTask {
 		TorrentClient peer = front.getTorrentPeer();
 		KyoroSocket mSocket = front.getSocket();
 		if(mIsFirst) {
-			System.out.println("-----sesefirst----"+front.getDebug());
 			front.sendShakehand();
 			front.sendBitfield();
 			mSocket.regist(peer.getSelector(), KyoroSelector.READ);
 			mSocket.setEventTaskAtWrakReference(this, KyoroSelector.READ);
 			mIsFirst = false;
+			// kick from socket event task
 			mIsKeep = false;
 			mIsNext = false;
 		} else {
@@ -62,6 +62,7 @@ public class TorrentFrontShakeHandTask extends EventTask {
 			} else {
 				mSocket.regist(peer.getSelector(), KyoroSelector.READ);
 				mSocket.setEventTaskAtWrakReference(this,KyoroSelector.READ);
+				// kick from socket event task
 				mIsKeep = false;
 				mIsNext = false;
 			}
