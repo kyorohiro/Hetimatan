@@ -30,6 +30,7 @@ import net.hetimatan.net.torrent.client.message.MessagePiece;
 import net.hetimatan.net.torrent.client.message.MessageRequest;
 import net.hetimatan.net.torrent.client.message.MessageUnchoke;
 import net.hetimatan.net.torrent.client.message.TorrentMessage;
+import net.hetimatan.net.torrent.client.senario.TorrentFrontReceiveMessageSenario;
 import net.hetimatan.net.torrent.client.senario.TorrentFrontShakeHandSenario;
 import net.hetimatan.net.torrent.tracker.TrackerPeerInfo;
 import net.hetimatan.net.torrent.util.piece.PieceInfo;
@@ -59,6 +60,7 @@ public class TorrentFront {
 
 	// delegate
 	private TorrentFrontShakeHandSenario mShakeHand = new TorrentFrontShakeHandSenario();
+	private TorrentFrontReceiveMessageSenario mMessageSenario = new TorrentFrontReceiveMessageSenario();
 	
 	private TrackerPeerInfo mPeer = null;
 	public String mDebug = "--";
@@ -314,35 +316,19 @@ public class TorrentFront {
 		}
 	}
 
-	//
+
 	// -1 eof
 	//  0 parseable
 	//  1 end
 	public int parseableMessage() throws IOException {
-		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"TorrentFront#parseableMessage()");}
-		if(mCurrentMessage == null) {
-			TorrentHistory.get().pushMessage("[receive start]\n");
-			mCurrentMessage = new HelperLookAheadMessage();
-		}
-		boolean isEnd = mCurrentMessage.lookahead(mReader);
-		if(isEnd) {return 0;}
-		else if(mReader.isEOF()){ return -1;}
-		else{return 1;}
+		return mMessageSenario.parseableMessage(this);
 	}
 
+	//
+	//
+	//
 	public void receive() throws IOException {
-		int parseable = parseableMessage();
-		if(parseable == -1) {
-			close();
-		} else if(parseable == 0) {
-			TorrentHistory.get().pushMessage("[receive end]\n");
-			onReceiveMessage(mCurrentMessage.getMessageNull());
-		}
-		if(mReader.length()>mReader.getFilePointer()) {
-			if(!mTorrentPeer.get().getClientRunner().contains(mTaskManager.mReceiverTask)) {
-				mTorrentPeer.get().getClientRunner().pushTask(mTaskManager.mReceiverTask);
-			}			
-		}
+		mMessageSenario.receive(this);
 	}
 
 
