@@ -12,7 +12,9 @@ import net.hetimatan.util.log.Log;
 import net.hetimatan.util.url.PercentEncoder;
 
 //
-// 各機能事に処理を委譲する。
+// 各機能は、個々のクラスに委譲する予定
+// このクラスもそのひとつ
+//
 // Tracker
 // HandShake
 // Request/Piece
@@ -21,20 +23,25 @@ import net.hetimatan.util.url.PercentEncoder;
 public class TorrentFrontShakeHandSenario {
 	private HelperLookAheadShakehand mCurrentSHHelper = null;
 
-	public boolean parseableShakehand(TorrentFront front) throws IOException {
-		String TAG = front.TAG;
-		String DEBUG = front.mDebug;
-		MarkableReader reader = front.getReader();
-		if(Log.ON){Log.v(TAG, "["+DEBUG+"]"+"TorrentFront#revieceSH()");}
+	private HelperLookAheadShakehand getHelper(MarkableReader reader) throws IOException {
 		if(mCurrentSHHelper == null) {
 			TorrentHistory.get().pushMessage("[receive start]\n");
-			mCurrentSHHelper = 
-					new HelperLookAheadShakehand(reader.getFilePointer(), reader);
+			mCurrentSHHelper = new HelperLookAheadShakehand(reader.getFilePointer(), reader);
 		}
-		mCurrentSHHelper.read();
+		return mCurrentSHHelper;
+	}
+
+	public boolean parseableShakehand(TorrentFront front) throws IOException {
+		String TAG = TorrentFront.TAG;
+		String DEBUG = front.mDebug;
+		MarkableReader reader = front.getReader();
+
+		if(Log.ON){Log.v(TAG, "["+DEBUG+"]"+"TorrentFront#revieceSH()");}
+		HelperLookAheadShakehand currentSHHelper = getHelper(reader);
+		currentSHHelper.read();
 
 		if(reader.isEOF()){ front.close(); return true;}
-		if(mCurrentSHHelper.isEnd()) {
+		if(currentSHHelper.isEnd()) {
 			return true;
 		} else {
 			return false;
@@ -43,7 +50,7 @@ public class TorrentFrontShakeHandSenario {
 
 
 	public void revcShakehand(TorrentFront front) throws IOException {
-		String TAG = front.TAG;
+		String TAG = TorrentFront.TAG;
 		String DEBUG = front.mDebug;
 		MarkableReader reader = front.getReader();
 
@@ -64,9 +71,9 @@ public class TorrentFrontShakeHandSenario {
 	}
 
 	public void sendShakehand(TorrentFront front) throws IOException {
-		String TAG = front.TAG;
+		String TAG = TorrentFront.TAG;
 		String DEBUG = front.mDebug;
-		MarkableReader reader = front.getReader();
+		if(Log.ON){Log.v(TAG, "["+DEBUG+"]"+"TorrentFrontTask#sendShakehand");}
 
 		PercentEncoder encoder = new PercentEncoder();
 		TorrentClient torentPeer = front.getTorrentPeer();
