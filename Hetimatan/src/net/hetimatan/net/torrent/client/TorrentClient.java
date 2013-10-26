@@ -305,5 +305,4 @@ public class TorrentClient {
 		return mFrontManager;
 	}
 
-
 }

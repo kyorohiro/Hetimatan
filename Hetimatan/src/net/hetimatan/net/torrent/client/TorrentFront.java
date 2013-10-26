@@ -57,7 +57,7 @@ public class TorrentFront {
 
 	
 	private TrackerPeerInfo mPeer = null;
-	private String mDebug = "--";
+	public String mDebug = "--";
 	private int mRequestPiece = -1;
 
 	// cash
@@ -150,27 +150,6 @@ public class TorrentFront {
 		return mTargetInfo.mTargetBitField.isAllOn();
 	}
 
-	public void revcShakehand() throws IOException {
-		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"TorrentFrontTask#shakehand");}
-		try {
-			//mReader.setBlockOn(true);
-			MessageHandShake recv = MessageHandShake.decode(mReader);
-			TorrentHistory.get().pushReceive(this, recv);
-//			recv.printLog();
-			{//todo
-				TorrentClient peer = getTorrentPeer();
-				PercentEncoder encoder = new PercentEncoder();
-				if(
-						peer.getPeerId()
-						.equals(encoder.encode(recv.getPeerId()))){	
-					throw new IOException();
-				}
-			}
-		} finally {
-//			mReader.setBlockOn(false);
-			Log.v(TAG, "/TorrentFrontTask#shakehand");
-		}
-	}
 
 	public void connect(String hostname, int port) throws IOException {
 //		if(Log.ON){Log.v(TAG, "TorrentFront#connection() : "+hostname+ ":" +port);}
@@ -196,6 +175,42 @@ public class TorrentFront {
 
 	public void pushflushSendTask() throws IOException {	
 		getTaskManager().startSendTask(getTorrentPeer(), this);
+	}
+
+	public boolean parseableShakehand() throws IOException {
+		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"TorrentFront#revieceSH()");}
+		if(mCurrentSHHelper == null) {
+			TorrentHistory.get().pushMessage("[receive start]\n");
+			mCurrentSHHelper = 
+					new HelperLookAheadShakehand(mReader.getFilePointer(), mReader);
+		}
+		mCurrentSHHelper.read();
+		if(mReader.isEOF()){close(); return true;}
+		
+		if(mCurrentSHHelper.isEnd()) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public void revcShakehand() throws IOException {
+		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"TorrentFrontTask#shakehand");}
+		try {
+			MessageHandShake recv = MessageHandShake.decode(mReader);
+			TorrentHistory.get().pushReceive(this, recv);
+			{
+				TorrentClient peer = getTorrentPeer();
+				PercentEncoder encoder = new PercentEncoder();
+				if(
+						peer.getPeerId()
+						.equals(encoder.encode(recv.getPeerId()))){	
+					throw new IOException();
+				}
+			}
+		} finally {
+			Log.v(TAG, "/TorrentFrontTask#shakehand");
+		}
 	}
 
 	public void sendShakehand() throws IOException {
@@ -327,23 +342,6 @@ public class TorrentFront {
 			e.printStackTrace();
 			close();
 			throw e;
-		}
-	}
-
-	public boolean parseableShakehand() throws IOException {
-		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"TorrentFront#revieceSH()");}
-		if(mCurrentSHHelper == null) {
-			TorrentHistory.get().pushMessage("[receive start]\n");
-			mCurrentSHHelper = 
-					new HelperLookAheadShakehand(mReader.getFilePointer(), mReader);
-		}
-		mCurrentSHHelper.read();
-		if(mReader.isEOF()){close(); return true;}
-		
-		if(mCurrentSHHelper.isEnd()) {
-			return true;
-		} else {
-			return false;
 		}
 	}
 
