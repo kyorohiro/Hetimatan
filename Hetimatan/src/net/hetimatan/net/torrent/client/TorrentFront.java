@@ -337,46 +337,38 @@ public class TorrentFront {
 		return mLastMessage;
 	}
 
-	public void onReceiveMessage(MessageNull nullMessage) throws IOException {
-		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"distribute:"+nullMessage.getSign()+":"+nullMessage.getMessageLength());}
+	public void onReceiveMessage(TorrentMessage nullMessage) throws IOException {
+		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"distribute:"+nullMessage.getType());}
 		TorrentMessage message = null;
-		switch(nullMessage.getSign()) {
+		switch(nullMessage.getType()) {
 		case TorrentMessage.SIGN_CHOKE:
 			mTargetInfo.isChoke(true);
-			message = MessageChoke.decode(mReader);
 			break;
 		case TorrentMessage.SIGN_UNCHOKE:
 			mTargetInfo.isChoke(false);
-			message = MessageUnchoke.decode(mReader);
 			break;
 		case TorrentMessage.SIGN_INTERESTED:
 			mTargetInfo.mTargetInterested = true;
-			message = MessageInterested.decode(mReader);
 			break;
 		case TorrentMessage.SIGN_NOTINTERESTED:
 			mTargetInfo.mTargetInterested = false;
-			message = MessageNotInterested.decode(mReader);
 			break;
 		case TorrentMessage.SIGN_HAVE:
-			MessageHave have = MessageHave.decode(mReader);
+			MessageHave have = (MessageHave)nullMessage;
 			mTargetInfo.mTargetBitField.isOn(have.getIndex());
 			message = have;
 			break;
 		case TorrentMessage.SIGN_BITFIELD:
-			MessageBitField bitfieldMS = MessageBitField.decode(mReader);
+			MessageBitField bitfieldMS = (MessageBitField)nullMessage;
 			mTargetInfo.mTargetBitField.setBitfield(bitfieldMS.getBitField().getBinary());
-			message = bitfieldMS;
 			break;
 		case TorrentMessage.SIGN_REQUEST:
-			MessageRequest request = MessageRequest.decode(mReader);
-			message = request;
+			MessageRequest request = (MessageRequest)nullMessage;
 			mTargetInfo.request(
-					request.getIndex(), request.getBegin(), 
-					request.getBegin()+request.getLength());
+					request.getIndex(), request.getBegin(), request.getBegin()+request.getLength());
 			break;
 		case TorrentMessage.SIGN_PIECE:
-			MessagePiece piece = MessagePiece.decode(mReader);
-			message = piece;
+			MessagePiece piece = (MessagePiece)nullMessage;
 			{
 				TorrentClient peer = mTorrentPeer.get();
 				if(peer == null) {return;}
@@ -390,13 +382,8 @@ public class TorrentFront {
 				}
 			}
 			break;
-		case TorrentMessage.SIGN_CANCEL:
-			MessageCancel cancel = MessageCancel.decode(mReader);
-			message = cancel;
-			break;
-		default:
-			message = MessageNull.decode(mReader);
-			break;
+		case TorrentMessage.SIGN_CANCEL:break;
+		default:break;
 		}
 
 		TorrentClient peer = mTorrentPeer.get();
@@ -404,7 +391,7 @@ public class TorrentFront {
 			TorrentHistory.get().pushReceive(this, message);
 		}
 
-		if (null != message) {
+		if(null != message) {
 			dispatch(message);
 			mLastMessage = message;
 		}
