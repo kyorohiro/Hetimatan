@@ -2,7 +2,6 @@ package net.hetimatan.net.torrent.client._front;
 
 import java.io.IOException;
 
-import net.hetimatan.io.file.MarkableFileReader;
 import net.hetimatan.io.file.MarkableReader;
 import net.hetimatan.net.torrent.client.TorrentClient;
 import net.hetimatan.net.torrent.client.TorrentFront;
@@ -21,6 +20,7 @@ import net.hetimatan.util.url.PercentEncoder;
 //
 public class TorrentFrontShakeHandSenario {
 	private HelperLookAheadShakehand mCurrentSHHelper = null;
+
 	public boolean parseableShakehand(TorrentFront front) throws IOException {
 		String TAG = front.TAG;
 		String DEBUG = front.mDebug;

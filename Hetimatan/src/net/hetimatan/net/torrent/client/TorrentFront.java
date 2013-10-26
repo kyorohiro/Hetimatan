@@ -13,6 +13,7 @@ import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.io.net.KyoroSelector;
 import net.hetimatan.io.net.KyoroSocket;
 import net.hetimatan.net.torrent.client._front.TorrentFrontMyInfo;
+import net.hetimatan.net.torrent.client._front.TorrentFrontShakeHandSenario;
 import net.hetimatan.net.torrent.client._front.TorrentFrontTargetInfo;
 import net.hetimatan.net.torrent.client._front.TorrentFrontTaskManager;
 import net.hetimatan.net.torrent.client.message.HelperLookAheadMessage;
@@ -47,6 +48,7 @@ public class TorrentFront {
 	private WeakReference<TorrentClient> mTorrentPeer = null;
 	private HelperLookAheadMessage mCurrentMessage = null;
 	private HelperLookAheadShakehand mCurrentSHHelper = null;
+	
 
 	private TorrentFrontTargetInfo mTargetInfo = null;
 	private TorrentFrontMyInfo mMyInfo = null;
@@ -55,6 +57,8 @@ public class TorrentFront {
 	// task
 	private TorrentFrontTaskManager mTaskManager = new TorrentFrontTaskManager();
 
+	// delegate
+	private TorrentFrontShakeHandSenario mShakeHand = new TorrentFrontShakeHandSenario();
 	
 	private TrackerPeerInfo mPeer = null;
 	public String mDebug = "--";
@@ -178,50 +182,15 @@ public class TorrentFront {
 	}
 
 	public boolean parseableShakehand() throws IOException {
-		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"TorrentFront#revieceSH()");}
-		if(mCurrentSHHelper == null) {
-			TorrentHistory.get().pushMessage("[receive start]\n");
-			mCurrentSHHelper = 
-					new HelperLookAheadShakehand(mReader.getFilePointer(), mReader);
-		}
-		mCurrentSHHelper.read();
-		if(mReader.isEOF()){close(); return true;}
-		
-		if(mCurrentSHHelper.isEnd()) {
-			return true;
-		} else {
-			return false;
-		}
+		return mShakeHand.parseableShakehand(this);
 	}
 
 	public void revcShakehand() throws IOException {
-		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"TorrentFrontTask#shakehand");}
-		try {
-			MessageHandShake recv = MessageHandShake.decode(mReader);
-			TorrentHistory.get().pushReceive(this, recv);
-			{
-				TorrentClient peer = getTorrentPeer();
-				PercentEncoder encoder = new PercentEncoder();
-				if(
-						peer.getPeerId()
-						.equals(encoder.encode(recv.getPeerId()))){	
-					throw new IOException();
-				}
-			}
-		} finally {
-			Log.v(TAG, "/TorrentFrontTask#shakehand");
-		}
+		mShakeHand.revcShakehand(this);
 	}
 
 	public void sendShakehand() throws IOException {
-		PercentEncoder encoder = new PercentEncoder();
-		TorrentClient torentPeer = mTorrentPeer.get();
-		byte[] infoHash = encoder.decode(torentPeer.getInfoHash().getBytes());
-		byte[] peerId = encoder.decode(torentPeer.getPeerId().getBytes());
-		MessageHandShake send = new MessageHandShake(infoHash, peerId);
-		TorrentHistory.get().pushSend(this, send);
-		send.encode(mSendCash.getLastOutput());
-		pushflushSendTask();
+		mShakeHand.sendShakehand(this);
 	}
 
 	public void flushSendTask() throws IOException {

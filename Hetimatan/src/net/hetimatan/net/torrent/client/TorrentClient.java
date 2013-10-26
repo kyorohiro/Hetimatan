@@ -66,7 +66,6 @@ public class TorrentClient {
 	private TorrentPeerPiecer mPieceScenario    = new TorrentPeerPiecer(this);
 	private TorrentPeerInterest mInterest       = new TorrentPeerInterest(this);
 	private TorrentPeerFrontManager mFrontManager = new TorrentPeerFrontManager();
-
 	// ---
 	// task
 	//
