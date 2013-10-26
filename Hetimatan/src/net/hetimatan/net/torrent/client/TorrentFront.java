@@ -33,7 +33,6 @@ import net.hetimatan.net.torrent.client.message.TorrentMessage;
 import net.hetimatan.net.torrent.tracker.TrackerPeerInfo;
 import net.hetimatan.net.torrent.util.piece.PieceInfo;
 import net.hetimatan.util.bitfield.BitField;
-import net.hetimatan.util.event.net.MessageSendTask;
 import net.hetimatan.util.log.Log;
 import net.hetimatan.util.url.PercentEncoder;
 
@@ -45,7 +44,6 @@ public class TorrentFront {
 	public static final int NONE  = -1;
 
 	private MarkableReader mReader = null;
-//	private KyoroSocketOutputStream mOutput = null;
 	private WeakReference<TorrentClient> mTorrentPeer = null;
 	private HelperLookAheadMessage mCurrentMessage = null;
 	private HelperLookAheadShakehand mCurrentSHHelper = null;
@@ -56,7 +54,6 @@ public class TorrentFront {
 
 	// task
 	private TorrentFrontTaskManager mTaskManager = new TorrentFrontTaskManager();
-	private MessageSendTask mTaskChanin = null;
 
 	
 	private TrackerPeerInfo mPeer = null;
@@ -74,9 +71,7 @@ public class TorrentFront {
 		mSocket = socket;
 		mTargetInfo = new TorrentFrontTargetInfo(peer.getPieceLength());
 		KyoroFileForKyoroSocket kf = new KyoroFileForKyoroSocket(socket, 512*30);
-		//kf.setSelector(peer.getSelector());
 		mReader = new MarkableFileReader(kf, 512);
-//		mOutput = new KyoroSocketOutputStream(socket);
 		mTorrentPeer = new WeakReference<TorrentClient>(peer);
 		mTargetInfo.mTargetBitField = new BitField(peer.getNumOfPieces());
 		mTargetInfo.mTargetBitField.zeroClear();
@@ -117,6 +112,7 @@ public class TorrentFront {
 	public KyoroSocket getSocket() {
 		return mSocket;
 	}
+
 	public KyoroSelector getSelector() {
 		return getTorrentPeer().getSelector();
 	}
@@ -344,7 +340,6 @@ public class TorrentFront {
 		mCurrentSHHelper.read();
 		if(mReader.isEOF()){close(); return true;}
 		
-	 	TorrentClient peer = mTorrentPeer.get();
 		if(mCurrentSHHelper.isEnd()) {
 			return true;
 		} else {

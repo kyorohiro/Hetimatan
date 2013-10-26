@@ -1,6 +1,6 @@
-package net.hetimatan.net.torrent.client._peer;
+package net.hetimatan.net.torrent.client;
 
-public class TorrentPeerSetting {
+public class TorrentClientSetting {
 
 	public int mNumOfPeer = 50;
 	public int mNumOfUnchoker = 4;

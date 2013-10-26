@@ -15,7 +15,6 @@ import net.hetimatan.net.torrent.client._peer.TorrentPeerChoker;
 import net.hetimatan.net.torrent.client._peer.TorrentPeerFrontManager;
 import net.hetimatan.net.torrent.client._peer.TorrentPeerInterest;
 import net.hetimatan.net.torrent.client._peer.TorrentPeerRequester;
-import net.hetimatan.net.torrent.client._peer.TorrentPeerSetting;
 import net.hetimatan.net.torrent.client._peer.TorrentPeerPiecer;
 import net.hetimatan.net.torrent.client.task.TorrentFrontFinTrackerTask;
 import net.hetimatan.net.torrent.client.task.TorrentPeerAcceptTask;
@@ -34,10 +33,7 @@ import net.hetimatan.util.url.PercentEncoder;
  *   TorrentClient c = new TorrentClient()
  *   c.startTorrentClient(null);
  * 
- * - 
  * 
- * @author kiyohiro
- *
  */
 public class TorrentClient {
 	public static final String TAG              = "TorrentPeer";
@@ -64,7 +60,7 @@ public class TorrentClient {
 	private MetaFile mMetaFile                  = null;
 	private TorrentData mData                   = null; 
 	private TrackerClient mTrackerClient        = null;
-	private TorrentPeerSetting mSetting         = new TorrentPeerSetting();
+	private TorrentClientSetting mSetting         = new TorrentClientSetting();
 	private TorrentPeerChoker mChoker           = new TorrentPeerChoker(this);
 	private TorrentPeerRequester mRequester     = new TorrentPeerRequester(this);
 	private TorrentPeerPiecer mPieceScenario    = new TorrentPeerPiecer(this);
@@ -164,7 +160,7 @@ public class TorrentClient {
 		return mMasterRunner.getSelector();
 	}
 
-	public TorrentPeerSetting getSetting() {
+	public TorrentClientSetting getSetting() {
 		return mSetting;
 	}
 

@@ -7,6 +7,7 @@ import java.util.Random;
 
 import net.hetimatan.net.torrent.client.TorrentFront;
 import net.hetimatan.net.torrent.client.TorrentClient;
+import net.hetimatan.net.torrent.client.TorrentClientSetting;
 import net.hetimatan.net.torrent.tracker.TrackerPeerInfo;
 
 public class TorrentPeerChoker {
@@ -21,7 +22,7 @@ public class TorrentPeerChoker {
 	public void updateOptimusUnchokePeer() throws IOException {
 		
 		TorrentClient torrentPeer = mOwner.get();if(torrentPeer == null) {return;}
-		TorrentPeerSetting mSetting = torrentPeer.getSetting();
+		TorrentClientSetting mSetting = torrentPeer.getSetting();
 		int numOfUnchokerNow = mOptimusUnchokePeer.size();
 		int maxOfUnchoker = mSetting.getNumOfUnchoker();
 		int numOfFront = torrentPeer.getTorrentPeerManager().numOfFront();
@@ -44,7 +45,7 @@ public class TorrentPeerChoker {
 
 	public void onStartTorrentFront(TorrentFront front) throws IOException {
 		TorrentClient torrentPeer = mOwner.get();if(torrentPeer == null) {return;}
-		TorrentPeerSetting mSetting = torrentPeer.getSetting();
+		TorrentClientSetting mSetting = torrentPeer.getSetting();
 		int numOfUnchokerNow = mOptimusUnchokePeer.size();
 		int maxOfUnchoker = mSetting.getNumOfUnchoker();
 

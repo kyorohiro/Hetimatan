@@ -12,6 +12,10 @@ import net.hetimatan.util.event.GlobalAccessProperty;
 import net.hetimatan.util.url.PercentEncoder;
 
 
+/**
+ * save received data and piece data. 
+ * 
+ */
 public class TorrentData {
 	private BitField mStockedDataInfo = null;
 	private BitField mRequestDataInfo = null;
@@ -25,7 +29,7 @@ public class TorrentData {
 	private long mDataLength = 0;
 	private MetaFile mMetafile = null;
 
-	public TorrentData(MetaFile file) throws IOException{//(int pieceLength) {
+	public TorrentData(MetaFile file) throws IOException{
 		mMetafile = file;
 		int numOfPiece = file.numOfPiece();
 		mPieceLength =(int)file.getPieceLength();

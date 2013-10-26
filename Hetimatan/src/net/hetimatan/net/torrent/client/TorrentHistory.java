@@ -9,6 +9,7 @@ import net.hetimatan.util.event.GlobalAccessProperty;
 import net.hetimatan.util.log.Log;
 
 
+
 public class TorrentHistory {
 
 	private CashKyoroFile mCash = null;
