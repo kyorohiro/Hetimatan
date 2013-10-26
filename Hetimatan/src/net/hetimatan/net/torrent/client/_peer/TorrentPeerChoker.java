@@ -63,14 +63,14 @@ public class TorrentPeerChoker {
 		if(!mOptimusUnchokePeer.contains(peer)) {
 			mOptimusUnchokePeer.remove(peer);
 		}
-		front.startChoker(true);
+		front.getTaskManager().startChoker(front.getTorrentPeer(), front, true);
 	}
 	
 	public void __unchoke(TorrentFront front) throws IOException {
 		TrackerPeerInfo peer = front.getPeer();
 		if(!mOptimusUnchokePeer.contains(peer)) {
 			mOptimusUnchokePeer.add(peer);
-			front.startChoker(false);
+			front.getTaskManager().startChoker(front.getTorrentPeer(), front, false);
 		}		
 	}
 }

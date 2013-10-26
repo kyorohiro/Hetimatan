@@ -37,6 +37,6 @@ public class TorrentFrontFirstAction extends EventTask {
 			front.sendInterest();		
 		}
 		front.startReceliver();
-		front.startDownload();
+		front.getTaskManager().startDownload(front.getTorrentPeer(), front);
 	}
 }

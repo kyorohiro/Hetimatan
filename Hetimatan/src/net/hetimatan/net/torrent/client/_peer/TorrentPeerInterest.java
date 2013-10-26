@@ -33,16 +33,16 @@ public class TorrentPeerInterest implements TorrentFront.EventListener {
 		if(message.getType() == TorrentMessage.SIGN_BITFIELD) {
 			BitField relative = front.relativeBitfield();
 			if(!relative.isAllOff()) {
-				front.startInterest();
+				front.getTaskManager().startInterest(front.getTorrentPeer(), front);
 			} else {
-				front.startNotInterest();				
+				front.getTaskManager().startNotInterest(front.getTorrentPeer(), front);				
 			}
 		}
 		if(message.getType() == TorrentMessage.SIGN_HAVE) {
 			int index = ((MessageHave)message).getIndex();
 			BitField stocked = peer.getTorrentData().getStockedDataInfo();
 			if(!stocked.isOn(index)) {
-				front.startInterest();
+				front.getTaskManager().startInterest(front.getTorrentPeer(), front);
 			}
 		}
 	}

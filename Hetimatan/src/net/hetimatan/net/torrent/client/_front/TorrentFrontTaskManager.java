@@ -128,6 +128,7 @@ public class TorrentFrontTaskManager {
 	}
 
 	public void startDownload(TorrentClient peer, TorrentFront front) throws IOException {
+		if(Log.ON){Log.v(TAG, "["+front.mDebug+"]"+"start Download");}
 		if(peer == null) {return;}
 		if(peer.isSeeder()){return;}
 		if(front.getTargetInfo().isChoked() != TorrentFront.FALSE){return;}
@@ -141,6 +142,7 @@ public class TorrentFrontTaskManager {
 	}
 
 	public void startChoker(TorrentClient peer, TorrentFront front, boolean isChoke) throws IOException {
+		if(Log.ON){Log.v(TAG, "["+front.mDebug+"]"+"start Choker:" +isChoke);}
 		if(peer == null) {return;}
 		if(mChokerTask == null) {
 			mChokerTask = new TorrentFrontChokerTask(front, isChoke);
@@ -154,6 +156,7 @@ public class TorrentFrontTaskManager {
 	}
 
 	public void startHave(TorrentClient peer, TorrentFront front, int index) throws IOException {
+		if(Log.ON){Log.v(TAG, "["+front.mDebug+"]"+"start Have");}
 		if(peer == null) {return;}
 		mHaveTask = new TorrentFrontHaveTask(front, index);
 		if(mCloseTask == null) {

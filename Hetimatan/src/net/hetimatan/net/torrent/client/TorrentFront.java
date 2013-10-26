@@ -15,17 +15,12 @@ import net.hetimatan.io.net.KyoroSocket;
 import net.hetimatan.net.torrent.client._front.TorrentFrontMyInfo;
 import net.hetimatan.net.torrent.client._front.TorrentFrontTargetInfo;
 import net.hetimatan.net.torrent.client._front.TorrentFrontTaskManager;
-import net.hetimatan.net.torrent.client.message.HelperLookAheadMessage;
-import net.hetimatan.net.torrent.client.message.HelperLookAheadShakehand;
 import net.hetimatan.net.torrent.client.message.MessageBitField;
-import net.hetimatan.net.torrent.client.message.MessageCancel;
 import net.hetimatan.net.torrent.client.message.MessageChoke;
-import net.hetimatan.net.torrent.client.message.MessageHandShake;
 import net.hetimatan.net.torrent.client.message.MessageHave;
 import net.hetimatan.net.torrent.client.message.MessageInterested;
 import net.hetimatan.net.torrent.client.message.MessageKeepAlive;
 import net.hetimatan.net.torrent.client.message.MessageNotInterested;
-import net.hetimatan.net.torrent.client.message.MessageNull;
 import net.hetimatan.net.torrent.client.message.MessagePiece;
 import net.hetimatan.net.torrent.client.message.MessageRequest;
 import net.hetimatan.net.torrent.client.message.MessageUnchoke;
@@ -36,7 +31,6 @@ import net.hetimatan.net.torrent.tracker.TrackerPeerInfo;
 import net.hetimatan.net.torrent.util.piece.PieceInfo;
 import net.hetimatan.util.bitfield.BitField;
 import net.hetimatan.util.log.Log;
-import net.hetimatan.util.url.PercentEncoder;
 
 
 public class TorrentFront {
@@ -47,8 +41,6 @@ public class TorrentFront {
 
 	private MarkableReader mReader = null;
 	private WeakReference<TorrentClient> mTorrentPeer = null;
-	private HelperLookAheadMessage mCurrentMessage = null;
-	private HelperLookAheadShakehand mCurrentSHHelper = null;
 	
 
 	private TorrentFrontTargetInfo mTargetInfo = null;
@@ -435,7 +427,6 @@ public class TorrentFront {
 		}
 	}
 
-
 	// ------------------------------------------------
 	//
 	// ------------------------------------------------
@@ -454,28 +445,5 @@ public class TorrentFront {
 		mTaskManager.startReceliver(mTorrentPeer.get(), this);
 	}
 
-	public void startInterest() {
-		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"start interest");}
-		mTaskManager.startInterest(mTorrentPeer.get(), this);
-	}
-
-	public void startNotInterest() {
-		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"start notinterest");}
-		mTaskManager.startNotInterest(mTorrentPeer.get(), this);
-	}
-
-	public void startDownload() throws IOException {
-		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"start Download");}
-		mTaskManager.startDownload(mTorrentPeer.get(), this);
-	}
-
-	public void startChoker(boolean isChoke) throws IOException {
-		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"start Choker:" +isChoke);}
-		mTaskManager.startChoker(mTorrentPeer.get(), this, isChoke);
-	}
-
-	public void startHave(int index) throws IOException {
-		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"start Have");}
-		mTaskManager.startHave(mTorrentPeer.get(), this, index);
-	}
+	
 }

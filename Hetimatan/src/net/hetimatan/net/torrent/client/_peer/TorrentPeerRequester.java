@@ -35,7 +35,7 @@ public class TorrentPeerRequester implements TorrentFront.EventListener {
 			TorrentFront front = peer.getTorrentPeerManager().getTorrentFront(i);
 			if(front != null) {
 				try {
-					front.startHave(index);
+					front.getTaskManager().startHave(peer, front, index);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -63,7 +63,7 @@ public class TorrentPeerRequester implements TorrentFront.EventListener {
 		) {
 			if(!peer.isSeeder()) {
 				try {
-						front.startDownload();
+						front.getTaskManager().startDownload(front.getTorrentPeer(), front);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}

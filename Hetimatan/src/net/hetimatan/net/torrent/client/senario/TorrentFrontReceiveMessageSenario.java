@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import net.hetimatan.io.file.MarkableReader;
 import net.hetimatan.net.torrent.client.TorrentClient;
-import net.hetimatan.net.torrent.client.TorrentData;
 import net.hetimatan.net.torrent.client.TorrentFront;
 import net.hetimatan.net.torrent.client.TorrentHistory;
 import net.hetimatan.net.torrent.client.message.HelperLookAheadMessage;
@@ -20,6 +19,7 @@ import net.hetimatan.net.torrent.client.message.MessageRequest;
 import net.hetimatan.net.torrent.client.message.MessageUnchoke;
 import net.hetimatan.net.torrent.client.message.TorrentMessage;
 import net.hetimatan.util.log.Log;
+
 
 public class TorrentFrontReceiveMessageSenario {
 
