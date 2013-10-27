@@ -21,9 +21,18 @@ import net.hetimatan.net.torrent.client.message.MessagePiece;
 import net.hetimatan.net.torrent.client.message.MessageRequest;
 import net.hetimatan.net.torrent.client.message.MessageUnchoke;
 import net.hetimatan.net.torrent.client.message.TorrentMessage;
+import net.hetimatan.util.event.EventTask;
+import net.hetimatan.util.event.EventTaskRunner;
 import net.hetimatan.util.log.Log;
 
-
+//
+//もともとぬ、TorrentFront、TorrentClientにあった機能を
+//機能ごとに別のクラスに委譲したい。
+//
+//このクラスもその候補
+//まだ、メソッドだけ抜き出した状態
+//
+//
 public class TorrentFrontReceiveMessageSenario {
 
 	private HelperLookAheadMessage mCurrentMessage = null;
@@ -132,6 +141,26 @@ public class TorrentFrontReceiveMessageSenario {
 				mObservers.remove(observerref);
 			}
 			observer.onReceiveMessage(front, message);
+		}
+	}
+
+	public static class TorrentFrontReceiverTask extends EventTask {
+
+		public static final String TAG  = "TorrentFrontReceiverTask";
+		private WeakReference<TorrentFront> mTorrentFront = null;
+		public TorrentFrontReceiverTask(TorrentFront front) {
+			mTorrentFront = new WeakReference<TorrentFront>(front);
+		}
+
+		@Override
+		public String toString() {
+			return TAG;
+		}
+
+		@Override
+		public void action(EventTaskRunner runner) throws Throwable {
+			TorrentFront front = mTorrentFront.get();
+			front.receive();
 		}
 	}
 

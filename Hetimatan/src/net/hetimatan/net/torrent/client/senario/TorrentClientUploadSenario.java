@@ -14,6 +14,13 @@ import net.hetimatan.util.event.EventTask;
 import net.hetimatan.util.event.EventTaskRunner;
 
 //
+//もともとぬ、TorrentFront、TorrentClientにあった機能を
+//機能ごとに別のクラスに委譲したい。
+//
+//このクラスもその候補
+//まだ、メソッドだけ抜き出した状態
+//
+//
 // upload data senario
 // 
 // 1. receive message 

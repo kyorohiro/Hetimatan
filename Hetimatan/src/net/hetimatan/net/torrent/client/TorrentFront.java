@@ -2,8 +2,6 @@ package net.hetimatan.net.torrent.client;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
-import java.util.Iterator;
-import java.util.LinkedList;
 
 import net.hetimatan.io.file.KyoroFile;
 import net.hetimatan.io.file.KyoroFileForKyoroSocket;

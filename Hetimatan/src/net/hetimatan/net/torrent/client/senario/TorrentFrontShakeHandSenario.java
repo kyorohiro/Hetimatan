@@ -11,6 +11,14 @@ import net.hetimatan.net.torrent.client.message.MessageHandShake;
 import net.hetimatan.util.log.Log;
 import net.hetimatan.util.url.PercentEncoder;
 
+//
+//もともとぬ、TorrentFront、TorrentClientにあった機能を
+//機能ごとに別のクラスに委譲したい。
+//
+//このクラスもその候補
+//まだ、メソッドだけ抜き出した状態
+//
+//
 /**
  * - how to use
  * sendShakehand();

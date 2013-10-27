@@ -102,9 +102,9 @@ public class TorrentClient {
 	}
 
 	public void startTracker(String event) {
-		mFinTrackerTask = new TorrentFrontFinTrackerTask(mGetPeerListSenario);
-		startTracker(event, mFinTrackerTask);
+		mFinTrackerTask = mGetPeerListSenario.startTracker(this, event);
 	}
+
 
 	/**
 	 * start Torrent Client. 

@@ -10,7 +10,16 @@ import net.hetimatan.net.torrent.tracker.TrackerPeerInfo;
 import net.hetimatan.util.event.EventTask;
 import net.hetimatan.util.event.EventTaskRunner;
 
+//
+// get peer list per interval time.
+//
 public class TorrentClientGetPeerListSenario {
+
+	public TorrentFrontFinTrackerTask startTracker(TorrentClient client, String event) {
+		TorrentFrontFinTrackerTask finTrackerTask = new TorrentFrontFinTrackerTask(this);
+		client.startTracker(event, finTrackerTask);
+		return finTrackerTask;
+	}
 
 	private WeakReference<TorrentClient> mUploadTargetPeer = null;
 
