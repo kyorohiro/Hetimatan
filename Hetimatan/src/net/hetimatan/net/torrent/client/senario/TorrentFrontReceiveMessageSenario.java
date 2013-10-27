@@ -1,6 +1,9 @@
 package net.hetimatan.net.torrent.client.senario;
 
 import java.io.IOException;
+import java.lang.ref.WeakReference;
+import java.util.Iterator;
+import java.util.LinkedList;
 
 import net.hetimatan.io.file.MarkableReader;
 import net.hetimatan.net.torrent.client.TorrentClient;
@@ -102,8 +105,34 @@ public class TorrentFrontReceiveMessageSenario {
 			break;
 		}
 
-		front.onReceiveMessage(message);
+//		front.onReceiveMessage(message);
+		dispatch(front, message);
 	}
 
+
+	// ------------------------------------------------
+	//
+	// ------------------------------------------------
+	private LinkedList<WeakReference<EventListener>> mObservers = new LinkedList<WeakReference<EventListener>>();
+	public void addObserverAtWeak(EventListener observer) {
+		mObservers.add(new WeakReference<EventListener>(observer));
+	}
+
+	public static interface EventListener {
+		void onReceiveMessage(TorrentFront front,TorrentMessage message);
+	}
+
+	public void dispatch(TorrentFront front, TorrentMessage message) throws IOException {
+		front.onReceiveMessage(message);
+		Iterator<WeakReference<EventListener>>	ite = mObservers.iterator();
+		while(ite.hasNext()) {
+			WeakReference<EventListener> observerref = ite.next();
+			EventListener observer = observerref.get();
+			if(null == observerref.get()) {
+				mObservers.remove(observerref);
+			}
+			observer.onReceiveMessage(front, message);
+		}
+	}
 
 }

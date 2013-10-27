@@ -26,6 +26,7 @@ import net.hetimatan.net.torrent.client.message.MessageRequest;
 import net.hetimatan.net.torrent.client.message.MessageUnchoke;
 import net.hetimatan.net.torrent.client.message.TorrentMessage;
 import net.hetimatan.net.torrent.client.senario.TorrentFrontReceiveMessageSenario;
+import net.hetimatan.net.torrent.client.senario.TorrentFrontReceiveMessageSenario.EventListener;
 import net.hetimatan.net.torrent.client.senario.TorrentFrontShakeHandSenario;
 import net.hetimatan.net.torrent.tracker.TrackerPeerInfo;
 import net.hetimatan.net.torrent.util.piece.PieceInfo;
@@ -383,7 +384,6 @@ public class TorrentFront {
 		}
 
 		if(null != message) {
-			dispatch(message);
 			mLastMessage = message;
 		}
 	}
@@ -406,27 +406,17 @@ public class TorrentFront {
 	// ------------------------------------------------
 	//
 	// ------------------------------------------------
-	private LinkedList<WeakReference<EventListener>> mObservers = new LinkedList<WeakReference<EventListener>>();
 	public void addObserverAtWeak(EventListener observer) {
-		mObservers.add(new WeakReference<EventListener>(observer));
-	}
-
-	public static interface EventListener {
-		void onReceiveMessage(TorrentFront front,TorrentMessage message);
+		mMessageSenario.addObserverAtWeak(observer);
 	}
 
 	public void dispatch(TorrentMessage message) {
-		Iterator<WeakReference<EventListener>>	ite = mObservers.iterator();
-		while(ite.hasNext()) {
-			WeakReference<EventListener> observerref = ite.next();
-			EventListener observer = observerref.get();
-			if(null == observerref.get()) {
-				mObservers.remove(observerref);
-			}
-			observer.onReceiveMessage(this, message);
+		try {
+			mMessageSenario.dispatch(this, message);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
-
 
 	
 	// ------------------------------------------------
