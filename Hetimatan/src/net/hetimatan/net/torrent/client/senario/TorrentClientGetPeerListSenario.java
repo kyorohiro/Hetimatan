@@ -7,6 +7,8 @@ import java.util.Iterator;
 import net.hetimatan.net.torrent.client.TorrentClient;
 import net.hetimatan.net.torrent.tracker.TrackerClient;
 import net.hetimatan.net.torrent.tracker.TrackerPeerInfo;
+import net.hetimatan.util.event.EventTask;
+import net.hetimatan.util.event.EventTaskRunner;
 
 public class TorrentClientGetPeerListSenario {
 
@@ -31,5 +33,28 @@ public class TorrentClientGetPeerListSenario {
 	 	}
 	 	client.clearPeer32();
 	 	peer.setTrackerTask(client.getIntervalPerSec()*1000);
+	}
+
+	public static class TorrentFrontFinTrackerTask extends EventTask {
+		
+		public static final String TAG = "TorrentFrontFinTrackerTask";
+		private WeakReference<TorrentClientGetPeerListSenario> mTorrentScenario = null;
+
+		public TorrentFrontFinTrackerTask(TorrentClientGetPeerListSenario scenario) {
+			mTorrentScenario = new WeakReference<TorrentClientGetPeerListSenario>(scenario);
+		}
+
+		@Override
+		public String toString() {
+			return TAG;
+		}
+
+		@Override
+		public void action(EventTaskRunner runner) throws Throwable {
+			TorrentClientGetPeerListSenario scenario = mTorrentScenario.get();
+			if(scenario == null) {return;}	
+			scenario.onFinTracker();
+		}
+
 	}
 }
