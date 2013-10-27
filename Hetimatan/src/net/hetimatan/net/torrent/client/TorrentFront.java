@@ -150,7 +150,6 @@ public class TorrentFront {
 
 
 	public void connect(String hostname, int port) throws IOException {
-//		if(Log.ON){Log.v(TAG, "TorrentFront#connection() : "+hostname+ ":" +port);}
 		mDebug =""+hostname+":"+port;
 		TorrentHistory.get().pushMessage("connection() : "+hostname+ ":" +port);
 		mSocket.connect(hostname, port);
@@ -389,8 +388,6 @@ public class TorrentFront {
 		}
 	}
 
-
-
 	public boolean waitMessage(byte sign, int timeout) {
 		TorrentMessage last = null;
 		long start = System.currentTimeMillis();
@@ -405,8 +402,11 @@ public class TorrentFront {
 	}
 
 
-	private LinkedList<WeakReference<EventListener>> mObservers = 
-			new LinkedList<WeakReference<EventListener>>();
+	
+	// ------------------------------------------------
+	//
+	// ------------------------------------------------
+	private LinkedList<WeakReference<EventListener>> mObservers = new LinkedList<WeakReference<EventListener>>();
 	public void addObserverAtWeak(EventListener observer) {
 		mObservers.add(new WeakReference<EventListener>(observer));
 	}
@@ -427,6 +427,8 @@ public class TorrentFront {
 		}
 	}
 
+
+	
 	// ------------------------------------------------
 	//
 	// ------------------------------------------------

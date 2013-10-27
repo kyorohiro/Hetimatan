@@ -15,7 +15,7 @@ import net.hetimatan.net.torrent.client._peer.TorrentPeerChoker;
 import net.hetimatan.net.torrent.client._peer.TorrentPeerFrontManager;
 import net.hetimatan.net.torrent.client._peer.TorrentPeerInterest;
 import net.hetimatan.net.torrent.client._peer.TorrentPeerRequester;
-import net.hetimatan.net.torrent.client._peer.TorrentPeerPiecer;
+import net.hetimatan.net.torrent.client.senario.TorrentClientUploadSenario;
 import net.hetimatan.net.torrent.client.task.TorrentFrontFinTrackerTask;
 import net.hetimatan.net.torrent.client.task.TorrentPeerAcceptTask;
 import net.hetimatan.net.torrent.client.task.TorrentPeerBootTask;
@@ -63,7 +63,7 @@ public class TorrentClient {
 	private TorrentClientSetting mSetting         = new TorrentClientSetting();
 	private TorrentPeerChoker mChoker           = new TorrentPeerChoker(this);
 	private TorrentPeerRequester mRequester     = new TorrentPeerRequester(this);
-	private TorrentPeerPiecer mPieceScenario    = new TorrentPeerPiecer(this);
+	private TorrentClientUploadSenario mPieceScenario    = new TorrentClientUploadSenario(this);
 	private TorrentPeerInterest mInterest       = new TorrentPeerInterest(this);
 	private TorrentPeerFrontManager mFrontManager = new TorrentPeerFrontManager();
 	// ---

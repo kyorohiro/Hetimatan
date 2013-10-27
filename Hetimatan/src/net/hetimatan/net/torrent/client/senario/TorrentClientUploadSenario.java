@@ -1,4 +1,4 @@
-package net.hetimatan.net.torrent.client._peer;
+package net.hetimatan.net.torrent.client.senario;
 
 
 import java.io.IOException;
@@ -12,17 +12,23 @@ import net.hetimatan.net.torrent.client.message.TorrentMessage;
 import net.hetimatan.net.torrent.client.task.TorrentFrontSendPieceTask;
 import net.hetimatan.net.torrent.tracker.TrackerClient;
 import net.hetimatan.net.torrent.tracker.TrackerPeerInfo;
+import net.hetimatan.util.event.EventTask;
+import net.hetimatan.util.event.EventTaskRunner;
 
 //
-// uploaad
+// upload data senario
 // 
-public class TorrentPeerPiecer implements TorrentFront.EventListener {
+// 1. receive message 
+// 2. start updalod(ScenarioSeeder)
+// 3. if have uploaded data, upload
+//
+public class TorrentClientUploadSenario implements TorrentFront.EventListener {
 
 	private WeakReference<TorrentClient> mUploadTargetPeer = null;
 	private LinkedList<TorrentFrontSendPieceTask> mScenarioList = new LinkedList<TorrentFrontSendPieceTask>();
 	private ScenarioSeeder mSeederTask = null;
 
-	public TorrentPeerPiecer(TorrentClient peer) {
+	public TorrentClientUploadSenario(TorrentClient peer) {
 		mUploadTargetPeer = new WeakReference<TorrentClient>(peer);
 		mSeederTask = new ScenarioSeeder(this);
 	}
@@ -94,4 +100,29 @@ public class TorrentPeerPiecer implements TorrentFront.EventListener {
 	 	client.clearPeer32();
 	 	peer.setTrackerTask(client.getIntervalPerSec()*1000);
 	}
+
+
+	public static class ScenarioSeeder extends EventTask {
+		
+		public static final String TAG = "ScenarioSeeder";
+		private WeakReference<TorrentClientUploadSenario> mTorrentScenario = null;
+
+		public ScenarioSeeder(TorrentClientUploadSenario scenario) {
+			mTorrentScenario = new WeakReference<TorrentClientUploadSenario>(scenario);
+		}
+
+		@Override
+		public String toString() {
+			return TAG;
+		}
+
+		@Override
+		public void action(EventTaskRunner runner) throws Throwable {
+			TorrentClientUploadSenario scenario = mTorrentScenario.get();
+			if(scenario == null) {return;}	
+			scenario.distributeInOrder();
+		}
+
+	}
+
 }
