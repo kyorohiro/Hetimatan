@@ -11,27 +11,38 @@ import net.hetimatan.util.event.EventTask;
 import net.hetimatan.util.event.EventTaskRunner;
 
 //
-// get peer list per interval time.
+// もともとぬ、TorrentFront、TorrentClientにあった機能を
+// 機能ごとに別のクラスに委譲したい。
 //
+// このクラスもその候補
+// メソッドだけ抜き出した状態
+//
+/**
+ * Trackerから取得したTorrentクライアント接続する。
+ * 次にTrackerへアクセスするタイミングを設定する。
+ *
+ */
 public class TorrentClientGetPeerListSenario {
-
-	public TorrentFrontFinTrackerTask startTracker(TorrentClient client, String event) {
-		TorrentFrontFinTrackerTask finTrackerTask = new TorrentFrontFinTrackerTask(this);
-		client.startTracker(event, finTrackerTask);
-		return finTrackerTask;
-	}
 
 	private WeakReference<TorrentClient> mUploadTargetPeer = null;
 
-	/**
-	 * getted peers from tracker. 
-	 */
-	public void onFinTracker() throws IOException {
+	public TorrentClientGetPeerListSenario(TorrentClient target) {
+		mUploadTargetPeer = new WeakReference<TorrentClient>(target);
+	}
+
+
+	public OnResponseFromTrackerTask startTracker(TorrentClient client, String event) {
+		OnResponseFromTrackerTask ret = new OnResponseFromTrackerTask(this);
+		client.startTracker(event, ret);
+		return ret;
+	}
+
+	public void startConnection() throws IOException {
 	 	TorrentClient peer = mUploadTargetPeer.get();
+	 	if(peer == null) {return;}
 	 	if(peer.isSeeder()) {
 	 		return ;
 	 	}
-	 	if(peer == null) {return;}
 	 	TrackerClient client = peer.getTracker();
 	 	Iterator<TrackerPeerInfo> peers32 = client.getPeer32();
 	 	if(!peer.isSeeder()) {//todo
@@ -41,15 +52,21 @@ public class TorrentClientGetPeerListSenario {
 	 		}
 	 	}
 	 	client.clearPeer32();
+	}
+
+	public void setNextRequestTask() { 
+	 	TorrentClient peer = mUploadTargetPeer.get();
+	 	if(peer == null) {return;}
+	 	TrackerClient client = peer.getTracker();
 	 	peer.setTrackerTask(client.getIntervalPerSec()*1000);
 	}
 
-	public static class TorrentFrontFinTrackerTask extends EventTask {
+	public static class OnResponseFromTrackerTask extends EventTask {
 		
 		public static final String TAG = "TorrentFrontFinTrackerTask";
 		private WeakReference<TorrentClientGetPeerListSenario> mTorrentScenario = null;
 
-		public TorrentFrontFinTrackerTask(TorrentClientGetPeerListSenario scenario) {
+		public OnResponseFromTrackerTask(TorrentClientGetPeerListSenario scenario) {
 			mTorrentScenario = new WeakReference<TorrentClientGetPeerListSenario>(scenario);
 		}
 
@@ -62,7 +79,8 @@ public class TorrentClientGetPeerListSenario {
 		public void action(EventTaskRunner runner) throws Throwable {
 			TorrentClientGetPeerListSenario scenario = mTorrentScenario.get();
 			if(scenario == null) {return;}	
-			scenario.onFinTracker();
+			scenario.startConnection();
+			scenario.setNextRequestTask();
 		}
 
 	}

@@ -16,7 +16,7 @@ import net.hetimatan.net.torrent.client._peer.TorrentPeerFrontManager;
 import net.hetimatan.net.torrent.client._peer.TorrentPeerInterest;
 import net.hetimatan.net.torrent.client._peer.TorrentPeerRequester;
 import net.hetimatan.net.torrent.client.senario.TorrentClientGetPeerListSenario;
-import net.hetimatan.net.torrent.client.senario.TorrentClientGetPeerListSenario.TorrentFrontFinTrackerTask;
+import net.hetimatan.net.torrent.client.senario.TorrentClientGetPeerListSenario.OnResponseFromTrackerTask;
 import net.hetimatan.net.torrent.client.senario.TorrentClientUploadSenario;
 import net.hetimatan.net.torrent.client.task.TorrentPeerAcceptTask;
 import net.hetimatan.net.torrent.client.task.TorrentPeerBootTask;
@@ -37,6 +37,21 @@ import net.hetimatan.util.url.PercentEncoder;
  * 
  */
 public class TorrentClient {
+
+	/**
+	 * peerid is random 20 byte string.  
+	 * the first character in the peer-id is PEERID_HEAD
+	 * BEP20
+	 */
+	public static String createPeerId() {
+		byte[] peerId = new byte[20]; 
+		Random random = new Random(System.currentTimeMillis());
+		random.nextBytes(peerId);
+		System.arraycopy(PEERID_HEAD.getBytes(), 0, peerId, 0, 8);
+		PercentEncoder encoder = new PercentEncoder();
+		return encoder.encode(peerId);
+	}
+
 	public static final String TAG              = "TorrentPeer";
 	public static final String PEERID_HEAD      = "-KY0114-";
 	public String sId 							= "none";
@@ -65,34 +80,24 @@ public class TorrentClient {
 	private TorrentPeerChoker mChoker           = new TorrentPeerChoker(this);
 	private TorrentPeerRequester mRequester     = new TorrentPeerRequester(this);
 	private TorrentClientUploadSenario mPieceScenario    = new TorrentClientUploadSenario(this);
-	private TorrentClientGetPeerListSenario mGetPeerListSenario = new TorrentClientGetPeerListSenario();
+	private TorrentClientGetPeerListSenario mGetPeerListSenario = new TorrentClientGetPeerListSenario(this);
 	private TorrentPeerInterest mInterest       = new TorrentPeerInterest(this);
 	private TorrentPeerFrontManager mFrontManager = new TorrentPeerFrontManager();
 	// ---
 	// task
 	//
 	private TorrentPeerAcceptTask mAcceptTask   = null;
-	private TorrentFrontFinTrackerTask mFinTrackerTask = null;
+	private OnResponseFromTrackerTask mFinTrackerTask = null;
 	private TorrentPeerStartTracker mTrackerTask = null;
 
 	private static int num = 0;
+
+	
 	public TorrentClient(MetaFile metafile, String peerId) throws URISyntaxException, IOException {
 		mTrackerClient = new TrackerClient(metafile, peerId);
 		mData = new TorrentData(metafile);
 		mMetaFile = metafile;
 		sId = "["+(num++)+"]"+peerId;
-	}
-
-	// peerid is random 20 byte string.  
-	// the first character in the peer-id is PEERID_HEAD
-	// BEP20
-	public static String createPeerId() {
-		byte[] peerId = new byte[20]; 
-		Random random = new Random(System.currentTimeMillis());
-		random.nextBytes(peerId);
-		System.arraycopy(PEERID_HEAD.getBytes(), 0, peerId, 0, 8);
-		PercentEncoder encoder = new PercentEncoder();
-		return encoder.encode(peerId);
 	}
 
 	public void startTracker(String event, EventTask last) {
@@ -108,8 +113,8 @@ public class TorrentClient {
 
 	/**
 	 * start Torrent Client. 
-	 * - start torrent server
-	 * - request torrent list to tracker
+	 *  - start torrent server
+	 *  - request torrent list to tracker
 	 * @param runner
 	 * @return
 	 * @throws IOException 
@@ -119,14 +124,12 @@ public class TorrentClient {
 		if(runner == null) {runner = new KyoroSocketEventRunner();}
 		mMasterRunner = runner;
 		runner.waitIsSelect(true);//todo
-		
-		//
 		// regist boot task, request tacker task, accept event
 		TorrentPeerBootTask bootTask = new TorrentPeerBootTask(this);
 		bootTask.nextAction(mTrackerTask = new TorrentPeerStartTracker(this));
 		mServerSocket = new KyoroServerSocketImpl();
 		mServerSocket.setEventTaskAtWrakReference(mMasterRunner.getSelector(), mAcceptTask= new TorrentPeerAcceptTask(this), KyoroSelector.ACCEPT);
-
+		//
 		runner.start(bootTask);
 		return runner; 
 	}
