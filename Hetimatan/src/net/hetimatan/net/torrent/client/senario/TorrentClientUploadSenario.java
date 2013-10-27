@@ -80,27 +80,6 @@ public class TorrentClientUploadSenario implements TorrentFront.EventListener {
 		}
 	}
 
-	/**
-	 * getted peers from tracker. 
-	 */
-	public void onFinTracker() throws IOException {
-	 	TorrentClient peer = mUploadTargetPeer.get();
-	 	if(peer.isSeeder()) {
-	 		return ;
-	 	}
-	 	if(peer == null) {return;}
-	 	TrackerClient client = peer.getTracker();
-	 	Iterator<TrackerPeerInfo> peers32 = client.getPeer32();
-	 	if(!peer.isSeeder()) {//todo
-	 		while(peers32.hasNext()) {
-	 			TrackerPeerInfo targetPeer = peers32.next();
-	 			peer.startConnect(targetPeer);
-	 		}
-	 	}
-	 	client.clearPeer32();
-	 	peer.setTrackerTask(client.getIntervalPerSec()*1000);
-	}
-
 
 	public static class ScenarioSeeder extends EventTask {
 		
