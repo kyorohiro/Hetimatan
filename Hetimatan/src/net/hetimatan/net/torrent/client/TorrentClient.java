@@ -16,7 +16,7 @@ import net.hetimatan.net.torrent.client._peer.TorrentPeerFrontManager;
 import net.hetimatan.net.torrent.client._peer.TorrentPeerInterest;
 import net.hetimatan.net.torrent.client._peer.TorrentPeerRequester;
 import net.hetimatan.net.torrent.client.senario.TorrentClientGetPeerListSenario;
-import net.hetimatan.net.torrent.client.senario.TorrentClientGetPeerListSenario.OnResponseFromTrackerTask;
+import net.hetimatan.net.torrent.client.senario.TorrentClientGetPeerListSenario.OnResponseFromTracker;
 import net.hetimatan.net.torrent.client.senario.TorrentClientUploadSenario;
 import net.hetimatan.net.torrent.client.task.TorrentPeerAcceptTask;
 import net.hetimatan.net.torrent.client.task.TorrentPeerBootTask;
@@ -69,32 +69,36 @@ public class TorrentClient {
 	private boolean mIsBooted                   = false;
 	private long mDownloaded                    = 0;
 	private long mUploaded                      = 0;
+	private String mPeerId                      = "";
+	private String mInfoHash                    = "";
+	private MetaFile mMetaFile                  = null;
+	private TorrentData mData                   = null; 
 
 	// ---
 	// this class's delegation
 	//
-	private MetaFile mMetaFile                  = null;
-	private TorrentData mData                   = null; 
-	private TrackerClient mTrackerClient        = null;
+//	private TrackerClient mTrackerClient        = null;
 	private TorrentClientSetting mSetting         = new TorrentClientSetting();
 	private TorrentPeerChoker mChoker           = new TorrentPeerChoker(this);
 	private TorrentPeerRequester mRequester     = new TorrentPeerRequester(this);
 	private TorrentClientUploadSenario mPieceScenario    = new TorrentClientUploadSenario(this);
-	private TorrentClientGetPeerListSenario mGetPeerListSenario = new TorrentClientGetPeerListSenario(this);
+	private TorrentClientGetPeerListSenario mGetPeerListSenario = null;
 	private TorrentPeerInterest mInterest       = new TorrentPeerInterest(this);
 	private TorrentPeerFrontManager mFrontManager = new TorrentPeerFrontManager();
 	// ---
 	// task
 	//
 	private TorrentPeerAcceptTask mAcceptTask   = null;
-	private OnResponseFromTrackerTask mFinTrackerTask = null;
+//	private OnResponseFromTrackerTask mFinTrackerTask = null;
 	private TorrentPeerStartTracker mTrackerTask = null;
 
 	private static int num = 0;
 
 	
 	public TorrentClient(MetaFile metafile, String peerId) throws URISyntaxException, IOException {
-		mTrackerClient = new TrackerClient(metafile, peerId);
+		mPeerId = peerId;
+		mInfoHash = metafile.getInfoSha1AsPercentString();
+		mGetPeerListSenario = new TorrentClientGetPeerListSenario(this, metafile, peerId);
 		mData = new TorrentData(metafile);
 		mMetaFile = metafile;
 		sId = "["+(num++)+"]"+peerId;
@@ -102,12 +106,11 @@ public class TorrentClient {
 
 	public void startTracker(String event, EventTask last) {
 		TorrentHistory.get().pushMessage("tracker:"+event+","+ mDownloaded+","+ mUploaded+"\n");
-		mTrackerClient.update(event, mDownloaded, mUploaded);
-		mTrackerClient.startTask(mMasterRunner, last);
+		mGetPeerListSenario.startTracker(mMasterRunner, event, last,  mDownloaded, mUploaded);
 	}
 
 	public void startTracker(String event) {
-		mFinTrackerTask = mGetPeerListSenario.startTracker(this, event);
+		mGetPeerListSenario.startToGetPeerListFromTracker(mMasterRunner, this, event, mDownloaded, mUploaded);
 	}
 
 
@@ -207,15 +210,15 @@ public class TorrentClient {
 	}
 
 	public TrackerClient getTracker() {
-		return mTrackerClient;
+		return mGetPeerListSenario.getTrackerClient();
 	}
 
 	public String getPeerId() {
-		return mTrackerClient.getPeerId();
+		return mPeerId;
 	}
 
 	public String getInfoHash() {
-		return mTrackerClient.getInfoHash();
+		return mInfoHash;
 	}
 
 	public void addClientTask(EventTask task) {
@@ -251,7 +254,7 @@ public class TorrentClient {
 		do {
 			try {
 				mServerSocket.bind(mPort);
-				mTrackerClient.setClientPort(mPort);
+				mGetPeerListSenario.setClientPort(mPort);
 				mIsBooted = true;
 				return;
 			} catch(IOException e) {}
