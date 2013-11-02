@@ -1,4 +1,4 @@
-package net.hetimatan.net.torrent.client.senario;
+package net.hetimatan.net.torrent.client._client;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
@@ -15,23 +15,26 @@ import net.hetimatan.util.event.EventTaskRunner;
 import net.hetimatan.util.event.net.KyoroSocketEventRunner;
 
 //
-// もともとぬ、TorrentFront、TorrentClientにあった機能を
+// もともとTorrentClientにあった機能を、でかくなってきたので
 // 機能ごとに別のクラスに委譲したい。
 //
 // このクラスもその候補
 // メソッドだけ抜き出した状態
 //
 /**
- * Trackerから取得したTorrentクライアント接続する。
- * 次にTrackerへアクセスするタイミングを設定する。
- *
+ * get peer list from tracker. 
+ * reserve next request task.
+ * 
+ * (0) startTracker();
+ * (1) reserveNextTrackerRequest()
+ *     
  */
-public class TorrentClientGetPeerListSenario {
+public class TorrentClientGetPeerList {
 	private TrackerClient mTrackerClient                   = null;
-	private OnResponseFromTracker mFinTrackerTask          = null;
+	private OnResponseFromTracker mOnReponseFromTracker          = null;
 	private WeakReference<TorrentClient> mUploadTargetPeer = null;
 
-	public TorrentClientGetPeerListSenario(TorrentClient target, MetaFile metafile, String peerId) throws URISyntaxException, IOException {
+	public TorrentClientGetPeerList(TorrentClient target, MetaFile metafile, String peerId) throws URISyntaxException, IOException {
 		mUploadTargetPeer = new WeakReference<TorrentClient>(target);
 		mTrackerClient = new TrackerClient(metafile, peerId);
 	}
@@ -47,8 +50,8 @@ public class TorrentClientGetPeerListSenario {
 	}
 
 	public void startToGetPeerListFromTracker(KyoroSocketEventRunner runner, TorrentClient client, String event, long downloaded, long uploaded) {
-		mFinTrackerTask = new OnResponseFromTracker(this);
-		startTracker(runner, event, mFinTrackerTask, downloaded, uploaded);
+		mOnReponseFromTracker = new OnResponseFromTracker(this);
+		startTracker(runner, event, mOnReponseFromTracker, downloaded, uploaded);
 	}
 
 	public TrackerClient getTrackerClient() {
@@ -82,10 +85,10 @@ public class TorrentClientGetPeerListSenario {
 	public static class OnResponseFromTracker extends EventTask {
 		
 		public static final String TAG = "TorrentFrontFinTrackerTask";
-		private WeakReference<TorrentClientGetPeerListSenario> mTorrentScenario = null;
+		private WeakReference<TorrentClientGetPeerList> mTorrentScenario = null;
 
-		public OnResponseFromTracker(TorrentClientGetPeerListSenario scenario) {
-			mTorrentScenario = new WeakReference<TorrentClientGetPeerListSenario>(scenario);
+		public OnResponseFromTracker(TorrentClientGetPeerList scenario) {
+			mTorrentScenario = new WeakReference<TorrentClientGetPeerList>(scenario);
 		}
 
 		@Override
@@ -95,7 +98,7 @@ public class TorrentClientGetPeerListSenario {
 
 		@Override
 		public void action(EventTaskRunner runner) throws Throwable {
-			TorrentClientGetPeerListSenario scenario = mTorrentScenario.get();
+			TorrentClientGetPeerList scenario = mTorrentScenario.get();
 			if(scenario == null) {return;}	
 			scenario.startConnection();
 			scenario.reserveNextTrackerRequest();

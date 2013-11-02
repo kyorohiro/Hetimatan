@@ -1,4 +1,4 @@
-package net.hetimatan.net.torrent.client._peer;
+package net.hetimatan.net.torrent.client._client;
 
 
 import java.lang.ref.WeakReference;

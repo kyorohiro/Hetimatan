@@ -11,12 +11,12 @@ import net.hetimatan.io.net.KyoroServerSocket;
 import net.hetimatan.io.net.KyoroServerSocketImpl;
 import net.hetimatan.io.net.KyoroSocket;
 import net.hetimatan.io.net.KyoroSocketImpl;
-import net.hetimatan.net.torrent.client._peer.TorrentPeerChoker;
-import net.hetimatan.net.torrent.client._peer.TorrentPeerFrontManager;
-import net.hetimatan.net.torrent.client._peer.TorrentPeerInterest;
-import net.hetimatan.net.torrent.client._peer.TorrentPeerRequester;
-import net.hetimatan.net.torrent.client.senario.TorrentClientGetPeerListSenario;
-import net.hetimatan.net.torrent.client.senario.TorrentClientGetPeerListSenario.OnResponseFromTracker;
+import net.hetimatan.net.torrent.client._client.TorrentClientGetPeerList;
+import net.hetimatan.net.torrent.client._client.TorrentPeerChoker;
+import net.hetimatan.net.torrent.client._client.TorrentPeerFrontManager;
+import net.hetimatan.net.torrent.client._client.TorrentPeerInterest;
+import net.hetimatan.net.torrent.client._client.TorrentPeerRequester;
+import net.hetimatan.net.torrent.client._client.TorrentClientGetPeerList.OnResponseFromTracker;
 import net.hetimatan.net.torrent.client.senario.TorrentClientUploadSenario;
 import net.hetimatan.net.torrent.client.task.TorrentPeerAcceptTask;
 import net.hetimatan.net.torrent.client.task.TorrentPeerBootTask;
@@ -82,7 +82,7 @@ public class TorrentClient {
 	private TorrentPeerChoker mChoker           = new TorrentPeerChoker(this);
 	private TorrentPeerRequester mRequester     = new TorrentPeerRequester(this);
 	private TorrentClientUploadSenario mPieceScenario    = new TorrentClientUploadSenario(this);
-	private TorrentClientGetPeerListSenario mGetPeerListSenario = null;
+	private TorrentClientGetPeerList mGetPeerListSenario = null;
 	private TorrentPeerInterest mInterest       = new TorrentPeerInterest(this);
 	private TorrentPeerFrontManager mFrontManager = new TorrentPeerFrontManager();
 	// ---
@@ -98,7 +98,7 @@ public class TorrentClient {
 	public TorrentClient(MetaFile metafile, String peerId) throws URISyntaxException, IOException {
 		mPeerId = peerId;
 		mInfoHash = metafile.getInfoSha1AsPercentString();
-		mGetPeerListSenario = new TorrentClientGetPeerListSenario(this, metafile, peerId);
+		mGetPeerListSenario = new TorrentClientGetPeerList(this, metafile, peerId);
 		mData = new TorrentData(metafile);
 		mMetaFile = metafile;
 		sId = "["+(num++)+"]"+peerId;
