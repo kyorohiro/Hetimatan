@@ -11,6 +11,7 @@ import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.io.net.KyoroSelector;
 import net.hetimatan.io.net.KyoroSocket;
 import net.hetimatan.net.torrent.client._front.TorrentFrontMyInfo;
+import net.hetimatan.net.torrent.client._front.TorrentFrontShakeHand;
 import net.hetimatan.net.torrent.client._front.TorrentFrontTargetInfo;
 import net.hetimatan.net.torrent.client._front.TorrentFrontTaskManager;
 import net.hetimatan.net.torrent.client.message.MessageBitField;
@@ -25,7 +26,6 @@ import net.hetimatan.net.torrent.client.message.MessageUnchoke;
 import net.hetimatan.net.torrent.client.message.TorrentMessage;
 import net.hetimatan.net.torrent.client.senario.TorrentFrontReceiveMessageSenario;
 import net.hetimatan.net.torrent.client.senario.TorrentFrontReceiveMessageSenario.EventListener;
-import net.hetimatan.net.torrent.client.senario.TorrentFrontShakeHandSenario;
 import net.hetimatan.net.torrent.tracker.TrackerPeerInfo;
 import net.hetimatan.net.torrent.util.piece.PieceInfo;
 import net.hetimatan.util.bitfield.BitField;
@@ -50,7 +50,7 @@ public class TorrentFront {
 	private TorrentFrontTaskManager mTaskManager = new TorrentFrontTaskManager();
 
 	// delegate
-	private TorrentFrontShakeHandSenario mShakeHand = new TorrentFrontShakeHandSenario();
+	private TorrentFrontShakeHand mShakeHand = new TorrentFrontShakeHand(this);
 	private TorrentFrontReceiveMessageSenario mMessageSenario = new TorrentFrontReceiveMessageSenario();
 	
 	private TrackerPeerInfo mPeer = null;

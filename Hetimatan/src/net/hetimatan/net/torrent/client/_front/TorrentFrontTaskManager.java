@@ -5,6 +5,7 @@ import java.io.IOException;
 import net.hetimatan.io.net.KyoroSelector;
 import net.hetimatan.net.torrent.client.TorrentFront;
 import net.hetimatan.net.torrent.client.TorrentClient;
+import net.hetimatan.net.torrent.client._front.TorrentFrontShakeHand.TorrentFrontShakeHandTask;
 import net.hetimatan.net.torrent.client.senario.TorrentFrontReceiveMessageSenario.TorrentFrontReceiverTask;
 import net.hetimatan.net.torrent.client.task.TorrentFrontChokerTask;
 import net.hetimatan.net.torrent.client.task.TorrentFrontCloseTask;
@@ -14,7 +15,6 @@ import net.hetimatan.net.torrent.client.task.TorrentFrontHaveTask;
 import net.hetimatan.net.torrent.client.task.TorrentFrontInterestTask;
 import net.hetimatan.net.torrent.client.task.TorrentFrontNotInterestTask;
 import net.hetimatan.net.torrent.client.task.TorrentFrontRequestTask;
-import net.hetimatan.net.torrent.client.task.TorrentFrontShakeHandTask;
 import net.hetimatan.util.event.EventTaskRunner;
 import net.hetimatan.util.event.net.MessageSendTask;
 import net.hetimatan.util.log.Log;
@@ -22,7 +22,7 @@ import net.hetimatan.util.log.Log;
 public class TorrentFrontTaskManager {
 	public static final String TAG = "TorrentFrontTask";
 
-	private TorrentFrontShakeHandTask mStartTask = null;
+
 	public TorrentFrontReceiverTask mReceiverTask = null; //todo
 	private TorrentFrontConnectionTask mConnection = null;
 	private TorrentFrontCloseTask mCloseTask = null;
@@ -33,7 +33,7 @@ public class TorrentFrontTaskManager {
 	private TorrentFrontHaveTask mHaveTask = null;
 	private TorrentFrontFirstAction mFirstAction = null;
 	private MessageSendTask mSendTaskChain = null;
-
+	private TorrentFrontShakeHand.TorrentFrontShakeHandTask mStartTask = null;
 
 	public void startSendTask(TorrentClient peer, TorrentFront front) {
 		 if(mSendTaskChain == null) {
@@ -61,7 +61,7 @@ public class TorrentFrontTaskManager {
 	public void startConnectForAccept(TorrentClient peer, TorrentFront front) {
 		if(Log.ON){Log.v(TAG, "["+front.getDebug()+"]"+"start accept task");}
 		EventTaskRunner runner = peer.getClientRunner();
-		mStartTask = new TorrentFrontShakeHandTask(front);
+		mStartTask = new TorrentFrontShakeHand.TorrentFrontShakeHandTask(front);
 		mFirstAction = new TorrentFrontFirstAction(front);
 		if(mCloseTask == null) {
 			mCloseTask = new TorrentFrontCloseTask(front);
