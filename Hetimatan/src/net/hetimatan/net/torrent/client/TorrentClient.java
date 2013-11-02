@@ -127,7 +127,7 @@ public class TorrentClient {
 		runner.waitIsSelect(true);//todo
 		// regist boot task, request tacker task, accept event
 		TorrentPeerBootTask bootTask = new TorrentPeerBootTask(this);
-		bootTask.nextAction(mGetPeerListSenario.getTorrentPeerStartTracker());
+		bootTask.nextAction(mGetPeerListSenario.getStartTrackerTask());
 		//mTrackerTask = new TorrentPeerStartTracker(this));
 		mServerSocket = new KyoroServerSocketImpl();
 		mServerSocket.setEventTaskAtWrakReference(mMasterRunner.getSelector(), mAcceptTask= new TorrentPeerAcceptTask(this), KyoroSelector.ACCEPT);

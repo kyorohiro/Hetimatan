@@ -42,13 +42,18 @@ public class TorrentClientGetPeerList {
 		mTrackerTask = new TorrentPeerStartTracker(target);
 	}
 
+	public EventTask getStartTrackerTask() {
+		return mTrackerTask;
+	}
+
+	public TrackerClient getTrackerClient() {
+		return mTrackerClient;
+	}
+
 	public void setClientPort(int port) {
 		mTrackerClient.setClientPort(port);
 	}
 
-	public EventTask getTorrentPeerStartTracker() {
-		return mTrackerTask;
-	}
 
 	public void startTracker(KyoroSocketEventRunner runner, String event, EventTask last, long downloaded, long uploaded) {
 		TorrentHistory.get().pushMessage("tracker:"+event+","+ downloaded+","+ uploaded+"\n");
@@ -59,10 +64,6 @@ public class TorrentClientGetPeerList {
 	public void startToGetPeerListFromTracker(KyoroSocketEventRunner runner, TorrentClient client, String event, long downloaded, long uploaded) {
 		mOnReponseFromTracker = new OnResponseFromTracker(this);
 		startTracker(runner, event, mOnReponseFromTracker, downloaded, uploaded);
-	}
-
-	public TrackerClient getTrackerClient() {
-		return mTrackerClient;
 	}
 
 	public void startConnection() throws IOException {
