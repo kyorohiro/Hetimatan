@@ -9,6 +9,7 @@ import net.hetimatan.net.torrent.client.TorrentClient;
 import net.hetimatan.net.torrent.client.TorrentHistory;
 import net.hetimatan.net.torrent.tracker.TrackerClient;
 import net.hetimatan.net.torrent.tracker.TrackerPeerInfo;
+import net.hetimatan.net.torrent.tracker.TrackerRequest;
 import net.hetimatan.net.torrent.util.metafile.MetaFile;
 import net.hetimatan.util.event.EventTask;
 import net.hetimatan.util.event.EventTaskRunner;
@@ -33,14 +34,20 @@ public class TorrentClientGetPeerList {
 	private TrackerClient mTrackerClient                   = null;
 	private OnResponseFromTracker mOnReponseFromTracker          = null;
 	private WeakReference<TorrentClient> mUploadTargetPeer = null;
+	private TorrentPeerStartTracker mTrackerTask = null;
 
 	public TorrentClientGetPeerList(TorrentClient target, MetaFile metafile, String peerId) throws URISyntaxException, IOException {
 		mUploadTargetPeer = new WeakReference<TorrentClient>(target);
 		mTrackerClient = new TrackerClient(metafile, peerId);
+		mTrackerTask = new TorrentPeerStartTracker(target);
 	}
 
 	public void setClientPort(int port) {
 		mTrackerClient.setClientPort(port);
+	}
+
+	public EventTask getTorrentPeerStartTracker() {
+		return mTrackerTask;
 	}
 
 	public void startTracker(KyoroSocketEventRunner runner, String event, EventTask last, long downloaded, long uploaded) {
@@ -79,11 +86,19 @@ public class TorrentClientGetPeerList {
 	 	TorrentClient peer = mUploadTargetPeer.get();
 	 	if(peer == null) {return;}
 	 	TrackerClient client = peer.getTracker();
-	 	peer.setTrackerTask(client.getIntervalPerSec()*1000);
+	 	setTrackerTask(client.getIntervalPerSec()*1000);
+	}
+
+	public void setTrackerTask(int timeout) {
+	 	TorrentClient peer = mUploadTargetPeer.get();
+		if(mTrackerTask == null) {
+			mTrackerTask = new TorrentPeerStartTracker(peer);
+		}
+		peer.getClientRunner().releaseTask(mTrackerTask);		
+		peer.getClientRunner().pushTask(mTrackerTask, timeout);
 	}
 
 	public static class OnResponseFromTracker extends EventTask {
-		
 		public static final String TAG = "TorrentFrontFinTrackerTask";
 		private WeakReference<TorrentClientGetPeerList> mTorrentScenario = null;
 
@@ -103,6 +118,50 @@ public class TorrentClientGetPeerList {
 			scenario.startConnection();
 			scenario.reserveNextTrackerRequest();
 		}
+	}
 
+	public static class TorrentPeerStartTracker extends EventTask {
+		public static final String TAG = "TorrentPeerStartTracker";
+
+		private WeakReference<TorrentClient> mServer = null;
+
+		public TorrentPeerStartTracker(TorrentClient httpServer) {
+			mServer = new WeakReference<TorrentClient>(httpServer);
+		}
+
+		@Override
+		public String toString() {
+			return TAG;
+		}
+
+		@Override
+		public void action(EventTaskRunner runner) throws Throwable {
+			TorrentClient server = mServer.get();
+			if(server.isSeeder()) {
+				server.startTracker(TrackerRequest.EVENT_COMPLETED);
+			} else {
+				server.startTracker(TrackerRequest.EVENT_STARTED);
+			}
+		}
+	}
+
+	public class TorrentPeerStopTracker extends EventTask {
+		public static final String TAG = "TorrentPeerStopTracker";
+		private WeakReference<TorrentClient> mServer = null;
+
+		public TorrentPeerStopTracker(TorrentClient httpServer) {
+			mServer = new WeakReference<TorrentClient>(httpServer);
+		}
+
+		@Override
+		public String toString() {
+			return TAG;
+		}
+
+		@Override
+		public void action(EventTaskRunner runner) throws Throwable {
+			TorrentClient server = mServer.get();
+			server.startTracker(TrackerRequest.EVENT_STOPPED);
+		}
 	}
 }

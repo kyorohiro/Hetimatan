@@ -16,11 +16,9 @@ import net.hetimatan.net.torrent.client._client.TorrentPeerChoker;
 import net.hetimatan.net.torrent.client._client.TorrentPeerFrontManager;
 import net.hetimatan.net.torrent.client._client.TorrentPeerInterest;
 import net.hetimatan.net.torrent.client._client.TorrentPeerRequester;
-import net.hetimatan.net.torrent.client._client.TorrentClientGetPeerList.OnResponseFromTracker;
 import net.hetimatan.net.torrent.client.senario.TorrentClientUploadSenario;
 import net.hetimatan.net.torrent.client.task.TorrentPeerAcceptTask;
 import net.hetimatan.net.torrent.client.task.TorrentPeerBootTask;
-import net.hetimatan.net.torrent.client.task.TorrentPeerStartTracker;
 import net.hetimatan.net.torrent.tracker.TrackerClient;
 import net.hetimatan.net.torrent.tracker.TrackerPeerInfo;
 import net.hetimatan.net.torrent.util.metafile.MetaFile;
@@ -90,7 +88,7 @@ public class TorrentClient {
 	//
 	private TorrentPeerAcceptTask mAcceptTask   = null;
 //	private OnResponseFromTrackerTask mFinTrackerTask = null;
-	private TorrentPeerStartTracker mTrackerTask = null;
+//	private TorrentPeerStartTracker mTrackerTask = null;
 
 	private static int num = 0;
 
@@ -129,7 +127,8 @@ public class TorrentClient {
 		runner.waitIsSelect(true);//todo
 		// regist boot task, request tacker task, accept event
 		TorrentPeerBootTask bootTask = new TorrentPeerBootTask(this);
-		bootTask.nextAction(mTrackerTask = new TorrentPeerStartTracker(this));
+		bootTask.nextAction(mGetPeerListSenario.getTorrentPeerStartTracker());
+		//mTrackerTask = new TorrentPeerStartTracker(this));
 		mServerSocket = new KyoroServerSocketImpl();
 		mServerSocket.setEventTaskAtWrakReference(mMasterRunner.getSelector(), mAcceptTask= new TorrentPeerAcceptTask(this), KyoroSelector.ACCEPT);
 		//
@@ -146,7 +145,7 @@ public class TorrentClient {
 			addObserver(front);
 		}
 	}
-
+/*
 	public void setTrackerTask(int timeout) {
 		if(mTrackerTask == null) {
 			mTrackerTask = new TorrentPeerStartTracker(this);
@@ -154,7 +153,7 @@ public class TorrentClient {
 		getClientRunner().releaseTask(mTrackerTask);		
 		getClientRunner().pushTask(mTrackerTask, timeout);
 	}
-
+*/
 	public void addDownloaded(int downloaded) {
 		mDownloaded += downloaded;
 	}
