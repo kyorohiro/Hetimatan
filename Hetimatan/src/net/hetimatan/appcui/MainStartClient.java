@@ -27,7 +27,7 @@ public class MainStartClient {
 			return;
 		}
 		MetaFile metafile =MetaFileCreater.createFromTorrentFile(metaFile);
-		TorrentClient peer = new TorrentClient(metafile, TorrentClient.createPeerId());
+		TorrentClient peer = new TorrentClient(metafile, TorrentClient.createPeerIdAsPercentEncode());
 		sPeer = peer;
 		setMasterFileFromArgs(peer, args);
 		peer.startTorrentClient(null);

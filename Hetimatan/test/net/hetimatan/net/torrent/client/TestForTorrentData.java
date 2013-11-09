@@ -1,4 +1,4 @@
-package info.kyorohiro.raider.net.torrent.client;
+package net.hetimatan.net.torrent.client;
 
 public class TestForTorrentData {
 

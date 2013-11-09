@@ -128,14 +128,14 @@ public class HtanClientPeer {
 		try {
 			cash = new CashKyoroFile(sPeerIdSt,10,2);
 			if(cash.length() == 0) {
-				peerid = TorrentClient.createPeerId();
+				peerid = TorrentClient.createPeerIdAsPercentEncode();
 				cash.addChunk(peerid.getBytes());
 				cash.syncWrite();
 			} else {
 				peerid = new String(CashKyoroFileHelper.newBinary(cash));
 			}
 		} catch (IOException e) {
-			peerid=TorrentClient.createPeerId();
+			peerid=TorrentClient.createPeerIdAsPercentEncode();
 		} finally {
 			if(cash != null) {
 				try {cash.close();

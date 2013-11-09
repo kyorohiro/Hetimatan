@@ -22,7 +22,7 @@ public class TrackerClient extends HttpGet {
 	private TrackerRequest mRequest = new TrackerRequest();
 	private TreeSet<TrackerPeerInfo> mPeers32 = new TreeSet<TrackerPeerInfo>();
 
-	public TrackerClient(MetaFile metafile, String peerId) throws URISyntaxException, IOException {
+	public TrackerClient(MetaFile metafile, String peerId) throws IOException {
 		mRequest = new TrackerRequest();
 		mRequest
 		.putCompact(1)
@@ -95,18 +95,22 @@ public class TrackerClient extends HttpGet {
 		mPeers32.clear();
 	}
 
-	public void setMetaFile(MetaFile metafile) throws IOException, URISyntaxException {
-		mMetaFile = metafile;
-		URI uri = new URI(mMetaFile.getAnnounce());
-		int port = uri.getPort();
-		if(port == -1) {port = 80;}
-		update(uri.getHost(), uri.getPath(), port);
-		mRequest
-		.putTrackerHost(uri.getHost())
-		.putTrackerHost(uri.getHost())
-		.putPath(uri.getPath())
-		.putTrackerPort(port)
-		.putInfoHash(mMetaFile.getInfoSha1AsPercentString());
+	public void setMetaFile(MetaFile metafile) throws IOException {
+		try {
+			mMetaFile = metafile;
+			URI uri = new URI(mMetaFile.getAnnounce());
+			int port = uri.getPort();
+			if(port == -1) {port = 80;}
+			update(uri.getHost(), uri.getPath(), port);
+			mRequest
+			.putTrackerHost(uri.getHost())
+			.putTrackerHost(uri.getHost())
+			.putPath(uri.getPath())
+			.putTrackerPort(port)
+			.putInfoHash(mMetaFile.getInfoSha1AsPercentString());
+		} catch(URISyntaxException e) {
+			throw new IOException(e);
+		}
 	}
 
 	@Override

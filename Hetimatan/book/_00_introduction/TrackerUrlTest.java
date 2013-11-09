@@ -67,7 +67,7 @@ public class TrackerUrlTest extends Application {
 	public String getUrl() throws IOException {
 		MetaFile metainfo = MetaFileCreater.createFromTorrentFile(mInput);
 		TrackerRequest request = TrackerRequest.decode(metainfo);
-		request.putPeerId(TorrentClient.createPeerId());
+		request.putPeerId(TorrentClient.createPeerIdAsPercentEncode());
 		HttpRequestUri uri = request.createUri();
 		uri.IsAbsolutePath(true);
 		return uri.toString();

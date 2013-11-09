@@ -160,7 +160,7 @@ public class TestForTrackerResponse extends TestCase {
 		String targetFileHash = MetaFile
 				.createPieces(new MarkableFileReader(targetFileContent))
 				.toPercentString();
-		String peerId = TorrentClient.createPeerId();
+		String peerId = TorrentClient.createPeerIdAsPercentEncode();
 		HttpRequest uri = HttpRequest.newInstance("dummy", "/adsdannounce", "dummy")
 		.putValue(TrackerRequest.KEY_COMPACT, "1")
 		.putValue(TrackerRequest.KEY_DOWNLOADED, "1")

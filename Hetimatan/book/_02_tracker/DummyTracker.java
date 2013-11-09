@@ -76,7 +76,7 @@ public class DummyTracker  extends Application implements TrackerServer.StatusCh
 	private TorrentClient mClient = null;
 	private EventTaskRunner mRunner = null;
 	public void startClient() throws IOException, URISyntaxException {
-		mClient = new TorrentClient(mMetafile, TorrentClient.createPeerId());
+		mClient = new TorrentClient(mMetafile, TorrentClient.createPeerIdAsPercentEncode());
 		mRunner = mClient.startTorrentClient(null);
 	}	
 

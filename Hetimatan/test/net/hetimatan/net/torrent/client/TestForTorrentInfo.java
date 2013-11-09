@@ -1,4 +1,4 @@
-package info.kyorohiro.raider.net.torrent.client;
+package net.hetimatan.net.torrent.client;
 
 import net.hetimatan.net.torrent.client._front.TorrentFrontTargetInfo;
 import net.hetimatan.net.torrent.util.piece.PieceInfo;

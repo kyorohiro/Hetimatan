@@ -34,7 +34,7 @@ public class GetPeersFromTracker {
 
 	public static void start() throws IOException, URISyntaxException, InterruptedException {
 		File mTorrent = new File("./testdata/1k.txt.torrent");
-		String peerId = TorrentClient.createPeerId();
+		String peerId = TorrentClient.createPeerIdAsPercentEncode();
 		MetaFile metafile = MetaFileCreater.createFromTorrentFile(mTorrent);
 
 		// ----------------------------------------------------

@@ -36,7 +36,7 @@ public class TorrentClientGetPeerList {
 	private WeakReference<TorrentClient> mUploadTargetPeer = null;
 	private TorrentPeerStartTracker mTrackerTask = null;
 
-	public TorrentClientGetPeerList(TorrentClient target, MetaFile metafile, String peerId) throws URISyntaxException, IOException {
+	public TorrentClientGetPeerList(TorrentClient target, MetaFile metafile, String peerId) throws IOException {
 		mUploadTargetPeer = new WeakReference<TorrentClient>(target);
 		mTrackerClient = new TrackerClient(metafile, peerId);
 		mTrackerTask = new TorrentPeerStartTracker(target);
