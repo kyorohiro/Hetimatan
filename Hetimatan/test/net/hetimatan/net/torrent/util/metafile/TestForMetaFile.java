@@ -1,4 +1,4 @@
-package info.kyorohiro.raider.util.torrent;
+package net.hetimatan.net.torrent.util.metafile;
 
 import java.io.File;
 import java.io.IOException;

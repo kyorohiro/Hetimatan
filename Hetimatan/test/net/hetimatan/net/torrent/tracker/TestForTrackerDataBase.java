@@ -1,4 +1,4 @@
-package info.kyorohiro.raider.net.torrent.tracker;
+package net.hetimatan.net.torrent.tracker;
 
 import java.io.IOException;
 

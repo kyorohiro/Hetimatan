@@ -17,7 +17,6 @@ import net.hetimatan.net.torrent.util.bencode.BenString;
 public class MetaFileCreater {
 
 	public static MetaFile createFromTorrentDiction(BenDiction diction) throws IOException {
-
 		// extract basic info
 		BenString announce = (BenString) diction.getBenValue(MetaFile.TYPE_ANNOUNCE, BenObject.TYPE_STRI);
 		BenDiction info = (BenDiction) diction.getBenValue(MetaFile.TYPE_INFO, BenObject.TYPE_DICT);
@@ -151,5 +150,21 @@ public class MetaFileCreater {
 			if (reader != null) {
 				reader.close();}
 		}
+	}
+
+
+	public static MetaFile createFromInfo(String address, String path, int fileLength, int pieceLength, byte[] piece) throws IOException {
+		BenDiction root = new BenDiction();
+		BenDiction info = new BenDiction();
+		BenString pieces = null;
+
+		root.put(MetaFile.TYPE_ANNOUNCE, new BenString(address));
+		root.put(MetaFile.TYPE_INFO, info);
+		info.put(MetaFile.TYPE_LENGTH, new BenInteger(fileLength));
+		info.put(MetaFile.TYPE_NAME, new BenString(path));
+		info.put(MetaFile.TYPE_PIECE_LENGTH, new BenInteger(pieceLength));
+		info.put(MetaFile.TYPE_PIECES, pieces);
+
+		return createFromTorrentDiction(root);
 	}
 }

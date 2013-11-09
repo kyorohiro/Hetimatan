@@ -54,7 +54,6 @@ public class TorrentClientGetPeerList {
 		mTrackerClient.setClientPort(port);
 	}
 
-
 	public void startTracker(KyoroSocketEventRunner runner, String event, EventTask last, long downloaded, long uploaded) {
 		TorrentHistory.get().pushMessage("tracker:"+event+","+ downloaded+","+ uploaded+"\n");
 		mTrackerClient.update(event, downloaded, uploaded);
@@ -143,26 +142,6 @@ public class TorrentClientGetPeerList {
 			} else {
 				server.startTracker(TrackerRequest.EVENT_STARTED);
 			}
-		}
-	}
-
-	public class TorrentPeerStopTracker extends EventTask {
-		public static final String TAG = "TorrentPeerStopTracker";
-		private WeakReference<TorrentClient> mServer = null;
-
-		public TorrentPeerStopTracker(TorrentClient httpServer) {
-			mServer = new WeakReference<TorrentClient>(httpServer);
-		}
-
-		@Override
-		public String toString() {
-			return TAG;
-		}
-
-		@Override
-		public void action(EventTaskRunner runner) throws Throwable {
-			TorrentClient server = mServer.get();
-			server.startTracker(TrackerRequest.EVENT_STOPPED);
 		}
 	}
 }
