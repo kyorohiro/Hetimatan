@@ -1,4 +1,4 @@
-package info.kyorohiro.raider.net.torrent.util.piece;
+package net.hetimatan.net.torrent.util.piece;
 
 import net.hetimatan.net.torrent.util.piece.PieceInfo;
 import net.hetimatan.net.torrent.util.piece.PieceInfoList;
