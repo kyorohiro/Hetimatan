@@ -4,6 +4,12 @@ import net.hetimatan.net.torrent.util.piece.PieceInfo;
 import net.hetimatan.net.torrent.util.piece.PieceInfoList;
 import junit.framework.TestCase;
 
+/**
+ * 
+ *  この管理は不要な事がわかった。
+ *  Httpの分割ダウンロードで使用しているので、httpへ移動する。
+ *
+ */
 public class TestForPieceInfoList extends TestCase {
 
 	public void testAppend() {
