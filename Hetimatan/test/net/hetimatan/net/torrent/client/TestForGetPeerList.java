@@ -22,24 +22,27 @@ public class TestForGetPeerList extends TestCase {
 		TorrentClient client2 = new TorrentClient(metaInfo, TorrentClient.createPeerIdAsPercentEncode());
 		server.setPort(8081);
 		server.addData(metaInfo);
+		EventTaskRunner clientRunner1 = null;
+		EventTaskRunner clientRunner2 = null;
 		EventTaskRunner serverRunner = server.startServer(null);
-		EventTaskRunner clientRunner1 = client1.startTorrentClient(null);
-		EventTaskRunner clientRunner2 = client2.startTorrentClient(null);
 		try {
+			clientRunner1 = client1.startTorrentClient(null);
 			//
 			while(0>=server.getTrackerDB().getManagedData(metaInfo.getInfoSha1AsPercentString()).numOfPeerInfo()) {
 				Thread.sleep(100);
 			}
 			System.out.println("--------AA----"+server.getTrackerDB().getManagedData(metaInfo.getInfoSha1AsPercentString()).numOfPeerInfo());
+
+			clientRunner2 = client2.startTorrentClient(null);
 			//
 			while(1>=server.getTrackerDB().getManagedData(metaInfo.getInfoSha1AsPercentString()).numOfPeerInfo()) {
 				Thread.sleep(100);
 			}
 			System.out.println("--------BB----"+server.getTrackerDB().getManagedData(metaInfo.getInfoSha1AsPercentString()).numOfPeerInfo());
 
-//			client1
-//			client1.findPeer()
-//			assertEquals(expected, actual);
+			assertEquals(1, client2.getTorrentPeerManager().numOfFront());
+			assertEquals(client1.getServerPort(), client2.getTorrentPeerManager().getFrontPeer(0).getPort());
+
 		} finally {
 			serverRunner.close();
 			server.close();
