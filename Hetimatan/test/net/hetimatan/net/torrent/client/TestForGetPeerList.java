@@ -12,23 +12,44 @@ import junit.framework.TestCase;
 
 public class TestForGetPeerList extends TestCase {
 
-	public void testTracker() throws IOException, URISyntaxException {
-		byte[] infoHash =new byte[20];
+	public void testGetPeerListFromTracker() throws IOException, URISyntaxException, InterruptedException {
 		byte[] piece = new byte[20];
-		String peerId = TorrentClient.createPeerIdAsPercentEncode();
-		MetaFile metaInfo = MetaFileCreater.createFromInfo("127.0.0.1", "a.zip", 10, MetaFile.DEFAULT_PIECE_LENGTH, piece);
+
+		MetaFile metaInfo = MetaFileCreater.createFromInfo("http://127.0.0.1:8081", "a.zip", 10, MetaFile.DEFAULT_PIECE_LENGTH, piece);
 		
 		TrackerServer server = new TrackerServer();
-		TorrentClient client = new TorrentClient(metaInfo, peerId);
+		TorrentClient client1 = new TorrentClient(metaInfo, TorrentClient.createPeerIdAsPercentEncode());
+		TorrentClient client2 = new TorrentClient(metaInfo, TorrentClient.createPeerIdAsPercentEncode());
 		server.setPort(8081);
-		server.addData(infoHash);
-		EventTaskRunner runner = server.startServer(null);
+		server.addData(metaInfo);
+		EventTaskRunner serverRunner = server.startServer(null);
+		EventTaskRunner clientRunner1 = client1.startTorrentClient(null);
+		EventTaskRunner clientRunner2 = client2.startTorrentClient(null);
 		try {
-			
+			//
+			while(0>=server.getTrackerDB().getManagedData(metaInfo.getInfoSha1AsPercentString()).numOfPeerInfo()) {
+				Thread.sleep(100);
+			}
+			System.out.println("--------AA----"+server.getTrackerDB().getManagedData(metaInfo.getInfoSha1AsPercentString()).numOfPeerInfo());
+			//
+			while(1>=server.getTrackerDB().getManagedData(metaInfo.getInfoSha1AsPercentString()).numOfPeerInfo()) {
+				Thread.sleep(100);
+			}
+			System.out.println("--------BB----"+server.getTrackerDB().getManagedData(metaInfo.getInfoSha1AsPercentString()).numOfPeerInfo());
+
+//			client1
+//			client1.findPeer()
+//			assertEquals(expected, actual);
 		} finally {
-			runner.close();
+			serverRunner.close();
 			server.close();
+			clientRunner1.close();
+			clientRunner2.close();
+			client1.close();
+			client2.close();
 		}
 	}
 
+	public void testSetInterval() {
+	}
 }

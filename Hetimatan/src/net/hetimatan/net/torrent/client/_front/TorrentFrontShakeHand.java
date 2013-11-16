@@ -35,15 +35,6 @@ import net.hetimatan.util.url.PercentEncoder;
  */
 public class TorrentFrontShakeHand {
 	private HelperLookAheadShakehand mCurrentSHHelper = null;
-//	private TorrentFrontShakeHandTask mStartTask = null;
-
-	public TorrentFrontShakeHand(TorrentFront front) {
-	//	mStartTask = new TorrentFrontShakeHandTask(front);
-	}
-
-//	public EventTask getTorrentFrontShakeHandTask() {
-//		return mStartTask;
-//	}
 
 	private HelperLookAheadShakehand getHelper(MarkableReader reader) throws IOException {
 		if(mCurrentSHHelper == null) {

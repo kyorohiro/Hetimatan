@@ -83,7 +83,6 @@ public class TorrentClient {
 	// ---
 	// this class's delegation
 	//
-//	private TrackerClient mTrackerClient        = null;
 	private TorrentClientSetting mSetting         = new TorrentClientSetting();
 	private TorrentPeerChoker mChoker           = new TorrentPeerChoker(this);
 	private TorrentPeerRequester mRequester     = new TorrentPeerRequester(this);
@@ -101,7 +100,7 @@ public class TorrentClient {
 	private static int num = 0;
 
 	
-	public TorrentClient(MetaFile metafile, String peerId) throws URISyntaxException, IOException {
+	public TorrentClient(MetaFile metafile, String peerId) throws IOException {
 		mPeerId = peerId;
 		mInfoHash = metafile.getInfoSha1AsPercentString();
 		mGetPeerListSenario = new TorrentClientGetPeerList(this, metafile, peerId);
@@ -153,15 +152,7 @@ public class TorrentClient {
 			addObserver(front);
 		}
 	}
-/*
-	public void setTrackerTask(int timeout) {
-		if(mTrackerTask == null) {
-			mTrackerTask = new TorrentPeerStartTracker(this);
-		}
-		getClientRunner().releaseTask(mTrackerTask);		
-		getClientRunner().pushTask(mTrackerTask, timeout);
-	}
-*/
+
 	public void addDownloaded(int downloaded) {
 		mDownloaded += downloaded;
 	}
@@ -179,7 +170,7 @@ public class TorrentClient {
 	}
 
 	public void updateOptimusUnchokePeer(TorrentFront front) throws IOException {
-		mChoker.onStartTorrentFront(front);
+					mChoker.onStartTorrentFront(front);
 	}
 
 	public void updateOptimusUnchokePeer() {

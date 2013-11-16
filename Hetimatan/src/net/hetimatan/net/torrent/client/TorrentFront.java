@@ -50,7 +50,7 @@ public class TorrentFront {
 	private TorrentFrontTaskManager mTaskManager = new TorrentFrontTaskManager();
 
 	// delegate
-	private TorrentFrontShakeHand mShakeHand = new TorrentFrontShakeHand(this);
+	private TorrentFrontShakeHand mShakeHand = new TorrentFrontShakeHand();
 	private TorrentFrontReceiveMessageSenario mMessageSenario = new TorrentFrontReceiveMessageSenario();
 	
 	private TrackerPeerInfo mPeer = null;

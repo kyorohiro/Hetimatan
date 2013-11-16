@@ -156,7 +156,7 @@ public class MetaFileCreater {
 	public static MetaFile createFromInfo(String address, String path, int fileLength, int pieceLength, byte[] piece) throws IOException {
 		BenDiction root = new BenDiction();
 		BenDiction info = new BenDiction();
-		BenString pieces = null;
+		BenString pieces = new BenString(piece, 0, piece.length, "utf8");
 
 		root.put(MetaFile.TYPE_ANNOUNCE, new BenString(address));
 		root.put(MetaFile.TYPE_INFO, info);
