@@ -7,9 +7,12 @@ import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.net.torrent.util.bencode.BenString;
 import net.hetimatan.net.torrent.util.metafile.MetaFile;
 import net.hetimatan.net.torrent.util.metafile.MetaFileCreater;
-
 import junit.framework.TestCase;
 
+/**
+ * 
+ *
+ */
 public class TestForMetaFile extends TestCase {
 
 	@Override
@@ -20,6 +23,15 @@ public class TestForMetaFile extends TestCase {
 			dummy.delete();
 		}
 		super.setUp();
+	}
+
+	@Override
+	protected void tearDown() throws Exception {
+		File dummy = new File("./dummy");
+		if(dummy.exists()) {
+			dummy.delete();
+		}
+		super.tearDown();
 	}
 
 	public void testHello() {
