@@ -15,19 +15,14 @@ import net.hetimatan.util.event.EventTask;
 import net.hetimatan.util.event.EventTaskRunner;
 import net.hetimatan.util.event.net.KyoroSocketEventRunner;
 
-//
-// もともとTorrentClientにあった機能を、でかくなってきたので
-// 機能ごとに別のクラスに委譲したい。
-//
-// このクラスもその候補
-// メソッドだけ抜き出した状態
-//
 /**
+ * 
+ * delegate get peer list task from TorrentClient
  * get peer list from tracker. 
  * reserve next request task.
  * 
- * (0) startTracker();
- * (1) reserveNextTrackerRequest()
+ *  (0) startTracker();
+ *  (1) reserveNextTrackerRequest()
  *     
  */
 public class TorrentClientGetPeerList {

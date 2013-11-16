@@ -16,15 +16,8 @@ import net.hetimatan.util.event.EventTaskRunner;
 import net.hetimatan.util.log.Log;
 import net.hetimatan.util.url.PercentEncoder;
 
-//
-//もともとぬ、TorrentFront、TorrentClientにあった機能を
-//機能ごとに別のクラスに委譲したい。
-//
-//このクラスもその候補
-//まだ、メソッドだけ抜き出した状態
-//
-//
 /**
+ * delegate shakehand task from TorrentClientFront
  * - how to use
  * sendShakehand();
  * while(!parseableShakehand()) {};
