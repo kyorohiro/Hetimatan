@@ -2,16 +2,16 @@ package net.hetimatan.net.torrent.client.task;
 
 import java.lang.ref.WeakReference;
 
-import net.hetimatan.net.torrent.client.TorrentFront;
+import net.hetimatan.net.torrent.client.TorrentClientFront;
 import net.hetimatan.util.event.EventTask;
 import net.hetimatan.util.event.EventTaskRunner;
 
 
 public class TorrentFrontInterestTask extends EventTask {
 	public static final String TAG  = "TorrentFrontInterestTask";
-	private WeakReference<TorrentFront> mTorrentFront = null;
-	public TorrentFrontInterestTask(TorrentFront front) {
-		mTorrentFront = new WeakReference<TorrentFront>(front);
+	private WeakReference<TorrentClientFront> mTorrentFront = null;
+	public TorrentFrontInterestTask(TorrentClientFront front) {
+		mTorrentFront = new WeakReference<TorrentClientFront>(front);
 	}
 
 	@Override
@@ -21,7 +21,7 @@ public class TorrentFrontInterestTask extends EventTask {
 
 	@Override
 	public void action(EventTaskRunner runner) throws Throwable {
-		TorrentFront front = mTorrentFront.get();
+		TorrentClientFront front = mTorrentFront.get();
 		front.sendInterest();
 	}
 }

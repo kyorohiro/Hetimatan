@@ -32,7 +32,7 @@ import net.hetimatan.util.bitfield.BitField;
 import net.hetimatan.util.log.Log;
 
 
-public class TorrentFront {
+public class TorrentClientFront {
 	public static final String TAG = "TorrentFront";
 	public static final int TRUE  = 0;
 	public static final int FALSE = 1;
@@ -64,7 +64,7 @@ public class TorrentFront {
 		return mSendCash;
 	}
 
-	public TorrentFront(TorrentClient peer, KyoroSocket socket) throws IOException {
+	public TorrentClientFront(TorrentClient peer, KyoroSocket socket) throws IOException {
 		mSocket = socket;
 		mTargetInfo = new TorrentFrontTargetInfo(peer.getPieceLength());
 		KyoroFileForKyoroSocket kf = new KyoroFileForKyoroSocket(socket, 512*30);
@@ -77,7 +77,7 @@ public class TorrentFront {
 		mDebug = ""+socket.getHost()+":"+socket.getPort();
 		mSendCash = new CashKyoroFile(1024, 3);
 	}
-	
+
 	public String getDebug() {
 		return mDebug;
 	}
@@ -217,7 +217,7 @@ public class TorrentFront {
 		MessageUnchoke message = new MessageUnchoke();
 		message.encode(mSendCash.getLastOutput());
 		pushflushSendTask();
-		if(mMyInfo.isChoked() != TorrentFront.FALSE) {
+		if(mMyInfo.isChoked() != TorrentClientFront.FALSE) {
 			mMyInfo.isChoke(false);
 		}
 		TorrentHistory.get().pushSend(this, message);
@@ -227,7 +227,7 @@ public class TorrentFront {
 		MessageChoke message = new MessageChoke();
 		message.encode(mSendCash.getLastOutput());
 		pushflushSendTask();
-		if(mMyInfo.isChoked() != TorrentFront.TRUE) {
+		if(mMyInfo.isChoked() != TorrentClientFront.TRUE) {
 			mMyInfo.isChoke(true);
 		}
 		TorrentHistory.get().pushSend(this, message);
@@ -262,7 +262,7 @@ public class TorrentFront {
 			TorrentClient peer = mTorrentPeer.get();
 			if(peer==null){if(Log.ON){Log.v(TAG, "--1--");}
 				return;}
-			if(getTargetInfo().isChoked() == TorrentFront.TRUE) {if(Log.ON){Log.v(TAG, "--2--");}
+			if(getTargetInfo().isChoked() == TorrentClientFront.TRUE) {if(Log.ON){Log.v(TAG, "--2--");}
 				return;}
 			if(mRequestPiece != -1) {if(Log.ON){Log.v(TAG, "--3--");}
 				return;}

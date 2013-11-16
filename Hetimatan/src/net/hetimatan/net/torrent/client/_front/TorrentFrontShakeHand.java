@@ -7,7 +7,7 @@ import net.hetimatan.io.file.MarkableReader;
 import net.hetimatan.io.net.KyoroSelector;
 import net.hetimatan.io.net.KyoroSocket;
 import net.hetimatan.net.torrent.client.TorrentClient;
-import net.hetimatan.net.torrent.client.TorrentFront;
+import net.hetimatan.net.torrent.client.TorrentClientFront;
 import net.hetimatan.net.torrent.client.TorrentHistory;
 import net.hetimatan.net.torrent.client.message.HelperLookAheadShakehand;
 import net.hetimatan.net.torrent.client.message.MessageHandShake;
@@ -44,8 +44,8 @@ public class TorrentFrontShakeHand {
 		return mCurrentSHHelper;
 	}
 
-	public boolean parseableShakehand(TorrentFront front) throws IOException {
-		if(Log.ON){Log.v(TorrentFront.TAG, "["+front.mDebug+"]"+"TorrentFront#revieceSH()");}
+	public boolean parseableShakehand(TorrentClientFront front) throws IOException {
+		if(Log.ON){Log.v(TorrentClientFront.TAG, "["+front.mDebug+"]"+"TorrentFront#revieceSH()");}
 		MarkableReader reader = front.getReader();
 		HelperLookAheadShakehand currentSHHelper = getHelper(reader);
 		currentSHHelper.read();
@@ -54,8 +54,8 @@ public class TorrentFrontShakeHand {
 		if(currentSHHelper.parseable()) {return true;} else {return false;}
 	}
 
-	public void revcShakehand(TorrentFront front) throws IOException {
-		if(Log.ON){Log.v(TorrentFront.TAG, "["+front.mDebug+"]"+"TorrentFrontTask#shakehand");}
+	public void revcShakehand(TorrentClientFront front) throws IOException {
+		if(Log.ON){Log.v(TorrentClientFront.TAG, "["+front.mDebug+"]"+"TorrentFrontTask#shakehand");}
 
 		MarkableReader reader = front.getReader();
 		MessageHandShake recv = MessageHandShake.decode(reader);
@@ -67,8 +67,8 @@ public class TorrentFrontShakeHand {
 		}
 	}
 
-	public void sendShakehand(TorrentFront front) throws IOException {
-		if(Log.ON){Log.v(TorrentFront.TAG, "["+front.mDebug+"]"+"TorrentFrontTask#sendShakehand");}
+	public void sendShakehand(TorrentClientFront front) throws IOException {
+		if(Log.ON){Log.v(TorrentClientFront.TAG, "["+front.mDebug+"]"+"TorrentFrontTask#sendShakehand");}
 		PercentEncoder encoder = new PercentEncoder();
 		TorrentClient torentPeer = front.getTorrentPeer();
 		byte[] infoHash = encoder.decode(torentPeer.getInfoHash().getBytes());
@@ -81,13 +81,13 @@ public class TorrentFrontShakeHand {
 
 	public static class TorrentFrontShakeHandTask extends EventTask {
 		public static final String TAG = "TorrentFrontShakeHandTask";
-		private WeakReference<TorrentFront> mTorrentFront = null;
+		private WeakReference<TorrentClientFront> mTorrentFront = null;
 		private boolean mIsFirst = true;
 		private boolean mIsKeep = true;
 		private boolean mIsNext = true;
 
-		public TorrentFrontShakeHandTask(TorrentFront front) {
-			mTorrentFront = new WeakReference<TorrentFront>(front);
+		public TorrentFrontShakeHandTask(TorrentClientFront front) {
+			mTorrentFront = new WeakReference<TorrentClientFront>(front);
 		}
 
 		@Override
@@ -107,7 +107,7 @@ public class TorrentFrontShakeHand {
 
 		@Override
 		public void action(EventTaskRunner runner) throws Throwable {
-			TorrentFront front = mTorrentFront.get();
+			TorrentClientFront front = mTorrentFront.get();
 
 			TorrentClient peer = front.getTorrentPeer();
 			KyoroSocket mSocket = front.getSocket();

@@ -5,7 +5,7 @@ import java.lang.ref.WeakReference;
 import java.util.LinkedList;
 import java.util.Random;
 
-import net.hetimatan.net.torrent.client.TorrentFront;
+import net.hetimatan.net.torrent.client.TorrentClientFront;
 import net.hetimatan.net.torrent.client.TorrentClient;
 import net.hetimatan.net.torrent.client.TorrentClientSetting;
 import net.hetimatan.net.torrent.tracker.TrackerPeerInfo;
@@ -34,7 +34,7 @@ public class TorrentPeerChoker {
 			TrackerPeerInfo peer2 = mOptimusUnchokePeer.get(rm);
 			if(!peer1.equals(peer2)) {
 				mOptimusUnchokePeer.remove(rm);
-				TorrentFront front = torrentPeer.getTorrentPeerManager().getTorrentFront(peer2);
+				TorrentClientFront front = torrentPeer.getTorrentPeerManager().getTorrentFront(peer2);
 				__choke(front);
 				mOptimusUnchokePeer.add(peer1);				
 				front = torrentPeer.getTorrentPeerManager().getTorrentFront(peer1);
@@ -43,7 +43,7 @@ public class TorrentPeerChoker {
 		}
 	}
 
-	public void onStartTorrentFront(TorrentFront front) throws IOException {
+	public void onStartTorrentFront(TorrentClientFront front) throws IOException {
 		TorrentClient torrentPeer = mOwner.get();if(torrentPeer == null) {return;}
 		TorrentClientSetting mSetting = torrentPeer.getSetting();
 		int numOfUnchokerNow = mOptimusUnchokePeer.size();
@@ -58,7 +58,7 @@ public class TorrentPeerChoker {
 		System.out.println("--AA-1-"+numOfUnchokerNow);
 	}
 
-	public void __choke(TorrentFront front) throws IOException {
+	public void __choke(TorrentClientFront front) throws IOException {
 		TrackerPeerInfo peer = front.getPeer();
 		if(!mOptimusUnchokePeer.contains(peer)) {
 			mOptimusUnchokePeer.remove(peer);
@@ -66,7 +66,7 @@ public class TorrentPeerChoker {
 		front.getTaskManager().startChoker(front.getTorrentPeer(), front, true);
 	}
 	
-	public void __unchoke(TorrentFront front) throws IOException {
+	public void __unchoke(TorrentClientFront front) throws IOException {
 		TrackerPeerInfo peer = front.getPeer();
 		if(!mOptimusUnchokePeer.contains(peer)) {
 			mOptimusUnchokePeer.add(peer);

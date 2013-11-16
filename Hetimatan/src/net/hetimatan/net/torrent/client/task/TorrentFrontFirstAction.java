@@ -2,7 +2,7 @@ package net.hetimatan.net.torrent.client.task;
 
 import java.lang.ref.WeakReference;
 
-import net.hetimatan.net.torrent.client.TorrentFront;
+import net.hetimatan.net.torrent.client.TorrentClientFront;
 import net.hetimatan.net.torrent.client.TorrentClient;
 import net.hetimatan.util.event.EventTask;
 import net.hetimatan.util.event.EventTaskRunner;
@@ -11,9 +11,9 @@ import net.hetimatan.util.event.EventTaskRunner;
 public class TorrentFrontFirstAction extends EventTask {
 
 	public static final String TAG = "TorrentFrontFirstAction";
-	private WeakReference<TorrentFront> mTorrentFront = null;
-	public TorrentFrontFirstAction(TorrentFront front) {
-		mTorrentFront = new WeakReference<TorrentFront>(front);
+	private WeakReference<TorrentClientFront> mTorrentFront = null;
+	public TorrentFrontFirstAction(TorrentClientFront front) {
+		mTorrentFront = new WeakReference<TorrentClientFront>(front);
 	}
 
 	@Override
@@ -23,7 +23,7 @@ public class TorrentFrontFirstAction extends EventTask {
 
 	@Override
 	public void action(EventTaskRunner runner) throws Throwable {
-		TorrentFront front = mTorrentFront.get();
+		TorrentClientFront front = mTorrentFront.get();
 		System.out.println("-----first----"+front.getDebug());
 		front.getSocket().rejectEventTask(this);
 

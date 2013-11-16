@@ -10,7 +10,7 @@ import com.sun.jndi.url.corbaname.corbanameURLContextFactory;
 import net.hetimatan.io.net.KyoroSelector;
 import net.hetimatan.io.net.KyoroSocket;
 import net.hetimatan.io.net.KyoroSocketImpl;
-import net.hetimatan.net.torrent.client.TorrentFront;
+import net.hetimatan.net.torrent.client.TorrentClientFront;
 import net.hetimatan.net.torrent.client.TorrentClient;
 import net.hetimatan.net.torrent.client.message.MessageNull;
 import net.hetimatan.net.torrent.tracker.TrackerClient;
@@ -77,7 +77,7 @@ public class SendDataTest {
 		// send shakehand
 		// ----------------------------------------------------
 		KyoroSocket socket = new KyoroSocketImpl();
-		TorrentFront front = peer.createFront(socket);
+		TorrentClientFront front = peer.createFront(socket);
 		front.connect(info.getHostName(), info.getPort());
 		while(!front.isConnect()) {Thread.yield();}
 

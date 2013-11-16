@@ -3,7 +3,6 @@ package net.hetimatan.net.torrent.client;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.Random;
 
 import net.hetimatan.io.net.KyoroSelector;
@@ -90,13 +89,11 @@ public class TorrentClient {
 	private TorrentClientGetPeerList mGetPeerListSenario = null;
 	private TorrentPeerInterest mInterest       = new TorrentPeerInterest(this);
 	private TorrentPeerFrontManager mFrontManager = new TorrentPeerFrontManager();
+
 	// ---
 	// task
 	//
 	private TorrentPeerAcceptTask mAcceptTask   = null;
-//	private OnResponseFromTrackerTask mFinTrackerTask = null;
-//	private TorrentPeerStartTracker mTrackerTask = null;
-
 	private static int num = 0;
 
 	
@@ -145,7 +142,7 @@ public class TorrentClient {
 
 	public void startConnect(TrackerPeerInfo peer) throws IOException {
 		if(getTorrentPeerManager().contain(peer)) {return;}
-		TorrentFront front = createFront(peer);
+		TorrentClientFront front = createFront(peer);
 		if(getTorrentPeerManager().addTorrentFront(peer, front)){
 			TorrentHistory.get().pushMessage("TorrentPeer#connect()"+peer.toString()+"\n");
 			front.startConnect(peer.getHostName(), peer.getPort());
@@ -169,7 +166,7 @@ public class TorrentClient {
 		return mSetting;
 	}
 
-	public void updateOptimusUnchokePeer(TorrentFront front) throws IOException {
+	public void updateOptimusUnchokePeer(TorrentClientFront front) throws IOException {
 					mChoker.onStartTorrentFront(front);
 	}
 
@@ -271,29 +268,29 @@ public class TorrentClient {
 			if(socket == null) {break;}
 			socket.setDebug("TorrentPeer"+socket.getHost()+":"+socket.getPort());
 			TorrentHistory.get().pushMessage("TorrentPeer#accepted()\n");
-			TorrentFront front = new TorrentFront(this, socket);
+			TorrentClientFront front = new TorrentClientFront(this, socket);
 			addObserver(front);
 			getTorrentPeerManager().addTorrentFront(front);
 			front.startConnectForAccept();
 		}
 	}
 
-	private void addObserver(TorrentFront front) {
+	private void addObserver(TorrentClientFront front) {
 		front.addObserverAtWeak(mPieceScenario);
 		front.addObserverAtWeak(mRequester);//mRequestScenario);
 		front.addObserverAtWeak(mInterest);
 	}
 
-	public TorrentFront createFront(TrackerPeerInfo peer) throws IOException {
+	public TorrentClientFront createFront(TrackerPeerInfo peer) throws IOException {
 		KyoroSocketImpl s = new KyoroSocketImpl();
 		s.setDebug("TorrentFront:"+s.getHost()+":"+s.getPort());
-		TorrentFront front = createFront(s);
+		TorrentClientFront front = createFront(s);
 		front.setPeer(peer);
 		return front;
 	}
 
-	public TorrentFront createFront(KyoroSocket s) throws IOException {
-		TorrentFront front = new TorrentFront(this, s);
+	public TorrentClientFront createFront(KyoroSocket s) throws IOException {
+		TorrentClientFront front = new TorrentClientFront(this, s);
 		return front;
 	}
 

@@ -7,7 +7,7 @@ import java.util.Iterator;
 
 import net.hetimatan.io.net.KyoroSocket;
 import net.hetimatan.io.net.KyoroSocketImpl;
-import net.hetimatan.net.torrent.client.TorrentFront;
+import net.hetimatan.net.torrent.client.TorrentClientFront;
 import net.hetimatan.net.torrent.client.TorrentClient;
 import net.hetimatan.net.torrent.tracker.TrackerClient;
 import net.hetimatan.net.torrent.tracker.TrackerPeerInfo;
@@ -73,7 +73,7 @@ public class HandShakeTest {
 		// send shakehand
 		// ----------------------------------------------------
 		KyoroSocket socket = new KyoroSocketImpl();
-		TorrentFront front = peer.createFront(socket);
+		TorrentClientFront front = peer.createFront(socket);
 		front.connect(info.getHostName(), info.getPort());
 		while(!front.isConnect()) {Thread.yield();}
 

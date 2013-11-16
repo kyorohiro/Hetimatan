@@ -2,7 +2,7 @@ package net.hetimatan.net.torrent.client.task;
 
 import java.lang.ref.WeakReference;
 
-import net.hetimatan.net.torrent.client.TorrentFront;
+import net.hetimatan.net.torrent.client.TorrentClientFront;
 import net.hetimatan.util.event.EventTask;
 import net.hetimatan.util.event.EventTaskRunner;
 
@@ -10,11 +10,11 @@ import net.hetimatan.util.event.EventTaskRunner;
 public class TorrentFrontChokerTask extends EventTask {
 
 	public static final String TAG = "TorrentFrontChokerTask";
-	private WeakReference<TorrentFront> mTorrentFront = null;
+	private WeakReference<TorrentClientFront> mTorrentFront = null;
 	private boolean mIsChoke = false;
 
-	public TorrentFrontChokerTask(TorrentFront front, boolean isChoke) {
-		mTorrentFront = new WeakReference<TorrentFront>(front);
+	public TorrentFrontChokerTask(TorrentClientFront front, boolean isChoke) {
+		mTorrentFront = new WeakReference<TorrentClientFront>(front);
 		mIsChoke = isChoke;
 	}
 
@@ -29,7 +29,7 @@ public class TorrentFrontChokerTask extends EventTask {
 
 	@Override
 	public void action(EventTaskRunner runner) throws Throwable {
-		TorrentFront front = mTorrentFront.get();
+		TorrentClientFront front = mTorrentFront.get();
 		if(mIsChoke) {
 			front.sendChoke();			
 		} else {

@@ -4,7 +4,7 @@ package net.hetimatan.net.torrent.client._client;
 import java.lang.ref.WeakReference;
 import java.util.LinkedList;
 
-import net.hetimatan.net.torrent.client.TorrentFront;
+import net.hetimatan.net.torrent.client.TorrentClientFront;
 import net.hetimatan.net.torrent.client.TorrentClient;
 import net.hetimatan.net.torrent.client.message.MessageHave;
 import net.hetimatan.net.torrent.client.message.TorrentMessage;
@@ -28,7 +28,7 @@ public class TorrentPeerInterest implements EventListener {
 	 * except myself's peer send message to me.
 	 */
 	@Override
-	public void onReceiveMessage(TorrentFront front, TorrentMessage message) {
+	public void onReceiveMessage(TorrentClientFront front, TorrentMessage message) {
 	 	TorrentClient peer = mUploadTargetPeer.get();
 		if(peer == null) {return;}
 		if(message.getType() == TorrentMessage.SIGN_BITFIELD) {

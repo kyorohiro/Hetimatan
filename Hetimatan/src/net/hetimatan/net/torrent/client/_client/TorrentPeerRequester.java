@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 
 import net.hetimatan.net.torrent.client.TorrentData;
-import net.hetimatan.net.torrent.client.TorrentFront;
+import net.hetimatan.net.torrent.client.TorrentClientFront;
 import net.hetimatan.net.torrent.client.TorrentClient;
 import net.hetimatan.net.torrent.client.message.MessagePiece;
 import net.hetimatan.net.torrent.client.message.TorrentMessage;
@@ -32,7 +32,7 @@ public class TorrentPeerRequester implements EventListener {
 	 	TorrentClient peer = mOwner.get();
 		if(peer == null) {return;}
 		for(int i=0;i<peer.getTorrentPeerManager().numOfFront();i++) {
-			TorrentFront front = peer.getTorrentPeerManager().getTorrentFront(i);
+			TorrentClientFront front = peer.getTorrentPeerManager().getTorrentFront(i);
 			if(front != null) {
 				try {
 					front.getTaskManager().startHave(peer, front, index);
@@ -48,7 +48,7 @@ public class TorrentPeerRequester implements EventListener {
 	 * except myself's peer send message to me.
 	 */
 	@Override
-	public void onReceiveMessage(TorrentFront front, TorrentMessage message) {
+	public void onReceiveMessage(TorrentClientFront front, TorrentMessage message) {
 	 	TorrentClient peer = mOwner.get();
 		if(peer == null) {return;}
 

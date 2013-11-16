@@ -1,6 +1,6 @@
 package net.hetimatan.net.torrent.client._front;
 
-import net.hetimatan.net.torrent.client.TorrentFront;
+import net.hetimatan.net.torrent.client.TorrentClientFront;
 import net.hetimatan.net.torrent.util.piece.PieceInfo;
 import net.hetimatan.net.torrent.util.piece.PieceInfoList;
 import net.hetimatan.util.bitfield.BitField;
@@ -8,7 +8,7 @@ import net.hetimatan.util.bitfield.BitField;
 public class TorrentFrontTargetInfo {
 	public BitField mTargetBitField = null;
 	public boolean mTargetInterested = false;
-	private int mTargetChoked = TorrentFront.NONE;
+	private int mTargetChoked = TorrentClientFront.NONE;
 	public PieceInfoList mRequestList = new PieceInfoList();
 
 	private int mPieceLength = 0;
@@ -63,9 +63,9 @@ public class TorrentFrontTargetInfo {
 
 	public void isChoke(boolean v) {
 		if(v) {
-			mTargetChoked = TorrentFront.TRUE;
+			mTargetChoked = TorrentClientFront.TRUE;
 		} else {
-			mTargetChoked = TorrentFront.FALSE;			
+			mTargetChoked = TorrentClientFront.FALSE;			
 		}
 	}
 }

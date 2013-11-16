@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.LinkedList;
 
-import net.hetimatan.net.torrent.client.TorrentFront;
+import net.hetimatan.net.torrent.client.TorrentClientFront;
 import net.hetimatan.net.torrent.client.TorrentClient;
 import net.hetimatan.net.torrent.client.message.TorrentMessage;
 import net.hetimatan.net.torrent.client.senario.TorrentFrontReceiveMessageSenario.EventListener;
@@ -38,7 +38,7 @@ public class TorrentClientUploadSenario implements EventListener {
 		mSeederTask = new ScenarioSeeder(this);
 	}
 
-	public void sendPiece(TorrentFront front) {
+	public void sendPiece(TorrentClientFront front) {
 		TorrentClient peer = mUploadTargetPeer.get();
 		if(peer == null){return;}
 		TorrentFrontSendPieceTask task = new TorrentFrontSendPieceTask(front);
@@ -59,7 +59,7 @@ public class TorrentClientUploadSenario implements EventListener {
 		if(newLen<0) {return;}
 		boolean have = false;
 		for(int i=0;i<peer.getTorrentPeerManager().numOfFront();i++) {
-			TorrentFront f = peer.getTorrentPeerManager().getTorrentFront(i);
+			TorrentClientFront f = peer.getTorrentPeerManager().getTorrentFront(i);
 			if(f == null){continue;}
 			if(f != null&&f.haveTargetRequest()) {
 				sendPiece(f);
@@ -75,7 +75,7 @@ public class TorrentClientUploadSenario implements EventListener {
 	 * except myself's peer send message to me.
 	 */
 	@Override
-	public void onReceiveMessage(TorrentFront front, TorrentMessage message) {
+	public void onReceiveMessage(TorrentClientFront front, TorrentMessage message) {
 	 	TorrentClient peer = mUploadTargetPeer.get();
 		if(peer == null) {return;}
 		if(peer.getClientRunner().contains(mSeederTask)){

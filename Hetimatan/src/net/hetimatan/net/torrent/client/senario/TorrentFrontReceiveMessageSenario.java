@@ -7,7 +7,7 @@ import java.util.LinkedList;
 
 import net.hetimatan.io.file.MarkableReader;
 import net.hetimatan.net.torrent.client.TorrentClient;
-import net.hetimatan.net.torrent.client.TorrentFront;
+import net.hetimatan.net.torrent.client.TorrentClientFront;
 import net.hetimatan.net.torrent.client.TorrentHistory;
 import net.hetimatan.net.torrent.client.message.HelperLookAheadMessage;
 import net.hetimatan.net.torrent.client.message.MessageBitField;
@@ -41,8 +41,8 @@ public class TorrentFrontReceiveMessageSenario {
 	// -1 eof
 	//  0 parseable
 	//  1 end
-	public int parseableMessage(TorrentFront front) throws IOException {
-		if(Log.ON){Log.v(TorrentFront.TAG, "["+front.mDebug+"]"+"TorrentFront#parseableMessage()");}
+	public int parseableMessage(TorrentClientFront front) throws IOException {
+		if(Log.ON){Log.v(TorrentClientFront.TAG, "["+front.mDebug+"]"+"TorrentFront#parseableMessage()");}
 		MarkableReader reader = front.getReader();
 		if(mCurrentMessage == null) {
 			TorrentHistory.get().pushMessage("[receive start]\n");
@@ -54,7 +54,7 @@ public class TorrentFrontReceiveMessageSenario {
 		else{return 1;}
 	}
 
-	public void receive(TorrentFront front) throws IOException {
+	public void receive(TorrentClientFront front) throws IOException {
 		MarkableReader reader = front.getReader();
 		TorrentClient peer = front.getTorrentPeer();
 		int parseable = parseableMessage(front);
@@ -72,8 +72,8 @@ public class TorrentFrontReceiveMessageSenario {
 		}
 	}
 
-	public void onReceiveMessage(TorrentFront front, MessageNull nullMessage) throws IOException {
-		if(Log.ON){Log.v(TorrentFront.TAG, "["+front.mDebug+"]"+"distribute:"+nullMessage.getSign()+":"+nullMessage.getMessageLength());}
+	public void onReceiveMessage(TorrentClientFront front, MessageNull nullMessage) throws IOException {
+		if(Log.ON){Log.v(TorrentClientFront.TAG, "["+front.mDebug+"]"+"distribute:"+nullMessage.getSign()+":"+nullMessage.getMessageLength());}
 		MarkableReader reader = front.getReader();
 		TorrentMessage message = null;
 		switch(nullMessage.getSign()) {
@@ -128,10 +128,10 @@ public class TorrentFrontReceiveMessageSenario {
 	}
 
 	public static interface EventListener {
-		void onReceiveMessage(TorrentFront front,TorrentMessage message);
+		void onReceiveMessage(TorrentClientFront front,TorrentMessage message);
 	}
 
-	public void dispatch(TorrentFront front, TorrentMessage message) throws IOException {
+	public void dispatch(TorrentClientFront front, TorrentMessage message) throws IOException {
 		front.onReceiveMessage(message);
 		Iterator<WeakReference<EventListener>>	ite = mObservers.iterator();
 		while(ite.hasNext()) {
@@ -147,9 +147,9 @@ public class TorrentFrontReceiveMessageSenario {
 	public static class TorrentFrontReceiverTask extends EventTask {
 
 		public static final String TAG  = "TorrentFrontReceiverTask";
-		private WeakReference<TorrentFront> mTorrentFront = null;
-		public TorrentFrontReceiverTask(TorrentFront front) {
-			mTorrentFront = new WeakReference<TorrentFront>(front);
+		private WeakReference<TorrentClientFront> mTorrentFront = null;
+		public TorrentFrontReceiverTask(TorrentClientFront front) {
+			mTorrentFront = new WeakReference<TorrentClientFront>(front);
 		}
 
 		@Override
@@ -159,7 +159,7 @@ public class TorrentFrontReceiveMessageSenario {
 
 		@Override
 		public void action(EventTaskRunner runner) throws Throwable {
-			TorrentFront front = mTorrentFront.get();
+			TorrentClientFront front = mTorrentFront.get();
 			front.receive();
 		}
 	}

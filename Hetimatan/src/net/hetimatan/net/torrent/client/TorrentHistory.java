@@ -50,14 +50,14 @@ public class TorrentHistory {
 		}
 	}
 
-	public synchronized void pushReceive(TorrentFront front, TorrentMessage message) {
+	public synchronized void pushReceive(TorrentClientFront front, TorrentMessage message) {
 		if(message == null || front == null) {
 			return;
 		}
 		log("["+front.getDebug()+"]"+"recv", message);
 	}
 
-	public synchronized void pushSend(TorrentFront front, TorrentMessage message) {
+	public synchronized void pushSend(TorrentClientFront front, TorrentMessage message) {
 		log("["+front.getDebug()+"]"+"send", message);
 	}
 
