@@ -6,11 +6,7 @@ import junit.framework.TestCase;
 import net.hetimatan.io.file.MarkableFileReader;
 import net.hetimatan.io.filen.CashKyoroFileHelper;
 import net.hetimatan.io.filen.CashKyoroFile;
-import net.hetimatan.net.torrent.client.message.MessageBitField;
-import net.hetimatan.net.torrent.client.message.MessageCancel;
-import net.hetimatan.net.torrent.client.message.MessageChoke;
 import net.hetimatan.net.torrent.client.message.MessageHandShake;
-import net.hetimatan.net.torrent.client.message.TorrentMessage;
 import net.hetimatan.util.io.ByteArrayBuilder;
 import net.hetimatan.util.test.TestUtil;
 
@@ -52,6 +48,7 @@ public class TestForMessageHandShake extends TestCase {
 		message.encode(output.getLastOutput());
 		output.syncWrite();
 		TestUtil.assertArrayEquals(this, "", expected, CashKyoroFileHelper.newBinary(output));
+		output.close();
 
 	}
 
