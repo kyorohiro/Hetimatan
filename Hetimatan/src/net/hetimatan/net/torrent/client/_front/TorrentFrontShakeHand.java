@@ -28,6 +28,8 @@ import net.hetimatan.util.url.PercentEncoder;
  */
 public class TorrentFrontShakeHand {
 	private HelperLookAheadShakehand mCurrentSHHelper = null;
+	private boolean mReceivedShakehand = false;
+	private boolean mSendShakehand = false;
 
 	private HelperLookAheadShakehand getHelper(MarkableReader reader) throws IOException {
 		if(mCurrentSHHelper == null) {
@@ -35,6 +37,10 @@ public class TorrentFrontShakeHand {
 			mCurrentSHHelper = new HelperLookAheadShakehand(reader.getFilePointer(), reader);
 		}
 		return mCurrentSHHelper;
+	}
+
+	public boolean isShakehanded() {
+		return (mReceivedShakehand&mSendShakehand);
 	}
 
 	public boolean parseableShakehand(TorrentClientFront front) throws IOException {
@@ -58,6 +64,7 @@ public class TorrentFrontShakeHand {
 		if (peer.getPeerId().equals(encoder.encode(recv.getPeerId()))) {	
 			throw new IOException();
 		}
+		mReceivedShakehand = true;
 	}
 
 	public void sendShakehand(TorrentClientFront front) throws IOException {
@@ -70,6 +77,7 @@ public class TorrentFrontShakeHand {
 		TorrentHistory.get().pushSend(front, send);
 		send.encode(front.getSendCash().getLastOutput());
 		front.pushflushSendTask();
+		mSendShakehand = true;
 	}
 
 	public static class TorrentFrontShakeHandTask extends EventTask {

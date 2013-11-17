@@ -31,7 +31,11 @@ import net.hetimatan.net.torrent.util.piece.PieceInfo;
 import net.hetimatan.util.bitfield.BitField;
 import net.hetimatan.util.log.Log;
 
-
+/**
+ * this class have another torrent client connection. and manage status. 
+ * 
+ *
+ */
 public class TorrentClientFront {
 	public static final String TAG = "TorrentFront";
 	public static final int TRUE  = 0;
@@ -171,6 +175,10 @@ public class TorrentClientFront {
 
 	public void pushflushSendTask() throws IOException {	
 		getTaskManager().startSendTask(getTorrentPeer(), this);
+	}
+
+	public boolean isShakehanded() {
+		return mShakeHand.isShakehanded();
 	}
 
 	public boolean parseableShakehand() throws IOException {

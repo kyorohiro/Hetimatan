@@ -295,7 +295,7 @@ public class TorrentClient {
 	}
 
 	public void close() {
-		try { mServerSocket.close();} catch (IOException e) { }
+		try { if(mServerSocket != null){mServerSocket.close();}} catch (IOException e) { }
 		try { getTorrentData().save();} catch (IOException e) { }
 	}
 

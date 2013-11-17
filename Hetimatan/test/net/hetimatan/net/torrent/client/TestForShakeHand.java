@@ -3,15 +3,13 @@ package net.hetimatan.net.torrent.client;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-import net.hetimatan.net.torrent.client.TorrentClient;
 import net.hetimatan.net.torrent.tracker.TrackerServer;
 import net.hetimatan.net.torrent.util.metafile.MetaFile;
 import net.hetimatan.net.torrent.util.metafile.MetaFileCreater;
 import net.hetimatan.util.event.EventTaskRunner;
 import junit.framework.TestCase;
 
-public class TestForGetPeerList extends TestCase {
-
+public class TestForShakeHand extends TestCase {
 	public void testGetPeerListFromTracker() throws IOException, URISyntaxException, InterruptedException {
 		byte[] piece = new byte[20];
 
@@ -43,11 +41,20 @@ public class TestForGetPeerList extends TestCase {
 			assertEquals(1, client2.getTorrentPeerManager().numOfFront());
 			assertEquals(client1.getServerPort(), client2.getTorrentPeerManager().getFrontPeer(0).getPort());
 
+			
+			for(int i=0;i<100;i++) {
+				if(client2.getTorrentPeerManager().getTorrentFront(0).isShakehanded()) {
+					break;
+				}
+				Thread.sleep(100);
+			}
+			assertEquals(true, client2.getTorrentPeerManager().getTorrentFront(0).isShakehanded());
+
 		} finally {
 			serverRunner.close();
 			server.close();
-			clientRunner1.close();
-			clientRunner2.close();
+			if(clientRunner1 != null) {clientRunner1.close();}
+			if(clientRunner2 != null) {clientRunner2.close();}
 			client1.close();
 			client2.close();
 		}
