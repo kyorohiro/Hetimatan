@@ -1,4 +1,4 @@
-package net.hetimatan.net.torrent.client.senario;
+package net.hetimatan.net.torrent.client._senario;
 
 
 import java.io.IOException;
@@ -7,8 +7,8 @@ import java.util.LinkedList;
 
 import net.hetimatan.net.torrent.client.TorrentClientFront;
 import net.hetimatan.net.torrent.client.TorrentClient;
+import net.hetimatan.net.torrent.client._front.TorrentFrontReceiveMessageSenario.EventListener;
 import net.hetimatan.net.torrent.client.message.TorrentMessage;
-import net.hetimatan.net.torrent.client.senario.TorrentFrontReceiveMessageSenario.EventListener;
 import net.hetimatan.net.torrent.client.task.TorrentFrontSendPieceTask;
 import net.hetimatan.util.event.EventTask;
 import net.hetimatan.util.event.EventTaskRunner;

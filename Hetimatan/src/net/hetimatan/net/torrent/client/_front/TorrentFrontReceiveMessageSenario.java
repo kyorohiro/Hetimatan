@@ -1,4 +1,4 @@
-package net.hetimatan.net.torrent.client.senario;
+package net.hetimatan.net.torrent.client._front;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;

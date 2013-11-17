@@ -6,9 +6,9 @@ import java.lang.ref.WeakReference;
 import net.hetimatan.net.torrent.client.TorrentData;
 import net.hetimatan.net.torrent.client.TorrentClientFront;
 import net.hetimatan.net.torrent.client.TorrentClient;
+import net.hetimatan.net.torrent.client._front.TorrentFrontReceiveMessageSenario.EventListener;
 import net.hetimatan.net.torrent.client.message.MessagePiece;
 import net.hetimatan.net.torrent.client.message.TorrentMessage;
-import net.hetimatan.net.torrent.client.senario.TorrentFrontReceiveMessageSenario.EventListener;
 import net.hetimatan.net.torrent.tracker.TrackerRequest;
 import net.hetimatan.util.bitfield.BitField;
 

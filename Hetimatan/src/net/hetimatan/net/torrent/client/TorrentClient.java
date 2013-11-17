@@ -15,7 +15,7 @@ import net.hetimatan.net.torrent.client._client.TorrentPeerChoker;
 import net.hetimatan.net.torrent.client._client.TorrentPeerFrontManager;
 import net.hetimatan.net.torrent.client._client.TorrentPeerInterest;
 import net.hetimatan.net.torrent.client._client.TorrentPeerRequester;
-import net.hetimatan.net.torrent.client.senario.TorrentClientUploadSenario;
+import net.hetimatan.net.torrent.client._senario.TorrentClientUploadSenario;
 import net.hetimatan.net.torrent.client.task.TorrentPeerAcceptTask;
 import net.hetimatan.net.torrent.client.task.TorrentPeerBootTask;
 import net.hetimatan.net.torrent.tracker.TrackerClient;
