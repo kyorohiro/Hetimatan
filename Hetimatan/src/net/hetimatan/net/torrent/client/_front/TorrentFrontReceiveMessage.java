@@ -37,7 +37,6 @@ public class TorrentFrontReceiveMessage {
 
 	private HelperLookAheadMessage mCurrentMessage = null;
 
-	//
 	// -1 eof
 	//  0 parseable
 	//  1 end
@@ -75,6 +74,12 @@ public class TorrentFrontReceiveMessage {
 	public void onReceiveMessage(TorrentClientFront front, MessageNull nullMessage) throws IOException {
 		if(Log.ON){Log.v(TorrentClientFront.TAG, "["+front.mDebug+"]"+"distribute:"+nullMessage.getSign()+":"+nullMessage.getMessageLength());}
 		MarkableReader reader = front.getReader();
+		TorrentMessage message = nullMessage2TorrentMessage(reader, nullMessage);
+		dispatch(front, message);
+	}
+
+
+	private TorrentMessage nullMessage2TorrentMessage(MarkableReader reader, MessageNull nullMessage) throws IOException {
 		TorrentMessage message = null;
 		switch(nullMessage.getSign()) {
 		case TorrentMessage.SIGN_CHOKE:
@@ -113,11 +118,8 @@ public class TorrentFrontReceiveMessage {
 			message = MessageNull.decode(reader);
 			break;
 		}
-
-//		front.onReceiveMessage(message);
-		dispatch(front, message);
+		return message;
 	}
-
 
 	// ------------------------------------------------
 	//
