@@ -5,7 +5,7 @@ import java.io.IOException;
 import net.hetimatan.io.net.KyoroSelector;
 import net.hetimatan.net.torrent.client.TorrentClientFront;
 import net.hetimatan.net.torrent.client.TorrentClient;
-import net.hetimatan.net.torrent.client._front.TorrentFrontReceiveMessageSenario.TorrentFrontReceiverTask;
+import net.hetimatan.net.torrent.client._front.TorrentFrontReceiveMessage.TorrentFrontReceiverTask;
 import net.hetimatan.net.torrent.client._front.TorrentFrontShakeHand.TorrentFrontShakeHandTask;
 import net.hetimatan.net.torrent.client.task.TorrentFrontChokerTask;
 import net.hetimatan.net.torrent.client.task.TorrentFrontCloseTask;

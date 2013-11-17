@@ -33,7 +33,7 @@ import net.hetimatan.util.log.Log;
 //まだ、メソッドだけ抜き出した状態
 //
 //
-public class TorrentFrontReceiveMessageSenario {
+public class TorrentFrontReceiveMessage {
 
 	private HelperLookAheadMessage mCurrentMessage = null;
 
@@ -148,6 +148,7 @@ public class TorrentFrontReceiveMessageSenario {
 
 		public static final String TAG  = "TorrentFrontReceiverTask";
 		private WeakReference<TorrentClientFront> mTorrentFront = null;
+
 		public TorrentFrontReceiverTask(TorrentClientFront front) {
 			mTorrentFront = new WeakReference<TorrentClientFront>(front);
 		}
