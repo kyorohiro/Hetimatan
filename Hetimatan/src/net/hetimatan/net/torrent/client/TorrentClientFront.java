@@ -15,7 +15,6 @@ import net.hetimatan.net.torrent.client._front.TorrentFrontReceiveMessage;
 import net.hetimatan.net.torrent.client._front.TorrentFrontShakeHand;
 import net.hetimatan.net.torrent.client._front.TorrentFrontTargetInfo;
 import net.hetimatan.net.torrent.client._front.TorrentFrontTaskManager;
-import net.hetimatan.net.torrent.client._front.TorrentFrontReceiveMessage.EventListener;
 import net.hetimatan.net.torrent.client.message.MessageBitField;
 import net.hetimatan.net.torrent.client.message.MessageChoke;
 import net.hetimatan.net.torrent.client.message.MessageHave;
@@ -412,7 +411,7 @@ public class TorrentClientFront {
 	// ------------------------------------------------
 	//
 	// ------------------------------------------------
-	public void addObserverAtWeak(EventListener observer) {
+	public void addObserverAtWeak(TorrentClientListener observer) {
 		mMessageSenario.addObserverAtWeak(observer);
 	}
 

@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import net.hetimatan.io.file.MarkableReader;
 import net.hetimatan.net.torrent.client.TorrentClient;
 import net.hetimatan.net.torrent.client.TorrentClientFront;
+import net.hetimatan.net.torrent.client.TorrentClientListener;
 import net.hetimatan.net.torrent.client.TorrentHistory;
 import net.hetimatan.net.torrent.client.message.HelperLookAheadMessage;
 import net.hetimatan.net.torrent.client.message.MessageBitField;
@@ -124,21 +125,17 @@ public class TorrentFrontReceiveMessage {
 	// ------------------------------------------------
 	//
 	// ------------------------------------------------
-	private LinkedList<WeakReference<EventListener>> mObservers = new LinkedList<WeakReference<EventListener>>();
-	public void addObserverAtWeak(EventListener observer) {
-		mObservers.add(new WeakReference<EventListener>(observer));
-	}
-
-	public static interface EventListener {
-		void onReceiveMessage(TorrentClientFront front,TorrentMessage message);
+	private LinkedList<WeakReference<TorrentClientListener>> mObservers = new LinkedList<WeakReference<TorrentClientListener>>();
+	public void addObserverAtWeak(TorrentClientListener observer) {
+		mObservers.add(new WeakReference<TorrentClientListener>(observer));
 	}
 
 	public void dispatch(TorrentClientFront front, TorrentMessage message) throws IOException {
 		front.onReceiveMessage(message);
-		Iterator<WeakReference<EventListener>>	ite = mObservers.iterator();
+		Iterator<WeakReference<TorrentClientListener>>	ite = mObservers.iterator();
 		while(ite.hasNext()) {
-			WeakReference<EventListener> observerref = ite.next();
-			EventListener observer = observerref.get();
+			WeakReference<TorrentClientListener> observerref = ite.next();
+			TorrentClientListener observer = observerref.get();
 			if(null == observerref.get()) {
 				mObservers.remove(observerref);
 			}

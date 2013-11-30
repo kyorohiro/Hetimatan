@@ -6,7 +6,7 @@ import java.util.LinkedList;
 
 import net.hetimatan.net.torrent.client.TorrentClientFront;
 import net.hetimatan.net.torrent.client.TorrentClient;
-import net.hetimatan.net.torrent.client._front.TorrentFrontReceiveMessage.EventListener;
+import net.hetimatan.net.torrent.client.TorrentClientListener;
 import net.hetimatan.net.torrent.client.message.MessageHave;
 import net.hetimatan.net.torrent.client.message.TorrentMessage;
 import net.hetimatan.net.torrent.client.task.TorrentFrontSendPieceTask;
@@ -15,7 +15,7 @@ import net.hetimatan.util.bitfield.BitField;
 //
 // if target peer has my lacked piece. notify interest. else notify not interst
 // 
-public class TorrentPeerInterest implements EventListener {
+public class TorrentPeerInterest implements TorrentClientListener {
 
 	private WeakReference<TorrentClient> mUploadTargetPeer = null;
 	private LinkedList<TorrentFrontSendPieceTask> mScenarioList = new LinkedList<TorrentFrontSendPieceTask>();

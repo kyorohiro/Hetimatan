@@ -7,7 +7,7 @@ import java.util.LinkedList;
 
 import net.hetimatan.net.torrent.client.TorrentClientFront;
 import net.hetimatan.net.torrent.client.TorrentClient;
-import net.hetimatan.net.torrent.client._front.TorrentFrontReceiveMessage.EventListener;
+import net.hetimatan.net.torrent.client.TorrentClientListener;
 import net.hetimatan.net.torrent.client.message.TorrentMessage;
 import net.hetimatan.net.torrent.client.task.TorrentFrontSendPieceTask;
 import net.hetimatan.util.event.EventTask;
@@ -27,7 +27,7 @@ import net.hetimatan.util.event.EventTaskRunner;
 // 2. start updalod(ScenarioSeeder)
 // 3. if have uploaded data, upload
 //
-public class TorrentClientUploadSenario implements EventListener {
+public class TorrentClientUploadSenario implements TorrentClientListener {
 
 	private WeakReference<TorrentClient> mUploadTargetPeer = null;
 	private LinkedList<TorrentFrontSendPieceTask> mScenarioList = new LinkedList<TorrentFrontSendPieceTask>();

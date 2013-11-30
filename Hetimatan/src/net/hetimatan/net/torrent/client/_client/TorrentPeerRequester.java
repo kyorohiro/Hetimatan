@@ -3,16 +3,16 @@ package net.hetimatan.net.torrent.client._client;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 
+import net.hetimatan.net.torrent.client.TorrentClientListener;
 import net.hetimatan.net.torrent.client.TorrentData;
 import net.hetimatan.net.torrent.client.TorrentClientFront;
 import net.hetimatan.net.torrent.client.TorrentClient;
-import net.hetimatan.net.torrent.client._front.TorrentFrontReceiveMessage.EventListener;
 import net.hetimatan.net.torrent.client.message.MessagePiece;
 import net.hetimatan.net.torrent.client.message.TorrentMessage;
 import net.hetimatan.net.torrent.tracker.TrackerRequest;
 import net.hetimatan.util.bitfield.BitField;
 
-public class TorrentPeerRequester implements EventListener {
+public class TorrentPeerRequester implements TorrentClientListener {
 	private WeakReference<TorrentClient> mOwner = null;
 
 	public TorrentPeerRequester(TorrentClient peer) {
