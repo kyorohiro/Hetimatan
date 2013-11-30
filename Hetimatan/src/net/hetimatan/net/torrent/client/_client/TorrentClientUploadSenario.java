@@ -79,11 +79,8 @@ public class TorrentClientUploadSenario implements TorrentClientListener {
 	public void onReceiveMessage(TorrentClientFront front, TorrentMessage message) {
 	 	TorrentClient peer = mUploadTargetPeer.get();
 		if(peer == null) {return;}
-		if(peer.getClientRunner().contains(mSeederTask)){
-			return;
-		} else {
-			peer.addClientTask(mSeederTask);
-		}
+		if(peer.getClientRunner().contains(mSeederTask)){return;}
+		peer.addClientTask(mSeederTask);
 	}
 
 

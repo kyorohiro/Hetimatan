@@ -2,12 +2,11 @@ package net.hetimatan.net.torrent.client._client;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
-import java.util.Iterator;
+
 
 import net.hetimatan.net.torrent.client.TorrentClient;
 import net.hetimatan.net.torrent.client.TorrentHistory;
 import net.hetimatan.net.torrent.tracker.TrackerClient;
-import net.hetimatan.net.torrent.tracker.TrackerPeerInfo;
 import net.hetimatan.net.torrent.tracker.TrackerRequest;
 import net.hetimatan.net.torrent.util.metafile.MetaFile;
 import net.hetimatan.util.event.EventTask;

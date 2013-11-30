@@ -5,7 +5,6 @@ import java.lang.ref.WeakReference;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import net.hetimatan.net.torrent.client.TorrentClient;
 import net.hetimatan.net.torrent.client.TorrentClientFront;
 import net.hetimatan.net.torrent.client.TorrentClientListener;
 import net.hetimatan.net.torrent.client.message.TorrentMessage;
