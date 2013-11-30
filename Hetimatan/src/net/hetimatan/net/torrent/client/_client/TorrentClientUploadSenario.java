@@ -1,4 +1,4 @@
-package net.hetimatan.net.torrent.client._senario;
+package net.hetimatan.net.torrent.client._client;
 
 
 import java.io.IOException;
@@ -10,6 +10,7 @@ import net.hetimatan.net.torrent.client.TorrentClient;
 import net.hetimatan.net.torrent.client.TorrentClientListener;
 import net.hetimatan.net.torrent.client.message.TorrentMessage;
 import net.hetimatan.net.torrent.client.task.TorrentFrontSendPieceTask;
+import net.hetimatan.net.torrent.tracker.TrackerClient;
 import net.hetimatan.util.event.EventTask;
 import net.hetimatan.util.event.EventTaskRunner;
 
@@ -107,6 +108,11 @@ public class TorrentClientUploadSenario implements TorrentClientListener {
 			scenario.distributeInOrder();
 		}
 
+	}
+
+
+	@Override
+	public void onResponsePeerList(TrackerClient client) {
 	}
 
 }

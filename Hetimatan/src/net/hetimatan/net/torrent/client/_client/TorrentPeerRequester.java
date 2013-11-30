@@ -9,6 +9,7 @@ import net.hetimatan.net.torrent.client.TorrentClientFront;
 import net.hetimatan.net.torrent.client.TorrentClient;
 import net.hetimatan.net.torrent.client.message.MessagePiece;
 import net.hetimatan.net.torrent.client.message.TorrentMessage;
+import net.hetimatan.net.torrent.tracker.TrackerClient;
 import net.hetimatan.net.torrent.tracker.TrackerRequest;
 import net.hetimatan.util.bitfield.BitField;
 
@@ -74,5 +75,9 @@ public class TorrentPeerRequester implements TorrentClientListener {
 			}
 			
 		}
+	}
+
+	@Override
+	public void onResponsePeerList(TrackerClient client) {
 	}
 }
