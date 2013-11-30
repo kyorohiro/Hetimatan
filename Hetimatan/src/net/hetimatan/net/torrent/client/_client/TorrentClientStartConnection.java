@@ -11,11 +11,11 @@ import net.hetimatan.net.torrent.client.message.TorrentMessage;
 import net.hetimatan.net.torrent.tracker.TrackerClient;
 import net.hetimatan.net.torrent.tracker.TrackerPeerInfo;
 
-public class TorrentClientStartConection implements TorrentClientListener {
+public class TorrentClientStartConnection implements TorrentClientListener {
 
 	private WeakReference<TorrentClient> mUploadTargetPeer = null;
 
-	public TorrentClientStartConection(TorrentClient target) throws IOException {
+	public TorrentClientStartConnection(TorrentClient target) throws IOException {
 		mUploadTargetPeer = new WeakReference<TorrentClient>(target);
 	}
 
