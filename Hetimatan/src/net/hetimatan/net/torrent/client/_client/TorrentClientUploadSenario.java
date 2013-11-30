@@ -51,10 +51,8 @@ public class TorrentClientUploadSenario implements TorrentClientListener {
 	// recreate . some torrent client receive only requested piece.
 	public void distributeInOrder() throws IOException {
 		TorrentClient peer = mUploadTargetPeer.get();
-		
-		if(peer == null) {
-			return;
-		}
+		if(peer == null) {return;}
+
 		int existLen = mScenarioList.size();
 		int newLen =  4-existLen;
 		if(newLen<0) {return;}
