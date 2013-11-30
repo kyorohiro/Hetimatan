@@ -1,0 +1,138 @@
+[httpserver6969]#startAccept:
+[httpserver6969]#startFront:[httpfront:172.16.31.128:49375]
+[httpfront:172.16.31.128:49375]:parse request:GET /announce?info_hash=O%19%2Fm%D6%E1C%C2%E5%F8%B00%AE%95%E5%9Da%7C%BEk&peer_id=%2DKY0114%2DJ%40f%B8d%04%00%0Dc%93%23G&port=6881&uploaded=0&downloaded=0&left=0&compact=1&event=completed HTTP/1.1
+User-Agent: Raider/1.0
+
+
+[httpserver6969]#createResponse:[httpfront:172.16.31.128:49375]
+[httpfront:172.16.31.128:49375]#close:
+[httpserver6969]#startFront:[httpfront:172.16.31.1:52819]
+[httpfront:172.16.31.1:52819]:parse request:GET /announce?info_hash=O%19%2Fm%D6%E1C%C2%E5%F8%B00%AE%95%E5%9Da%7C%BEk&peer_id=%2DKY0114%2D%DEBf%9EE%D0I%B6%06%97b%13&port=6881&uploaded=0&downloaded=0&left=0&compact=1&event=started HTTP/1.1
+User-Agent: Raider/1.0
+
+
+[httpserver6969]#createResponse:[httpfront:172.16.31.1:52819]
+[httpfront:172.16.31.1:52819]#close:
+[httpserver6969]#startFront:[httpfront:172.16.31.1:52824]
+[httpfront:172.16.31.1:52824]:parse request:GET /announce?info_hash=O%19%2Fm%D6%E1C%C2%E5%F8%B00%AE%95%E5%9Da%7C%BEk&peer_id=%2DKY0114%2D%DEBf%9EE%D0I%B6%06%97b%13&port=6881&uploaded=0&downloaded=64667648&left=0&compact=1&event=completed HTTP/1.1
+User-Agent: Raider/1.0
+
+
+[httpserver6969]#createResponse:[httpfront:172.16.31.1:52824]
+[httpfront:172.16.31.1:52824]#close:
+[httpserver6969]#startFront:[httpfront:172.16.31.1:52856]
+[httpfront:172.16.31.1:52856]:parse request:GET /announce?info_hash=O%19%2Fm%D6%E1C%C2%E5%F8%B00%AE%95%E5%9Da%7C%BEk&peer_id=%2DKY0114%2D%DEBf%9EE%D0I%B6%06%97b%13&port=6881&uploaded=0&downloaded=64667648&left=0&compact=1&event=stopped HTTP/1.1
+User-Agent: Raider/1.0
+
+
+[httpserver6969]#createResponse:[httpfront:172.16.31.1:52856]
+[httpfront:172.16.31.1:52856]#close:
+[httpserver6969]#close:
+[http_server_empty]#close:
+t:
+[httpserver6969]#startAccept:
+[httpserver6969]#startFront:[httpfront:172.16.31.1:58576]
+[httpfront:172.16.31.1:58576]:parse request:GET /announce?info_hash=O%19%2Fm%D6%E1C%C2%E5%F8%B00%AE%95%E5%9Da%7C%BEk&peer_id=%2DKY0114%2D%DEBf%9EE%D0I%B6%06%97b%13&port=6881&uploaded=0&downloaded=0&left=0&compact=1&event=completed HTTP/1.1
+User-Agent: Raider/1.0
+
+
+[httpserver6969]#createResponse:[httpfront:172.16.31.1:58576]
+[httpfront:172.16.31.1:58576]#close:
+[httpserver6969]#startFront:[httpfront:172.16.31.1:58650]
+[httpfront:172.16.31.1:58650]:parse request:GET /announce?info_hash=O%19%2Fm%D6%E1C%C2%E5%F8%B00%AE%95%E5%9Da%7C%BEk&peer_id=%2DKY0114%2D%DEBf%9EE%D0I%B6%06%97b%13&port=6881&uploaded=0&downloaded=0&left=0&compact=1&event=completed HTTP/1.1
+User-Agent: Raider/1.0
+
+
+[httpserver6969]#createResponse:[httpfront:172.16.31.1:58650]
+[httpfront:172.16.31.1:58650]#close:
+[httpserver6969]#startFront:[httpfront:172.16.31.128:40496]
+[httpfront:172.16.31.128:40496]:parse request:GET /announce?info_hash=O%19%2Fm%D6%E1C%C2%E5%F8%B00%AE%95%E5%9Da%7C%BEk&peer_id=%2DKY0114%2DJ%40f%B8d%04%00%0Dc%93%23G&port=6881&uploaded=0&downloaded=0&left=0&compact=1&event=completed HTTP/1.1
+User-Agent: Raider/1.0
+
+
+[httpserver6969]#createResponse:[httpfront:172.16.31.128:40496]
+[httpfront:172.16.31.128:40496]#close:
+[httpserver6969]#startFront:[httpfront:172.16.31.1:58818]
+[httpfront:172.16.31.1:58818]:parse request:GET /announce?info_hash=O%19%2Fm%D6%E1C%C2%E5%F8%B00%AE%95%E5%9Da%7C%BEk&peer_id=%2DKY0114%2D%DEBf%9EE%D0I%B6%06%97b%13&port=6881&uploaded=0&downloaded=0&left=0&compact=1&event=stopped HTTP/1.1
+User-Agent: Raider/1.0
+
+
+[httpserver6969]#createResponse:[httpfront:172.16.31.1:58818]
+[httpfront:172.16.31.1:58818]#close:
+[httpserver6969]#startFront:[httpfront:172.16.31.1:58827]
+[httpfront:172.16.31.1:58827]:parse request:GET /announce?info_hash=O%19%2Fm%D6%E1C%C2%E5%F8%B00%AE%95%E5%9Da%7C%BEk&peer_id=%2DKY0114%2D%DEBf%9EE%D0I%B6%06%97b%13&port=6881&uploaded=0&downloaded=0&left=0&compact=1&event=completed HTTP/1.1
+User-Agent: Raider/1.0
+
+
+[httpserver6969]#createResponse:[httpfront:172.16.31.1:58827]
+[httpfront:172.16.31.1:58827]#close:
+[httpserver6969]#startFront:[httpfront:172.16.31.128:40497]
+[httpfront:172.16.31.128:40497]:parse request:GET /announce?info_hash=O%19%2Fm%D6%E1C%C2%E5%F8%B00%AE%95%E5%9Da%7C%BEk&peer_id=%2DKY0114%2DJ%40f%B8d%04%00%0Dc%93%23G&port=6881&uploaded=0&downloaded=0&left=0&compact=1&event=stopped HTTP/1.1
+User-Agent: Raider/1.0
+
+
+[httpserver6969]#createResponse:[httpfront:172.16.31.128:40497]
+[httpfront:172.16.31.128:40497]#close:
+[httpserver6969]#startFront:[httpfront:172.16.31.1:58851]
+[httpfront:172.16.31.1:58851]:parse request:GET /scrape?info_hash=O%19%2fm%d6%e1C%c2%e5%f8%b00%ae%95%e5%9da%7c%bek HTTP/1.1
+Host: 172.16.31.128:6969
+User-Agent: BitTorrentMac/7410(29971)
+Accept-Encoding: gzip
+Connection: Close
+
+
+[httpserver6969]#createResponse:[httpfront:172.16.31.1:58851]
+[httpfront:172.16.31.1:58851]#close:
+[httpfront:172.16.31.1:58851]#close:
+[httpserver6969]#startFront:[httpfront:172.16.31.1:58852]
+[httpfront:172.16.31.1:58852]:parse request:GET /announce?info_hash=O%19%2fm%d6%e1C%c2%e5%f8%b00%ae%95%e5%9da%7c%bek&peer_id=M7-4-1--%13uJ%b9%c8%e9%deg9%d7%29%f3&port=43611&uploaded=0&downloaded=0&left=64657027&corrupt=0&key=CDEEF381&event=started&numwant=200&compact=1&no_peer_id=1&ipv6=fe80%3a%3a12dd%3ab1ff%3afed1%3ab137 HTTP/1.1
+Host: 172.16.31.128:6969
+User-Agent: BitTorrentMac/7410(29971)
+Accept-Encoding: gzip
+Connection: Close
+
+
+[httpserver6969]#createResponse:[httpfront:172.16.31.1:58852]
+[httpfront:172.16.31.1:58852]#close:
+[httpfront:172.16.31.1:58852]#close:
+[httpserver6969]#startFront:[httpfront:172.16.31.128:40498]
+[httpfront:172.16.31.128:40498]:parse request:GET /announce?info_hash=O%19%2Fm%D6%E1C%C2%E5%F8%B00%AE%95%E5%9Da%7C%BEk&peer_id=%2DKY0114%2DJ%40f%B8d%04%00%0Dc%93%23G&port=6881&uploaded=0&downloaded=0&left=0&compact=1&event=completed HTTP/1.1
+User-Agent: Raider/1.0
+
+
+[httpserver6969]#createResponse:[httpfront:172.16.31.128:40498]
+[httpfront:172.16.31.128:40498]#close:
+[httpserver6969]#startFront:[httpfront:172.16.31.1:58863]
+[httpfront:172.16.31.1:58863]:parse request:GET /announce?info_hash=O%19%2fm%d6%e1C%c2%e5%f8%b00%ae%95%e5%9da%7c%bek&peer_id=M7-4-1--%13uJ%b9%c8%e9%deg9%d7%29%f3&port=43611&uploaded=0&downloaded=0&left=64657027&corrupt=0&key=A16E694E&event=stopped&numwant=0&compact=1&no_peer_id=1 HTTP/1.1
+Host: 172.16.31.128:6969
+User-Agent: BitTorrentMac/7410(29971)
+Accept-Encoding: gzip
+Connection: Close
+
+
+[httpserver6969]#createResponse:[httpfront:172.16.31.1:58863]
+[httpfront:172.16.31.1:58863]#close:
+[httpfront:172.16.31.1:58863]#close:
+[httpserver6969]#startFront:[httpfront:172.16.31.1:58864]
+[httpfront:172.16.31.1:58864]:parse request:GET /announce?info_hash=O%19%2fm%d6%e1C%c2%e5%f8%b00%ae%95%e5%9da%7c%bek&peer_id=M7-4-1--%13uJ%b9%c8%e9%deg9%d7%29%f3&port=43611&uploaded=0&downloaded=0&left=64657027&corrupt=0&key=A16E694E&event=started&numwant=200&compact=1&no_peer_id=1&ipv6=fe80%3a%3a12dd%3ab1ff%3afed1%3ab137 HTTP/1.1
+Host: 172.16.31.128:6969
+User-Agent: BitTorrentMac/7410(29971)
+Accept-Encoding: gzip
+Connection: Close
+
+
+[httpserver6969]#createResponse:[httpfront:172.16.31.1:58864]
+[httpfront:172.16.31.1:58864]#close:
+[httpfront:172.16.31.1:58864]#close:
+[httpserver6969]#startFront:[httpfront:172.16.31.1:58872]
+[httpfront:172.16.31.1:58872]:parse request:GET /announce?info_hash=O%19%2fm%d6%e1C%c2%e5%f8%b00%ae%95%e5%9da%7c%bek&peer_id=M7-4-1--%13uJ%b9%c8%e9%deg9%d7%29%f3&port=43611&uploaded=0&downloaded=64657027&left=0&corrupt=0&key=7700BD10&event=completed&numwant=200&compact=1&no_peer_id=1&ipv6=fe80%3a%3a12dd%3ab1ff%3afed1%3ab137 HTTP/1.1
+Host: 172.16.31.128:6969
+User-Agent: BitTorrentMac/7410(29971)
+Accept-Encoding: gzip
+Connection: Close
+
+
+[httpserver6969]#createResponse:[httpfront:172.16.31.1:58872]
+[httpfront:172.16.31.1:58872]#close:
+[httpserver6969]#close:
+[httpserver6969]#startAccept:

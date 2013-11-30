@@ -21,7 +21,7 @@ import net.hetimatan.util.event.net.KyoroSocketEventRunner;
  * 
  *  (0) startTracker();
  *  (1) reserveNextTrackerRequest()
- *     
+ * 
  */
 public class TorrentClientGetPeerList {
 	private TrackerClient mTrackerClient                   = null;
