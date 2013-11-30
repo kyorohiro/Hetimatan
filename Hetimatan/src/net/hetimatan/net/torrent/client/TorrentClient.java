@@ -12,6 +12,7 @@ import net.hetimatan.io.net.KyoroSocket;
 import net.hetimatan.io.net.KyoroSocketImpl;
 import net.hetimatan.net.torrent.client._client.TorrentClientGetPeerList;
 import net.hetimatan.net.torrent.client._client.TorrentClientObserverManager;
+import net.hetimatan.net.torrent.client._client.TorrentClientStartConection;
 import net.hetimatan.net.torrent.client._client.TorrentClientUploadSenario;
 import net.hetimatan.net.torrent.client._client.TorrentPeerChoker;
 import net.hetimatan.net.torrent.client._client.TorrentPeerFrontManager;
@@ -90,7 +91,7 @@ public class TorrentClient {
 	private TorrentClientGetPeerList mGetPeerListSenario = null;
 	private TorrentPeerInterest mInterest       = new TorrentPeerInterest(this);
 	private TorrentPeerFrontManager mFrontManager = new TorrentPeerFrontManager();
-
+	private TorrentClientStartConection mStartConnection = new TorrentClientStartConection(this);
 	// ---
 	// task
 	//
@@ -110,6 +111,8 @@ public class TorrentClient {
 		getDispatcher().addObserverAtWeak(mPieceScenario);
 		getDispatcher().addObserverAtWeak(mRequester);
 		getDispatcher().addObserverAtWeak(mInterest);
+		getDispatcher().addObserverAtWeak(mStartConnection);
+		
 		sId = "["+(num++)+"]"+peerId;
 	}
 

@@ -2,7 +2,6 @@ package net.hetimatan.net.torrent.client._client;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
-import java.net.URISyntaxException;
 import java.util.Iterator;
 
 import net.hetimatan.net.torrent.client.TorrentClient;
@@ -60,21 +59,10 @@ public class TorrentClientGetPeerList {
 		startTracker(runner, event, mOnReponseFromTracker, downloaded, uploaded);
 	}
 
-	public void startConnection() throws IOException {
+	public void dispatchMessage() throws IOException {
 	 	TorrentClient peer = mUploadTargetPeer.get();
 	 	if(peer == null) {return;}
-	 	if(peer.isSeeder()) {
-	 		return ;
-	 	}
-	 	TrackerClient client = peer.getTracker();
-	 	Iterator<TrackerPeerInfo> peers32 = client.getPeer32();
-	 	if(!peer.isSeeder()) {//todo
-	 		while(peers32.hasNext()) {
-	 			TrackerPeerInfo targetPeer = peers32.next();
-	 			peer.startConnect(targetPeer);
-	 		}
-	 	}
-	 	client.clearPeer32();
+	 	peer.getDispatcher().dispatch(peer.getTracker());
 	}
 
 	public void reserveNextTrackerRequest() { 
@@ -110,7 +98,7 @@ public class TorrentClientGetPeerList {
 		public void action(EventTaskRunner runner) throws Throwable {
 			TorrentClientGetPeerList scenario = mTorrentScenario.get();
 			if(scenario == null) {return;}	
-			scenario.startConnection();
+			scenario.dispatchMessage();
 			scenario.reserveNextTrackerRequest();
 		}
 	}
