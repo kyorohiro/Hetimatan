@@ -407,23 +407,6 @@ public class TorrentClientFront {
 	}
 
 
-	
-	// ------------------------------------------------
-	//
-	// ------------------------------------------------
-	public void addObserverAtWeak(TorrentClientListener observer) {
-		mMessageSenario.addObserverAtWeak(observer);
-	}
-
-	public void dispatch(TorrentMessage message) {
-		try {
-			mMessageSenario.dispatch(this, message);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	
 	// ------------------------------------------------
 	//
 	// ------------------------------------------------

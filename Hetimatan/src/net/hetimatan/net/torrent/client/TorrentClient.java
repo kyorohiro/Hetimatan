@@ -11,6 +11,7 @@ import net.hetimatan.io.net.KyoroServerSocketImpl;
 import net.hetimatan.io.net.KyoroSocket;
 import net.hetimatan.io.net.KyoroSocketImpl;
 import net.hetimatan.net.torrent.client._client.TorrentClientGetPeerList;
+import net.hetimatan.net.torrent.client._client.TorrentClientObserverManager;
 import net.hetimatan.net.torrent.client._client.TorrentClientUploadSenario;
 import net.hetimatan.net.torrent.client._client.TorrentPeerChoker;
 import net.hetimatan.net.torrent.client._client.TorrentPeerFrontManager;
@@ -96,7 +97,9 @@ public class TorrentClient {
 	private TorrentPeerAcceptTask mAcceptTask   = null;
 	private static int num = 0;
 
-	
+	//
+	TorrentClientObserverManager mDispatcher = new TorrentClientObserverManager();
+
 	public TorrentClient(MetaFile metafile, String peerId) throws IOException {
 		mPeerId = peerId;
 		mInfoHash = metafile.getInfoSha1AsPercentString();
@@ -106,6 +109,10 @@ public class TorrentClient {
 		sId = "["+(num++)+"]"+peerId;
 	}
 
+	public TorrentClientObserverManager getDispatcher() {
+		return mDispatcher;
+	}
+	
 	public void startTracker(String event, EventTask last) {
 		TorrentHistory.get().pushMessage("tracker:"+event+","+ mDownloaded+","+ mUploaded+"\n");
 		mGetPeerListSenario.startTracker(mMasterRunner, event, last,  mDownloaded, mUploaded);
@@ -276,9 +283,9 @@ public class TorrentClient {
 	}
 
 	private void addObserver(TorrentClientFront front) {
-		front.addObserverAtWeak(mPieceScenario);
-		front.addObserverAtWeak(mRequester);//mRequestScenario);
-		front.addObserverAtWeak(mInterest);
+		getDispatcher().addObserverAtWeak(mPieceScenario);
+		getDispatcher().addObserverAtWeak(mRequester);//mRequestScenario);
+		getDispatcher().addObserverAtWeak(mInterest);
 	}
 
 	public TorrentClientFront createFront(TrackerPeerInfo peer) throws IOException {

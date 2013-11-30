@@ -76,7 +76,7 @@ public class TorrentFrontReceiveMessage {
 		if(Log.ON){Log.v(TorrentClientFront.TAG, "["+front.mDebug+"]"+"distribute:"+nullMessage.getSign()+":"+nullMessage.getMessageLength());}
 		MarkableReader reader = front.getReader();
 		TorrentMessage message = nullMessage2TorrentMessage(reader, nullMessage);
-		dispatch(front, message);
+		front.getTorrentPeer().getDispatcher().dispatch(front, message);
 	}
 
 
@@ -125,6 +125,7 @@ public class TorrentFrontReceiveMessage {
 	// ------------------------------------------------
 	//
 	// ------------------------------------------------
+/*
 	private LinkedList<WeakReference<TorrentClientListener>> mObservers = new LinkedList<WeakReference<TorrentClientListener>>();
 	public void addObserverAtWeak(TorrentClientListener observer) {
 		mObservers.add(new WeakReference<TorrentClientListener>(observer));
@@ -142,6 +143,7 @@ public class TorrentFrontReceiveMessage {
 			observer.onReceiveMessage(front, message);
 		}
 	}
+*/
 
 	public static class TorrentFrontReceiverTask extends EventTask {
 
