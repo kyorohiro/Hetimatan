@@ -106,6 +106,10 @@ public class TorrentClient {
 		mGetPeerListSenario = new TorrentClientGetPeerList(this, metafile, peerId);
 		mData = new TorrentData(metafile);
 		mMetaFile = metafile;
+
+		getDispatcher().addObserverAtWeak(mPieceScenario);
+		getDispatcher().addObserverAtWeak(mRequester);
+		getDispatcher().addObserverAtWeak(mInterest);
 		sId = "["+(num++)+"]"+peerId;
 	}
 
@@ -153,7 +157,6 @@ public class TorrentClient {
 		if(getTorrentPeerManager().addTorrentFront(peer, front)){
 			TorrentHistory.get().pushMessage("TorrentPeer#connect()"+peer.toString()+"\n");
 			front.startConnect(peer.getHostName(), peer.getPort());
-			addObserver(front);
 		}
 	}
 
@@ -276,16 +279,9 @@ public class TorrentClient {
 			socket.setDebug("TorrentPeer"+socket.getHost()+":"+socket.getPort());
 			TorrentHistory.get().pushMessage("TorrentPeer#accepted()\n");
 			TorrentClientFront front = new TorrentClientFront(this, socket);
-			addObserver(front);
 			getTorrentPeerManager().addTorrentFront(front);
 			front.startConnectForAccept();
 		}
-	}
-
-	private void addObserver(TorrentClientFront front) {
-		getDispatcher().addObserverAtWeak(mPieceScenario);
-		getDispatcher().addObserverAtWeak(mRequester);//mRequestScenario);
-		getDispatcher().addObserverAtWeak(mInterest);
 	}
 
 	public TorrentClientFront createFront(TrackerPeerInfo peer) throws IOException {
