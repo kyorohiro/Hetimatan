@@ -3,13 +3,11 @@ package net.hetimatan.net.torrent.client._client;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
-import java.util.LinkedList;
 
 import net.hetimatan.net.torrent.client.TorrentClientFront;
 import net.hetimatan.net.torrent.client.TorrentClient;
 import net.hetimatan.net.torrent.client.TorrentClientListener;
 import net.hetimatan.net.torrent.client.message.TorrentMessage;
-import net.hetimatan.net.torrent.client.task.TorrentFrontSendPieceTask;
 import net.hetimatan.net.torrent.tracker.TrackerClient;
 import net.hetimatan.util.event.EventTask;
 import net.hetimatan.util.event.EventTaskRunner;
@@ -107,4 +105,25 @@ public class TorrentClientUploadSenario implements TorrentClientListener {
 
 	}
 
+	public class TorrentFrontSendPieceTask extends EventTask {
+		
+		public static final String TAG = "TorrentFrontSendPieceTask";
+		private WeakReference<TorrentClientFront> mTorrentFront = null;
+
+		public TorrentFrontSendPieceTask(TorrentClientFront front) {
+			mTorrentFront = new WeakReference<TorrentClientFront>(front);
+		}
+
+		@Override
+		public String toString() {
+			return TAG;
+		}
+
+		@Override
+		public void action(EventTaskRunner runner) throws Throwable {
+			TorrentClientFront front = mTorrentFront.get();
+			if(front == null) {return;}	
+			front.sendPiece();
+		}
+	}
 }

@@ -9,7 +9,6 @@ import net.hetimatan.net.torrent.client.TorrentClient;
 import net.hetimatan.net.torrent.client.TorrentClientListener;
 import net.hetimatan.net.torrent.client.message.MessageHave;
 import net.hetimatan.net.torrent.client.message.TorrentMessage;
-import net.hetimatan.net.torrent.client.task.TorrentFrontSendPieceTask;
 import net.hetimatan.net.torrent.tracker.TrackerClient;
 import net.hetimatan.util.bitfield.BitField;
 
@@ -19,7 +18,6 @@ import net.hetimatan.util.bitfield.BitField;
 public class TorrentPeerInterest implements TorrentClientListener {
 
 	private WeakReference<TorrentClient> mUploadTargetPeer = null;
-	private LinkedList<TorrentFrontSendPieceTask> mScenarioList = new LinkedList<TorrentFrontSendPieceTask>();
 
 	public TorrentPeerInterest(TorrentClient peer) {
 		mUploadTargetPeer = new WeakReference<TorrentClient>(peer);
