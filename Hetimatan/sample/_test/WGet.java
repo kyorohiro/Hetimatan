@@ -17,6 +17,7 @@ public class WGet {
 			CloseRunnerTask close = new CloseRunnerTask(null);
 			KyoroSocketEventRunner runner = getter.startTask(null, close);
 			runner.waitByClose(30000);
+			runner.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch(InterruptedException e) {
