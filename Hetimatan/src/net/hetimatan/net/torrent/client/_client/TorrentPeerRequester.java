@@ -64,17 +64,24 @@ public class TorrentPeerRequester implements TorrentClientListener {
 		) {
 			if(!peer.isSeeder()) {
 				try {
-						front.getTaskManager().startDownload(front.getTorrentPeer(), front);
+					front.getTaskManager().startDownload(front.getTorrentPeer(), front);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			} else {
-				if(!TrackerRequest.EVENT_COMPLETED.equals(peer.getTracker().getCurrentEvent())){
-					peer.startTracker(TrackerRequest.EVENT_COMPLETED);
-				}
+				tryToSendCompleted();
 			}
 			
 		}
+	}
+
+	private void tryToSendCompleted() {
+	 	TorrentClient peer = mOwner.get();
+		if(peer == null) {return;}
+
+		if(!TrackerRequest.EVENT_COMPLETED.equals(peer.getTracker().getCurrentEvent())){
+			peer.startTracker(TrackerRequest.EVENT_COMPLETED);
+		}		
 	}
 
 	@Override
