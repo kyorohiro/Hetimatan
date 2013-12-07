@@ -76,7 +76,7 @@ public class TorrentFrontReceiveMessage {
 		if(Log.ON){Log.v(TorrentClientFront.TAG, "["+front.mDebug+"]"+"distribute:"+nullMessage.getSign()+":"+nullMessage.getMessageLength());}
 		MarkableReader reader = front.getReader();
 		TorrentMessage message = nullMessage2TorrentMessage(reader, nullMessage);
-		front.getTorrentPeer().getDispatcher().dispatch(front, message);
+		front.getTorrentPeer().getDispatcher().dispatchTorrentMessage(front, message);
 	}
 
 

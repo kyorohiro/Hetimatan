@@ -18,7 +18,7 @@ public class TorrentClientObserverManager {
 		mObservers.add(new WeakReference<TorrentClientListener>(observer));
 	}
 
-	public void dispatch(TorrentClientFront front, TorrentMessage message) throws IOException {
+	public void dispatchTorrentMessage(TorrentClientFront front, TorrentMessage message) throws IOException {
 		front.onReceiveMessage(message);
 		Iterator<WeakReference<TorrentClientListener>>	ite = mObservers.iterator();
 		while(ite.hasNext()) {
@@ -31,7 +31,7 @@ public class TorrentClientObserverManager {
 		}
 	}
 
-	public void dispatch(TrackerClient client) throws IOException {
+	public void dispatchTrackerResponse(TrackerClient client) throws IOException {
 		Iterator<WeakReference<TorrentClientListener>>	ite = mObservers.iterator();
 		while(ite.hasNext()) {
 			WeakReference<TorrentClientListener> observerref = ite.next();
