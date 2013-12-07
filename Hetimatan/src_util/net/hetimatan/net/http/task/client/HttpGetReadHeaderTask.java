@@ -36,7 +36,7 @@ public class HttpGetReadHeaderTask extends EventTask {
 	public void action(EventTaskRunner runner) throws IOException, InterruptedException {
 		if(!mHeaderIsReadable) {
 			mHeaderIsReadable = mOwner.get().headerIsReadeable();
-			if(Log.ON){Log.v("===", "mHeaderIsReadable="+mHeaderIsReadable);}
+			//if(Log.ON){Log.v("===", "mHeaderIsReadable="+mHeaderIsReadable);}
 			if(!mHeaderIsReadable) {
 				mIsKeep = true;
 				return;

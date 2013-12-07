@@ -196,7 +196,7 @@ public class HttpGet {
 	}
 
 	public boolean headerIsReadeable() throws IOException, InterruptedException {
-		if(Log.ON){Log.v(TAG, "HttpGet#headerIsReadeable()");}
+		//if(Log.ON){Log.v(TAG, "HttpGet#headerIsReadeable()");}
 		if(mCurrentResponse == null) {
 			mCurrentResponse = mCurrentRequest.getResponse(mCurrentSocket);
 		}

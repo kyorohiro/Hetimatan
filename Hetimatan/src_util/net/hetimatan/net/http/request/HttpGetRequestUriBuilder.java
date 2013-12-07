@@ -3,6 +3,8 @@ package net.hetimatan.net.http.request;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 
+import javax.swing.plaf.basic.BasicScrollPaneUI.HSBChangeListener;
+
 import net.hetimatan.util.http.HttpRequest;
 import net.hetimatan.util.http.HttpRequestLine;
 import net.hetimatan.util.http.HttpRequestUri;
@@ -65,7 +67,9 @@ public class HttpGetRequestUriBuilder {
 	public synchronized HttpRequest createHttpRequest() throws IOException {
 		HttpRequest request = HttpRequest
 		.newInstance(REQUEST_METHOD_GET, mPath, HttpRequestLine.HTTP10);
+		boolean haveHost = false;
 		for (String key : mHeader.keySet()) {
+			if(key.matches("[Hh][Oo][Ss][Tt]")){haveHost=true;}
 			request.addHeader(key, mHeader.get(key));
 		}
 		for (String key : mValues.keySet()) {
@@ -75,6 +79,9 @@ public class HttpGetRequestUriBuilder {
 		HttpRequestUri uri = request.getLine().getRequestURI();
 		uri.setHost(mHost);
 		uri.setPort(mPort);
+		if(!haveHost) {
+			request.addHeader(HEADER_HOST, mHost);
+		}
 		return request;
 	}
 

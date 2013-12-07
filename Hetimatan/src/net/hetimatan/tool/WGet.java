@@ -13,7 +13,7 @@ public class WGet {
 		
 		try {
 			HttpGet getter = new HttpGet();
-			getter.update("http://localhost:80?q=%E7%97%9B%E3%81%84");
+			getter.update("http://localhost");
 			CloseRunnerTask close = new CloseRunnerTask(null);
 			KyoroSocketEventRunner runner = getter.startTask(null, close);
 			runner.waitByClose(30000);
