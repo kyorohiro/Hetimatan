@@ -31,12 +31,11 @@ import net.hetimatan.util.event.EventTaskRunner;
 public class TorrentClientUploadSenario implements TorrentClientListener {
 
 	private WeakReference<TorrentClient> mUploadTargetPeer = null;
-	private LinkedList<TorrentFrontSendPieceTask> mScenarioList = new LinkedList<TorrentFrontSendPieceTask>();
-	private ScenarioSeeder mSeederTask = null;
+	private UploaderTask mUploaderTask = null;
 
 	public TorrentClientUploadSenario(TorrentClient peer) {
 		mUploadTargetPeer = new WeakReference<TorrentClient>(peer);
-		mSeederTask = new ScenarioSeeder(this);
+		mUploaderTask = new UploaderTask(this);
 	}
 
 	public void sendPiece(TorrentClientFront front) {
@@ -53,9 +52,6 @@ public class TorrentClientUploadSenario implements TorrentClientListener {
 		TorrentClient peer = mUploadTargetPeer.get();
 		if(peer == null) {return;}
 
-		int existLen = mScenarioList.size();
-		int newLen =  4-existLen;
-		if(newLen<0) {return;}
 		boolean have = false;
 		for(int i=0;i<peer.getTorrentPeerManager().numOfFront();i++) {
 			TorrentClientFront f = peer.getTorrentPeerManager().getTorrentFront(i);
@@ -65,8 +61,9 @@ public class TorrentClientUploadSenario implements TorrentClientListener {
 				have = true;
 			}
 		}
+
 		if(have) {
-			peer.addClientTask(mSeederTask);
+			peer.addClientTask(mUploaderTask);
 		}
 	}
 
@@ -77,17 +74,22 @@ public class TorrentClientUploadSenario implements TorrentClientListener {
 	public void onReceiveMessage(TorrentClientFront front, TorrentMessage message) {
 	 	TorrentClient peer = mUploadTargetPeer.get();
 		if(peer == null) {return;}
-		if(peer.getClientRunner().contains(mSeederTask)){return;}
-		peer.addClientTask(mSeederTask);
+		if(peer.getClientRunner().contains(mUploaderTask)){return;}
+		peer.addClientTask(mUploaderTask);
 	}
 
+	@Override
+	public void onResponsePeerList(TrackerClient client) {
+	}
 
-	public static class ScenarioSeeder extends EventTask {
+	//
+	//
+	public static class UploaderTask extends EventTask {
 		
 		public static final String TAG = "ScenarioSeeder";
 		private WeakReference<TorrentClientUploadSenario> mTorrentScenario = null;
 
-		public ScenarioSeeder(TorrentClientUploadSenario scenario) {
+		public UploaderTask(TorrentClientUploadSenario scenario) {
 			mTorrentScenario = new WeakReference<TorrentClientUploadSenario>(scenario);
 		}
 
@@ -103,11 +105,6 @@ public class TorrentClientUploadSenario implements TorrentClientListener {
 			scenario.distributeInOrder();
 		}
 
-	}
-
-
-	@Override
-	public void onResponsePeerList(TrackerClient client) {
 	}
 
 }

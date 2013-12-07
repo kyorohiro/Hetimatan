@@ -11,6 +11,10 @@ import net.hetimatan.net.torrent.client.message.TorrentMessage;
 import net.hetimatan.net.torrent.tracker.TrackerClient;
 import net.hetimatan.net.torrent.tracker.TrackerPeerInfo;
 
+/**
+ * if finded new peer, connect this.
+ *
+ */
 public class TorrentClientStartConnection implements TorrentClientListener {
 
 	private WeakReference<TorrentClient> mUploadTargetPeer = null;
