@@ -49,9 +49,15 @@ public class TorrentFrontReceiveMessage {
 			mCurrentMessage = new HelperLookAheadMessage();
 		}
 		boolean isEnd = mCurrentMessage.lookahead(reader);
-		if(isEnd) {return 0;}
-		else if(reader.isEOF()){ return -1;}
-		else{return 1;}
+		if(isEnd) {
+			return 0;
+		}
+		else if(reader.isEOF()){
+			return -1;
+		}
+		else{
+			return 1;
+		}
 	}
 
 	public void receive(TorrentClientFront front) throws IOException {
