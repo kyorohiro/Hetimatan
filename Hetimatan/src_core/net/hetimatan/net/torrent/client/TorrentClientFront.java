@@ -58,10 +58,15 @@ public class TorrentClientFront {
 	
 	private TrackerPeerInfo mPeer = null;
 	public String mDebug = "--";
+
+	//
+	// TODO next work following args is for test
+	//
 	private int mRequestPiece = -1;
 
 	// cash
 	private CashKyoroFile mSendCash = null;
+	private int mRequestedNum = 0;
 
 	public CashKyoroFile getSendCash() {
 		return mSendCash;
@@ -273,6 +278,9 @@ public class TorrentClientFront {
 				return;}
 			if(mRequestPiece != -1) {if(Log.ON){Log.v(TAG, "--3--");}
 				return;}
+			if(mRequestedNum >= 1) {
+				return;
+			}
 			index = peer.getNextRequestPiece();
 			mRequestPiece = index;
 			pieceLength = mTargetInfo.getPieceLength();
@@ -280,6 +288,7 @@ public class TorrentClientFront {
 			request.encode(mSendCash.getLastOutput());
 			pushflushSendTask();
 			TorrentHistory.get().pushSend(this, request);
+			mRequestedNum++;
 		} finally {
 			if(Log.ON){Log.v(TAG, "/TorrentFront#sendRequest() "+index+","+pieceLength);}
 		}
@@ -365,6 +374,7 @@ public class TorrentClientFront {
 					request.getIndex(), request.getBegin(), request.getBegin()+request.getLength());
 			break;
 		case TorrentMessage.SIGN_PIECE:
+			mRequestedNum--;
 			MessagePiece piece = (MessagePiece)nullMessage;
 			{
 				TorrentClient peer = mTorrentPeer.get();

@@ -45,6 +45,9 @@ public class BitField {
 		oneClear();
 	}
 
+	//
+	// TODO next work following method is wrong
+	//
 	public int getPieceAtRandom() {
 		int byteLength  = lengthPerByte();
 		if(byteLength<=0) {

@@ -16,6 +16,7 @@ import net.hetimatan.util.bitfield.BitField;
 public class TorrentPeerRequester implements TorrentClientListener {
 	private WeakReference<TorrentClient> mOwner = null;
 
+
 	public TorrentPeerRequester(TorrentClient peer) {
 		mOwner = new WeakReference<TorrentClient>(peer);
 	}
