@@ -7,7 +7,6 @@ import net.hetimatan.io.file.MarkableReader;
 public class HelperLookAheadMessage {
 
 	private MessageNull mNullMessage = new MessageNull(0, -999);
-	private long mStartFP = 0;
 
 	public HelperLookAheadMessage() {
 	}
@@ -16,19 +15,16 @@ public class HelperLookAheadMessage {
 		return mNullMessage;
 	}
 
-	public long getStartFp() {
-		return mStartFP;
-	}
 
 	public boolean lookahead(MarkableReader reader) throws IOException {
 		try  {
-			mStartFP = reader.getFilePointer();
+			reader.pushMark();
 			mNullMessage = MessageNull.decode(reader);
 			return true;
 		} catch(IOException e) {
 		} catch(NegativeArraySizeException e) {			
 		} finally {
-			reader.seek(mStartFP);
+			reader.popMark();
 		}
 		return false;
 	}

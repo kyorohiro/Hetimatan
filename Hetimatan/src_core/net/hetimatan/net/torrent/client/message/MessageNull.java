@@ -45,7 +45,7 @@ public class MessageNull extends TorrentMessage {
 			sign = reader.read();
 		}
 		for(int i=1;i<len;i++){
-			if(-1 == reader.read()){
+			if(0 > reader.read()){
 				throw new IOException();
 			}
 		}
