@@ -310,4 +310,16 @@ public class HttpRequestUri extends HttpObject {
 			throw e;
 		}
 	}
+
+
+	public static HttpRequestUri createHttpRequestUri(String location) throws IOException {
+		MarkableFileReader reader = null;
+		try {
+			reader = new MarkableFileReader(location.getBytes());
+			HttpRequestUri geturi = HttpRequestUri.decode(reader);
+			return geturi;
+		} finally {
+			reader.close();
+		}
+	}
 }
