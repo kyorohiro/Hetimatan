@@ -34,7 +34,7 @@ public class TorrentFrontShakeHand {
 	private HelperLookAheadShakehand getHelper(MarkableReader reader) throws IOException {
 		if(mCurrentSHHelper == null) {
 			TorrentHistory.get().pushMessage("[receive start]\n");
-			mCurrentSHHelper = new HelperLookAheadShakehand(reader.getFilePointer(), reader);
+			mCurrentSHHelper = new HelperLookAheadShakehand();
 		}
 		return mCurrentSHHelper;
 	}
@@ -47,10 +47,16 @@ public class TorrentFrontShakeHand {
 		if(Log.ON){Log.v(TorrentClientFront.TAG, "["+front.mDebug+"]"+"TorrentFront#revieceSH()");}
 		MarkableReader reader = front.getReader();
 		HelperLookAheadShakehand currentSHHelper = getHelper(reader);
-		currentSHHelper.read();
+		boolean parseable = currentSHHelper.parseable(reader);
 
-		if(reader.isEOF()){ front.close(); return true;}
-		if(currentSHHelper.parseable()) {return true;} else {return false;}
+		if(reader.isEOF()){
+			if(Log.ON){Log.v(TorrentClientFront.TAG, "["+front.mDebug+"]"+"TorrentFront#revieceSH()::EOF");}
+			front.close();
+			return true;}
+		if(parseable) {
+			return true;} 
+		else {
+			return false;}
 	}
 
 	public void revcShakehand(TorrentClientFront front) throws IOException {
