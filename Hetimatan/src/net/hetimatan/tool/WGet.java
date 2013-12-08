@@ -10,10 +10,13 @@ public class WGet {
 
 	public static void main(String[] args) {
 		System.out.println("start");
+		if(args.length != 1) {
+			return;
+		}
 		
 		try {
 			HttpGet getter = new HttpGet();
-			getter.update("http://localhost");
+			getter.update(args[0]);
 			CloseRunnerTask close = new CloseRunnerTask(null);
 			KyoroSocketEventRunner runner = getter.startTask(null, close);
 			runner.waitByClose(30000);
