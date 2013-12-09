@@ -41,7 +41,7 @@ public class TestForMetaFile extends TestCase {
 	public File getTestData(String filename) {
 		String path = getClass().getName();
 		String tmp = path.replaceAll("[^\\.]*$", "");
-		tmp = "./test/"+tmp.replaceAll("\\.", "/");
+		tmp = "./test_core/"+tmp.replaceAll("\\.", "/");
 		File ret = new File(new File(tmp), filename);
 		return ret;
 	}

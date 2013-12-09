@@ -102,15 +102,18 @@ public class TorrentClientFront {
 	}
 
 	public BitField relativeBitfield() {
+		return mMyInfo.mRelative;
+	}
+	public void updateRelativeBitfield() {
 	 	TorrentClient peer = mTorrentPeer.get();
-		if(peer == null) {return mMyInfo.mRelative;}
+		if(peer == null) {return ;}
 		TorrentData data = peer.getTorrentData();
 		BitField myInfo = data.getStockedDataInfo();
 		if(mMyInfo.mRelative == null) {
 			mMyInfo.mRelative = new BitField(myInfo.lengthPerBit());
 		}
 		BitField targetInfo = getTargetInfo().mTargetBitField;
-		return BitField.relative(targetInfo, myInfo, mMyInfo.mRelative);
+		BitField.relative(targetInfo, myInfo, mMyInfo.mRelative);
 	}
 
 	public KyoroSocket getSocket() {
@@ -344,7 +347,7 @@ public class TorrentClientFront {
 
 	public void onReceiveMessage(TorrentMessage nullMessage) throws IOException {
 		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"distribute:"+nullMessage.getType());}
-		TorrentMessage message = null;
+		//TorrentMessage message = null;
 		switch(nullMessage.getType()) {
 		case TorrentMessage.SIGN_CHOKE:
 			mTargetInfo.isChoke(true);
@@ -361,11 +364,13 @@ public class TorrentClientFront {
 		case TorrentMessage.SIGN_HAVE:
 			MessageHave have = (MessageHave)nullMessage;
 			mTargetInfo.mTargetBitField.isOn(have.getIndex());
-			message = have;
+			updateRelativeBitfield();
+		//	message = have;
 			break;
 		case TorrentMessage.SIGN_BITFIELD:
 			MessageBitField bitfieldMS = (MessageBitField)nullMessage;
 			mTargetInfo.mTargetBitField.setBitfield(bitfieldMS.getBitField().getBinary());
+			updateRelativeBitfield();
 			break;
 		case TorrentMessage.SIGN_REQUEST:
 			MessageRequest request = (MessageRequest)nullMessage;
@@ -394,11 +399,12 @@ public class TorrentClientFront {
 
 		TorrentClient peer = mTorrentPeer.get();
 		if(peer != null) {
-			TorrentHistory.get().pushReceive(this, message);
+			TorrentHistory.get().pushReceive(this, nullMessage);
 		}
 
-		if(null != message) {
-			mLastMessage = message;
+//		if(null != message) {
+		if(nullMessage != null) {
+			mLastMessage = nullMessage;
 		}
 	}
 
