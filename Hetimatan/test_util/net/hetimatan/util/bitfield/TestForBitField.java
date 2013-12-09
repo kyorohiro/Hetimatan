@@ -148,4 +148,68 @@ public class TestForBitField extends TestCase {
 
 		}
 	}
+
+	public void test_relative() {
+		{
+			BitField myinfo = new BitField(22);
+			BitField target = new BitField(22);
+			BitField output = new BitField(22);
+			myinfo.oneClear();
+			target.oneClear();
+			BitField.relative(target, myinfo, output);
+			for(int i=0;i<22;i++) {
+				assertEquals(false, output.isOn(i));
+			}
+		}
+		{
+			BitField myinfo = new BitField(22);
+			BitField target = new BitField(22);
+			BitField output = new BitField(22);
+			myinfo.zeroClear();
+			target.zeroClear();
+			BitField.relative(target, myinfo, output);
+			for(int i=0;i<22;i++) {
+				assertEquals(false, output.isOn(i));
+			}
+		}
+
+		{
+			BitField myinfo = new BitField(22);
+			BitField target = new BitField(22);
+			BitField output = new BitField(22);
+			myinfo.zeroClear();
+			target.oneClear();
+			BitField.relative(target, myinfo, output);
+			for(int i=0;i<22;i++) {
+				assertEquals("["+i+"]", true, output.isOn(i));
+			}
+		}
+		{
+			BitField myinfo = new BitField(22);
+			BitField target = new BitField(22);
+			BitField output = new BitField(22);
+			myinfo.oneClear();
+			target.zeroClear();
+			BitField.relative(target, myinfo, output);
+			for(int i=0;i<22;i++) {
+				assertEquals("["+i+"]", false, output.isOn(i));
+			}
+		}
+
+		{
+			BitField myinfo = new BitField(22);
+			BitField target = new BitField(22);
+			BitField output = new BitField(22);
+			myinfo.zeroClear();
+			target.zeroClear();
+			target.isOn(1, true);
+			BitField.relative(target, myinfo, output);
+			
+			assertEquals("["+0+"]", false, output.isOn(0));
+			assertEquals("["+1+"]", true, output.isOn(1));
+			for(int i=2;i<22;i++) {
+				assertEquals("["+i+"]", false, output.isOn(i));
+			}
+		}
+	}
 }
