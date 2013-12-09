@@ -31,8 +31,7 @@ import net.hetimatan.util.bitfield.BitField;
 import net.hetimatan.util.log.Log;
 
 /**
- * this class have another torrent client connection. and manage status. 
- * 
+ * TorrentClient have TorrentClientForntClass per conection.
  *
  */
 public class TorrentClientFront {
