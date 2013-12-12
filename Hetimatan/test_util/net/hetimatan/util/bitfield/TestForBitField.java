@@ -212,4 +212,28 @@ public class TestForBitField extends TestCase {
 			}
 		}
 	}
+
+	public void testUnique() {
+		{
+			BitField target = new BitField(1974);
+			target.zeroClear();
+			int[] indexs={
+				434, 1157, 1455, 74, 764, 1414, 1941, 1723, 
+				446, 1442, 955, 408, 1577, 377, 767, 223,
+				1328, 629, 1875, 203, 1244, 1847, 753, 1332
+			};
+			for(int index: indexs) {
+				target.isOn(index, true);
+			}
+			A:for(int j=0;j<100;j++) { 
+				int ret = target.getPieceAtRandom();
+				for(int index:indexs) {
+					if(index==ret) {
+						break A;
+					}
+				}
+				assertTrue("[["+ret+"]]", false);
+				}
+		}
+	}
 }
