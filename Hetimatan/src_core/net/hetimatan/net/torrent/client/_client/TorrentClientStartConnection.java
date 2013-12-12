@@ -29,12 +29,17 @@ public class TorrentClientStartConnection implements TorrentClientListener {
 	 	if(peer.isSeeder()) {
 	 		return ;
 	 	}
+	 	int todo_i =0;
 	 	TrackerClient client = peer.getTracker();
 	 	Iterator<TrackerPeerInfo> peers32 = client.getPeer32();
 	 	if(!peer.isSeeder()) {//todo
 	 		while(peers32.hasNext()) {
+	 			todo_i++;
 	 			TrackerPeerInfo targetPeer = peers32.next();
 	 			peer.startConnect(targetPeer);
+	 			if(todo_i>4) {
+	 				break;
+	 			}
 	 		}
 	 	}
 	 	client.clearPeer32();

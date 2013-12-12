@@ -42,7 +42,7 @@ public class TorrentFrontReceiveMessage {
 	//  0 parseable
 	//  1 end
 	public int parseableMessage(TorrentClientFront front) throws IOException {
-		if(Log.ON){Log.v(TorrentClientFront.TAG, "["+front.mDebug+"]"+"TorrentFront#parseableMessage()");}
+		if(Log.ON){Log.v(TorrentClientFront.TAG, "["+front.mDebug+"]"+"TorrentFront#parseableMessage()::"+front.getReader().getFilePointer());}
 		MarkableReader reader = front.getReader();
 		if(mCurrentMessage == null) {
 			TorrentHistory.get().pushMessage("[receive start]\n");
@@ -65,9 +65,13 @@ public class TorrentFrontReceiveMessage {
 		TorrentClient peer = front.getTorrentPeer();
 		int parseable = parseableMessage(front);
 		if(parseable == -1) {
+			TorrentHistory.get().pushMessage("[close parseable -1]"+reader.getFilePointer()+"\n");
 			front.close();
 		} else if(parseable == 0) {
-			TorrentHistory.get().pushMessage("[receive end]\n");
+			TorrentHistory.get().pushMessage("[receive end]"+reader.getFilePointer()+":"
+					+"type="+mCurrentMessage.getMessageNull().getType() + ":"
+					+"len="+mCurrentMessage.getMessageNull().getMessageLength()
+					+"\n");
 			onReceiveMessage(front, mCurrentMessage.getMessageNull());
 		}
 
@@ -81,8 +85,14 @@ public class TorrentFrontReceiveMessage {
 	public void onReceiveMessage(TorrentClientFront front, MessageNull nullMessage) throws IOException {
 		if(Log.ON){Log.v(TorrentClientFront.TAG, "["+front.mDebug+"]"+"distribute:"+nullMessage.getSign()+":"+nullMessage.getMessageLength());}
 		MarkableReader reader = front.getReader();
-		TorrentMessage message = nullMessage2TorrentMessage(reader, nullMessage);
-		front.getTorrentPeer().getDispatcher().dispatchTorrentMessage(front, message);
+		try {
+			TorrentMessage message = nullMessage2TorrentMessage(reader, nullMessage);
+			front.getTorrentPeer().getDispatcher().dispatchTorrentMessage(front, message);
+		} catch (Throwable t) {
+			//debug
+			if(Log.ON){Log.v(TorrentClientFront.TAG, "["+front.mDebug+"]"+"failed parse:"+nullMessage.getSign()+":"+nullMessage.getMessageLength());}
+			throw t;
+		}
 	}
 
 
