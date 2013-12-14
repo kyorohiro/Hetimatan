@@ -131,7 +131,8 @@ public class TorrentFrontTaskManager {
 		if(Log.ON){Log.v(TAG, "["+front.mDebug+"]"+"start Download");}
 		if(peer == null) {return;}
 		if(peer.isSeeder()){return;}
-		if(front.getTargetInfo().isChoked() != TorrentClientFront.FALSE){return;}
+//		if(front.getTargetInfo().isChoked() != TorrentClientFront.FALSE){return;}
+		if(front.getTargetInfo().isChoked() == TorrentClientFront.TRUE){return;}
 		if(Log.ON){Log.v(TAG, "["+front.getDebug()+"]"+"startDownload");}
 		mRequestTask = new TorrentFrontRequestTask(front);
 		if(mCloseTask == null) {

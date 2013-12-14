@@ -276,13 +276,16 @@ public class TorrentClientFront {
 			TorrentClient peer = mTorrentPeer.get();
 			if(peer==null){if(Log.ON){Log.v(TAG, "--1--");}
 				return;}
-			if(getTargetInfo().isChoked() == TorrentClientFront.TRUE) {if(Log.ON){Log.v(TAG, "--2--");}
+			if(getTargetInfo().isChoked() == TorrentClientFront.TRUE) {
+				if(Log.ON){Log.v(TAG, "choked");}
 				return;}
-			if(mRequestPiece != -1) {if(Log.ON){Log.v(TAG, "--3--");}
+			if(mRequestPiece != -1) {if(Log.ON){
+				Log.v(TAG, "already requested [A]:"+mRequestPiece);}
 				return;}
 			if(mRequestedNum >= 1) {
-				return;
-			}
+				Log.v(TAG, "already requested [B]:"+mRequestedNum);
+				return;}
+
 			index = peer.getNextRequestPiece(this);
 			mRequestPiece = index;
 			pieceLength = mTargetInfo.getPieceLength();
@@ -291,8 +294,9 @@ public class TorrentClientFront {
 			pushflushSendTask();
 			TorrentHistory.get().pushSend(this, request);
 			mRequestedNum++;
+			if(Log.ON){Log.v(TAG, "requested:"+index+","+pieceLength);}
 		} finally {
-			if(Log.ON){Log.v(TAG, "/TorrentFront#sendRequest() "+index+","+pieceLength);}
+			if(Log.ON){Log.v(TAG, "/TorrentFront#sendRequest() ");}
 		}
 	}
 
