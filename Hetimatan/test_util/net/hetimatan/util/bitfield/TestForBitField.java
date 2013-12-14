@@ -128,22 +128,22 @@ public class TestForBitField extends TestCase {
 	public void test_getPieceAtRandom() {
 		{
 			BitField field = newBitField(0);
-			assertEquals(-1, field.getPieceAtRandom());
+			assertEquals(-1, field.getOnPieceAtRandom());
 		}
 		{
 			BitField field = newBitField(1);
-			assertEquals(-1, field.getPieceAtRandom());
+			assertEquals(-1, field.getOnPieceAtRandom());
 			field.isOn(0, false);
-			assertEquals(0, field.getPieceAtRandom());
+			assertEquals(0, field.getOnPieceAtRandom());
 		}
 
 		{
 			BitField field = newBitField(3);
-			assertEquals(-1, field.getPieceAtRandom());
+			assertEquals(-1, field.getOnPieceAtRandom());
 			field.isOn(1, false);
-			assertEquals(1, field.getPieceAtRandom());
+			assertEquals(1, field.getOnPieceAtRandom());
 			field.isOn(2, true);
-			int i = field.getPieceAtRandom();
+			int i = field.getOnPieceAtRandom();
 			assertEquals(true, (i==2||i==1?true:false));
 
 		}
@@ -226,7 +226,7 @@ public class TestForBitField extends TestCase {
 				target.isOn(index, true);
 			}
 			A:for(int j=0;j<100;j++) { 
-				int ret = target.getPieceAtRandom();
+				int ret = target.getOnPieceAtRandom();
 				for(int index:indexs) {
 					if(index==ret) {
 						break A;

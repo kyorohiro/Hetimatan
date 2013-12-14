@@ -67,8 +67,8 @@ public class FastBitField extends BitField {
 	}
 
 	@Override
-	public int getPieceAtRandom() {
-		int index = mIndex.getPieceAtRandom()*8;
+	public int getOnPieceAtRandom() {
+		int index = mIndex.getOnPieceAtRandom()*8;
 		if(index <0) {return -1;}
 		shuffle(mShuffleList);
 		return getPieceAtRandomPer8Byte(index);
@@ -80,7 +80,7 @@ public class FastBitField extends BitField {
 		if(v>8) {v=8;}
 		for(int i=0;i<8;i++) {
 			if(mShuffleList[i]<v&&(0xFF&buffer[index+mShuffleList[i]]) != 0xFF) {
-				return super.getPieceAtRandomPerByte(index+mShuffleList[i]);
+				return super.getOnPieceAtRandomPerByte(index+mShuffleList[i]);
 			}
 		}
 		return -1;

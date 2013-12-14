@@ -48,7 +48,7 @@ public class BitField {
 	//
 	// TODO next work following method is wrong
 	//
-	public int getPieceAtRandom() {
+	public int getOnPieceAtRandom() {
 		int byteLength  = lengthPerByte();
 		if(byteLength<=0) {
 			return -1;
@@ -73,7 +73,7 @@ public class BitField {
 			return -1;
 		}
 
-		return getPieceAtRandomPerByte(ia);
+		return getOnPieceAtRandomPerByte(ia);
 	}
 
 	protected void shuffle(int[] shufflelist) {
@@ -87,7 +87,15 @@ public class BitField {
 		}
 	}
 
-	public int getPieceAtRandomPerByte(int numPerByte) {
+	public int getOnPieceAtRandomPerByte(int numPerByte) {
+		return getPieceAtRandomPerByte(numPerByte, true);
+	}
+
+	public int getOffPieceAtRandomPerByte(int numPerByte) {
+		return getPieceAtRandomPerByte(numPerByte, false);
+	}
+
+	public int getPieceAtRandomPerByte(int numPerByte, boolean isOn) {
 		int byteLength  = lengthPerByte();
 		if(byteLength<=0) {
 			return -1;
@@ -99,7 +107,8 @@ public class BitField {
 			rn =(lengthPerBit()-numPerByte*8); 
 		}
 		for(int i=0;i<8;i++) {
-			if((numPerByte*8+mShuffleList[i])<lengthPerBit()&&!isOn(numPerByte*8+mShuffleList[i])) {
+			if((numPerByte*8+mShuffleList[i])<lengthPerBit()&&
+					isOn != isOn(numPerByte*8+mShuffleList[i])) {
 				return (numPerByte*8+mShuffleList[i]);
 			}			
 		}
