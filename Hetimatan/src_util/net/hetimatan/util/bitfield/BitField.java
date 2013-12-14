@@ -49,6 +49,17 @@ public class BitField {
 	// TODO next work following method is wrong
 	//
 	public int getOnPieceAtRandom() {
+		return getPieceAtRandom(true);
+	}
+
+	public int getOffPieceAtRandom() {
+		return getPieceAtRandom(false);
+	}
+
+	//
+	// TODO next work following method is wrong
+	//
+	public int getPieceAtRandom(boolean isOn) {
 		int byteLength  = lengthPerByte();
 		if(byteLength<=0) {
 			return -1;
@@ -56,11 +67,19 @@ public class BitField {
 		int ia = mR.nextInt(byteLength);
 		boolean f = false;
 		for(int i=ia;i<byteLength;i++) {
-			if(!isAllOnPerByte(i)) {
-				ia = i;
-				f = true;break;
+			if(isOn) {
+				if(!isAllOnPerByte(i)) {
+					ia = i;
+					f = true;break;
+				}
+			} else {
+				if(!isAllOffPerByte(i)) {
+					ia = i;
+					f = true;break;
+				}
 			}
 		}
+
 		if(!f) {
 			for(int i=ia;i>=0;i--) {
 				if(!isAllOnPerByte(i)) {
@@ -225,6 +244,18 @@ public class BitField {
 			} else {
 				return false;
 			}
+		}
+	}
+
+	public boolean isAllOffPerByte(int number) {
+		int len = lengthPerByte();
+		if(number>=len) {
+			return false;
+		}
+		if((0xFF&mBitfield[number]) == 0x00) {
+			return true;
+		} else {
+			return false;
 		}
 	}
 
