@@ -70,7 +70,7 @@ public class TrackerInfoTest extends Application {
 		String LF = System.getProperty("line.separator");
 		builder.append("announce:"+metainfo.getAnnounce()+LF);
 		builder.append("pieceLength:"+metainfo.getPieceLength()+LF);
-		builder.append("infosha1:"+metainfo.getInfoSha1AsBenString()+LF);
+		builder.append("infosha1:"+metainfo.getInfoSha1AsPercentString()+LF);
 		
 		Long[] flen = metainfo.getFileLengths();
 		long flenSum = 0;

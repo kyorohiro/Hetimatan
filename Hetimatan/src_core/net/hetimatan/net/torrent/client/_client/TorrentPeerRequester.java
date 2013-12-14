@@ -28,12 +28,6 @@ public class TorrentPeerRequester implements TorrentClientListener {
 		int nextId = bitfield.getOnPieceAtRandom();
 		data.setRequest(nextId);
 		return nextId;
-		//TorrentClient peer = mOwner.get();
-		//TorrentData data = peer.getTorrentData();
-		//BitField bitfield = data.getRequestedDataInfo();
-		//int nextId = bitfield.getOffPieceAtRandom();
-		//data.setRequest(nextId);
-		//return nextId;//mTodoCurrentRequestIndex++;
 	}
 
 	private void sendHave(int index) {

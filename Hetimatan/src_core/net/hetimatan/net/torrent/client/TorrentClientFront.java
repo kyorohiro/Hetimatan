@@ -279,9 +279,9 @@ public class TorrentClientFront {
 			if(getTargetInfo().isChoked() == TorrentClientFront.TRUE) {
 				if(Log.ON){Log.v(TAG, "choked");}
 				return;}
-			if(mRequestPiece != -1) {if(Log.ON){
-				Log.v(TAG, "already requested [A]:"+mRequestPiece);}
-				return;}
+			//if(mRequestPiece != -1) {if(Log.ON){
+			//	Log.v(TAG, "already requested [A]:"+mRequestPiece);}
+			//	return;}
 			if(mRequestedNum >= 1) {
 				Log.v(TAG, "already requested [B]:"+mRequestedNum);
 				return;}
