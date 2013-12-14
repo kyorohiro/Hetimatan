@@ -21,13 +21,19 @@ public class TorrentPeerRequester implements TorrentClientListener {
 		mOwner = new WeakReference<TorrentClient>(peer);
 	}
 
-	public int nextPieceId() {
+	public int nextPieceId(TorrentClientFront front) {
 		TorrentClient peer = mOwner.get();
 		TorrentData data = peer.getTorrentData();
-		BitField bitfield = data.getRequestedDataInfo();
-		int nextId = bitfield.getOffPieceAtRandom();
+		BitField bitfield = front.relativeBitfield();
+		int nextId = bitfield.getOnPieceAtRandom();
 		data.setRequest(nextId);
-		return nextId;//mTodoCurrentRequestIndex++;
+		return nextId;
+		//TorrentClient peer = mOwner.get();
+		//TorrentData data = peer.getTorrentData();
+		//BitField bitfield = data.getRequestedDataInfo();
+		//int nextId = bitfield.getOffPieceAtRandom();
+		//data.setRequest(nextId);
+		//return nextId;//mTodoCurrentRequestIndex++;
 	}
 
 	private void sendHave(int index) {

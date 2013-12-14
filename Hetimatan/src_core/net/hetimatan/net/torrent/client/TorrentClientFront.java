@@ -283,7 +283,7 @@ public class TorrentClientFront {
 			if(mRequestedNum >= 1) {
 				return;
 			}
-			index = peer.getNextRequestPiece();
+			index = peer.getNextRequestPiece(this);
 			mRequestPiece = index;
 			pieceLength = mTargetInfo.getPieceLength();
 			MessageRequest request = new MessageRequest(index, 0, pieceLength);

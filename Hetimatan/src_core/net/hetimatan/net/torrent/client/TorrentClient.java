@@ -305,8 +305,8 @@ public class TorrentClient {
 		try { getTorrentData().save();} catch (IOException e) { }
 	}
 
-	public int getNextRequestPiece() {
-		return mRequester.nextPieceId();
+	public int getNextRequestPiece(TorrentClientFront front) {
+		return mRequester.nextPieceId(front);
 	}
 
 	public TorrentPeerFrontManager getTorrentPeerManager() {
