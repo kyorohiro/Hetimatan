@@ -264,7 +264,108 @@ public class TestForBitField extends TestCase {
 					}
 				}
 				assertTrue("[["+ret+"]]", false);
-				}
+			}
 		}
+		{
+			BitField target = new BitField(1974);
+			BitField myinfo = new BitField(1974);
+			BitField output = new BitField(1974);
+
+			target.zeroClear();
+			myinfo.zeroClear();
+
+			// crete target test data
+			int[] indexs={
+				434, 1157, 1455, 74, 764, 1414, 1941, 1723, 
+				446, 1442, 955, 408, 1577, 377, 767, 223,
+				1328, 629, 1875, 203, 1244, 1847, 753, 1332
+			};
+
+			for(int index: indexs) {
+				target.isOn(index, true);
+			}
+
+			//
+			target.relative(target, myinfo, output);
+			
+			A:for(int j=0;j<100;j++) { 
+				int ret = output.getOnPieceAtRandom();
+				for(int index:indexs) {
+					if(index==ret) {
+						break A;
+					}
+				}
+				assertTrue("[["+ret+"]]", false);
+			}
+		}
+	
+	
+		{
+			BitField target = new BitField(1974);
+			BitField myinfo = new BitField(1974);
+			BitField output = new BitField(1974);
+
+			target.zeroClear();
+			myinfo.zeroClear();
+
+			// crete target test data
+			int[] indexs={
+				434, 1157, 1455, 74, 764, 1414, 1941, 1723, 
+				446, 1442, 955, 408, 1577, 377, 767, 223,
+				1328, 629, 1875, 203, 1244, 1847, 753, 1332
+			};
+
+			for(int index: indexs) {
+				target.isOn(index, true);
+			}
+
+			for(int index: indexs) {
+				myinfo.isOn(index, true);
+			}
+
+			//
+			target.relative(target, myinfo, output);
+			
+			A:for(int j=0;j<100;j++) { 
+				int ret = output.getOnPieceAtRandom();
+				for(int index:indexs) {
+					if(index==ret) {
+						assertTrue("[["+ret+"]]", false);
+					}
+				}
+			}
+		}
+
+
+		{
+			BitField target = new BitField(1974);
+			BitField myinfo = new BitField(1974);
+			BitField output = new BitField(1974);
+
+			target.zeroClear();
+			myinfo.zeroClear();
+
+			// crete target test data
+			int[] indexs={
+				434, 1157, 1455, 74, 764, 1414, 1941, 1723, 
+				446, 1442, 955, 408, 1577, 377, 767, 223,
+				1328, 629, 1875, 203, 1244, 1847, 753, 1332
+			};
+
+			for(int index: indexs) {
+				target.isOn(index, true);
+			}
+
+			for(int index: indexs) {
+				myinfo.isOn(index, true);
+			}
+			myinfo.isOn(1455, false);
+
+			//
+			target.relative(target, myinfo, output);
+			int ret = output.getOnPieceAtRandom();
+			assertTrue("[["+ret+"]]", ret == 1455);
+		}
+
 	}
 }
