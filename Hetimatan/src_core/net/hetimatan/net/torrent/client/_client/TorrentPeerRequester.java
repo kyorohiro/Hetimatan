@@ -88,4 +88,10 @@ public class TorrentPeerRequester implements TorrentClientListener {
 	@Override
 	public void onResponsePeerList(TrackerClient client) {
 	}
+
+	@Override
+	public void onClose(TorrentClientFront front) {
+		// TODO Auto-generated method stub
+		
+	}
 }

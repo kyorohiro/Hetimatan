@@ -43,4 +43,16 @@ public class TorrentClientObserverManager {
 		}
 	}
 
+	public void dispatchCloseFront(TorrentClientFront front) throws IOException {
+		Iterator<WeakReference<TorrentClientListener>>	ite = mObservers.iterator();
+		while(ite.hasNext()) {
+			WeakReference<TorrentClientListener> observerref = ite.next();
+			TorrentClientListener observer = observerref.get();
+			if(null == observerref.get()) {
+				mObservers.remove(observerref);
+			}
+			observer.onClose(front);
+		}
+	}
+	
 }

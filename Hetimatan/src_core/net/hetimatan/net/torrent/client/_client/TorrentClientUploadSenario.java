@@ -126,4 +126,10 @@ public class TorrentClientUploadSenario implements TorrentClientListener {
 			front.sendPiece();
 		}
 	}
+
+	@Override
+	public void onClose(TorrentClientFront front) {
+		// TODO Auto-generated method stub
+		
+	}
 }

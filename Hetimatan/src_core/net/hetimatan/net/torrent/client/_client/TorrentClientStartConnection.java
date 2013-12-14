@@ -57,4 +57,13 @@ public class TorrentClientStartConnection implements TorrentClientListener {
 			e.printStackTrace();
 		}
 	}
+
+	@Override
+	public void onClose(TorrentClientFront front) {
+		try {
+			startConnection();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }

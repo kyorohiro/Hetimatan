@@ -145,6 +145,9 @@ public class TorrentClientFront {
 		if(peer != null) {
 			peer.getTorrentPeerManager().removeTorrentFront(this);
 		}
+		
+		peer.getDispatcher().dispatchCloseFront(this);
+		
 		if(mSocket != null) {	
 			mSocket.close();
 		}

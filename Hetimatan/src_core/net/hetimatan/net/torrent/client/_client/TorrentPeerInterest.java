@@ -52,4 +52,10 @@ public class TorrentPeerInterest implements TorrentClientListener {
 		// TODO Auto-generated method stub
 	}
 
+	@Override
+	public void onClose(TorrentClientFront front) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
