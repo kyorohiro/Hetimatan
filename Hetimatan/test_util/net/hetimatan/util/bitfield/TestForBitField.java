@@ -128,24 +128,55 @@ public class TestForBitField extends TestCase {
 	public void test_getPieceAtRandom() {
 		{
 			BitField field = newBitField(0);
-			assertEquals(-1, field.getOnPieceAtRandom());
+			assertEquals(-1, field.getOffPieceAtRandom());
 		}
 		{
 			BitField field = newBitField(1);
-			assertEquals(-1, field.getOnPieceAtRandom());
+			assertEquals(-1, field.getOffPieceAtRandom());
 			field.isOn(0, false);
-			assertEquals(0, field.getOnPieceAtRandom());
+			assertEquals(0, field.getOffPieceAtRandom());
 		}
 
 		{
 			BitField field = newBitField(3);
-			assertEquals(-1, field.getOnPieceAtRandom());
+			assertEquals(-1, field.getOffPieceAtRandom());
 			field.isOn(1, false);
-			assertEquals(1, field.getOnPieceAtRandom());
+			assertEquals(1, field.getOffPieceAtRandom());
 			field.isOn(2, true);
-			int i = field.getOnPieceAtRandom();
+			int i = field.getOffPieceAtRandom();
 			assertEquals(true, (i==2||i==1?true:false));
 
+		}
+	}
+
+	public void test_getOffPieceAtRandom() {
+		{
+			BitField field = newBitField(0);
+			assertEquals(-1, field.getOnPieceAtRandom());
+		}
+		{
+			BitField field = newBitField(1);
+			assertEquals(0, field.getOnPieceAtRandom());
+			field.isOn(0, false);
+			assertEquals(-1, field.getOnPieceAtRandom());
+		}
+
+		{
+			BitField field = newBitField(3);
+			int i = field.getOnPieceAtRandom();
+			assertEquals(true, (i==0|i==1||i==2?true:false));
+
+			field.isOn(1, false);
+			 i = field.getOnPieceAtRandom();
+			assertEquals(true, (i==0||i==2?true:false));
+
+			field.isOn(2, false);
+			 i = field.getOnPieceAtRandom();
+			assertEquals(i, 0);
+			
+			field.isOn(0, false);
+			 i = field.getOnPieceAtRandom();
+			assertEquals(-1, i);
 		}
 	}
 
