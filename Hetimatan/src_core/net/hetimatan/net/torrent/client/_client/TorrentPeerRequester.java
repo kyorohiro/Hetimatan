@@ -100,4 +100,10 @@ public class TorrentPeerRequester implements TorrentClientListener {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void onConnection(TorrentClientFront front) {
+		// TODO Auto-generated method stub
+		
+	}
 }

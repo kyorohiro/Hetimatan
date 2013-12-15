@@ -64,4 +64,10 @@ public class TorrentPeerInterest implements TorrentClientListener {
 		
 	}
 
+	@Override
+	public void onConnection(TorrentClientFront front) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

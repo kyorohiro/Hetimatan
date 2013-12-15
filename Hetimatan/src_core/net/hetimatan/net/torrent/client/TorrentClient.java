@@ -14,7 +14,7 @@ import net.hetimatan.net.torrent.client._client.TorrentClientGetPeerList;
 import net.hetimatan.net.torrent.client._client.TorrentClientObserverManager;
 import net.hetimatan.net.torrent.client._client.TorrentClientStartConnection;
 import net.hetimatan.net.torrent.client._client.TorrentClientUploadSenario;
-import net.hetimatan.net.torrent.client._client.TorrentPeerChoker;
+import net.hetimatan.net.torrent.client._client.TorrentClientChoker;
 import net.hetimatan.net.torrent.client._client.TorrentPeerFrontManager;
 import net.hetimatan.net.torrent.client._client.TorrentPeerInterest;
 import net.hetimatan.net.torrent.client._client.TorrentPeerRequester;
@@ -85,7 +85,7 @@ public class TorrentClient {
 	// this class's delegation
 	//
 	private TorrentClientSetting mSetting         = new TorrentClientSetting();
-	private TorrentPeerChoker mChoker           = new TorrentPeerChoker(this);
+	private TorrentClientChoker mChoker           = new TorrentClientChoker(this);
 	private TorrentPeerRequester mRequester     = new TorrentPeerRequester(this);
 	private TorrentClientUploadSenario mPieceScenario    = new TorrentClientUploadSenario(this);
 	private TorrentClientGetPeerList mGetPeerListSenario = null;
@@ -112,6 +112,7 @@ public class TorrentClient {
 		getDispatcher().addObserverAtWeak(mRequester);
 		getDispatcher().addObserverAtWeak(mInterest);
 		getDispatcher().addObserverAtWeak(mStartConnection);
+		getDispatcher().addObserverAtWeak(mChoker);
 		
 		sId = "["+(num++)+"]"+peerId;
 	}
@@ -177,18 +178,6 @@ public class TorrentClient {
 
 	public TorrentClientSetting getSetting() {
 		return mSetting;
-	}
-
-	public void updateOptimusUnchokePeer(TorrentClientFront front) throws IOException {
-		mChoker.onStartTorrentFront(front);
-	}
-
-	public void updateOptimusUnchokePeer() {
-		try {
-			mChoker.updateOptimusUnchokePeer();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 
 	public void setMasterFile(File[] master) throws IOException {

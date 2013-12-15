@@ -138,4 +138,10 @@ public class TorrentClientUploadSenario implements TorrentClientListener {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void onConnection(TorrentClientFront front) {
+		// TODO Auto-generated method stub
+		
+	}
 }

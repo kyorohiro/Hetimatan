@@ -29,7 +29,8 @@ public class TorrentFrontFirstAction extends EventTask {
 
 		//front.sendBitfield();
 		TorrentClient peer =  front.getTorrentPeer();
-		if(peer != null) { peer.updateOptimusUnchokePeer(front);}
+		if(peer == null) {return;}
+		peer.getDispatcher().dispatchConnection(front);
 
 		if(mTorrentFront.get().getTorrentPeer().isSeeder()) {
 			front.sendNotinterest();

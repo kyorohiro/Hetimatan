@@ -43,6 +43,7 @@ public class TorrentPeerFrontManager {
 		TrackerPeerInfo key = getFrontPeer(i);
 		return getTorrentFront(key);
 	}
+
 	public TorrentClientFront getTorrentFront(TrackerPeerInfo peer) {
 		if(peer == null) {return null;}
 		return mFrontList.get(peer);
