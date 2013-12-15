@@ -24,7 +24,7 @@ public class TorrentClientStartConnection implements TorrentClientListener {
 		mUploadTargetPeer = new WeakReference<TorrentClient>(target);
 	}
 
-	public void updatePeerList() throws IOException {
+	public void updatePeerList_tracker2client() throws IOException {
 	 	TorrentClient peer = mUploadTargetPeer.get();
 	 	if(peer == null) {return;}
 	 	if(peer.isSeeder()) {
@@ -60,7 +60,7 @@ public class TorrentClientStartConnection implements TorrentClientListener {
 	@Override
 	public void onResponsePeerList(TrackerClient client) {
 		try {
-			updatePeerList();
+			updatePeerList_tracker2client();
 			startConnection();
 		} catch (IOException e) {
 			e.printStackTrace();

@@ -13,11 +13,11 @@ import net.hetimatan.net.torrent.tracker.TrackerClient;
 import net.hetimatan.net.torrent.tracker.TrackerRequest;
 import net.hetimatan.util.bitfield.BitField;
 
-public class TorrentPeerRequester implements TorrentClientListener {
+public class TorrentClientRequester implements TorrentClientListener {
 	private WeakReference<TorrentClient> mOwner = null;
 
 
-	public TorrentPeerRequester(TorrentClient peer) {
+	public TorrentClientRequester(TorrentClient peer) {
 		mOwner = new WeakReference<TorrentClient>(peer);
 	}
 

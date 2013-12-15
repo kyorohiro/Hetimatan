@@ -7,7 +7,7 @@ import java.util.Set;
 import net.hetimatan.net.torrent.client.TorrentClientFront;
 import net.hetimatan.net.torrent.tracker.TrackerPeerInfo;
 
-public class TorrentPeerFrontManager {
+public class TorrentClientFrontManager {
 
 	private LinkedHashMap<TrackerPeerInfo, TorrentClientFront> mFrontList = new LinkedHashMap<TrackerPeerInfo, TorrentClientFront>();
 

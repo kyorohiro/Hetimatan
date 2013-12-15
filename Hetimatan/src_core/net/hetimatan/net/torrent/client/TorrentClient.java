@@ -15,8 +15,8 @@ import net.hetimatan.net.torrent.client._client.TorrentClientMessageDispatcher;
 import net.hetimatan.net.torrent.client._client.TorrentClientStartConnection;
 import net.hetimatan.net.torrent.client._client.TorrentClientUploadSenario;
 import net.hetimatan.net.torrent.client._client.TorrentClientChoker;
-import net.hetimatan.net.torrent.client._client.TorrentPeerFrontManager;
-import net.hetimatan.net.torrent.client._client.TorrentPeerRequester;
+import net.hetimatan.net.torrent.client._client.TorrentClientFrontManager;
+import net.hetimatan.net.torrent.client._client.TorrentClientRequester;
 import net.hetimatan.net.torrent.client.task.TorrentPeerAcceptTask;
 import net.hetimatan.net.torrent.client.task.TorrentPeerBootTask;
 import net.hetimatan.net.torrent.tracker.TrackerClient;
@@ -85,10 +85,10 @@ public class TorrentClient {
 	//
 	private TorrentClientSetting mSetting         = new TorrentClientSetting();
 	private TorrentClientChoker mChoker           = new TorrentClientChoker(this);
-	private TorrentPeerRequester mRequester     = new TorrentPeerRequester(this);
+	private TorrentClientRequester mRequester     = new TorrentClientRequester(this);
 	private TorrentClientUploadSenario mPieceScenario    = new TorrentClientUploadSenario(this);
 	private TorrentClientGetPeerList mGetPeerListSenario = null;
-	private TorrentPeerFrontManager mFrontManager = new TorrentPeerFrontManager();
+	private TorrentClientFrontManager mFrontManager = new TorrentClientFrontManager();
 	private TorrentClientStartConnection mStartConnection = new TorrentClientStartConnection(this);
 	// ---
 	// task
@@ -295,7 +295,7 @@ public class TorrentClient {
 		return mRequester.nextPieceId(front);
 	}
 
-	public TorrentPeerFrontManager getTorrentPeerManager() {
+	public TorrentClientFrontManager getTorrentPeerManager() {
 		return mFrontManager;
 	}
 
