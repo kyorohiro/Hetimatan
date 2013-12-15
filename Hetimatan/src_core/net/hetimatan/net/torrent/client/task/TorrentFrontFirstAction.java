@@ -28,16 +28,16 @@ public class TorrentFrontFirstAction extends EventTask {
 		front.getSocket().rejectEventTask(this);
 
 		//front.sendBitfield();
-		TorrentClient peer =  front.getTorrentPeer();
-		if(peer == null) {return;}
-		peer.getDispatcher().dispatchConnection(front);
+		//TorrentClient peer =  front.getTorrentPeer();
+		//if(peer == null) {return;}
+		//peer.getDispatcher().dispatchConnection(front);
 
-		if(mTorrentFront.get().getTorrentPeer().isSeeder()) {
-			front.sendNotinterest();
-		} else {
-			front.sendInterest();		
-		}
+		//if(mTorrentFront.get().getTorrentPeer().isSeeder()) {
+		//	front.sendNotinterest();
+		//} else {
+		//	front.sendInterest();		
+		//}
 		front.startReceliver();
-		front.getTaskManager().startDownload(front.getTorrentPeer(), front);
+		//front.getTaskManager().startDownload(front.getTorrentPeer(), front);
 	}
 }

@@ -58,9 +58,13 @@ public class TorrentFrontTaskManager {
 		}
 	}
 
-	public void startConnectForAccept(TorrentClient peer, TorrentClientFront front) {
+	public void startConnectForAccept(TorrentClient peer, TorrentClientFront front) throws IOException {
 		if(Log.ON){Log.v(TAG, "["+front.getDebug()+"]"+"start accept task");}
 		EventTaskRunner runner = peer.getClientRunner();
+
+		// connected
+		peer.getDispatcher().dispatchConnection(front);
+
 		mStartTask = new TorrentFrontShakeHand.TorrentFrontShakeHandTask(front);
 		mFirstAction = new TorrentFrontFirstAction(front);
 		if(mCloseTask == null) {

@@ -72,8 +72,6 @@ public class TorrentFrontShakeHand {
 			throw new IOException();
 		}
 
-		//
-		peer.getDispatcher().dispatchShakeHand(front);
 		mReceivedShakehand = true;
 	}
 
@@ -138,6 +136,10 @@ public class TorrentFrontShakeHand {
 					front.revcShakehand();
 					mIsKeep = false;
 					mIsNext = true;
+
+					//
+					// shakehand
+					peer.getDispatcher().dispatchShakeHand(front);
 				} else {
 					mSocket.regist(peer.getSelector(), KyoroSelector.READ);
 					mSocket.setEventTaskAtWrakReference(this,KyoroSelector.READ);

@@ -3,6 +3,7 @@ package net.hetimatan.net.torrent.client.task;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 
+import net.hetimatan.net.torrent.client.TorrentClient;
 import net.hetimatan.net.torrent.client.TorrentClientFront;
 import net.hetimatan.util.event.EventTask;
 import net.hetimatan.util.event.EventTaskRunner;
@@ -40,6 +41,10 @@ public class TorrentFrontConnectionTask extends EventTask {
 
 		if(front.isConnect()) {
 			mIsKeep = false;
+			TorrentClient peer = front.getTorrentPeer();
+			if(peer != null) {
+				peer.getDispatcher().dispatchConnection(front);
+			}
 		} else {
 			mIsKeep = true;
 		}

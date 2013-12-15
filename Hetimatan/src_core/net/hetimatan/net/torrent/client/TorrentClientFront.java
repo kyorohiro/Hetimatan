@@ -446,7 +446,7 @@ public class TorrentClientFront {
 	// ------------------------------------------------
 	//
 	// ------------------------------------------------
-	public void startConnectForAccept() {
+	public void startConnectForAccept() throws IOException {
 		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"start accept task");}
 		mTaskManager.startConnectForAccept(mTorrentPeer.get(), this);
 	}

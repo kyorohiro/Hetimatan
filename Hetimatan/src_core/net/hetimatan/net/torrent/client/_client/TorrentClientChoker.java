@@ -39,6 +39,17 @@ public class TorrentClientChoker implements TorrentClientListener {
 
 	@Override
 	public void onConnection(TorrentClientFront front) throws IOException {
+
+	}
+
+	@Override
+	public void onClose(TorrentClientFront front) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onShakeHand(TorrentClientFront front) throws IOException {
 		TorrentClient torrentPeer = mOwner.get();if(torrentPeer == null) {return;}
 		TorrentClientSetting mSetting = torrentPeer.getSetting();
 		int numOfUnchokerNow = mOptimusUnchokePeer.size();
@@ -54,20 +65,7 @@ public class TorrentClientChoker implements TorrentClientListener {
 	}
 
 	@Override
-	public void onClose(TorrentClientFront front) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onShakeHand(TorrentClientFront front) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onReceiveMessage(TorrentClientFront front,
-			TorrentMessage message) {
+	public void onReceiveMessage(TorrentClientFront front, TorrentMessage message) {
 		// TODO Auto-generated method stub
 		
 	}
