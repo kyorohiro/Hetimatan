@@ -42,16 +42,23 @@ public class TorrentClientFront {
 
 	private MarkableReader mReader = null;
 	private WeakReference<TorrentClient> mTorrentPeer = null;
+
 	private boolean mIsOneself = false;
-	
 	public boolean isOneself() {
 		return mIsOneself;
 	}
-
 	public void isOneself(boolean v) {
 		mIsOneself = v;
 	}
-	
+
+	private boolean mConnectable = true;
+	public boolean isConnectable() {
+		return mConnectable;
+	}
+	public void isConnectable(boolean v) {
+		mConnectable = v;
+	}
+
 	private TorrentFrontTargetInfo mTargetInfo = null;
 	private TorrentFrontMyInfo mMyInfo = null;
 	private KyoroSocket mSocket = null;
@@ -183,6 +190,7 @@ public class TorrentClientFront {
 			return true;
 		case KyoroSocket.CN_DISCONNECTED:
 			if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"TorrentFront#disconnected() : ");}
+			isConnectable(false);
 			throw new IOException();
 		case KyoroSocket.CN_CONNECTING:
 		default:

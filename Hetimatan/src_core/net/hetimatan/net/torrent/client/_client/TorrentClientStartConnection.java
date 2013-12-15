@@ -70,7 +70,7 @@ public class TorrentClientStartConnection implements TorrentClientListener {
 	@Override
 	public void onClose(TorrentClientFront front) {
 		try {
-			if(front.isOneself()) {
+			if(front.isOneself()||!front.isConnectable()) {
 				int i = mPeerInfoList.indexOf(front.getPeer());
 				if(i!=-1) {
 					mPeerInfoList.remove(mPeerInfoList.get(i));
