@@ -100,6 +100,17 @@ public class TorrentData {
 		return mDataLength;
 	}
 
+	public int getPieceLengthPer(int index) {
+		long len = (index+1)*mPieceLength;
+		if(mDataLength <=len) {
+			int ret = (int)(mDataLength-(index*mPieceLength));
+			if(ret<=mPieceLength && ret>=0) {
+				return ret;
+			}
+		}
+		return mPieceLength;
+	}
+
 	public void setMaster(File[] srcs) throws IOException {
 		int len = srcs.length;
 		if(srcs.length == 0) {

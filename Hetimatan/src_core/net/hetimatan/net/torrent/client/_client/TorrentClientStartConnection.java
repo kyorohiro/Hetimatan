@@ -69,13 +69,15 @@ public class TorrentClientStartConnection implements TorrentClientListener {
 
 	@Override
 	public void onClose(TorrentClientFront front) {
+	 	TorrentClient peer = mUploadTargetPeer.get();
+	 	if(peer == null) {return;}
 		try {
 			if(front.isOneself()||!front.isConnectable()) {
 				int i = mPeerInfoList.indexOf(front.getPeer());
 				if(i!=-1) {
 					mPeerInfoList.remove(mPeerInfoList.get(i));
 				}
-			} else {
+			} else if(!peer.isSeeder()){
 				startConnection();
 			}
 		} catch (IOException e) {
