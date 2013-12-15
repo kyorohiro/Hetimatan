@@ -11,7 +11,7 @@ import net.hetimatan.io.net.KyoroServerSocketImpl;
 import net.hetimatan.io.net.KyoroSocket;
 import net.hetimatan.io.net.KyoroSocketImpl;
 import net.hetimatan.net.torrent.client._client.TorrentClientGetPeerList;
-import net.hetimatan.net.torrent.client._client.TorrentClientObserverManager;
+import net.hetimatan.net.torrent.client._client.TorrentClientMessageDispatcher;
 import net.hetimatan.net.torrent.client._client.TorrentClientStartConnection;
 import net.hetimatan.net.torrent.client._client.TorrentClientUploadSenario;
 import net.hetimatan.net.torrent.client._client.TorrentClientChoker;
@@ -97,7 +97,7 @@ public class TorrentClient {
 	private static int num = 0;
 
 	//
-	TorrentClientObserverManager mDispatcher = new TorrentClientObserverManager();
+	TorrentClientMessageDispatcher mDispatcher = new TorrentClientMessageDispatcher();
 
 	public TorrentClient(MetaFile metafile, String peerId) throws IOException {
 		mPeerId = peerId;
@@ -114,7 +114,7 @@ public class TorrentClient {
 		sId = "["+(num++)+"]"+peerId;
 	}
 
-	public TorrentClientObserverManager getDispatcher() {
+	public TorrentClientMessageDispatcher getDispatcher() {
 		return mDispatcher;
 	}
 	

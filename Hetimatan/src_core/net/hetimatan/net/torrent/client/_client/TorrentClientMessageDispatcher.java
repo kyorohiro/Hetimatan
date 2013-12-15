@@ -10,7 +10,7 @@ import net.hetimatan.net.torrent.client.TorrentClientListener;
 import net.hetimatan.net.torrent.client.message.TorrentMessage;
 import net.hetimatan.net.torrent.tracker.TrackerClient;
 
-public class TorrentClientObserverManager {
+public class TorrentClientMessageDispatcher {
 
 	private LinkedList<WeakReference<TorrentClientListener>> mObservers = new LinkedList<WeakReference<TorrentClientListener>>();
 
