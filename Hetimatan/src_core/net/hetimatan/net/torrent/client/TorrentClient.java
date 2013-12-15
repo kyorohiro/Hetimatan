@@ -16,7 +16,6 @@ import net.hetimatan.net.torrent.client._client.TorrentClientStartConnection;
 import net.hetimatan.net.torrent.client._client.TorrentClientUploadSenario;
 import net.hetimatan.net.torrent.client._client.TorrentClientChoker;
 import net.hetimatan.net.torrent.client._client.TorrentPeerFrontManager;
-import net.hetimatan.net.torrent.client._client.TorrentPeerInterest;
 import net.hetimatan.net.torrent.client._client.TorrentPeerRequester;
 import net.hetimatan.net.torrent.client.task.TorrentPeerAcceptTask;
 import net.hetimatan.net.torrent.client.task.TorrentPeerBootTask;
@@ -89,7 +88,6 @@ public class TorrentClient {
 	private TorrentPeerRequester mRequester     = new TorrentPeerRequester(this);
 	private TorrentClientUploadSenario mPieceScenario    = new TorrentClientUploadSenario(this);
 	private TorrentClientGetPeerList mGetPeerListSenario = null;
-	private TorrentPeerInterest mInterest       = new TorrentPeerInterest(this);
 	private TorrentPeerFrontManager mFrontManager = new TorrentPeerFrontManager();
 	private TorrentClientStartConnection mStartConnection = new TorrentClientStartConnection(this);
 	// ---
@@ -110,7 +108,6 @@ public class TorrentClient {
 
 		getDispatcher().addObserverAtWeak(mPieceScenario);
 		getDispatcher().addObserverAtWeak(mRequester);
-		getDispatcher().addObserverAtWeak(mInterest);
 		getDispatcher().addObserverAtWeak(mStartConnection);
 		getDispatcher().addObserverAtWeak(mChoker);
 		

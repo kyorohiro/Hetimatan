@@ -7,7 +7,6 @@ import java.io.OutputStream;
 import net.hetimatan.io.file.MarkableReader;
 import net.hetimatan.io.file.MarkableReaderHelper;
 import net.hetimatan.util.io.ByteArrayBuilder;
-import net.hetimatan.util.url.PercentEncoder;
 
 public class MessageHave extends TorrentMessage {
 

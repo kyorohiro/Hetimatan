@@ -8,9 +8,11 @@ import net.hetimatan.net.torrent.client.TorrentClientFront;
 import net.hetimatan.net.torrent.client.TorrentClient;
 import net.hetimatan.net.torrent.client.TorrentClientListener;
 import net.hetimatan.net.torrent.client.TorrentClientSetting;
+import net.hetimatan.net.torrent.client.message.MessageHave;
 import net.hetimatan.net.torrent.client.message.TorrentMessage;
 import net.hetimatan.net.torrent.tracker.TrackerClient;
 import net.hetimatan.net.torrent.tracker.TrackerPeerInfo;
+import net.hetimatan.util.bitfield.BitField;
 
 public class TorrentClientChoker implements TorrentClientListener {
 
@@ -66,13 +68,32 @@ public class TorrentClientChoker implements TorrentClientListener {
 
 	@Override
 	public void onReceiveMessage(TorrentClientFront front, TorrentMessage message) {
-		// TODO Auto-generated method stub
-		
+		 updateInterest(front, message);
 	}
 
 	@Override
 	public void onResponsePeerList(TrackerClient client) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public void updateInterest(TorrentClientFront front, TorrentMessage message) {
+	 	TorrentClient peer = mOwner.get();
+		if(peer == null) {return;}
+		if(message.getType() == TorrentMessage.SIGN_BITFIELD) {
+			BitField relative = front.relativeBitfield();
+			if(!relative.isAllOff()) {
+				front.getTaskManager().startInterest(front.getTorrentPeer(), front);
+			} else {
+				front.getTaskManager().startNotInterest(front.getTorrentPeer(), front);				
+			}
+		}
+		if(message.getType() == TorrentMessage.SIGN_HAVE) {
+			int index = ((MessageHave)message).getIndex();
+			BitField stocked = peer.getTorrentData().getStockedDataInfo();
+			if(!stocked.isOn(index)) {
+				front.getTaskManager().startInterest(front.getTorrentPeer(), front);
+			}
+		}
 	}
 }
