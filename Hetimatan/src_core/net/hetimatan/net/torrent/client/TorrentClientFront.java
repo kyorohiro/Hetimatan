@@ -42,8 +42,16 @@ public class TorrentClientFront {
 
 	private MarkableReader mReader = null;
 	private WeakReference<TorrentClient> mTorrentPeer = null;
+	private boolean mIsOneself = false;
 	
+	public boolean isOneself() {
+		return mIsOneself;
+	}
 
+	public void isOneself(boolean v) {
+		mIsOneself = v;
+	}
+	
 	private TorrentFrontTargetInfo mTargetInfo = null;
 	private TorrentFrontMyInfo mMyInfo = null;
 	private KyoroSocket mSocket = null;

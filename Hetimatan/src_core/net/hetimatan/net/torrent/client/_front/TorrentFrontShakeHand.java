@@ -67,7 +67,8 @@ public class TorrentFrontShakeHand {
 		TorrentHistory.get().pushReceive(front, recv);
 		TorrentClient peer = front.getTorrentPeer();
 		PercentEncoder encoder = new PercentEncoder();
-		if (peer.getPeerId().equals(encoder.encode(recv.getPeerId()))) {	
+		if (peer.getPeerId().equals(encoder.encode(recv.getPeerId()))) {
+			front.isOneself(true);
 			throw new IOException();
 		}
 		mReceivedShakehand = true;

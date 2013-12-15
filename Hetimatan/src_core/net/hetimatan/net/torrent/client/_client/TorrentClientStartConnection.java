@@ -3,6 +3,7 @@ package net.hetimatan.net.torrent.client._client;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.Iterator;
+import java.util.LinkedList;
 
 import net.hetimatan.net.torrent.client.TorrentClient;
 import net.hetimatan.net.torrent.client.TorrentClientFront;
@@ -23,26 +24,33 @@ public class TorrentClientStartConnection implements TorrentClientListener {
 		mUploadTargetPeer = new WeakReference<TorrentClient>(target);
 	}
 
-	public void startConnection() throws IOException {
+	public void updatePeerList() throws IOException {
 	 	TorrentClient peer = mUploadTargetPeer.get();
 	 	if(peer == null) {return;}
 	 	if(peer.isSeeder()) {
 	 		return ;
 	 	}
-	 	int todo_i =0;
 	 	TrackerClient client = peer.getTracker();
 	 	Iterator<TrackerPeerInfo> peers32 = client.getPeer32();
 	 	if(!peer.isSeeder()) {//todo
 	 		while(peers32.hasNext()) {
-	 			todo_i++;
 	 			TrackerPeerInfo targetPeer = peers32.next();
 	 			peer.startConnect(targetPeer);
-	 			if(todo_i>4) {
-	 				break;
+	 			if(!mPeerInfoList.contains(targetPeer)) {
+	 				mPeerInfoList.add(new PeerInfo(targetPeer));
 	 			}
 	 		}
 	 	}
 	 	client.clearPeer32();
+	}
+
+	public void startConnection() throws IOException {
+	 	TorrentClient peer = mUploadTargetPeer.get();
+	 	if(peer == null) {return;}
+		int size = mPeerInfoList.size();
+		for(int i=0;i<size;i++) {
+			peer.startConnect(mPeerInfoList.get(i).mPeerInfo);
+		}
 	}
 
 	@Override
@@ -52,6 +60,7 @@ public class TorrentClientStartConnection implements TorrentClientListener {
 	@Override
 	public void onResponsePeerList(TrackerClient client) {
 		try {
+			updatePeerList();
 			startConnection();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -61,9 +70,35 @@ public class TorrentClientStartConnection implements TorrentClientListener {
 	@Override
 	public void onClose(TorrentClientFront front) {
 		try {
-			startConnection();
+			if(front.isOneself()) {
+				int i = mPeerInfoList.indexOf(front.getPeer());
+				if(i!=-1) {
+					mPeerInfoList.remove(mPeerInfoList.get(i));
+				}
+			} else {
+				startConnection();
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+	}
+
+	public LinkedList<PeerInfo> mPeerInfoList = new LinkedList<>();
+	
+	public static class PeerInfo implements Comparable<PeerInfo>{
+		private TrackerPeerInfo mPeerInfo = null;
+		private int mStatus = 0;
+		public PeerInfo(TrackerPeerInfo info) {
+			mPeerInfo = info;
+		}
+		@Override
+		public int compareTo(PeerInfo o) {
+			return mPeerInfo.compareTo(o.mPeerInfo);
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			return mPeerInfo.equals(obj);
 		}
 	}
 }

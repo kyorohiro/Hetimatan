@@ -180,7 +180,7 @@ public class TorrentClient {
 	}
 
 	public void updateOptimusUnchokePeer(TorrentClientFront front) throws IOException {
-					mChoker.onStartTorrentFront(front);
+		mChoker.onStartTorrentFront(front);
 	}
 
 	public void updateOptimusUnchokePeer() {
