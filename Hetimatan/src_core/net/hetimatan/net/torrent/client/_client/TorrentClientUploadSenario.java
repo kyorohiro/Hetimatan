@@ -144,4 +144,10 @@ public class TorrentClientUploadSenario implements TorrentClientListener {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void onClose(TorrentClient client) throws IOException {
+		// TODO Auto-generated method stub
+		
+	}
 }

@@ -132,6 +132,8 @@ public class TorrentClient {
 	 * start Torrent Client. 
 	 *  - start torrent server
 	 *  - request torrent list to tracker
+	 *  - start connect another peer.
+	 *  - upload/download data
 	 * @param runner
 	 * @return
 	 * @throws IOException 
@@ -152,6 +154,12 @@ public class TorrentClient {
 		return runner; 
 	}
 
+	/**
+	 * start connection to args peer.
+	 * and start download/upload 
+	 * @param peer
+	 * @throws IOException
+	 */
 	public void startConnect(TrackerPeerInfo peer) throws IOException {
 		if(getTorrentPeerManager().contain(peer)) {return;}
 		TorrentClientFront front = createFront(peer);
@@ -261,6 +269,10 @@ public class TorrentClient {
 		return mIsBooted;
 	}
 
+	/**
+	 * accept peer request
+	 * @throws IOException
+	 */
 	public void accept() throws IOException {
 		while(true) {
 			KyoroSocket socket = mServerSocket.accept();
@@ -289,6 +301,7 @@ public class TorrentClient {
 	public void close() {
 		try { if(mServerSocket != null){mServerSocket.close();}} catch (IOException e) { }
 		try { getTorrentData().save();} catch (IOException e) { }
+		try { getDispatcher().dispatchClose(this);}catch(IOException e){}
 	}
 
 	public int getNextRequestPiece(TorrentClientFront front) {

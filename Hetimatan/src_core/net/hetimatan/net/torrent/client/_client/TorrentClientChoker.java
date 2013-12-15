@@ -96,4 +96,10 @@ public class TorrentClientChoker implements TorrentClientListener {
 			}
 		}
 	}
+
+	@Override
+	public void onClose(TorrentClient client) throws IOException {
+		// TODO Auto-generated method stub
+		
+	}
 }

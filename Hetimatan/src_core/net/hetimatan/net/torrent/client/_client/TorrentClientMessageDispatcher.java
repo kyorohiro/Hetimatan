@@ -5,6 +5,7 @@ import java.lang.ref.WeakReference;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import net.hetimatan.net.torrent.client.TorrentClient;
 import net.hetimatan.net.torrent.client.TorrentClientFront;
 import net.hetimatan.net.torrent.client.TorrentClientListener;
 import net.hetimatan.net.torrent.client.message.TorrentMessage;
@@ -76,6 +77,18 @@ public class TorrentClientMessageDispatcher {
 				mObservers.remove(observerref);
 			}
 			observer.onConnection(front);
+		}
+	}
+
+	public void dispatchClose(TorrentClient client) throws IOException {
+		Iterator<WeakReference<TorrentClientListener>>	ite = mObservers.iterator();
+		while(ite.hasNext()) {
+			WeakReference<TorrentClientListener> observerref = ite.next();
+			TorrentClientListener observer = observerref.get();
+			if(null == observerref.get()) {
+				mObservers.remove(observerref);
+			}
+			observer.onClose(client);
 		}
 	}
 }
