@@ -94,4 +94,10 @@ public class TorrentPeerRequester implements TorrentClientListener {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void onShakeHand(TorrentClientFront front) {
+		// TODO Auto-generated method stub
+		
+	}
 }

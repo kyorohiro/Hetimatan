@@ -58,4 +58,10 @@ public class TorrentPeerInterest implements TorrentClientListener {
 		
 	}
 
+	@Override
+	public void onShakeHand(TorrentClientFront front) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

@@ -71,6 +71,9 @@ public class TorrentFrontShakeHand {
 			front.isOneself(true);
 			throw new IOException();
 		}
+
+		//
+		peer.getDispatcher().dispatchShakeHand(front);
 		mReceivedShakehand = true;
 	}
 

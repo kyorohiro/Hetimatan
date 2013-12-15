@@ -103,4 +103,10 @@ public class TorrentClientStartConnection implements TorrentClientListener {
 			return mPeerInfo.equals(obj);
 		}
 	}
+
+	@Override
+	public void onShakeHand(TorrentClientFront front) {
+		// TODO Auto-generated method stub
+		
+	}
 }
