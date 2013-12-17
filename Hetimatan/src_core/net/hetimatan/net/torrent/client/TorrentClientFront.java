@@ -293,18 +293,12 @@ public class TorrentClientFront {
 		try {
 			if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"TorrentFront#sendRequest() ");}
 			TorrentClient peer = mTorrentPeer.get();
-			if(peer==null){if(Log.ON){Log.v(TAG, "--1--");}
-				return;}
-			if(getTargetInfo().isChoked() == TorrentClientFront.TRUE) {
-				if(Log.ON){Log.v(TAG, "choked");}
-				return;}
-			if(mRequestedNum >= 1) {
-				Log.v(TAG, "already requested [B]:"+mRequestedNum);
-				return;}
+			if(peer==null){return;}
+			if(getTargetInfo().isChoked() == TorrentClientFront.TRUE) {if(Log.ON){Log.v(TAG, "choked");} return;}
+			if(mRequestedNum >= 1) {Log.v(TAG, "already requested [B]:"+mRequestedNum);return;}
 
 			index = peer.getNextRequestPiece(this);
 			mRequestPiece = index;
-//			pieceLength = mTargetInfo.getPieceLength();
 			pieceLength = peer.getTorrentData().getPieceLengthPer(index);
 			MessageRequest request = new MessageRequest(index, 0, pieceLength);
 			request.encode(mSendCash.getLastOutput());
