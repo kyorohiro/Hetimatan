@@ -93,9 +93,9 @@ public class HttpGet {
 	public void send() throws InterruptedException, IOException {
 		if(Log.ON){Log.v(TAG, "HttpGet#send()");}
 		MessageSendTask sendTask = mCurrentRequest.getRequestTask(getSocket());
-		HttpGetReadHeaderTask readHeaderTask = new HttpGetReadHeaderTask(this, mTaskManager.mLast);
-		readHeaderTask.nextAction(new HttpGetReadBodyTask(this, mTaskManager.mLast));
-		sendTask.nextAction(readHeaderTask);
+		sendTask
+		.nextAction(new HttpGetReadHeaderTask(this, mTaskManager.mLast))
+		.nextAction(new HttpGetReadBodyTask(this, mTaskManager.mLast));
 		getRunner().pushTask(sendTask);
 		mTaskManager.mSendTaskChain = sendTask;
 	}
