@@ -7,9 +7,9 @@ import java.io.IOException;
 import com.sun.jndi.toolkit.url.Uri;
 
 import net.hetimatan.net.torrent.tracker.TrackerServer;
-import net.hetimatan.net.torrent.tracker.db.TrackerDB;
-import net.hetimatan.net.torrent.tracker.db.TrackerData;
-import net.hetimatan.net.torrent.tracker.db.TrackerDatam;
+import net.hetimatan.net.torrent.tracker._server.TrackerDB;
+import net.hetimatan.net.torrent.tracker._server.TrackerData;
+import net.hetimatan.net.torrent.tracker._server.TrackerDatam;
 import net.hetimatan.net.torrent.util.metafile.MetaFile;
 import net.hetimatan.net.torrent.util.metafile.MetaFileCreater;
 import net.hetimatan.util.http.HttpRequestUri;

@@ -8,8 +8,8 @@ import java.nio.ByteOrder;
 import java.util.LinkedList;
 
 import net.hetimatan.io.file.MarkableReader;
-import net.hetimatan.net.torrent.tracker.db.TrackerData;
-import net.hetimatan.net.torrent.tracker.db.TrackerDatam;
+import net.hetimatan.net.torrent.tracker._server.TrackerData;
+import net.hetimatan.net.torrent.tracker._server.TrackerDatam;
 import net.hetimatan.net.torrent.util.bencode.BenDiction;
 import net.hetimatan.net.torrent.util.bencode.BenInteger;
 import net.hetimatan.net.torrent.util.bencode.BenList;

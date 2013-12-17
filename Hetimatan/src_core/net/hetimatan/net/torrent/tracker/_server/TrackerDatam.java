@@ -1,4 +1,4 @@
-package net.hetimatan.net.torrent.tracker.db;
+package net.hetimatan.net.torrent.tracker._server;
 
 import net.hetimatan.net.torrent.client.TorrentClient;
 import net.hetimatan.net.torrent.tracker.TrackerRequest;
