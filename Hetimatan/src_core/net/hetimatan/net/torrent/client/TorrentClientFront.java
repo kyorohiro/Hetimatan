@@ -295,7 +295,8 @@ public class TorrentClientFront {
 			TorrentClient peer = mTorrentPeer.get();
 			if(peer==null){return;}
 			if(getTargetInfo().isChoked() == TorrentClientFront.TRUE) {if(Log.ON){Log.v(TAG, "choked");} return;}
-			if(mRequestedNum >= 1) {Log.v(TAG, "already requested [B]:"+mRequestedNum);return;}
+			if(mRequestedNum >= peer.getSetting().getNumOfRequestPerFront()) {
+				Log.v(TAG, "already requested [B]:"+mRequestedNum);return;}
 
 			index = peer.getNextRequestPiece(this);
 			mRequestPiece = index;
