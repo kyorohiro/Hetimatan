@@ -28,7 +28,7 @@ public class HttpServer {
 
 	public String sId = "[http_server_empty]";
 
-	private LinkedList<HttpFront> mClientInfos = new LinkedList<HttpFront>();
+	private LinkedList<HttpServerFront> mClientInfos = new LinkedList<HttpServerFront>();
 	private HttpServerAcceptTask mAcceptTask = null;
 	private int mPort = 8080;
 
@@ -80,7 +80,7 @@ public class HttpServer {
 	}
 
 	private void startStartFrontTask(KyoroSocket socket) throws IOException {
-		HttpFront front = new HttpFront(this, socket);
+		HttpServerFront front = new HttpServerFront(this, socket);
 		HttpHistory.get().pushMessage(sId+"#startFront:"+front.sId+"\n");
 
 		socket.regist(mRequestRunner.getSelector(), KyoroSelector.READ);
@@ -112,7 +112,7 @@ public class HttpServer {
 	/**
 	 * this method is overrided
 	 */
-	public KyoroFile createResponse(HttpFront front, KyoroSocket socket, HttpRequest uri) throws IOException {
+	public KyoroFile createResponse(HttpServerFront front, KyoroSocket socket, HttpRequest uri) throws IOException {
 		HttpHistory.get().pushMessage(sId+"#createResponse:"+front.sId+"\n");
 		KyoroFile responce = createContent(socket, uri);
 		ByteArrayBuilder builder = createHeader(socket, uri, responce);
@@ -147,7 +147,7 @@ public class HttpServer {
 			}
 			if(mClientInfos != null) {
 				while (0<mClientInfos.size()) {
-					HttpFront front = mClientInfos.removeFirst();
+					HttpServerFront front = mClientInfos.removeFirst();
 					front.close();
 				}
 			}
@@ -161,13 +161,13 @@ public class HttpServer {
 	}
 
 
-	public void addManagedHttpFront(HttpFront front) {
+	public void addManagedHttpFront(HttpServerFront front) {
 		if(mClientInfos != null && front != null) {
 			mClientInfos.addLast(front);
 		}
 	}
 
-	public void removeManagedHttpFront(HttpFront front) {
+	public void removeManagedHttpFront(HttpServerFront front) {
 		if(mClientInfos != null && front != null) {
 			mClientInfos.remove(front);
 		}

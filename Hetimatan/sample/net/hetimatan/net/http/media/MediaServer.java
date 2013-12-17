@@ -9,7 +9,7 @@ import net.hetimatan.io.filen.ByteKyoroFile;
 import net.hetimatan.io.filen.CashKyoroFileHelper;
 import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.io.net.KyoroSocket;
-import net.hetimatan.net.http.HttpFront;
+import net.hetimatan.net.http.HttpServerFront;
 import net.hetimatan.net.http.HttpHistory;
 import net.hetimatan.net.http.HttpServer;
 import net.hetimatan.net.torrent.util.piece.PieceInfoList;
@@ -52,7 +52,7 @@ public class MediaServer extends HttpServer {
 	}
 
 	@Override
-	public KyoroFile createResponse(HttpFront front, KyoroSocket socket, HttpRequest uri) throws IOException {
+	public KyoroFile createResponse(HttpServerFront front, KyoroSocket socket, HttpRequest uri) throws IOException {
 		HttpHistory.get().pushMessage(sId+"#createResponse:"+front.sId+"\n");
 		String rangeHeader = uri.getHeaderValue("Range");
 		boolean isRange = false;
@@ -70,7 +70,7 @@ public class MediaServer extends HttpServer {
 //		}
 	}
 
-	public KyoroFile createRangeResponse(PieceInfoList list, HttpFront front, KyoroSocket socket, HttpRequest uri) throws IOException {
+	public KyoroFile createRangeResponse(PieceInfoList list, HttpServerFront front, KyoroSocket socket, HttpRequest uri) throws IOException {
 		int length = 5;
 		if(length > list.size()) {length = list.size();}
 

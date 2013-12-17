@@ -20,7 +20,7 @@ public class HttpServerResponseCheck extends HttpServer {
 	}
 
 	@Override
-	public KyoroFile createResponse(HttpFront front, KyoroSocket socket, HttpRequest uri) throws IOException {
+	public KyoroFile createResponse(HttpServerFront front, KyoroSocket socket, HttpRequest uri) throws IOException {
 		HttpHistory.get().pushMessage(sId+"#createResponse:"+front.sId+"\n");
 		mResponseNumber++;
 		return super.createResponse(front, socket, uri);

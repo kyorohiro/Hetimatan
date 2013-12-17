@@ -16,7 +16,7 @@ import net.hetimatan.util.http.LookaheadHttpHeader;
 import net.hetimatan.util.http.HttpRequest;
 import net.hetimatan.util.log.Log;
 
-public class HttpFront {
+public class HttpServerFront {
 	public static final String TAG = "HttpFront";
 
 	public String sId = ""; 
@@ -31,7 +31,7 @@ public class HttpFront {
 	private LinkedList<EventTask> mMyTask = new LinkedList<EventTask>();
 
 
-	public HttpFront(HttpServer server, KyoroSocket socket) throws IOException {
+	public HttpServerFront(HttpServer server, KyoroSocket socket) throws IOException {
 		sId = "[httpfront:"+socket.getHost()+ ":"+ socket.getPort()+"]";
 		socket.setDebug(sId);
 
@@ -75,7 +75,7 @@ public class HttpFront {
 
 	public void startResponseTask() throws IOException {
 		if(Log.ON){Log.v(TAG, "HttpFront#doRespose");}
-		HttpFront info = this;
+		HttpServerFront info = this;
 		HttpServer server = mServer.get();
 		if(info == null || server == null) {
 			return;

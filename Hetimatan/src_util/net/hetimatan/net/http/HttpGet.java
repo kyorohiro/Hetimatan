@@ -211,5 +211,10 @@ public class HttpGet {
 		return mCurrentResponse.bodyIsReadable();
 	}
 
+	public static class HttpGetTaskManager {
+		public MessageSendTask mSendTaskChain = null;
+		public EventTask mLast = null;
+	}
+
 }
 
