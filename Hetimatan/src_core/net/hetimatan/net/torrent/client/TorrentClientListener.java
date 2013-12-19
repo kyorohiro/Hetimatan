@@ -10,6 +10,7 @@ public interface TorrentClientListener {
 	void onClose(TorrentClientFront front) throws IOException;
 	void onClose(TorrentClient client) throws IOException;
 	void onShakeHand(TorrentClientFront front) throws IOException;
+	void onSendMessage(TorrentClientFront front, TorrentMessage message) throws IOException;
 	void onReceiveMessage(TorrentClientFront front, TorrentMessage message) throws IOException;
 	void onResponsePeerList(TrackerClient client) throws IOException;
 }

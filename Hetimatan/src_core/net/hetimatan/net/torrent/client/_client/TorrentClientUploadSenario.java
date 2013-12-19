@@ -150,4 +150,11 @@ public class TorrentClientUploadSenario implements TorrentClientListener {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void onSendMessage(TorrentClientFront front, TorrentMessage message)
+			throws IOException {
+		// TODO Auto-generated method stub
+		
+	}
 }
