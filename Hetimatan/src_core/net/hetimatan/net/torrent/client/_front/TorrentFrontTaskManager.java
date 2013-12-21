@@ -54,6 +54,7 @@ public class TorrentFrontTaskManager {
 				peer.getClientRunner().releaseTask(mSendTaskChain);
 			}
 		} catch(Throwable t) {
+			t.printStackTrace();
 			throw new IOException("");
 		}
 	}

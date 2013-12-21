@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
+import net.hetimatan.net.torrent.client._client.ConnectTicket;
+import net.hetimatan.net.torrent.client._client.MessageTicket;
 import net.hetimatan.net.torrent.client.message.TorrentMessage;
 import net.hetimatan.net.torrent.tracker.TrackerPeerInfo;
 import net.hetimatan.net.torrent.util.metafile.MetaFile;
@@ -18,14 +20,29 @@ public class TestForTorrentPeerWithChoker extends TestCase {
 		TorrentClient testPeer = new TorrentClient(metainfo, TorrentClient.createPeerIdAsPercentEncode());
 		testPeer.startTorrentClient(null);
 		while(!testPeer.isBooted()){Thread.sleep(0);Thread.yield();}
+		ConnectTicket connectaCheck = new ConnectTicket(testPeer);
 
+		// 
 		TorrentClient compe = new TorrentClient(metainfo, TorrentClient.createPeerIdAsPercentEncode());
 		compe.boot();
+
 		TrackerPeerInfo peer = new TrackerPeerInfo("127.0.0.1", testPeer.getServerPort());
 		TorrentClientFront front = compe.createFront(peer);
+		
+		
+		//
+		// connect
+		//
 		front.connect(peer.getHostName(), peer.getPort());
 		while(!front.isConnect()){Thread.sleep(0);Thread.yield();}
-		//Thread.sleep(1000);//todo
+		connectaCheck.getTorrentClientFront();
+
+		
+		
+		MessageTicket unchokeCheck = new MessageTicket(
+				testPeer.getTorrentPeerManager().getTorrentFront(0),
+				TorrentMessage.SIGN_UNCHOKE
+		);
 		front.sendShakehand();
 		front.flushSendTask();
 		while(!front.parseableShakehand()) {;}
@@ -36,7 +53,8 @@ public class TestForTorrentPeerWithChoker extends TestCase {
 		front.flushSendTask();
 
 		assertEquals(1, testPeer.getTorrentPeerManager().numOfFront());
-		testPeer.getTorrentPeerManager().getTorrentFront(testPeer.getTorrentPeerManager().getFrontPeer(0)).waitMessage(TorrentMessage.SIGN_UNCHOKE, 3000);
+		unchokeCheck.getMessage();
+
 		assertEquals(TorrentClientFront.FALSE,
 		testPeer.getTorrentPeerManager().getTorrentFront(testPeer.getTorrentPeerManager().getFrontPeer(0)).getTargetInfo().isChoked());
 

@@ -1,31 +1,35 @@
-package net.hetimatan.net.torrent.client._front;
+package net.hetimatan.net.torrent.client._client;
 
 import java.io.IOException;
 
 import net.hetimatan.net.torrent.client.TorrentClient;
 import net.hetimatan.net.torrent.client.TorrentClientFront;
 import net.hetimatan.net.torrent.client.TorrentClientListener;
+import net.hetimatan.net.torrent.client._client.TorrentClientMessageDispatcher;
 import net.hetimatan.net.torrent.client.message.TorrentMessage;
 import net.hetimatan.net.torrent.tracker.TrackerClient;
 
 /**
  * for test 
- * received message,  
+ * connect  
  *
  */
-public class MessageTicket implements TorrentClientListener {
+public class ConnectTicket implements TorrentClientListener {
 
-	private int mMessageType = 0;
-	private TorrentClientFront mFront = null;
-	private TorrentMessage mReceived = null;
-
-	public MessageTicket(TorrentClientFront front, int messageType) {
-		mMessageType = messageType;
-		mFront = front;
+	private TorrentClientFront mConnected = null;
+	public ConnectTicket(TorrentClient client) throws IOException {
+		if(client == null) {throw new IOException();}
+		TorrentClientMessageDispatcher dispatcher = client.getDispatcher();
+		if(dispatcher == null) {throw new IOException();}
+		dispatcher.addObserverAtWeak(this);
 	}
 
 	@Override
 	public void onConnection(TorrentClientFront front) throws IOException {
+		if(mConnected == null) {
+			mConnected = front;
+			_notify();
+		}
 	}
 
 	@Override
@@ -45,13 +49,13 @@ public class MessageTicket implements TorrentClientListener {
 	}
 
 	private Object lock = new Object();
-	public TorrentMessage getMessage() {
+	public TorrentClientFront getTorrentClientFront() {
 		synchronized (lock) {
-			if(mReceived == null) {
+			if(mConnected == null) {
 				_wait();
 			}
 		}
-		return mReceived;
+		return mConnected;
 	}
 
 	private void _wait() {
@@ -72,12 +76,6 @@ public class MessageTicket implements TorrentClientListener {
 
 	@Override
 	public void onReceiveMessage(TorrentClientFront front, TorrentMessage message) throws IOException {
-		if(message == null) {return;}
-		if(mMessageType!=-1 && mMessageType != message.getType()) {
-			return;
-		}
-		mReceived = message;
-		_notify();
 	}
 
 	@Override
