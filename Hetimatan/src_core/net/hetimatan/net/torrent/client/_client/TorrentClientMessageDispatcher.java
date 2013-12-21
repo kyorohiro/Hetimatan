@@ -93,7 +93,6 @@ public class TorrentClientMessageDispatcher {
 	}
 	
 	public void dispatchSendTorrentMessage(TorrentClientFront front, TorrentMessage message) throws IOException {
-		front.onReceiveMessage(message);
 		Iterator<WeakReference<TorrentClientListener>>	ite = mObservers.iterator();
 		while(ite.hasNext()) {
 			WeakReference<TorrentClientListener> observerref = ite.next();

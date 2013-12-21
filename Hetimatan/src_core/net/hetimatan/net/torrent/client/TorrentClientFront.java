@@ -204,7 +204,6 @@ public class TorrentClientFront {
 		message.encode(mSendCash.getLastOutput());
 		pushflushSendTask();
 		client.getDispatcher().dispatchSendTorrentMessage(this, message);
-		TorrentHistory.get().pushSend(this, message);
 	}
 
 	public void pushflushSendTask() throws IOException {	
@@ -405,12 +404,7 @@ public class TorrentClientFront {
 		default:break;
 		}
 
-		TorrentClient peer = mTorrentPeer.get();
-		if(peer != null) {
-			TorrentHistory.get().pushReceive(this, nullMessage);
-		}
 
-//		if(null != message) {
 		if(nullMessage != null) {
 			mLastMessage = nullMessage;
 		}

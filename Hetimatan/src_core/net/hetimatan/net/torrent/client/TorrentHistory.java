@@ -5,12 +5,13 @@ import java.io.IOException;
 
 import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.net.torrent.client.message.TorrentMessage;
+import net.hetimatan.net.torrent.tracker.TrackerClient;
 import net.hetimatan.util.event.GlobalAccessProperty;
 import net.hetimatan.util.log.Log;
 
 
 
-public class TorrentHistory {
+public class TorrentHistory implements TorrentClientListener {
 
 	private CashKyoroFile mCash = null;
 	private static TorrentHistory sHistory = null;
@@ -75,6 +76,41 @@ public class TorrentHistory {
 		public void run() {
 			sync();
 		}
+	}
+
+	@Override
+	public void onConnection(TorrentClientFront front) throws IOException {
+		pushMessage(""+front.mDebug+": connect front");
+	}
+
+	@Override
+	public void onClose(TorrentClientFront front) throws IOException {
+		pushMessage(""+front.mDebug+": close front");
+	}
+
+	@Override
+	public void onClose(TorrentClient client) throws IOException {
+		pushMessage(""+client.sId+": close client");
+	}
+
+	@Override
+	public void onShakeHand(TorrentClientFront front) throws IOException {
+		pushMessage(""+front.mDebug+": shakehand");
+	}
+
+	@Override
+	public void onSendMessage(TorrentClientFront front, TorrentMessage message) throws IOException {
+		pushSend(front, message);
+	}
+
+	@Override
+	public void onReceiveMessage(TorrentClientFront front, TorrentMessage message) throws IOException {
+		pushReceive(front, message);
+	}
+
+	@Override
+	public void onResponsePeerList(TrackerClient client) throws IOException {
+
 	}
 
 }
