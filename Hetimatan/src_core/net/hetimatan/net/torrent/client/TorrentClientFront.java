@@ -354,7 +354,6 @@ public class TorrentClientFront {
 
 	public void onReceiveMessage(TorrentMessage nullMessage) throws IOException {
 		updateTargetInfo(nullMessage) ;
-
 		if(nullMessage != null) {
 			mLastMessage = nullMessage;
 		}
@@ -378,7 +377,6 @@ public class TorrentClientFront {
 			MessageHave have = (MessageHave)nullMessage;
 			mTargetInfo.mTargetBitField.isOn(have.getIndex());
 			updateRelativeBitfield();
-		//	message = have;
 			break;
 		case TorrentMessage.SIGN_BITFIELD:
 			MessageBitField bitfieldMS = (MessageBitField)nullMessage;
@@ -411,6 +409,9 @@ public class TorrentClientFront {
 		}
 	}
 
+
+	//
+	//
 	public boolean waitMessage(byte sign, int timeout) {
 		TorrentMessage last = null;
 		long start = System.currentTimeMillis();
