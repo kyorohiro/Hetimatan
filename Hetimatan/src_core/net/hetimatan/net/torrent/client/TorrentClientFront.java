@@ -13,7 +13,7 @@ import net.hetimatan.io.net.KyoroSocket;
 import net.hetimatan.net.torrent.client._front.TorrentFrontMyInfo;
 import net.hetimatan.net.torrent.client._front.TorrentFrontReceiveMessage;
 import net.hetimatan.net.torrent.client._front.TorrentFrontShakeHand;
-import net.hetimatan.net.torrent.client._front.TorrentFrontTargetInfo;
+import net.hetimatan.net.torrent.client._front.TorrentClientFrontTargetInfo;
 import net.hetimatan.net.torrent.client._front.TorrentFrontTaskManager;
 import net.hetimatan.net.torrent.client.message.MessageBitField;
 import net.hetimatan.net.torrent.client.message.MessageChoke;
@@ -59,7 +59,7 @@ public class TorrentClientFront {
 		mConnectable = v;
 	}
 
-	private TorrentFrontTargetInfo mTargetInfo = null;
+	private TorrentClientFrontTargetInfo mTargetInfo = null;
 	private TorrentFrontMyInfo mMyInfo = null;
 	private KyoroSocket mSocket = null;
 
@@ -88,7 +88,7 @@ public class TorrentClientFront {
 
 	public TorrentClientFront(TorrentClient peer, KyoroSocket socket) throws IOException {
 		mSocket = socket;
-		mTargetInfo = new TorrentFrontTargetInfo(peer.getPieceLength());
+		mTargetInfo = new TorrentClientFrontTargetInfo(peer.getPieceLength());
 		KyoroFileForKyoroSocket kf = new KyoroFileForKyoroSocket(socket, 512*30);
 		mReader = new MarkableFileReader(kf, 512);
 		mTorrentPeer = new WeakReference<TorrentClient>(peer);
@@ -146,7 +146,7 @@ public class TorrentClientFront {
 	public TorrentFrontMyInfo getMyInfo() {
 		return mMyInfo;
 	}
-	public TorrentFrontTargetInfo getTargetInfo() {
+	public TorrentClientFrontTargetInfo getTargetInfo() {
 		return mTargetInfo;
 	}
 
@@ -322,6 +322,10 @@ public class TorrentClientFront {
 			MessagePiece message = new MessagePiece((int)index, (int)(start-(index*peer.getPieceLength())), piece);
 			pushFlushSendTask(message);
 
+			//
+			// update download/update data size
+			getTargetInfo().updateTargetDownloaded(end-start);
+
 			peer.addUploaded((int)piece.length());
 		} catch(IOException e) {
 			TorrentHistory.get().pushMessage("ERROR: BROKEN");
@@ -382,12 +386,17 @@ public class TorrentClientFront {
 		case TorrentMessage.SIGN_PIECE:
 			mRequestedNum--;
 			MessagePiece piece = (MessagePiece)nullMessage;
+			TorrentClient peer = mTorrentPeer.get();
+			if(peer == null) {return;}
 			{
-				TorrentClient peer = mTorrentPeer.get();
-				if(peer == null) {return;}
+				// save piece data
 				TorrentData data = peer.getTorrentData();
 				data.setPiece(piece.getIndex(), piece.getCotent());
+			}
+			{
+				// upload uploaded downloaded size
 				peer.addDownloaded((int)piece.getCotent().length());
+				getTargetInfo().updateTargetUploaded((int)piece.getCotent().length());
 			}
 			{
 				if(mRequestPiece == piece.getIndex()) {

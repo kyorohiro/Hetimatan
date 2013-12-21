@@ -82,7 +82,7 @@ public class TorrentClient {
 	private TorrentData mData                   = null; 
 
 	// ---
-	// this class's delegation
+	// delegate 
 	//
 	private TorrentClientSetting mSetting         = new TorrentClientSetting();
 	private TorrentClientChoker mChoker           = new TorrentClientChoker(this);
@@ -92,6 +92,8 @@ public class TorrentClient {
 	private TorrentClientFrontManager mFrontManager = new TorrentClientFrontManager();
 	private TorrentClientStartConnection mStartConnection = new TorrentClientStartConnection(this);
 	private TorrentClientTimeDispatcher mIntervalTimer = new TorrentClientTimeDispatcher(this, 30*1000); // 30sec
+
+	
 	// ---
 	// task
 	//
