@@ -7,11 +7,14 @@ import net.hetimatan.util.bitfield.BitField;
 
 public class TorrentClientFrontTargetInfo {
 	public BitField mTargetBitField = null;
+	public PieceInfoList mRequestList = new PieceInfoList();
+
 	public boolean mTargetInterested = false;
 	private int mTargetChoked = TorrentClientFront.NONE;
-	public PieceInfoList mRequestList = new PieceInfoList();
 	private long mTargetUploaded = 0;
 	private long mTargetDownloaded = 0;
+	private long mFrontStartRequestTime = 0;
+	private long mFrontRequestTime = 0;
 
 	
 	private int mPieceLength = 0;
@@ -19,7 +22,18 @@ public class TorrentClientFrontTargetInfo {
 		mPieceLength = pieceLength;
 	}
 
-	public void request(int index, int start, int end) {
+	public void updateFrontRequestTime() {
+		if(mFrontStartRequestTime == 0) {
+			mFrontStartRequestTime = System.currentTimeMillis();
+			return;
+		}
+		long curTime = System.currentTimeMillis();
+		mFrontRequestTime += curTime-mFrontStartRequestTime;
+		mFrontRequestTime = curTime;
+	}
+
+	
+	public void taregtRequested(int index, int start, int end) {
 		long pieceStart = (long)index*(long)mPieceLength;
 		mRequestList.append(pieceStart+start, pieceStart+end);
 	}
@@ -31,9 +45,14 @@ public class TorrentClientFrontTargetInfo {
 	public long getTargetDownloaded() {
 		return mTargetDownloaded;
 	}
-	
+
+	public long getFrontReuqstedTime() {
+		return mFrontRequestTime;
+	}
+
 	public void updateTargetUploaded(long sizePerByte) {
 		mTargetUploaded += sizePerByte;
+		updateFrontRequestTime();
 	}
 
 	public void updateTargetDownloaded(long sizePerByte) {
@@ -52,7 +71,7 @@ public class TorrentClientFrontTargetInfo {
 		return mRequestList.size();
 	}
 
-	public PieceInfo popPieceInfo() {
+	public PieceInfo popTargetRequestedPieceInfo() {
 		if(mRequestList.size()<=0) {
 			return new PieceInfo(0, 0);
 		}
@@ -87,4 +106,5 @@ public class TorrentClientFrontTargetInfo {
 			mTargetChoked = TorrentClientFront.FALSE;			
 		}
 	}
+
 }

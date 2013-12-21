@@ -307,7 +307,7 @@ public class TorrentClientFront {
 	public void sendPiece() throws IOException {
 		TorrentClient peer = mTorrentPeer.get();
 		if(peer==null){return;}
-		PieceInfo info = mTargetInfo.popPieceInfo();
+		PieceInfo info = mTargetInfo.popTargetRequestedPieceInfo();
 		long start = info.getStart();
 		long end = info.getEnd();
 		long index = start/peer.getPieceLength();//peer.getNumOfPieces();
@@ -380,7 +380,7 @@ public class TorrentClientFront {
 			break;
 		case TorrentMessage.SIGN_REQUEST:
 			MessageRequest request = (MessageRequest)nullMessage;
-			mTargetInfo.request(
+			mTargetInfo.taregtRequested(
 					request.getIndex(), request.getBegin(), request.getBegin()+request.getLength());
 			break;
 		case TorrentMessage.SIGN_PIECE:
