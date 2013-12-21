@@ -58,10 +58,13 @@ public class TestForTorrentPeerWithChoker extends TestCase {
 		assertEquals(TorrentClientFront.FALSE,
 		testPeer.getTorrentPeerManager().getTorrentFront(testPeer.getTorrentPeerManager().getFrontPeer(0)).getTargetInfo().isChoked());
 
+		MessageTicket chokeCheck = new MessageTicket(
+				testPeer.getTorrentPeerManager().getTorrentFront(0),
+				TorrentMessage.SIGN_CHOKE
+		);
 		front.sendChoke();
 		front.flushSendTask();
-		testPeer.getTorrentPeerManager().getTorrentFront(testPeer.getTorrentPeerManager().getFrontPeer(0))
-		.waitMessage(TorrentMessage.SIGN_CHOKE, 3000);
+		chokeCheck.getMessage();
 		assertEquals(1, testPeer.getTorrentPeerManager().numOfFront());
 		assertEquals(true, testPeer.getTorrentPeerManager().getTorrentFront(testPeer.getTorrentPeerManager().getFrontPeer(0)).getTargetInfo().isChoked() == TorrentClientFront.TRUE);
 
