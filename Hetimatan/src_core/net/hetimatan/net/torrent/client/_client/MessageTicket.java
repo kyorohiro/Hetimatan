@@ -17,9 +17,11 @@ public class MessageTicket implements TorrentClientListener {
 
 	private int mMessageType = 0;
 	private TorrentMessage mReceived = null;
+	private TorrentClientFront mFront = null;
 
 	public MessageTicket(TorrentClientFront front, int messageType) throws IOException {
 		mMessageType = messageType;
+		mFront = front;
 		if(front == null) {throw new IOException();}
 		TorrentClient client =  front.getTorrentPeer();
 		if(client == null) {throw new IOException();}
@@ -80,8 +82,10 @@ public class MessageTicket implements TorrentClientListener {
 		if(mMessageType!=-1 && mMessageType != message.getType()) {
 			return;
 		}
-		mReceived = message;
-		_notify();
+		if(front == mFront) {
+			mReceived = message;
+			_notify();
+		}
 	}
 
 	@Override
