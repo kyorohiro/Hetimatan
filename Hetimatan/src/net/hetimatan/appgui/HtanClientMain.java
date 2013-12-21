@@ -12,6 +12,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
@@ -22,11 +23,12 @@ public class HtanClientMain extends Application {
 	private File mSource = (new File(".")).getAbsoluteFile().getParentFile();
 	private Text mTorrentFilePath = new Text(25, 25, mTorrent.getAbsolutePath());
 	private Text mSourceFilePath = new Text(25, 25, mTorrent.getAbsolutePath());
-	private Text mTrackerInfo = new Text(25, 25, ".....");
+	private Text mTrackerInfo = new Text(25, 25, "....\n.....\n....\n....\n....\n.....\n....\n....\n");
 	private Button mOpenTorrentFileButton = new Button("open torrent file");
 	private Button mStartDownloadButton = new Button("start download");
 	private Button mSourceFileButton = new Button("open source");
 	private HtanClientPeer mPeer = new HtanClientPeer();
+	private ScrollPane mPane = new ScrollPane();
 
 
 	@Override
@@ -57,9 +59,12 @@ public class HtanClientMain extends Application {
 		root.getChildren().add(mTorrentFilePath);
 		root.getChildren().add(mOpenTorrentFileButton);
 		root.getChildren().add(mStartDownloadButton);
-		root.getChildren().add(mTrackerInfo);
+//		root.getChildren().add(mTrackerInfo);
+		root.getChildren().add(mPane);
 		root.getChildren().add(mSourceFilePath);
 		root.getChildren().add(mSourceFileButton);
+		mPane.setContent(mTrackerInfo);
+//		mPane.setPrefHeight(40);
 		buttonSetting();
 		primaryStage.show();
 		

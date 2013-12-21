@@ -4,8 +4,6 @@ package net.hetimatan.appgui;
 import java.io.File;
 import java.io.IOException;
 
-import com.sun.jndi.toolkit.url.Uri;
-
 import net.hetimatan.net.torrent.tracker.TrackerServer;
 import net.hetimatan.net.torrent.tracker._server.TrackerDB;
 import net.hetimatan.net.torrent.tracker._server.TrackerData;
@@ -19,6 +17,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
