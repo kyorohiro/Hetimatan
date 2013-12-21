@@ -346,17 +346,8 @@ public class TorrentClientFront {
 		mMessageSenario.receive(this);
 	}
 
-
-	private TorrentMessage mLastMessage = null;
-	public TorrentMessage getReceivedLastMessage() {
-		return mLastMessage;
-	}
-
 	public void onReceiveMessage(TorrentMessage nullMessage) throws IOException {
 		updateTargetInfo(nullMessage) ;
-		if(nullMessage != null) {
-			mLastMessage = nullMessage;
-		}
 	}
 
 	public void updateTargetInfo(TorrentMessage nullMessage) throws IOException {
@@ -410,20 +401,7 @@ public class TorrentClientFront {
 	}
 
 
-	//
-	//
-	public boolean waitMessage(byte sign, int timeout) {
-		TorrentMessage last = null;
-		long start = System.currentTimeMillis();
-		do{
-			last = getReceivedLastMessage();
-			if(timeout<(System.currentTimeMillis()-start)) {
-				return false;
-			}
-			Thread.yield();
-		} while(last==null||last.getType() != sign);
-		return true;
-	}
+
 
 
 	// ------------------------------------------------
