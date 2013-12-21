@@ -109,4 +109,10 @@ public class TorrentClientChoker implements TorrentClientListener {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void onInterval(TorrentClient client) {
+		// TODO Auto-generated method stub
+		
+	}
 }

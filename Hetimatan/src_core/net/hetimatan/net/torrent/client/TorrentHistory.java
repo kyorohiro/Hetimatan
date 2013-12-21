@@ -113,4 +113,9 @@ public class TorrentHistory implements TorrentClientListener {
 
 	}
 
+	@Override
+	public void onInterval(TorrentClient client) {
+		System.out.println("--interval");
+	}
+
 }

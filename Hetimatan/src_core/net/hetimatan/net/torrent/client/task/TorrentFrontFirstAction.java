@@ -24,20 +24,8 @@ public class TorrentFrontFirstAction extends EventTask {
 	@Override
 	public void action(EventTaskRunner runner) throws Throwable {
 		TorrentClientFront front = mTorrentFront.get();
-		System.out.println("-----first----"+front.getDebug());
 		front.getSocket().rejectEventTask(this);
 
-		//front.sendBitfield();
-		//TorrentClient peer =  front.getTorrentPeer();
-		//if(peer == null) {return;}
-		//peer.getDispatcher().dispatchConnection(front);
-
-		//if(mTorrentFront.get().getTorrentPeer().isSeeder()) {
-		//	front.sendNotinterest();
-		//} else {
-		//	front.sendInterest();		
-		//}
 		front.startReceliver();
-		//front.getTaskManager().startDownload(front.getTorrentPeer(), front);
 	}
 }

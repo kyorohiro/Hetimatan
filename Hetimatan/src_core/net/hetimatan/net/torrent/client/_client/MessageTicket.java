@@ -92,4 +92,10 @@ public class MessageTicket implements TorrentClientListener {
 	public void onResponsePeerList(TrackerClient client) throws IOException {
 	}
 
+	@Override
+	public void onInterval(TorrentClient client) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

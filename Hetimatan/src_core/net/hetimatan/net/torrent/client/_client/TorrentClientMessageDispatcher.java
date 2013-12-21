@@ -103,4 +103,16 @@ public class TorrentClientMessageDispatcher {
 			observer.onSendMessage(front, message);
 		}
 	}
+
+	public void dispatchIntervalAction(TorrentClient client) throws IOException {
+		Iterator<WeakReference<TorrentClientListener>>	ite = mObservers.iterator();
+		while(ite.hasNext()) {
+			WeakReference<TorrentClientListener> observerref = ite.next();
+			TorrentClientListener observer = observerref.get();
+			if(null == observerref.get()) {
+				mObservers.remove(observerref);
+			}
+			observer.onInterval(client);
+		}
+	}
 }

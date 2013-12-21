@@ -30,7 +30,7 @@ public class TorrentClientUploadSenario implements TorrentClientListener {
 
 	private WeakReference<TorrentClient> mUploadTargetPeer = null;
 	private UploaderTask mUploaderTask = null;
-
+		
 	public TorrentClientUploadSenario(TorrentClient peer) {
 		mUploadTargetPeer = new WeakReference<TorrentClient>(peer);
 		mUploaderTask = new UploaderTask(this);
@@ -154,6 +154,12 @@ public class TorrentClientUploadSenario implements TorrentClientListener {
 	@Override
 	public void onSendMessage(TorrentClientFront front, TorrentMessage message)
 			throws IOException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onInterval(TorrentClient client) {
 		// TODO Auto-generated method stub
 		
 	}

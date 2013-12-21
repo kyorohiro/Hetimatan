@@ -24,5 +24,6 @@ public class TorrentPeerBootTask extends EventTask {
 	public void action(EventTaskRunner runner) throws Throwable {
 		TorrentClient server = mServer.get();
 		server.boot();
+		server.startIntervalTimerTask();
 	}
 }

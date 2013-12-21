@@ -13,6 +13,7 @@ import net.hetimatan.io.net.KyoroSocketImpl;
 import net.hetimatan.net.torrent.client._client.TorrentClientGetPeerList;
 import net.hetimatan.net.torrent.client._client.TorrentClientMessageDispatcher;
 import net.hetimatan.net.torrent.client._client.TorrentClientStartConnection;
+import net.hetimatan.net.torrent.client._client.TorrentClientTimeDispatcher;
 import net.hetimatan.net.torrent.client._client.TorrentClientUploadSenario;
 import net.hetimatan.net.torrent.client._client.TorrentClientChoker;
 import net.hetimatan.net.torrent.client._client.TorrentClientFrontManager;
@@ -90,6 +91,7 @@ public class TorrentClient {
 	private TorrentClientGetPeerList mGetPeerListSenario = null;
 	private TorrentClientFrontManager mFrontManager = new TorrentClientFrontManager();
 	private TorrentClientStartConnection mStartConnection = new TorrentClientStartConnection(this);
+	private TorrentClientTimeDispatcher mIntervalTimer = new TorrentClientTimeDispatcher(this, 30*1000); // 30sec
 	// ---
 	// task
 	//
@@ -110,6 +112,7 @@ public class TorrentClient {
 		getDispatcher().addObserverAtWeak(mRequester);
 		getDispatcher().addObserverAtWeak(mStartConnection);
 		getDispatcher().addObserverAtWeak(mChoker);
+		getDispatcher().addObserverAtWeak(TorrentHistory.get());
 		
 		sId = "["+(num++)+"]"+peerId;
 	}
@@ -152,6 +155,10 @@ public class TorrentClient {
 		//
 		runner.start(bootTask);
 		return runner; 
+	}
+
+	public void startIntervalTimerTask() throws IOException {
+		mIntervalTimer.start(getClientRunner());
 	}
 
 	/**
