@@ -353,8 +353,14 @@ public class TorrentClientFront {
 	}
 
 	public void onReceiveMessage(TorrentMessage nullMessage) throws IOException {
-		if(Log.ON){Log.v(TAG, "["+mDebug+"]"+"distribute:"+nullMessage.getType());}
-		//TorrentMessage message = null;
+		updateTargetInfo(nullMessage) ;
+
+		if(nullMessage != null) {
+			mLastMessage = nullMessage;
+		}
+	}
+
+	public void updateTargetInfo(TorrentMessage nullMessage) throws IOException {
 		switch(nullMessage.getType()) {
 		case TorrentMessage.SIGN_CHOKE:
 			mTargetInfo.isChoke(true);
@@ -402,11 +408,6 @@ public class TorrentClientFront {
 			break;
 		case TorrentMessage.SIGN_CANCEL:break;
 		default:break;
-		}
-
-
-		if(nullMessage != null) {
-			mLastMessage = nullMessage;
 		}
 	}
 
