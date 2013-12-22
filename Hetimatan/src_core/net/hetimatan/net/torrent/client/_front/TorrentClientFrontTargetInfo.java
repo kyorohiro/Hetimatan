@@ -9,7 +9,7 @@ public class TorrentClientFrontTargetInfo {
 	public BitField mTargetBitField = null;
 	public PieceInfoList mRequestList = new PieceInfoList();
 
-	public boolean mTargetInterested = false;
+	private boolean mTargetInterested = false;
 	private int mTargetChoked = TorrentClientFront.NONE;
 	private long mTargetUploaded = 0;
 	private long mTargetDownloaded = 0;
@@ -93,6 +93,14 @@ public class TorrentClientFrontTargetInfo {
 		} else {
 			return true;
 		}
+	}
+
+	public boolean isInterested() {
+		return mTargetInterested;
+	}
+
+	public void isInterested(boolean v) {
+		mTargetInterested = v;
 	}
 
 	public int isChoked() {

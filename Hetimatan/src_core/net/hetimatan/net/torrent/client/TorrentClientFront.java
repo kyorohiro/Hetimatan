@@ -363,10 +363,10 @@ public class TorrentClientFront {
 			mTargetInfo.isChoke(false);
 			break;
 		case TorrentMessage.SIGN_INTERESTED:
-			mTargetInfo.mTargetInterested = true;
+			mTargetInfo.isInterested(true);
 			break;
 		case TorrentMessage.SIGN_NOTINTERESTED:
-			mTargetInfo.mTargetInterested = false;
+			mTargetInfo.isInterested(false);
 			break;
 		case TorrentMessage.SIGN_HAVE:
 			MessageHave have = (MessageHave)nullMessage;
