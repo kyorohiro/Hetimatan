@@ -80,22 +80,22 @@ public class TorrentHistory implements TorrentClientListener {
 
 	@Override
 	public void onConnection(TorrentClientFront front) throws IOException {
-		pushMessage(""+front.mDebug+": connect front");
+		pushMessage(""+front.mDebug+": connect front\r\n");
 	}
 
 	@Override
 	public void onClose(TorrentClientFront front) throws IOException {
-		pushMessage(""+front.mDebug+": close front");
+		pushMessage(""+front.mDebug+": close front\r\n");
 	}
 
 	@Override
 	public void onClose(TorrentClient client) throws IOException {
-		pushMessage(""+client.sId+": close client");
+		pushMessage(""+client.sId+": close client\r\n");
 	}
 
 	@Override
 	public void onShakeHand(TorrentClientFront front) throws IOException {
-		pushMessage(""+front.mDebug+": shakehand");
+		pushMessage(""+front.mDebug+": shakehand\r\n");
 	}
 
 	@Override
@@ -115,7 +115,6 @@ public class TorrentHistory implements TorrentClientListener {
 
 	@Override
 	public void onInterval(TorrentClient client) {
-		System.out.println("--interval");
 	}
 
 }

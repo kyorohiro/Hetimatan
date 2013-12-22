@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import net.hetimatan.net.torrent.client.TorrentClient;
 import net.hetimatan.net.torrent.client.TorrentClientFront;
 import net.hetimatan.net.torrent.client.TorrentClientListener;
+import net.hetimatan.net.torrent.client.TorrentHistory;
 import net.hetimatan.net.torrent.client.message.TorrentMessage;
 import net.hetimatan.net.torrent.tracker.TrackerClient;
 import net.hetimatan.net.torrent.tracker.TrackerPeerInfo;
@@ -45,6 +46,7 @@ public class TorrentClientStartConnection implements TorrentClientListener {
 	}
 
 	public void startConnection() throws IOException {
+		TorrentHistory.get().pushMessage("startConnection(\r\n");
 	 	TorrentClient peer = mUploadTargetPeer.get();
 	 	if(peer == null) {return;}
 		int size = mPeerInfoList.size();
