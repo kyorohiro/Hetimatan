@@ -14,7 +14,7 @@ import net.hetimatan.net.torrent.client._front.TorrentFrontMyInfo;
 import net.hetimatan.net.torrent.client.message.TorrentMessage;
 import net.hetimatan.net.torrent.tracker.TrackerClient;
 
-public class TorrentClientChokerRule implements TorrentClientListener {
+public class TorrentClientChokerRuleChoke implements TorrentClientListener {
 
 	public void choke(TorrentClient client) {
 		TorrentClientFrontManager manager = client.getTorrentPeerManager();

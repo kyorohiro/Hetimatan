@@ -20,81 +20,59 @@ import net.hetimatan.util.bitfield.BitField;
 public class TorrentClientChoker implements TorrentClientListener {
 
 	private WeakReference<TorrentClient> mOwner = null;
-	private TorrentClientListener mChoke = new TorrentClientChokerRule();
+	private TorrentClientListener mChoke = new TorrentClientChokerRuleChoke();
+	private TorrentClientListener mInterest = new TorrentClientChokerRuleInterest();
 
 	public TorrentClientChoker(TorrentClient owner) {
 		mOwner = new WeakReference<TorrentClient>(owner);
 	}
 
-	public void __choke(TorrentClientFront front) throws IOException {
-		TrackerPeerInfo peer = front.getPeer();
-		front.getTaskManager().startChoker(front.getTorrentPeer(), front, true);
-	}
-	
-	public void __unchoke(TorrentClientFront front) throws IOException {
-		TrackerPeerInfo peer = front.getPeer();
-		front.getTaskManager().startChoker(front.getTorrentPeer(), front, false);
-	}
-
 	@Override
 	public void onConnection(TorrentClientFront front) throws IOException {
 		mChoke.onConnection(front);
+		mInterest.onConnection(front);		
 	}
 
 	@Override
 	public void onClose(TorrentClientFront front) throws IOException {
 		mChoke.onClose(front);
+		mInterest.onClose(front);
 	}
 
 	@Override
 	public void onShakeHand(TorrentClientFront front) throws IOException {
 		mChoke.onShakeHand(front);
+		mInterest.onShakeHand(front);
 	}
 
 	@Override
 	public void onReceiveMessage(TorrentClientFront front, TorrentMessage message) throws IOException {
 		mChoke.onReceiveMessage(front, message);
-		updateInterest(front, message);
+		mInterest.onReceiveMessage(front, message);
 	}
 
 	@Override
 	public void onResponsePeerList(TrackerClient client) throws IOException {
 		mChoke.onResponsePeerList(client);
-	}
-
-	public void updateInterest(TorrentClientFront front, TorrentMessage message) {
-	 	TorrentClient peer = mOwner.get();
-		if(peer == null) {return;}
-		if(message.getType() == TorrentMessage.SIGN_BITFIELD) {
-			BitField relative = front.relativeBitfield();
-			if(!relative.isAllOff()) {
-				front.getTaskManager().startInterest(front.getTorrentPeer(), front);
-			} else {
-				front.getTaskManager().startNotInterest(front.getTorrentPeer(), front);				
-			}
-		}
-		if(message.getType() == TorrentMessage.SIGN_HAVE) {
-			int index = ((MessageHave)message).getIndex();
-			BitField stocked = peer.getTorrentData().getStockedDataInfo();
-			if(!stocked.isOn(index)) {
-				front.getTaskManager().startInterest(front.getTorrentPeer(), front);
-			}
-		}
+		mInterest.onResponsePeerList(client);
 	}
 
 	@Override
 	public void onClose(TorrentClient client) throws IOException {
 		mChoke.onClose(client);
+		mInterest.onClose(client);
 	}
 
 	@Override
 	public void onSendMessage(TorrentClientFront front, TorrentMessage message)throws IOException {
 		mChoke.onSendMessage(front, message);
+		mInterest.onSendMessage(front, message);
 	}
 
 	@Override
 	public void onInterval(TorrentClient client) {
 		mChoke.onInterval(client);
+		mInterest.onInterval(client);
 	}
 
 	
