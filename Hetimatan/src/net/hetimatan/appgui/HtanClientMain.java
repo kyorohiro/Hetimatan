@@ -23,7 +23,7 @@ public class HtanClientMain extends Application {
 	private File mSource = (new File(".")).getAbsoluteFile().getParentFile();
 	private Text mTorrentFilePath = new Text(25, 25, mTorrent.getAbsolutePath());
 	private Text mSourceFilePath = new Text(25, 25, mTorrent.getAbsolutePath());
-	private Text mTrackerInfo = new Text(25, 25, "....\n.....\n....\n....\n....\n.....\n....\n....\n");
+	private Text mPeerInfo = new Text(25, 25, "....\n.....\n....\n....\n....\n.....\n....\n....\n");
 	private Button mOpenTorrentFileButton = new Button("open torrent file");
 	private Button mStartDownloadButton = new Button("start download");
 	private Button mSourceFileButton = new Button("open source");
@@ -63,7 +63,7 @@ public class HtanClientMain extends Application {
 		root.getChildren().add(mPane);
 		root.getChildren().add(mSourceFilePath);
 		root.getChildren().add(mSourceFileButton);
-		mPane.setContent(mTrackerInfo);
+		mPane.setContent(mPeerInfo);
 //		mPane.setPrefHeight(40);
 		buttonSetting();
 		primaryStage.show();
@@ -137,8 +137,14 @@ public class HtanClientMain extends Application {
 	public class PeerStatusChecker implements StatusCheck {
 		@Override
 		public void onUpdateTracker() {
-			mTrackerInfo.setText(mPeer.getTrackerStatus());
+			mPeerInfo.setText(mPeer.getPeerStatus());
 		}
+
+		@Override
+		public void onUpdatePeer() {
+			mPeerInfo.setText(mPeer.getPeerStatus());
+		}
+
 	}
 
 	public static void main(String[] args) {

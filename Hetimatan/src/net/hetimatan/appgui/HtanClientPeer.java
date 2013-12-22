@@ -8,6 +8,10 @@ import java.util.Iterator;
 import net.hetimatan.io.filen.CashKyoroFileHelper;
 import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.net.torrent.client.TorrentClient;
+import net.hetimatan.net.torrent.client.TorrentClientFront;
+import net.hetimatan.net.torrent.client.TorrentClientListener;
+import net.hetimatan.net.torrent.client._client.TorrentClientFrontManager;
+import net.hetimatan.net.torrent.client.message.TorrentMessage;
 import net.hetimatan.net.torrent.tracker.TrackerClient;
 import net.hetimatan.net.torrent.tracker.TrackerPeerInfo;
 import net.hetimatan.net.torrent.tracker.TrackerRequest;
@@ -41,6 +45,7 @@ public class HtanClientPeer {
 		return mRunner.isAlive();
 	}
 
+	private PeerStatus mPeerStatus = new PeerStatus();
 	public void start() throws IOException, URISyntaxException {
 		if(!easyCheck()) {
 			throw new IOException("unsupported file");
@@ -54,7 +59,7 @@ public class HtanClientPeer {
 		mPeer.getTorrentData().load();
 		} catch(IOException e) {e.printStackTrace();}
 		mRunner = mPeer.startTorrentClient(null);
-		mPeer.getTracker().setStatusCheck(new TrackerStatus());
+		mPeer.getDispatcher().addObserverAtWeak(mPeerStatus);
 	}
 
 	public void stop() {
@@ -86,35 +91,83 @@ public class HtanClientPeer {
 	
 	interface StatusCheck {
 		public void onUpdateTracker();
+		public void onUpdatePeer();
 	}
 
 	public synchronized void setStatusCheck(StatusCheck observer) {
 		mObserver = observer;
 	}
 
-	public synchronized void kickObserver() {
+	public synchronized void kickTrackerObserver() {
 		if(mObserver != null) {
 			mObserver.onUpdateTracker();
 		}
 	}
 
-	private String mTrackerStatus = "";
-	public String getTrackerStatus() {
-		return mTrackerStatus;
+	public synchronized void kickPeerObserver() {
+		if(mObserver != null) {
+			mObserver.onUpdateTracker();
+		}
 	}
 
-	public class TrackerStatus implements TrackerClient.StatusCheck {
+
+	private String mPeerStatusString = "";
+	public String getPeerStatus() {
+		return mPeerStatusString;
+	}
+
+	public class PeerStatus implements TorrentClientListener {
+
 		@Override
-		public void onUpdate(TrackerClient client) {
-			Iterator<TrackerPeerInfo> infos = client.getPeer32();
+		public void onConnection(TorrentClientFront front) throws IOException {
+		}
+
+		@Override
+		public void onClose(TorrentClientFront front) throws IOException {
+		}
+
+		@Override
+		public void onClose(TorrentClient client) throws IOException {
+		}
+
+		@Override
+		public void onShakeHand(TorrentClientFront front) throws IOException {
+			updatePeerInfo(front.getTorrentPeer());
+			kickPeerObserver();
+		}
+
+		@Override
+		public void onSendMessage(TorrentClientFront front, TorrentMessage message) throws IOException {
+		}
+
+		@Override
+		public void onReceiveMessage(TorrentClientFront front, TorrentMessage message) throws IOException {
+		}
+
+		@Override
+		public void onResponsePeerList(TrackerClient client) throws IOException {
+		}
+
+		@Override
+		public void onInterval(TorrentClient client) {
+			updatePeerInfo(client);
+			kickPeerObserver();
+		}
+
+		public void updatePeerInfo(TorrentClient client) {
+			TorrentClientFrontManager manager = client.getTorrentPeerManager();
+			int num = manager.numOfFront();
+
 			StringBuilder b = new StringBuilder();
-			b.append("[tracker info]"+"--"+"\r\n");
-			while(infos.hasNext()) {
-				TrackerPeerInfo info = infos.next();
-				b.append(info.getHostName()+":"+info.getPort()+"\r\n");
+			b.append("[peer info]"+"--"+"\r\n");
+			for(int i=0;i<num;i++) {
+				TorrentClientFront front = manager.getTorrentFront(i);
+				b.append("["+front.getPeer().getHostName()+":"+front.getPeer().getPort()+"]"+
+				"td="+front.getTargetInfo().getTargetDownloaded()+","+
+				"tu="+front.getTargetInfo().getTargetUploadded()+","+
+				"tp="+(front.getTargetInfo().getTargetUploadded()/(front.getTargetInfo().getFrontReuqstedTime()+1))+"\r\n");
 			}
-			mTrackerStatus = b.toString();
-			kickObserver();
+			mPeerStatusString = b.toString();
 		}
 	}
 

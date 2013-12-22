@@ -29,7 +29,7 @@ public class TorrentClientFrontTargetInfo {
 		}
 		long curTime = System.currentTimeMillis();
 		mFrontRequestTime += curTime-mFrontStartRequestTime;
-		mFrontRequestTime = curTime;
+		mFrontStartRequestTime= curTime;
 	}
 
 	
