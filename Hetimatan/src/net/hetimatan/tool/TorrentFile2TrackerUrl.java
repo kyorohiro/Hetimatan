@@ -19,7 +19,7 @@ import javafx.scene.layout.FlowPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-public class TrackerUrlTest extends Application {
+public class TorrentFile2TrackerUrl extends Application {
 	private File mInput = (new File("dummy")).getAbsoluteFile().getParentFile();
 	private TextField mUrl = new TextField("show tracker url"); 
 	private Button mOpenFile = new Button("open torrent");
