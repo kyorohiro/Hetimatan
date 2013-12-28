@@ -32,7 +32,7 @@ public class TorrentClientMessageDispatcher {
 		}
 	}
 
-	public void dispatchTrackerResponse(TrackerClient client) throws IOException {
+	public void dispatchTrackerResponse(TorrentClient client, TrackerClient tracker) throws IOException {
 		Iterator<WeakReference<TorrentClientListener>>	ite = mObservers.iterator();
 		while(ite.hasNext()) {
 			WeakReference<TorrentClientListener> observerref = ite.next();
@@ -40,7 +40,7 @@ public class TorrentClientMessageDispatcher {
 			if(null == observerref.get()) {
 				mObservers.remove(observerref);
 			}
-			observer.onResponsePeerList(client);
+			observer.onResponsePeerList(client, tracker);
 		}
 	}
 

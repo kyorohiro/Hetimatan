@@ -12,7 +12,7 @@ public interface TorrentClientListener {
 	void onShakeHand(TorrentClientFront front) throws IOException;
 	void onSendMessage(TorrentClientFront front, TorrentMessage message) throws IOException;
 	void onReceiveMessage(TorrentClientFront front, TorrentMessage message) throws IOException;
-	void onResponsePeerList(TrackerClient client) throws IOException;
+	void onResponsePeerList(TorrentClient client, TrackerClient tracker) throws IOException;
 	void onInterval(TorrentClient client);
 }
 

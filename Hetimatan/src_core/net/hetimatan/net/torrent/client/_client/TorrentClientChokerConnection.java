@@ -17,16 +17,13 @@ import net.hetimatan.net.torrent.tracker.TrackerPeerInfo;
  * if finded new peer, connect this.
  *
  */
-public class TorrentClientStartConnection implements TorrentClientListener {
+public class TorrentClientChokerConnection implements TorrentClientListener {
 
-	private WeakReference<TorrentClient> mUploadTargetPeer = null;
 
-	public TorrentClientStartConnection(TorrentClient target) throws IOException {
-		mUploadTargetPeer = new WeakReference<TorrentClient>(target);
+	public TorrentClientChokerConnection() {
 	}
 
-	public void updatePeerList_tracker2client() throws IOException {
-	 	TorrentClient peer = mUploadTargetPeer.get();
+	public void updatePeerList_tracker2client(TorrentClient peer) throws IOException {
 	 	if(peer == null) {return;}
 	 	if(peer.isSeeder()) {
 	 		return ;
@@ -45,9 +42,8 @@ public class TorrentClientStartConnection implements TorrentClientListener {
 	 	client.clearPeer32();
 	}
 
-	public void startConnection() throws IOException {
+	public void startConnection(TorrentClient peer) throws IOException {
 		TorrentHistory.get().pushMessage("startConnection(\r\n");
-	 	TorrentClient peer = mUploadTargetPeer.get();
 	 	if(peer == null) {return;}
 		int size = mPeerInfoList.size();
 		for(int i=0;i<size;i++) {
@@ -60,10 +56,10 @@ public class TorrentClientStartConnection implements TorrentClientListener {
 	}
 
 	@Override
-	public void onResponsePeerList(TrackerClient client) {
+	public void onResponsePeerList(TorrentClient client, TrackerClient tracker) {
 		try {
-			updatePeerList_tracker2client();
-			startConnection();
+			updatePeerList_tracker2client(client);
+			startConnection(client);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -71,8 +67,7 @@ public class TorrentClientStartConnection implements TorrentClientListener {
 
 	@Override
 	public void onClose(TorrentClientFront front) {
-	 	TorrentClient peer = mUploadTargetPeer.get();
-	 	if(peer == null) {return;}
+	 	TorrentClient peer = front.getTorrentPeer();
 		try {
 			if(front.isOneself()||!front.isConnectable()) {
 				int i = mPeerInfoList.indexOf(front.getPeer());
@@ -80,7 +75,7 @@ public class TorrentClientStartConnection implements TorrentClientListener {
 					mPeerInfoList.remove(mPeerInfoList.get(i));
 				}
 			} else if(!peer.isSeeder()){
-				startConnection();
+				startConnection(peer);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

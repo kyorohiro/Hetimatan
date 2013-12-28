@@ -89,7 +89,7 @@ public class MessageTicket implements TorrentClientListener {
 	}
 
 	@Override
-	public void onResponsePeerList(TrackerClient client) throws IOException {
+	public void onResponsePeerList(TorrentClient client, TrackerClient tracker) throws IOException {
 	}
 
 	@Override

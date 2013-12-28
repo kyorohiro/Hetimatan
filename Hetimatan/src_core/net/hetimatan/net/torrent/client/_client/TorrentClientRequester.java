@@ -86,7 +86,7 @@ public class TorrentClientRequester implements TorrentClientListener {
 	}
 
 	@Override
-	public void onResponsePeerList(TrackerClient client) {
+	public void onResponsePeerList(TorrentClient client, TrackerClient tracker)  {
 	}
 
 	@Override

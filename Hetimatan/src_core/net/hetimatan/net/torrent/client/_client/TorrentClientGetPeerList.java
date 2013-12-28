@@ -61,7 +61,7 @@ public class TorrentClientGetPeerList {
 	public void dispatchMessage() throws IOException {
 	 	TorrentClient peer = mUploadTargetPeer.get();
 	 	if(peer == null) {return;}
-	 	peer.getDispatcher().dispatchTrackerResponse(peer.getTracker());
+	 	peer.getDispatcher().dispatchTrackerResponse(peer, peer.getTracker());
 	}
 
 	public void reserveNextTrackerRequest() { 

@@ -22,6 +22,7 @@ public class TorrentClientChoker implements TorrentClientListener {
 	private WeakReference<TorrentClient> mOwner = null;
 	private TorrentClientListener mChoke = new TorrentClientChokerRuleChoke();
 	private TorrentClientListener mInterest = new TorrentClientChokerRuleInterest();
+	private TorrentClientChokerConnection mConnection = new TorrentClientChokerConnection();
 
 	public TorrentClientChoker(TorrentClient owner) {
 		mOwner = new WeakReference<TorrentClient>(owner);
@@ -29,48 +30,56 @@ public class TorrentClientChoker implements TorrentClientListener {
 
 	@Override
 	public void onConnection(TorrentClientFront front) throws IOException {
+		mConnection.onConnection(front);
 		mChoke.onConnection(front);
-		mInterest.onConnection(front);		
+		mInterest.onConnection(front);	
 	}
 
 	@Override
 	public void onClose(TorrentClientFront front) throws IOException {
+		mConnection.onClose(front);
 		mChoke.onClose(front);
 		mInterest.onClose(front);
 	}
 
 	@Override
 	public void onShakeHand(TorrentClientFront front) throws IOException {
+		mConnection.onShakeHand(front);
 		mChoke.onShakeHand(front);
 		mInterest.onShakeHand(front);
 	}
 
 	@Override
 	public void onReceiveMessage(TorrentClientFront front, TorrentMessage message) throws IOException {
+		mConnection.onReceiveMessage(front, message);
 		mChoke.onReceiveMessage(front, message);
 		mInterest.onReceiveMessage(front, message);
 	}
 
 	@Override
-	public void onResponsePeerList(TrackerClient client) throws IOException {
-		mChoke.onResponsePeerList(client);
-		mInterest.onResponsePeerList(client);
+	public void onResponsePeerList(TorrentClient client, TrackerClient tracker)  throws IOException {
+		mConnection.onResponsePeerList(client, tracker);
+		mChoke.onResponsePeerList(client, tracker);
+		mInterest.onResponsePeerList(client, tracker);
 	}
 
 	@Override
 	public void onClose(TorrentClient client) throws IOException {
+		mConnection.onClose(client);
 		mChoke.onClose(client);
 		mInterest.onClose(client);
 	}
 
 	@Override
 	public void onSendMessage(TorrentClientFront front, TorrentMessage message)throws IOException {
+		mConnection.onSendMessage(front, message);
 		mChoke.onSendMessage(front, message);
 		mInterest.onSendMessage(front, message);
 	}
 
 	@Override
 	public void onInterval(TorrentClient client) {
+		mConnection.onInterval(client);
 		mChoke.onInterval(client);
 		mInterest.onInterval(client);
 	}
