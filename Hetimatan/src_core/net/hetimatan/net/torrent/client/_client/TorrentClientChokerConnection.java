@@ -7,6 +7,7 @@ import java.util.LinkedList;
 
 import net.hetimatan.net.torrent.client.TorrentClient;
 import net.hetimatan.net.torrent.client.TorrentClientFront;
+import net.hetimatan.net.torrent.client.TorrentClientFrontManager.PeerInfo;
 import net.hetimatan.net.torrent.client.TorrentClientListener;
 import net.hetimatan.net.torrent.client.TorrentHistory;
 import net.hetimatan.net.torrent.client.message.TorrentMessage;
@@ -47,7 +48,7 @@ public class TorrentClientChokerConnection implements TorrentClientListener {
 	 	if(peer == null) {return;}
 		int size = mPeerInfoList.size();
 		for(int i=0;i<size;i++) {
-			peer.startConnect(mPeerInfoList.get(i).mPeerInfo);
+			peer.startConnect(mPeerInfoList.get(i).getPeerInfo());
 		}
 	}
 
@@ -83,52 +84,24 @@ public class TorrentClientChokerConnection implements TorrentClientListener {
 	}
 
 	public LinkedList<PeerInfo> mPeerInfoList = new LinkedList<>();
-	
-	public static class PeerInfo implements Comparable<PeerInfo>{
-		private TrackerPeerInfo mPeerInfo = null;
-		private int mStatus = 0;
-		public PeerInfo(TrackerPeerInfo info) {
-			mPeerInfo = info;
-		}
-		@Override
-		public int compareTo(PeerInfo o) {
-			return mPeerInfo.compareTo(o.mPeerInfo);
-		}
-
-		@Override
-		public boolean equals(Object obj) {
-			return mPeerInfo.equals(obj);
-		}
-	}
 
 	@Override
 	public void onShakeHand(TorrentClientFront front) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void onConnection(TorrentClientFront front) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void onClose(TorrentClient client) throws IOException {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
-	public void onSendMessage(TorrentClientFront front, TorrentMessage message)
-			throws IOException {
-		// TODO Auto-generated method stub
-		
+	public void onSendMessage(TorrentClientFront front, TorrentMessage message) throws IOException {
 	}
 
 	@Override
 	public void onInterval(TorrentClient client) {
-		// TODO Auto-generated method stub
-		
 	}
 }

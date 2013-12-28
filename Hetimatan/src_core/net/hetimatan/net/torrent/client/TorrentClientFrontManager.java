@@ -8,17 +8,15 @@ import net.hetimatan.net.torrent.tracker.TrackerPeerInfo;
 
 public class TorrentClientFrontManager {
 
-	private LinkedHashMap<TrackerPeerInfo, TorrentClientFront> mFrontList = new LinkedHashMap<TrackerPeerInfo, TorrentClientFront>();
+	private LinkedHashMap<TrackerPeerInfo, NPeerInfo> mFrontList
+		= new LinkedHashMap<TrackerPeerInfo, NPeerInfo>();
 
 	public synchronized int numOfFront() {
 		return mFrontList.size();
 	}	
 
 	public boolean addTorrentFront(TorrentClientFront front) throws IOException {
-		String host = front.getSocket().getHost();
-		int port = front.getSocket().getPort();
-		TrackerPeerInfo peer = new TrackerPeerInfo(host, port);
-		return addTorrentFront(peer, front);
+		return addTorrentFront(front.getPeer(), front);
 	}
 
 	public boolean contain(TrackerPeerInfo peer) {
@@ -27,9 +25,17 @@ public class TorrentClientFrontManager {
 
 	public boolean addTorrentFront(TrackerPeerInfo peer, TorrentClientFront front) throws IOException {
 		if(mFrontList.containsKey(peer)) {
-			return false;
+			NPeerInfo info = mFrontList.get(peer);
+			if(info.getFront() == front) {
+				return false;
+			} else {
+				info.setFront(front);
+				return true;
+			}
 		} else {
-			mFrontList.put(peer, front);
+			NPeerInfo info = new NPeerInfo();
+			info.setFront(front);
+			mFrontList.put(peer, info);
 			return true;
 		}
 	}
@@ -38,6 +44,7 @@ public class TorrentClientFrontManager {
 		mFrontList.remove(front.getPeer());
 	}
 
+	
 	public TorrentClientFront getTorrentFront(int i) {
 		TrackerPeerInfo key = getFrontPeer(i);
 		return getTorrentFront(key);
@@ -45,7 +52,9 @@ public class TorrentClientFrontManager {
 
 	public TorrentClientFront getTorrentFront(TrackerPeerInfo peer) {
 		if(peer == null) {return null;}
-		return mFrontList.get(peer);
+		NPeerInfo info = mFrontList.get(peer);
+		if(info == null) {return null;}
+		return info.getFront();
 	}
 
 	public TrackerPeerInfo getFrontPeer(int index) {
@@ -56,5 +65,42 @@ public class TorrentClientFrontManager {
 			return null;
 		}
 	}
-	
+
+	public static class NPeerInfo {
+		private TorrentClientFront mFront = null;
+		public TorrentClientFront getFront() {
+			return mFront;
+		}
+		public void setFront(TorrentClientFront front) {
+			mFront = front;
+		}
+	}
+
+	public static class PeerInfo implements Comparable<PeerInfo>{
+		private TrackerPeerInfo mPeerInfo = null;
+		private int mStatus = 0;
+
+		public PeerInfo(TrackerPeerInfo info) {
+			mPeerInfo = info;
+		}
+
+		@Override
+		public int compareTo(PeerInfo o) {
+			return mPeerInfo.compareTo(o.mPeerInfo);
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			return mPeerInfo.equals(obj);
+		}
+
+		public int getStatus() {
+			return mStatus;
+		}
+
+		public TrackerPeerInfo getPeerInfo() {
+			return mPeerInfo;
+		}
+	}
+
 }
