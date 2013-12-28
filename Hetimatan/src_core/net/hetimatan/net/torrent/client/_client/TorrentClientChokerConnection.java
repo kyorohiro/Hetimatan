@@ -1,14 +1,12 @@
 package net.hetimatan.net.torrent.client._client;
 
 import java.io.IOException;
-import java.lang.ref.WeakReference;
 import java.util.Iterator;
-import java.util.LinkedList;
 
 import net.hetimatan.net.torrent.client.TorrentClient;
 import net.hetimatan.net.torrent.client.TorrentClientFront;
 import net.hetimatan.net.torrent.client.TorrentClientFrontManager;
-import net.hetimatan.net.torrent.client.TorrentClientFrontManager.PeerInfo;
+import net.hetimatan.net.torrent.client.TorrentClientSetting;
 import net.hetimatan.net.torrent.client.TorrentClientListener;
 import net.hetimatan.net.torrent.client.TorrentHistory;
 import net.hetimatan.net.torrent.client.message.TorrentMessage;
@@ -49,13 +47,19 @@ public class TorrentClientChokerConnection implements TorrentClientListener {
 		TorrentHistory.get().pushMessage("startConnection(\r\n");
 	 	if(peer == null) {return;}
 	 	TorrentClientFrontManager manager = peer.getTorrentPeerManager();
-	 	
+	 	TorrentClientSetting setting = peer.getSetting();
+
 	 	//todo
-		for(int i=0;i<manager.numOfFront();i++) {
+	 	int numOfConnect = manager.numOfConnect();
+	 	int maxOfConnect = setting.getNumOfConnection();
+	 	int _newConnectNum = maxOfConnect-numOfConnect;
+
+	 	for(int i=0;i<manager.numOfFront()&&_newConnectNum>0;i++) {
 			TrackerPeerInfo info = manager.getFrontPeer(i);
 			TorrentClientFront front = manager.getTorrentFront(info);
 			if(front == null) {
 				peer.startConnect(info);
+				_newConnectNum--;
 			}
 		}
 	}

@@ -11,4 +11,7 @@ public class TorrentClientSetting {
 	public int getNumOfUnchoker() {
 		return mNumOfUnchoker;
 	}
+	public int getNumOfConnection() {
+		return mNumOfPeer;
+	}
 }
