@@ -6,7 +6,6 @@ import java.net.URISyntaxException;
 
 import net.hetimatan.net.torrent.client._client.ConnectTicket;
 import net.hetimatan.net.torrent.client._client.MessageTicket;
-import net.hetimatan.net.torrent.client._client.TorrentClientFrontManager;
 import net.hetimatan.net.torrent.client.message.TorrentMessage;
 import net.hetimatan.net.torrent.tracker.TrackerPeerInfo;
 import net.hetimatan.net.torrent.util.metafile.MetaFile;

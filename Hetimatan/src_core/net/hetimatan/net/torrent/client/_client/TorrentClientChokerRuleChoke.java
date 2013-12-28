@@ -1,12 +1,12 @@
 package net.hetimatan.net.torrent.client._client;
 
 import java.io.IOException;
-import java.util.Currency;
 import java.util.LinkedList;
 import java.util.Random;
 
 import net.hetimatan.net.torrent.client.TorrentClient;
 import net.hetimatan.net.torrent.client.TorrentClientFront;
+import net.hetimatan.net.torrent.client.TorrentClientFrontManager;
 import net.hetimatan.net.torrent.client.TorrentClientListener;
 import net.hetimatan.net.torrent.client.TorrentClientSetting;
 import net.hetimatan.net.torrent.client._front.TorrentClientFrontTargetInfo;

@@ -1,12 +1,10 @@
-package net.hetimatan.net.torrent.client._client;
+package net.hetimatan.net.torrent.client;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Set;
 
-import net.hetimatan.net.torrent.client.TorrentClientFront;
 import net.hetimatan.net.torrent.tracker.TrackerPeerInfo;
-import net.hetimatan.tool.TrackerInfoTest;
 
 public class TorrentClientFrontManager {
 
