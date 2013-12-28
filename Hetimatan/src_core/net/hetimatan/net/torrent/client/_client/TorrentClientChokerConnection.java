@@ -7,6 +7,7 @@ import java.util.LinkedList;
 
 import net.hetimatan.net.torrent.client.TorrentClient;
 import net.hetimatan.net.torrent.client.TorrentClientFront;
+import net.hetimatan.net.torrent.client.TorrentClientFrontManager;
 import net.hetimatan.net.torrent.client.TorrentClientFrontManager.PeerInfo;
 import net.hetimatan.net.torrent.client.TorrentClientListener;
 import net.hetimatan.net.torrent.client.TorrentHistory;
@@ -29,14 +30,15 @@ public class TorrentClientChokerConnection implements TorrentClientListener {
 	 	if(peer.isSeeder()) {
 	 		return ;
 	 	}
+	 	TorrentClientFrontManager manager = peer.getTorrentPeerManager();
 	 	TrackerClient client = peer.getTracker();
 	 	Iterator<TrackerPeerInfo> peers32 = client.getPeer32();
 	 	if(!peer.isSeeder()) {//todo
 	 		while(peers32.hasNext()) {
 	 			TrackerPeerInfo targetPeer = peers32.next();
 	 			peer.startConnect(targetPeer);
-	 			if(!mPeerInfoList.contains(targetPeer)) {
-	 				mPeerInfoList.add(new PeerInfo(targetPeer));
+	 			if(!manager.contain(targetPeer)) {
+	 				manager.addPeerInfo(targetPeer);
 	 			}
 	 		}
 	 	}
@@ -46,9 +48,15 @@ public class TorrentClientChokerConnection implements TorrentClientListener {
 	public void startConnection(TorrentClient peer) throws IOException {
 		TorrentHistory.get().pushMessage("startConnection(\r\n");
 	 	if(peer == null) {return;}
-		int size = mPeerInfoList.size();
-		for(int i=0;i<size;i++) {
-			peer.startConnect(mPeerInfoList.get(i).getPeerInfo());
+	 	TorrentClientFrontManager manager = peer.getTorrentPeerManager();
+	 	
+	 	//todo
+		for(int i=0;i<manager.numOfFront();i++) {
+			TrackerPeerInfo info = manager.getFrontPeer(i);
+			TorrentClientFront front = manager.getTorrentFront(info);
+			if(front == null) {
+				peer.startConnect(info);
+			}
 		}
 	}
 
@@ -69,12 +77,10 @@ public class TorrentClientChokerConnection implements TorrentClientListener {
 	@Override
 	public void onClose(TorrentClientFront front) {
 	 	TorrentClient peer = front.getTorrentPeer();
+	 	TorrentClientFrontManager manager = peer.getTorrentPeerManager();
 		try {
 			if(front.isOneself()||!front.isConnectable()) {
-				int i = mPeerInfoList.indexOf(front.getPeer());
-				if(i!=-1) {
-					mPeerInfoList.remove(mPeerInfoList.get(i));
-				}
+				manager.removePeerInfo(front.getPeer());
 			} else if(!peer.isSeeder()){
 				startConnection(peer);
 			}
@@ -82,8 +88,6 @@ public class TorrentClientChokerConnection implements TorrentClientListener {
 			e.printStackTrace();
 		}
 	}
-
-	public LinkedList<PeerInfo> mPeerInfoList = new LinkedList<>();
 
 	@Override
 	public void onShakeHand(TorrentClientFront front) {

@@ -23,6 +23,16 @@ public class TorrentClientFrontManager {
 		return mFrontList.containsKey(peer);
 	}
 
+	public boolean addPeerInfo(TrackerPeerInfo peer) {
+		if(mFrontList.containsKey(peer)) {
+			return false;
+		} else {
+			NPeerInfo info = new NPeerInfo();
+			mFrontList.put(peer, info);			
+			return true;
+		}
+	}
+
 	public boolean addTorrentFront(TrackerPeerInfo peer, TorrentClientFront front) throws IOException {
 		if(mFrontList.containsKey(peer)) {
 			NPeerInfo info = mFrontList.get(peer);
@@ -41,10 +51,17 @@ public class TorrentClientFrontManager {
 	}
 
 	public void removeTorrentFront(TorrentClientFront front) {
-		mFrontList.remove(front.getPeer());
+		TrackerPeerInfo info = front.getPeer();
+		if(mFrontList.containsKey(info)) {
+			NPeerInfo cont = mFrontList.get(info);
+			cont.setFront(null);
+		}
 	}
 
-	
+	public void removePeerInfo(TrackerPeerInfo info) {
+		mFrontList.remove(info);
+	}
+
 	public TorrentClientFront getTorrentFront(int i) {
 		TrackerPeerInfo key = getFrontPeer(i);
 		return getTorrentFront(key);
