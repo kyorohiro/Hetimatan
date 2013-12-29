@@ -111,7 +111,7 @@ public class TorrentClient {
 		getDispatcher().addObserverAtWeak(mRequester);
 		getDispatcher().addObserverAtWeak(mChoker);
 		getDispatcher().addObserverAtWeak(TorrentHistory.get());
-		
+		mIntervalTimer.setInterval(getSetting().getUpdateTime());
 		sId = "["+(num++)+"]"+peerId;
 	}
 

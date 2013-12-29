@@ -33,6 +33,15 @@ public class BitField {
 		return out;
 	}
 
+	public static int numOfOn(BitField field) {
+		int ret = 0;
+		int size = field.lengthPerBit();
+		for(int i=0;i<size;i++) {
+			
+		}
+		return ret;
+	}
+
 	public void update(){}
 	public BitField(int bitsize) {
 		mR = new Random(System.currentTimeMillis());

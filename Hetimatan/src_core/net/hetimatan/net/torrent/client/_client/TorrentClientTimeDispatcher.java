@@ -28,6 +28,10 @@ public class TorrentClientTimeDispatcher {
 		mIsStop = true;
 	}
 
+	public void setInterval(int intervalAsMs) {
+		mInterval = intervalAsMs;
+	}
+
 	public class Time extends EventTask {
 		@Override
 		public void action(EventTaskRunner runner) throws Throwable {
