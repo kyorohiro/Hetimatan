@@ -76,7 +76,8 @@ public class HelloSSDP {
 				return;
 			}
 
-			//HttpRequestHeader header = request.getHeader("location");
+			HttpRequestHeader header = request.getHeader("location");
+			
 		}
 		
 	}

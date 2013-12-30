@@ -33,7 +33,17 @@ public class SSDPMessage {
 	public HttpRequestHeader getHeader(int i) {
 		return mHeader.get(i);
 	}
-	
+
+	public HttpRequestHeader getHeader(String tag) {
+		for(int i=0;i<mHeader.size();i++) {
+			HttpRequestHeader header = mHeader.get(i);
+			if(header.getKey().toLowerCase().equals(tag.toLowerCase())){
+				return header;
+			}
+		}
+		return null;
+	}
+
 	public static SSDPMessage decode(MarkableFileReader reader) throws IOException {
 		SSDPStartLine line = SSDPStartLine.decode(reader);
 		SSDPMessage message = new SSDPMessage(line);
