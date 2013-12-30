@@ -58,21 +58,15 @@ public class SSDPStartLine {
 	}
 
 	public static SSDPStartLine responseLine(MarkableFileReader reader) throws IOException {
-		reader.pushMark();
 		try {
-			version(reader);
-			sp(reader);
-			String code = code(reader);
-			sp(reader);
-			String message = message(reader);
-			crlf(reader, true);
-			return new SSDPStartLine(code, message);
+			return responseLine(reader);
 		} catch(IOException e) {
-			reader.backToMark();
-			throw e;
-		} finally {
-			reader.popMark();
 		}
+		try {
+			return notifyhLine(reader);
+		} catch(IOException e) {
+		} 
+		return mSearchLine(reader);
 	}
 
 	public static SSDPStartLine mSearchLine(MarkableFileReader reader) throws IOException {
