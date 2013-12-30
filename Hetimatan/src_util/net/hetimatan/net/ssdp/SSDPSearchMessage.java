@@ -10,6 +10,7 @@ public class SSDPSearchMessage extends SSDPMessage {
 	private int mMX= 3;
 
 	public SSDPSearchMessage(String searchTarget, int responseSec) {
+		super(null);
 		mST = searchTarget;
 		mMX = responseSec;
 	}

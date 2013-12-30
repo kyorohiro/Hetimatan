@@ -14,6 +14,11 @@ import java.net.SocketAddress;
 import java.net.SocketException;
 import java.util.Enumeration;
 
+import com.sun.xml.internal.messaging.saaj.packaging.mime.Header;
+
+import net.hetimatan.util.http.HttpRequest;
+import net.hetimatan.util.http.HttpRequestHeader;
+
 public class HelloSSDP {
 
 	public static void main(String[] args) {
@@ -25,14 +30,16 @@ public class HelloSSDP {
 			show();
 //			client.init(InetAddress.getLocalHost().getHostAddress());//"192.168.0.3");
 			client.init("192.168.0.3");
+			client.addSSDPClientListener(new RObserver());
 			client.sendMessage(new SSDPSearchMessage(
 					SSDPSearchMessage.UPNP_ROOT_DEVICE,
 //					SSDPClient.ST_CONTENT_DICTIONARY,
 					3));
-			while(true) {
-				DatagramPacket ret = client.receive();
-				System.out.println(new String(ret.getData()));
-			}
+			client.startMessageReceiver();
+//			while(true) {
+//				DatagramPacket ret = client.receive();
+//				System.out.println(new String(ret.getData()));
+//			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -56,6 +63,14 @@ public class HelloSSDP {
 				System.out.println(": " + a.getHostAddress());
 			}
 		}
+	}
+
+	public static class RObserver implements SSDPClientListener {
+		@Override
+		public void onReceiveå(SSDPMessage request) {
+			System.out.println("##\r\n"+request.toString()+"\r\n##");
+		}
+		
 	}
 }
 
