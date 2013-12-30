@@ -3,9 +3,12 @@ package net.hetimatan.net.ssdp;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import net.hetimatan.net.ssdp.message.SSDPMessage;
+
 public class SSDPSearchMessage extends SSDPMessage {
 	public static final String SL_MSEARCH = "M-SEARCH * HTTP/1.1";
 	public static final String UPNP_ROOT_DEVICE = "upnp:rootdevice";
+	public static final String UPNP_INTERNET_GATEWAY = "urn:schemas-upnp-org:device:InternetGatewayDevice:1";
 	private String mST = "";
 	private int mMX= 3;
 

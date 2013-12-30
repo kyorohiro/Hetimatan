@@ -16,6 +16,7 @@ import java.util.Enumeration;
 
 import com.sun.xml.internal.messaging.saaj.packaging.mime.Header;
 
+import net.hetimatan.net.ssdp.message.SSDPMessage;
 import net.hetimatan.util.http.HttpRequest;
 import net.hetimatan.util.http.HttpRequestHeader;
 
@@ -32,7 +33,8 @@ public class HelloSSDP {
 			client.init("192.168.0.3");
 			client.addSSDPClientListener(new RObserver());
 			client.sendMessage(new SSDPSearchMessage(
-					SSDPSearchMessage.UPNP_ROOT_DEVICE,
+					SSDPSearchMessage.UPNP_INTERNET_GATEWAY,
+					//SSDPSearchMessage.UPNP_ROOT_DEVICE,
 //					SSDPClient.ST_CONTENT_DICTIONARY,
 					3));
 			client.startMessageReceiver();
@@ -69,6 +71,11 @@ public class HelloSSDP {
 		@Override
 		public void onReceiveå(SSDPMessage request) {
 			System.out.println("##\r\n"+request.toString()+"\r\n##");
+			if(!"200".equals(request.getLine().getCode())) {
+				return;
+			}
+
+			HttpRequestHeader header = request.getHeader("location");
 		}
 		
 	}

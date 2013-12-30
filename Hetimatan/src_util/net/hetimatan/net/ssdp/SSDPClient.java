@@ -12,6 +12,7 @@ import java.util.LinkedList;
 
 import net.hetimatan.io.file.MarkableFileReader;
 import net.hetimatan.io.filen.ByteKyoroFile;
+import net.hetimatan.net.ssdp.message.SSDPMessage;
 import net.hetimatan.util.http.HttpRequest;
 
 class SSDPClient {

@@ -1,5 +1,6 @@
 package net.hetimatan.net.ssdp;
 
+import net.hetimatan.net.ssdp.message.SSDPMessage;
 import net.hetimatan.util.http.HttpRequest;
 
 public interface SSDPClientListener {
