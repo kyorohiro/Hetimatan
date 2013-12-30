@@ -17,6 +17,7 @@ import java.util.Enumeration;
 import com.sun.xml.internal.messaging.saaj.packaging.mime.Header;
 
 import net.hetimatan.net.ssdp.message.SSDPMessage;
+import net.hetimatan.net.ssdp.message.SSDPSearchMessage;
 import net.hetimatan.util.http.HttpRequest;
 import net.hetimatan.util.http.HttpRequestHeader;
 
@@ -75,7 +76,7 @@ public class HelloSSDP {
 				return;
 			}
 
-			HttpRequestHeader header = request.getHeader("location");
+			//HttpRequestHeader header = request.getHeader("location");
 		}
 		
 	}

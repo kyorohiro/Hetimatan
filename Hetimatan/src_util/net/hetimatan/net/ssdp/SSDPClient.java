@@ -15,7 +15,7 @@ import net.hetimatan.io.filen.ByteKyoroFile;
 import net.hetimatan.net.ssdp.message.SSDPMessage;
 import net.hetimatan.util.http.HttpRequest;
 
-class SSDPClient {
+public class SSDPClient {
 	public static final String SSDP_ADDRESS = "239.255.255.250";
 	public static final int SSDP_PORT = 1900;
 	

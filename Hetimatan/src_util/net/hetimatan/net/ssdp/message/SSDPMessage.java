@@ -8,9 +8,9 @@ import net.hetimatan.io.file.MarkableFileReader;
 import net.hetimatan.util.http.HttpRequestHeader;
 
 public class SSDPMessage {
-	private SSDPResponseLine mLine = null;
+	private SSDPStartLine mLine = null;
 	private LinkedList<HttpRequestHeader> mHeader = new LinkedList<>();
-	public SSDPMessage(SSDPResponseLine line) {
+	public SSDPMessage(SSDPStartLine line) {
 		mLine = line;
 	} 
 
@@ -22,7 +22,7 @@ public class SSDPMessage {
 		;
 	}
 
-	public SSDPResponseLine getLine() {
+	public SSDPStartLine getLine() {
 		return mLine;
 	}
 
@@ -35,9 +35,9 @@ public class SSDPMessage {
 	}
 	
 	public static SSDPMessage decode(MarkableFileReader reader) throws IOException {
-		SSDPResponseLine line = SSDPResponseLine.decode(reader);
+		SSDPStartLine line = SSDPStartLine.decode(reader);
 		SSDPMessage message = new SSDPMessage(line);
-		while(reader.peek()!=-1 && !SSDPResponseLine.crlf(reader, false)) {
+		while(reader.peek()!=-1 && !SSDPStartLine.crlf(reader, false)) {
 			HttpRequestHeader header = HttpRequestHeader.decode(reader);
 			message.add(header);
 		}
