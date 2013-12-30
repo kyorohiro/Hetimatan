@@ -38,26 +38,6 @@ public class SSDPStartLine {
 	}
 
 	public static SSDPStartLine decode(MarkableFileReader reader) throws IOException {
-		reader.pushMark();
-		try {
-			version(reader);
-			sp(reader);
-			String code = code(reader);
-			System.out.println("#"+code+"#");
-			sp(reader);
-			String message = message(reader);
-			System.out.println("#"+message+"#");
-			crlf(reader, true);
-			return new SSDPStartLine(code, message);
-		} catch(IOException e) {
-			reader.backToMark();
-			throw e;
-		} finally {
-			reader.popMark();
-		}
-	}
-
-	public static SSDPStartLine responseLine(MarkableFileReader reader) throws IOException {
 		try {
 			return responseLine(reader);
 		} catch(IOException e) {
@@ -67,6 +47,24 @@ public class SSDPStartLine {
 		} catch(IOException e) {
 		} 
 		return mSearchLine(reader);
+	}
+
+	public static SSDPStartLine responseLine(MarkableFileReader reader) throws IOException {
+		reader.pushMark();
+		try {
+			version(reader);
+			sp(reader);
+			String code = code(reader);
+			sp(reader);
+			String message = message(reader);
+			crlf(reader, true);
+			return new SSDPStartLine(code, message);
+		} catch(IOException e) {
+			reader.backToMark();
+			throw e;
+		} finally {
+			reader.popMark();
+		}
 	}
 
 	public static SSDPStartLine mSearchLine(MarkableFileReader reader) throws IOException {
