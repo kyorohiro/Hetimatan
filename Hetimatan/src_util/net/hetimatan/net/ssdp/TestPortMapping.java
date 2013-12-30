@@ -16,12 +16,13 @@ import java.util.Enumeration;
 
 import com.sun.xml.internal.messaging.saaj.packaging.mime.Header;
 
+import net.hetimatan.net.http.HttpGet;
 import net.hetimatan.net.ssdp.message.SSDPMessage;
 import net.hetimatan.net.ssdp.message.SSDPSearchMessage;
 import net.hetimatan.util.http.HttpRequest;
 import net.hetimatan.util.http.HttpRequestHeader;
 
-public class HelloSSDP {
+public class TestPortMapping {
 
 	public static void main(String[] args) {
 		System.out.println("start ssdp test");
@@ -70,14 +71,18 @@ public class HelloSSDP {
 
 	public static class RObserver implements SSDPClientListener {
 		@Override
-		public void onReceiveå(SSDPMessage request) {
+		public void onReceiveSSDPMessage(SSDPClient client, SSDPMessage request) {
 			System.out.println("##\r\n"+request.toString()+"\r\n##");
 			if(!"200".equals(request.getLine().getCode())) {
 				return;
 			}
 
 			HttpRequestHeader header = request.getHeader("location");
-			
+			try {
+				client.startHttpGet(header.getValue());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		
 	}

@@ -12,8 +12,9 @@ import java.util.LinkedList;
 
 import net.hetimatan.io.file.MarkableFileReader;
 import net.hetimatan.io.filen.ByteKyoroFile;
+import net.hetimatan.net.http.HttpGet;
 import net.hetimatan.net.ssdp.message.SSDPMessage;
-import net.hetimatan.util.http.HttpRequest;
+import net.hetimatan.util.event.net.KyoroSocketEventRunner;
 
 public class SSDPClient {
 	public static final String SSDP_ADDRESS = "239.255.255.250";
@@ -22,6 +23,7 @@ public class SSDPClient {
 	private MulticastSocket mReceiveSocket = null;
 	private NetworkInterface mReciveNInterface = null;
 	private InetSocketAddress mReceiveGroup = null;
+	private LinkedList<SSDPClientListener> mObserver = new LinkedList<>();
 
 	public NetworkInterface getNetworkInterface(ServerSocket socket) throws SocketException {
 		return NetworkInterface.getByName(socket.getInetAddress().getHostName());
@@ -31,8 +33,7 @@ public class SSDPClient {
 		mReceiveGroup = new InetSocketAddress(SSDP_ADDRESS, SSDP_PORT);
 		InetAddress ll = InetAddress.getByName(hostName);
 		mReciveNInterface = NetworkInterface.getByInetAddress(ll);
-		mReceiveSocket = new MulticastSocket(new InetSocketAddress(
-				ll, SSDP_PORT));
+		mReceiveSocket = new MulticastSocket(new InetSocketAddress(ll, SSDP_PORT));
 		mReceiveSocket.joinGroup(mReceiveGroup, mReciveNInterface);
 	}
 
@@ -73,27 +74,32 @@ public class SSDPClient {
 		}
 	}
 
-	private LinkedList<SSDPClientListener> mObserver = new LinkedList<>();
+
+	//
+	// observer
+	//
 	public void addSSDPClientListener(SSDPClientListener observer) {
 		mObserver.add(observer);
 	}
 
 	public void dispatch(SSDPMessage request) {
 		for(SSDPClientListener l : mObserver) {
-			l.onReceiveå(request);
+			l.onReceiveSSDPMessage(this, request);
 		}
 	}
 
-	Thread mTh = null;
+
+	//
+	// message receiver
+	//
+	private Thread mReceiverThread = null;
 	public void startMessageReceiver() {
-		if(mTh == null || !mTh.isAlive()) {
-			mTh = new Thread(new MessageReceiver(this));
-			mTh.start();
+		if(mReceiverThread == null || !mReceiverThread.isAlive()) {
+			mReceiverThread = new Thread(new MessageReceiver(this));
+			mReceiverThread.start();
 		}
 	}
-	//
-	//
-	//
+
 	public static class MessageReceiver implements Runnable {
 		SSDPClient mClient = null;
 		
@@ -121,7 +127,18 @@ public class SSDPClient {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}			
-		}
-		
+		}	
 	}
+
+	//
+	// GetData
+	//
+	private KyoroSocketEventRunner mRunner = null;
+	private HttpGet wGet = null;
+	public void startHttpGet(String url) throws IOException {
+		wGet = new HttpGet();
+		wGet.update(url);
+		mRunner = wGet.startTask(null, null);
+	}
+	
 }

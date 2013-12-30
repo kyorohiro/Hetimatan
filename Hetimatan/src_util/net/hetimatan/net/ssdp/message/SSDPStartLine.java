@@ -57,7 +57,7 @@ public class SSDPStartLine {
 			String code = code(reader);
 			sp(reader);
 			String message = message(reader);
-			crlf(reader, true);
+			crlf(reader, true, false);
 			return new SSDPStartLine(code, message);
 		} catch(IOException e) {
 			reader.backToMark();
@@ -75,7 +75,7 @@ public class SSDPStartLine {
 			_astarisk(reader);
 			sp(reader);
 			version(reader);
-			crlf(reader, true);
+			crlf(reader, true ,false);
 			return new SSDPStartLine(TYPE_MSEARCH);
 		} catch(IOException e) {
 			reader.backToMark();
@@ -93,7 +93,7 @@ public class SSDPStartLine {
 			_astarisk(reader);
 			sp(reader);
 			version(reader);
-			crlf(reader, true);
+			crlf(reader, true, false);
 			return new SSDPStartLine(TYPE_NOTIFY);
 		} catch(IOException e) {
 			reader.backToMark();
@@ -103,18 +103,27 @@ public class SSDPStartLine {
 		}
 	}
 
-	public static boolean crlf(MarkableFileReader reader, boolean throwable) throws IOException {
-		int v = reader.read();
-		if(v == '\n') {
-			return true;
-		}
-		if(v == '\r' && '\n' == reader.read()) {
-			return true;
-		}
-		if(throwable) {
-			throw new IOException("");
-		} else {
-			return false;
+	public static boolean crlf(MarkableFileReader reader, boolean throwable, boolean isPeek) throws IOException {
+		reader.pushMark();
+		try {
+			int v = reader.read();
+			if(v == '\n') {
+				return true;
+			}
+			if(v == '\r' && '\n' == reader.read()) {
+				return true;
+			}
+			if(throwable) {
+				reader.backToMark();
+				throw new IOException("");
+			} else {
+				return false;
+			}
+		} finally {
+			if(isPeek) {
+				reader.backToMark();
+			}
+			reader.popMark();
 		}
 	}
 

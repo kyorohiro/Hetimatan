@@ -47,7 +47,7 @@ public class SSDPMessage {
 	public static SSDPMessage decode(MarkableFileReader reader) throws IOException {
 		SSDPStartLine line = SSDPStartLine.decode(reader);
 		SSDPMessage message = new SSDPMessage(line);
-		while(reader.peek()!=-1 && !SSDPStartLine.crlf(reader, false)) {
+		while(reader.peek()!=-1 && !SSDPStartLine.crlf(reader, false, true)) {
 			HttpRequestHeader header = HttpRequestHeader.decode(reader);
 			message.add(header);
 		}
