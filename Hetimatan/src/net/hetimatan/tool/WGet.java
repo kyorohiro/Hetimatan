@@ -10,6 +10,7 @@ public class WGet {
 
 	public static void main(String[] args) {
 		System.out.println("start");
+
 		if(args.length != 1) {
 			return;
 		}

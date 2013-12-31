@@ -44,6 +44,7 @@ public class HttpGetReadBodyTask extends EventTask {
 			mIsKeep = false;
 		}
 
+//		Thread.sleep(2000);
 		httpGet.recvBody();
 		if(httpGet.isRedirect()) {
 			httpGet.update(httpGet.getLocation());

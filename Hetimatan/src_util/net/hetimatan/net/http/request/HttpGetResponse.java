@@ -78,7 +78,7 @@ public class HttpGetResponse {
 				mReader.seek(0);
 				byte[] bu = new byte[mVfOffset];
 				mReader.read(bu);
-				System.out.println("++++"+new String(bu)+"#####");
+				System.out.println("##--header--##"+new String(bu)+"##-//-header--##");
 				mReader.seek(mVfOffset);
 			}
 			for(HttpRequestHeader h :mResponse.getHeader()) {
