@@ -1,4 +1,4 @@
-package net.hetimatan.net.ssdp;
+package net.hetimatan.net.ssdp.sample;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -14,15 +14,22 @@ import java.net.SocketAddress;
 import java.net.SocketException;
 import java.util.Enumeration;
 
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.xpath.XPath;
+
 import com.sun.xml.internal.messaging.saaj.packaging.mime.Header;
+import com.sun.xml.internal.txw2.Document;
 
 import net.hetimatan.net.http.HttpGet;
+import net.hetimatan.net.http.request.HttpGetResponse;
+import net.hetimatan.net.ssdp.SSDPClient;
+import net.hetimatan.net.ssdp.SSDPClientListener;
 import net.hetimatan.net.ssdp.message.SSDPMessage;
 import net.hetimatan.net.ssdp.message.SSDPSearchMessage;
 import net.hetimatan.util.http.HttpRequest;
 import net.hetimatan.util.http.HttpRequestHeader;
 
-public class TestPortMapping {
+public class PortMappingSample {
 
 	public static void main(String[] args) {
 		System.out.println("start ssdp test");
@@ -79,9 +86,30 @@ public class TestPortMapping {
 
 			HttpRequestHeader header = request.getHeader("location");
 			try {
-				client.startHttpGet(header.getValue());
+				SSDPGetRootDevice cl = new SSDPGetRootDevice(header.getValue());
+				cl.startTask(null, null);
+//				client.startHttpGet(header.getValue());
 			} catch (IOException e) {
 				e.printStackTrace();
+			}
+		}
+	}
+
+	public static class SSDPGetRootDevice extends HttpGet {
+		public SSDPGetRootDevice(String url) throws IOException {
+			super();
+			update(url);
+		}
+
+		@Override
+		public void recvBody() throws IOException, InterruptedException {
+			try {
+				byte[] buffer = getBody();
+				DocumentBuilderFactory factory = 
+						DocumentBuilderFactory.newInstance();
+				
+			} finally {
+				close();
 			}
 		}
 		

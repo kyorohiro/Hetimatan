@@ -40,14 +40,14 @@ public class LookaheadHttpBody {
 	
 	public boolean readable(MarkableReader reader) throws IOException {
 		if((reader.length()-mStart)>=mContentLength) {
-			System.out.println("reader.length()="+reader.length());
-			System.out.println("mStart="+mStart);
-			System.out.println("mContentLength="+mContentLength);
+			//System.out.println("reader.length()="+reader.length());
+			//System.out.println("mStart="+mStart);
+			//System.out.println("mContentLength="+mContentLength);
 			return true;
 		} else {
-			System.out.println("reader.length()="+reader.length());
-			System.out.println("mStart="+mStart);
-			System.out.println("mContentLength="+mContentLength);
+			//System.out.println("reader.length()="+reader.length());
+			//System.out.println("mStart="+mStart);
+			//00o--System.out.println("mContentLength="+mContentLength);
 
 			return false;
 		}

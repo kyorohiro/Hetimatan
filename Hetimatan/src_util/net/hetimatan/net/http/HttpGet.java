@@ -1,6 +1,7 @@
 package net.hetimatan.net.http;
 
 import java.io.IOException;
+import java.util.LinkedList;
 
 import net.hetimatan.io.file.MarkableFileReader;
 import net.hetimatan.io.filen.CashKyoroFile;
@@ -115,10 +116,8 @@ public class HttpGet {
 
 		try {
 			CashKyoroFile vf = mCurrentResponse.getVF();
-			vf.seek(mCurrentResponse.getVFOffset());
-			int len = (int)vf.length();
-			byte[] buffer = new byte[len];
-			vf.read(buffer, 0, len);
+			byte[] buffer = getBody();
+			vf.read(buffer, 0, buffer.length);
 			System.out.println("@1:"+new String(buffer, 0, mCurrentResponse.getVFOffset()));
 			System.out.println("@2:"+new String(buffer));
 			System.out.println("@3:"+mCurrentResponse.getVFOffset()+","+buffer.length);
@@ -126,6 +125,17 @@ public class HttpGet {
 		} finally {
 			close();
 		}
+	}
+
+	//
+	//
+	public byte[] getBody() throws IOException {
+		CashKyoroFile vf = mCurrentResponse.getVF();
+		vf.seek(mCurrentResponse.getVFOffset());
+		int len = (int)vf.length();
+		byte[] buffer = new byte[len];
+		vf.read(buffer, 0, len);
+		return buffer;
 	}
 
 	public boolean isRedirect() throws IOException {

@@ -18,8 +18,9 @@ import net.hetimatan.util.event.net.KyoroSocketEventRunner;
 
 public class SSDPClient {
 	public static final String SSDP_ADDRESS = "239.255.255.250";
-	public static final int SSDP_PORT = 1900;
-	
+	public static final int SSDP_PORT = 1900;	
+	public static final String URN_WAN_IP_CONNECTION = "urn:schemas-upnp-org:service:WANIPConnection:1";
+			
 	private MulticastSocket mReceiveSocket = null;
 	private NetworkInterface mReciveNInterface = null;
 	private InetSocketAddress mReceiveGroup = null;
