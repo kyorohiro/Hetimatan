@@ -13,6 +13,7 @@ import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.SocketException;
 import java.util.Enumeration;
+import java.util.LinkedList;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.xpath.XPath;
@@ -26,6 +27,7 @@ import net.hetimatan.net.ssdp.SSDPClient;
 import net.hetimatan.net.ssdp.SSDPClientListener;
 import net.hetimatan.net.ssdp.message.SSDPMessage;
 import net.hetimatan.net.ssdp.message.SSDPSearchMessage;
+import net.hetimatan.net.ssdp.sample.RootDeviceXml2ServiceInfo.SSDPServiceInfo;
 import net.hetimatan.util.http.HttpRequest;
 import net.hetimatan.util.http.HttpRequestHeader;
 
@@ -103,13 +105,34 @@ public class PortMappingSample {
 
 		@Override
 		public void recvBody() throws IOException, InterruptedException {
+			super.recvBody();
+
 			try {
 				byte[] buffer = getBody();
+				System.out.println("##"+buffer.length+"##");
+				System.out.println("##"+buffer[buffer.length-1]+"##");
+				System.out.println("##"+buffer[buffer.length-2]+"##");
+				System.out.println("##"+buffer[buffer.length-3]+"##");
+				System.out.println("##"+buffer[buffer.length-4]+"##");
+				System.out.println("##"+buffer[buffer.length-5]+"##");
+				System.out.println("##"+buffer[buffer.length-6]+"##");
+				System.out.println("##"+buffer[buffer.length-7]+"##");
+				System.out.println("##"+buffer[buffer.length-8]+"##");
+				System.out.println("##"+buffer[buffer.length-9]+"##");
+				System.out.println("##"+buffer[buffer.length-10]+"##");
+				System.out.println("##"+buffer[buffer.length-11]+"##");
+				System.out.println("##"+buffer[buffer.length-12]+"##");
+				System.out.println("##"+buffer[buffer.length-13]+"##");
+				System.out.println("##"+buffer[buffer.length-14]+"##");
+
+				System.out.println("##"+new String(buffer)+"##");
 				RootDeviceXml2ServiceInfo converter = new RootDeviceXml2ServiceInfo();
-				converter.createServiceList(buffer);
-				
+				LinkedList<SSDPServiceInfo> infos = converter.createServiceList((new String(buffer)).getBytes());//buffer);//converter._data.getBytes());//buffer);
+				for(SSDPServiceInfo info:infos) {
+					System.out.println(""+info);
+				}
 			} finally {
-				close();
+				//close();
 			}
 		}
 		

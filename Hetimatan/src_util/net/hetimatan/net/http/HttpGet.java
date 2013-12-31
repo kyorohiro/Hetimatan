@@ -145,7 +145,7 @@ public class HttpGet {
 	public byte[] getBody() throws IOException {
 		CashKyoroFile vf = mCurrentResponse.getVF();
 		vf.seek(mCurrentResponse.getVFOffset());
-		int len = (int)vf.length();
+		int len = (int)vf.length() - mCurrentResponse.getVFOffset();
 		byte[] buffer = new byte[len];
 		vf.read(buffer, 0, len);
 		return buffer;

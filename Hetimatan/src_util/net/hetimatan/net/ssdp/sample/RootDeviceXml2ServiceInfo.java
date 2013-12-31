@@ -94,12 +94,12 @@ public class RootDeviceXml2ServiceInfo {
 	"  </deviceList>\r\n"+
 	" <presentationURL>http://192.168.0.1/</presentationURL>\r\n"+
 	" </device>\r\n"+
-	"</root>\r\n";
+	"</root>\r\n\r\n";
 	
 	public static void main(String[] args) {
 		RootDeviceXml2ServiceInfo parser = new RootDeviceXml2ServiceInfo();
 		try {
-			LinkedList<SSDPServiceInfo> serviceList= parser.createServiceList(parser._data.getBytes());
+			LinkedList<SSDPServiceInfo> serviceList= parser.createServiceList(parser._data2.getBytes());
 			System.out.println(""+serviceList.toString());
 		} catch (Throwable e) {
 			e.printStackTrace();
@@ -152,6 +152,7 @@ public class RootDeviceXml2ServiceInfo {
 			}
 			return ret;
 		} catch(Throwable t) {
+			t.printStackTrace();
 			throw new IOException("");
 		}
 	}
@@ -183,4 +184,76 @@ public class RootDeviceXml2ServiceInfo {
 			else {return ret;}
 		}
 	}
+
+	public static String _data2 = 
+	"<?xml version=\"1.0\"?>\n"+
+	"<root xmlns=\"urn:schemas-upnp-org:device-1-0\">\n"+
+	"<specVersion>\n"+
+	"<major>1</major>\n"+
+	"<minor>0</minor>\n"+
+	"</specVersion>\n"+
+	"<device>\n"+
+	"<deviceType>urn:schemas-upnp-org:device:InternetGatewayDevice:1</deviceType>\n"+
+	"<friendlyName>Aterm Series</friendlyName>\n"+
+	"<manufacturer>NEC Corporation/NEC AccessTechnica,Ltd.</manufacturer>\n"+
+	"<modelDescription>Broadband Router and Wireless Access Point</modelDescription>\n"+
+	"<modelName>Aterm Series</modelName>\n"+
+	"<modelNumber></modelNumber>\n"+
+	"<serialNumber>0000001</serialNumber>\n"+
+	"<UDN>uuid:79f0447f-860fbb81</UDN>\n"+
+	"<serviceList>\n"+
+	"<service>\n"+
+	"<serviceType>urn:schemas-upnp-org:service:Layer3Forwarding:1</serviceType>\n"+
+	"<serviceId>urn:upnp-org:serviceId:L3Frwd1</serviceId>\n"+
+	"<controlURL>/upnp/control/L3Frwd1</controlURL>\n"+
+	"<eventSubURL>/upnp/event/L3Frwd1</eventSubURL>\n"+
+	"<SCPDURL>/upnp/L3Frwd1.xml</SCPDURL>\n"+
+	"</service>\n"+
+	"</serviceList>\n"+
+	"<deviceList>\n"+
+	"<device>\n"+
+	"<deviceType>urn:schemas-upnp-org:device:WANDevice:1</deviceType>\n"+
+	"<friendlyName>Aterm Series</friendlyName>\n"+
+	"<manufacturer>NEC Corporation/NEC AccessTechnica,Ltd.</manufacturer>\n"+
+	"<modelDescription>Broadband Router and Wireless Access Point</modelDescription>\n"+
+	"<modelName>Aterm Series</modelName>\n"+
+	"<modelNumber></modelNumber>\n"+
+	"<serialNumber>0000001</serialNumber>\n"+
+	"<UDN>uuid:79f0447f-860fbb83</UDN>\n"+
+	"<serviceList>\n"+
+	"<service>\n"+
+	"<serviceType>urn:schemas-upnp-org:service:WANCommonInterfaceConfig:1</serviceType>\n"+
+	"<serviceId>urn:upnp-org:serviceId:WANCommonIFC1</serviceId>\n"+
+	"<controlURL>/upnp/control/WANCommonIFC1</controlURL>\n"+
+	"	<eventSubURL>/upnp/event/WANCommonIFC1</eventSubURL>\n"+
+	"<SCPDURL>/upnp/WANCommonIFC1.xml</SCPDURL>\n"+
+	"</service>\n"+
+	"</serviceList>\n"+
+	"<deviceList>\n"+
+	"<device>\n"+
+	"<deviceType>urn:schemas-upnp-org:device:WANConnectionDevice:1</deviceType>\n"+
+	"<friendlyName>Aterm Series</friendlyName>\n"+
+	"<manufacturer>NEC Corporation/NEC AccessTechnica,Ltd.</manufacturer>\n"+
+	"<modelDescription>Broadband Router and Wireless Access Point</modelDescription>\n"+
+	"<modelName>Aterm Series</modelName>\n"+
+	"<modelNumber></modelNumber>\n"+
+	"<serialNumber>0000001</serialNumber>\n"+
+	"<UDN>uuid:79f0447f-860fbb85</UDN>\n"+
+	"<serviceList>\n"+
+	"<service>\n"+
+	"<serviceType>urn:schemas-upnp-org:service:WANIPConnection:1</serviceType>\n"+
+	"<serviceId>urn:upnp-org:serviceId:WANIPConn1</serviceId>\n"+
+	"<controlURL>/upnp/control/WANIPConn1</controlURL>\n"+
+	"<eventSubURL>/upnp/event/WANIPConn1</eventSubURL>\n"+
+	"<SCPDURL>/upnp/WANIPConn1.xml</SCPDURL>\n"+
+	"</service>\n"+
+	"</serviceList>\n"+
+	"</device>\n"+
+	"</deviceList>\n"+
+	"</device>\n"+
+	"</deviceList>\n"+
+	"<presentationURL>http://192.168.0.1/</presentationURL>\n"+
+	"</device>\n"+
+	"</root>\n";
+	
 }
