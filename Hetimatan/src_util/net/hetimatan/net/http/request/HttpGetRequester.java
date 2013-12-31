@@ -3,6 +3,7 @@ package net.hetimatan.net.http.request;
 
 import java.io.IOException;
 
+import net.hetimatan.io.file.KyoroFile;
 import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.io.net.KyoroSelector;
 import net.hetimatan.io.net.KyoroSocket;
@@ -24,6 +25,19 @@ public class HttpGetRequester  {
 	private HttpRequestBuilder mBuilder = new HttpRequestBuilder();
 	private MessageSendTask mTask = null;
 	private CashKyoroFile mSendCash = null;
+
+	// --- <omake> ---
+	private boolean mIsPostMode = false;
+	public void setBody(KyoroFile body) {
+		mBuilder.putBody(body);
+	}
+	public void isPostMode(boolean on) {
+		mIsPostMode = on;
+	}
+	public boolean isPostMode() {
+		return mIsPostMode;
+	}
+	// --- </omake> ---
 
 	public HttpGetRequester() {
 	}
@@ -65,7 +79,12 @@ public class HttpGetRequester  {
 	}	
 
 	public synchronized HttpRequest createHttpRequest() throws IOException {
-		return mBuilder.createHttpGetRequest();
+		if(false == mIsPostMode) {
+			return mBuilder.createHttpGetRequest();
+		} else {
+			// omake
+			return mBuilder.createHttpPostRequest();
+		}
 	}
 
 	public synchronized byte[] createRequest() throws IOException {

@@ -3,6 +3,7 @@ package net.hetimatan.net.http;
 import java.io.IOException;
 import java.util.LinkedList;
 
+import net.hetimatan.io.file.KyoroFile;
 import net.hetimatan.io.file.MarkableFileReader;
 import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.io.net.KyoroSocket;
@@ -70,6 +71,14 @@ public class HttpGet {
 		}
 	}
 
+	// <omake>
+	private KyoroFile mBody = null;
+	private boolean mIsPost = false;
+	public void setBody(KyoroFile contents) throws IOException {
+		mBody = contents;
+		mIsPost = true;
+	}
+
 	public KyoroSocketEventRunner startTask(KyoroSocketEventRunner runner, EventTask last) {
 		HttpHistory.get().pushMessage(sId+"#startTask"+"\n");
 		mTaskManager.mLast = last;
@@ -89,6 +98,10 @@ public class HttpGet {
 		mCurrentResponse = null;
 		mCurrentRequest.getUrlBuilder().setHost(mHost).setPath(mPath).setPort(mPort);
 		mCurrentSocket = mCurrentRequest.connect(null);
+		if(mIsPost) {
+			mCurrentRequest.isPostMode(true);
+			mCurrentRequest.setBody(mBody);
+		}
 	}
 
 	public void send() throws InterruptedException, IOException {

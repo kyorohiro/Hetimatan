@@ -10,7 +10,6 @@ import net.hetimatan.io.file.MarkableFileReader;
 import net.hetimatan.io.file.MarkableReader;
 import net.hetimatan.io.file.MarkableReaderHelper;
 import net.hetimatan.io.filen.CashKyoroFile;
-import net.hetimatan.util.io.ByteArrayBuilder;
 
 // GET request
 // http://www.w3schools.com/tags/ref_httpmethods.asp
