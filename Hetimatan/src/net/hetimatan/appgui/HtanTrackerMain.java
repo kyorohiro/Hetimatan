@@ -10,7 +10,7 @@ import net.hetimatan.net.torrent.tracker._server.TrackerData;
 import net.hetimatan.net.torrent.tracker._server.TrackerDatam;
 import net.hetimatan.net.torrent.util.metafile.MetaFile;
 import net.hetimatan.net.torrent.util.metafile.MetaFileCreater;
-import net.hetimatan.util.http.HttpRequestUri;
+import net.hetimatan.util.http.HttpGetRequestUri;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -115,7 +115,7 @@ public class HtanTrackerMain extends Application implements TrackerServer.Status
 		mServer = new TrackerServer();
 		{
 			String url = mMetafile.getAnnounce();
-			HttpRequestUri uri = HttpRequestUri.createHttpRequestUri(url);
+			HttpGetRequestUri uri = HttpGetRequestUri.createHttpRequestUri(url);
 			mServer.setPort(uri.getPort());
 		}
 //		mServer.setPort(TrackerServer.DEFAULT_TRACKER_PORT);

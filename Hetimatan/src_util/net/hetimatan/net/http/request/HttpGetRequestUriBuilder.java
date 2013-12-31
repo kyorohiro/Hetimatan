@@ -1,5 +1,5 @@
 package net.hetimatan.net.http.request;
-
+/*
 import java.io.IOException;
 import java.util.LinkedHashMap;
 
@@ -95,3 +95,4 @@ public class HttpGetRequestUriBuilder {
 		return uri;
 	}
 }
+*/

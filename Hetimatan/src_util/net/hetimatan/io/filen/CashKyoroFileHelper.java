@@ -2,6 +2,7 @@ package net.hetimatan.io.filen;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 
 import net.hetimatan.io.file.KyoroFile;
 import net.hetimatan.util.event.GlobalAccessProperty;
@@ -90,4 +91,15 @@ public class CashKyoroFileHelper {
 		return new ReferenceModifierKyoroFile(file, start, end, 256, 3);
 	}
 
+	public static void write(OutputStream output, KyoroFile source) throws IOException {
+		byte[] buffer = new byte[1024];
+		int wr = 0;
+
+		source.seek(0);
+		do {
+			wr = source.read(buffer);
+			if(wr<0){break;}
+			output.write(buffer, 0, wr);
+		} while(true);
+	}
 }

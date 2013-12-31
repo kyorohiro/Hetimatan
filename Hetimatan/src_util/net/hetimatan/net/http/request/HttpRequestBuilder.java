@@ -5,9 +5,12 @@ import java.util.LinkedHashMap;
 
 import javax.swing.plaf.basic.BasicScrollPaneUI.HSBChangeListener;
 
+import net.hetimatan.io.file.KyoroFile;
+import net.hetimatan.io.filen.ByteKyoroFile;
 import net.hetimatan.util.http.HttpRequest;
+import net.hetimatan.util.http.HttpRequestHeader;
 import net.hetimatan.util.http.HttpRequestLine;
-import net.hetimatan.util.http.HttpRequestUri;
+import net.hetimatan.util.http.HttpGetRequestUri;
 
 public class HttpRequestBuilder {
 	public static final String REQUEST_METHOD_GET = "GET";
@@ -26,6 +29,7 @@ public class HttpRequestBuilder {
 	private int mPort = 80;
 	private String mHost = "127.0.0.1";
 	private String mHttpVersion = HTTP10;
+	private KyoroFile mBody = null;
 
 	
 	public String getHost() {
@@ -65,6 +69,11 @@ public class HttpRequestBuilder {
 		return this;
 	}
 
+	public HttpRequestBuilder putBody(KyoroFile body) {
+		mBody = body;
+		return this;
+	}
+
 	public synchronized HttpRequest createHttpGetRequest() throws IOException {
 		HttpRequest request = HttpRequest
 		.newInstance(REQUEST_METHOD_GET, mPath, HttpRequestLine.HTTP10);
@@ -77,8 +86,16 @@ public class HttpRequestBuilder {
 	public synchronized HttpRequest createHttpPostRequest() throws IOException {
 		HttpRequest request = HttpRequest
 		.newInstance(REQUEST_METHOD_POST, mPath, HttpRequestLine.HTTP10);
-		for (String key : mValues.keySet()) {
-			request.putValue(key, mValues.get(key));
+		if(mBody == null) {
+			ByteKyoroFile value = new ByteKyoroFile();
+			for (String key : mValues.keySet()) {
+				value.addChunk((""+key+": "+mValues.get(key)).getBytes());
+			}
+			request.setBody(value);
+			mHeader.put(HttpRequestHeader.HEADER_CONTENT_LENGTH, ""+value.length());
+		} else {
+			request.setBody(mBody);
+			mHeader.put(HttpRequestHeader.HEADER_CONTENT_LENGTH, ""+mBody.length());
 		}
 		return createHttpRequest(request);
 	}
@@ -90,7 +107,7 @@ public class HttpRequestBuilder {
 			request.addHeader(key, mHeader.get(key));
 		}
 		request.getLine().setHttpVersion(mHttpVersion);
-		HttpRequestUri uri = request.getLine().getRequestURI();
+		HttpGetRequestUri uri = request.getLine().getRequestURI();
 		uri.setHost(mHost);
 		uri.setPort(mPort);
 		if(!haveHost) {
@@ -98,8 +115,9 @@ public class HttpRequestBuilder {
 		}
 		return request;
 	}
-	public synchronized HttpRequestUri createHttpGetRequestUri() throws IOException {
-		HttpRequestUri uri = HttpRequestUri.crateHttpGetRequestUri(mPath);
+
+	public synchronized HttpGetRequestUri createHttpGetRequestUri() throws IOException {
+		HttpGetRequestUri uri = HttpGetRequestUri.crateHttpGetRequestUri(mPath);
 		for (String key : mValues.keySet()) {
 			uri.putVale(key, mValues.get(key));
 		}

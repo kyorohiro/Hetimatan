@@ -12,12 +12,13 @@ import net.hetimatan.io.filen.CashKyoroFile;
 //Request-Line   = Method SP Request-URI SP HTTP-Version CRLF
 public class HttpRequestLine extends HttpObject {
 	private String mMethod = "";
-	private HttpRequestUri mRequestURI = null;
+	private HttpGetRequestUri mRequestURI = null;
 	private String mHTTPVersion = "";
 
 	public static final String HTTP11 = "HTTP/1.1";
 	public static final String HTTP10 = "HTTP/1.0";
 	public static final String GET = "GET";
+	public static final String POST = "POST";
 
 	public static final byte[] available = {
 			'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
@@ -29,19 +30,35 @@ public class HttpRequestLine extends HttpObject {
 			'U', 'V', 'W', 'X', 'Y', 'Z',
 			'.', '-', '/', '_'
 	};
-	public HttpRequestLine(String method, HttpRequestUri requestURI, String httpVersion) {
+	public HttpRequestLine(String method, HttpGetRequestUri requestURI, String httpVersion) {
 		mMethod = method;
 		mRequestURI = requestURI;
 		mHTTPVersion = httpVersion;
 	}
 	public HttpRequestLine(String method, String requestUri, String httpVersion) {
 		mMethod = method;
-		mRequestURI = HttpRequestUri.crateHttpGetRequestUri(requestUri);
+		mRequestURI = HttpGetRequestUri.crateHttpGetRequestUri(requestUri);
 		mHTTPVersion = httpVersion;
 	}
 
 	public void setHttpVersion(String version) {
 		mHTTPVersion = version;
+	}
+
+	public boolean isPost() {
+		if(mMethod.toUpperCase().equals(POST)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public boolean isGet() {
+		if(mMethod.toUpperCase().equals(GET)) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	@Override
@@ -59,7 +76,7 @@ public class HttpRequestLine extends HttpObject {
 		return mMethod;
 	}
 
-	public HttpRequestUri getRequestURI() {
+	public HttpGetRequestUri getRequestURI() {
 		return mRequestURI;
 	}
 	
@@ -89,7 +106,7 @@ public class HttpRequestLine extends HttpObject {
 			reader.pushMark();
 			String method = _metod(reader);
 			_sp(reader);
-			HttpRequestUri requestUri = HttpRequestUri.decode(reader);
+			HttpGetRequestUri requestUri = HttpGetRequestUri.decode(reader);
 			_sp(reader);
 			String httpVersion = _httpVersion(reader);
 			_crlf(reader);

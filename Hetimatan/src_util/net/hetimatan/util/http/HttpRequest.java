@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.LinkedList;
 
+import net.hetimatan.io.file.KyoroFile;
 import net.hetimatan.io.file.MarkableReader;
+import net.hetimatan.io.filen.CashKyoroFileHelper;
 
 //http://www.w3.org/Protocols/rfc2616/rfc2616.html
 //Request-URI    = "*" | absoluteURI | abs_path | authority
@@ -13,6 +15,7 @@ public class HttpRequest extends HttpObject {
 
 	private HttpRequestLine mLine = null;
 	private LinkedList<HttpRequestHeader> mHeaders = new LinkedList<HttpRequestHeader>();
+	private KyoroFile mBody = null;
 
 	public static HttpRequest newInstance(String method, String requestUri, String httpVersion) {
 		HttpRequestLine line = new HttpRequestLine(method, requestUri, httpVersion);
@@ -58,6 +61,14 @@ public class HttpRequest extends HttpObject {
 		return this;
 	}
 
+	public void setBody(KyoroFile body) {
+		mBody = body;
+	}
+
+	public KyoroFile getBody() {
+		return mBody;
+	}
+
 	@Override
 	public void encode(OutputStream output) throws IOException {
 		mLine.encode(output);
@@ -65,6 +76,9 @@ public class HttpRequest extends HttpObject {
 			header.encode(output);
 		}
 		output.write(CRLF.getBytes());
+		if(mBody != null) {
+			CashKyoroFileHelper.write(output, mBody);
+		}
 	}
 
 	@Override

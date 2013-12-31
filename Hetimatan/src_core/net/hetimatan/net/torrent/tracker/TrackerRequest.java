@@ -7,15 +7,15 @@ import java.net.URISyntaxException;
 
 import net.hetimatan.io.file.MarkableFileReader;
 import net.hetimatan.io.file.MarkableReader;
-import net.hetimatan.net.http.request.HttpGetRequestUriBuilder;
 import net.hetimatan.net.http.request.HttpGetRequester;
 import net.hetimatan.net.http.request.HttpGetRequester;
+import net.hetimatan.net.http.request.HttpRequestBuilder;
 import net.hetimatan.net.torrent.client.TorrentClient;
 import net.hetimatan.net.torrent.util.metafile.MetaFile;
 import net.hetimatan.util.http.HttpObject;
 import net.hetimatan.util.http.HttpRequestLine;
 import net.hetimatan.util.http.HttpRequest;
-import net.hetimatan.util.http.HttpRequestUri;
+import net.hetimatan.util.http.HttpGetRequestUri;
 
 
 public class TrackerRequest {
@@ -79,7 +79,7 @@ public class TrackerRequest {
 		String url = metainfo.getAnnounce();
 		MarkableReader reader = new MarkableFileReader(url.getBytes());
 		try {
-			HttpRequestUri uri = HttpRequestUri.decode(reader);
+			HttpGetRequestUri uri = HttpGetRequestUri.decode(reader);
 			request
 			.putTrackerHost(uri.getHost())
 			.putPath(uri.getPath())
@@ -91,8 +91,8 @@ public class TrackerRequest {
 		}
 	}
 
-	public HttpRequestUri createUri() throws IOException {
-		HttpGetRequestUriBuilder builder = new HttpGetRequestUriBuilder();
+	public HttpGetRequestUri createUri() throws IOException {
+		HttpRequestBuilder builder = new HttpRequestBuilder();
 		builder
 		.setHost(mTrackerHost)
 		.setPath(mPath)
@@ -107,7 +107,7 @@ public class TrackerRequest {
 		if(!TrackerRequest.EVENT_NONE.equals(mEvent)) {
 			builder.putValue(KEY_EVENT, mEvent);
 		}
-		return builder.createHttpRequestUri();
+		return builder.createHttpGetRequestUri();
 	}
 
 	public HttpGetRequester createHttpGetRequester() {

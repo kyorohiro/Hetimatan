@@ -196,7 +196,7 @@ public class TestForTorrentPeerWithChoker extends TestCase {
 		for(int i=0;i<5;i++) {
 			if(testPeer.getTorrentPeerManager()
 					.getTorrentFront(testPeer.getTorrentPeerManager().getFrontPeer(i))
-					.getMyInfo().isChoked() == TorrentClientFront.TRUE) {
+					.getMyInfo().isChoked() != TorrentClientFront.FALSE) {
 				num++;
 			}
 		}

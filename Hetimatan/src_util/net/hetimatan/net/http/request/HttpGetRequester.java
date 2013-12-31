@@ -21,7 +21,7 @@ public class HttpGetRequester  {
 	public static final String USER_AGENT = "User-Agent";
 	public static final String CONTENT_LENGTH = "Content-Length";
 
-	private HttpGetRequestUriBuilder mBuilder = new HttpGetRequestUriBuilder();
+	private HttpRequestBuilder mBuilder = new HttpRequestBuilder();
 	private MessageSendTask mTask = null;
 	private CashKyoroFile mSendCash = null;
 
@@ -32,7 +32,7 @@ public class HttpGetRequester  {
 		System.out.println("KyoroSocketGetRequester#"  + message);
 	}
 
-	public HttpGetRequestUriBuilder getUrlBuilder() {
+	public HttpRequestBuilder getUrlBuilder() {
 		return mBuilder;
 	}
 
@@ -65,7 +65,7 @@ public class HttpGetRequester  {
 	}	
 
 	public synchronized HttpRequest createHttpRequest() throws IOException {
-		return mBuilder.createHttpRequest();
+		return mBuilder.createHttpGetRequest();
 	}
 
 	public synchronized byte[] createRequest() throws IOException {
