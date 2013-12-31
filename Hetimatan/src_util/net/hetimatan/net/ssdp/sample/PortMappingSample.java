@@ -105,8 +105,8 @@ public class PortMappingSample {
 		public void recvBody() throws IOException, InterruptedException {
 			try {
 				byte[] buffer = getBody();
-				DocumentBuilderFactory factory = 
-						DocumentBuilderFactory.newInstance();
+				RootDeviceXml2ServiceInfo converter = new RootDeviceXml2ServiceInfo();
+				converter.createServiceList(buffer);
 				
 			} finally {
 				close();
