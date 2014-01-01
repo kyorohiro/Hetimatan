@@ -2,6 +2,8 @@ package net.hetimatan.tool;
 
 import java.io.IOException;
 
+import net.hetimatan.io.filen.ByteKyoroFile;
+import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.net.http.HttpGet;
 import net.hetimatan.util.event.CloseRunnerTask;
 import net.hetimatan.util.event.net.KyoroSocketEventRunner;
@@ -10,8 +12,6 @@ public class WGet {
 
 	public static void main(String[] args) {
 		System.out.println("start");
-		args = new String[1];
-		args[0] = "http://www.google.com";
 		if(args.length != 1) {
 			return;
 		}

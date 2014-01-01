@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.LinkedList;
 
+import com.sun.xml.internal.bind.v2.schemagen.xmlschema.Particle;
+
 import net.hetimatan.io.file.KyoroFile;
 import net.hetimatan.io.file.KyoroFileForKyoroSocket;
 import net.hetimatan.io.file.MarkableFileReader;
@@ -12,6 +14,8 @@ import net.hetimatan.io.net.KyoroSocket;
 import net.hetimatan.net.http.task.server.HttpFrontCloseTask;
 import net.hetimatan.util.event.EventTask;
 import net.hetimatan.util.event.net.MessageSendTask;
+import net.hetimatan.util.http.HttpRequestHeader;
+import net.hetimatan.util.http.LookaheadHttpBody;
 import net.hetimatan.util.http.LookaheadHttpHeader;
 import net.hetimatan.util.http.HttpRequest;
 import net.hetimatan.util.log.Log;
@@ -67,6 +71,24 @@ public class HttpServerFront {
 		}
 	}
 
+	private LookaheadHttpBody mLookaheadBody = null;
+	public boolean parseableBody() throws IOException {
+		String contentLength = mUri.getHeaderValue(HttpRequestHeader.HEADER_CONTENT_LENGTH);
+		if(contentLength == null || contentLength.length() == 0) {return true;}
+		int _contentLength = 0;
+		try {
+			_contentLength = Integer.parseInt(contentLength);
+		} catch(Exception e) {
+			return true;
+		}
+
+		if(mLookaheadBody == null) {
+			mLookaheadBody = new LookaheadHttpBody(mCurrentReader, mCurrentReader.getFilePointer(), _contentLength); 
+		}
+
+		return mLookaheadBody.lookahead();
+	}
+
 	public void parseHeader() throws IOException {
 		this.mUri = HttpRequest.decode(mCurrentReader);
 		HttpHistory.get().pushMessage(this.sId+":parse request:"+mUri.toString()+"\n");
@@ -91,8 +113,11 @@ public class HttpServerFront {
 
 	public boolean executeFrontWork() throws Throwable {
 		if(Log.ON){Log.v(TAG, "HttpServer#doRequestTask()");}
-		if(!parseableHeader()){return false;}
-		parseHeader();
+		if(mUri == null) {
+			if(!parseableHeader()){return false;}
+			parseHeader();
+		}
+		if(!parseableBody()){return false;}
 		startResponseTask();
 		return true;
 	}
