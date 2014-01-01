@@ -26,6 +26,9 @@ public class TorrentClientRequester implements TorrentClientListener {
 		TorrentData data = peer.getTorrentData();
 		BitField bitfield = front.relativeBitfield();
 		int nextId = bitfield.getOnPieceAtRandom();
+		if(nextId < 0) {
+			return nextId;
+		}
 		data.setRequest(nextId);
 		return nextId;
 	}

@@ -293,6 +293,10 @@ public class TorrentClientFront {
 				Log.v(TAG, "already requested [B]:"+mRequestedNum);return;}
 
 			index = peer.getNextRequestPiece(this);
+			if(index < 0) {
+				// target don't have interest piece
+				return;
+			}
 			mRequestPiece = index;
 			pieceLength = peer.getTorrentData().getPieceLengthPer(index);
 			MessageRequest request = new MessageRequest(index, 0, pieceLength);

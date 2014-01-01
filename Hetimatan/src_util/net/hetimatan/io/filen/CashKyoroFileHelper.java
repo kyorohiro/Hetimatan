@@ -88,6 +88,7 @@ public class CashKyoroFileHelper {
 	}
 
 	public static KyoroFile subSequence(CashKyoroFile file, long start, long end) throws IOException {
+		System.out.println("start="+start+",end="+end);
 		return new ReferenceModifierKyoroFile(file, start, end, 256, 3);
 	}
 

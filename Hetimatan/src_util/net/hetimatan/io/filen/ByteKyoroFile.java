@@ -99,7 +99,7 @@ public class ByteKyoroFile implements KyoroFile, KyoroByteOutput {
 		long prev = mSkip;
 		long skipsize = skip-prev; 
 		if(skipsize<0) {
-			throw new IOException();
+			throw new IOException("skipsize=skip("+skip+")-("+prev+"),skipsize<0");
 		} else {
 			mBuffer.shift((int)skipsize);
 		}
