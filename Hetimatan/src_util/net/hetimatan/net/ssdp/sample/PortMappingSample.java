@@ -40,19 +40,13 @@ public class PortMappingSample {
 			ServerSocket socket 
 			= new ServerSocket(8888);
 			show();
-//			client.init(InetAddress.getLocalHost().getHostAddress());//"192.168.0.3");
 			client.init("192.168.0.3");
 			client.addSSDPClientListener(new RObserver());
 			client.sendMessage(new SSDPSearchMessage(
 					SSDPSearchMessage.UPNP_INTERNET_GATEWAY,
-					//SSDPSearchMessage.UPNP_ROOT_DEVICE,
-//					SSDPClient.ST_CONTENT_DICTIONARY,
 					3));
 			client.startMessageReceiver();
-//			while(true) {
-//				DatagramPacket ret = client.receive();
-//				System.out.println(new String(ret.getData()));
-//			}
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -90,7 +84,6 @@ public class PortMappingSample {
 			try {
 				SSDPGetRootDevice cl = new SSDPGetRootDevice(header.getValue());
 				cl.startTask(null, null);
-//				client.startHttpGet(header.getValue());
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -107,35 +100,15 @@ public class PortMappingSample {
 		public void recvBody() throws IOException, InterruptedException {
 			super.recvBody();
 
-			try {
-				byte[] buffer = getBody();
-				System.out.println("##"+buffer.length+"##");
-				System.out.println("##"+buffer[buffer.length-1]+"##");
-				System.out.println("##"+buffer[buffer.length-2]+"##");
-				System.out.println("##"+buffer[buffer.length-3]+"##");
-				System.out.println("##"+buffer[buffer.length-4]+"##");
-				System.out.println("##"+buffer[buffer.length-5]+"##");
-				System.out.println("##"+buffer[buffer.length-6]+"##");
-				System.out.println("##"+buffer[buffer.length-7]+"##");
-				System.out.println("##"+buffer[buffer.length-8]+"##");
-				System.out.println("##"+buffer[buffer.length-9]+"##");
-				System.out.println("##"+buffer[buffer.length-10]+"##");
-				System.out.println("##"+buffer[buffer.length-11]+"##");
-				System.out.println("##"+buffer[buffer.length-12]+"##");
-				System.out.println("##"+buffer[buffer.length-13]+"##");
-				System.out.println("##"+buffer[buffer.length-14]+"##");
+			byte[] buffer = getBody();
 
-				System.out.println("##"+new String(buffer)+"##");
-				RootDeviceXml2ServiceInfo converter = new RootDeviceXml2ServiceInfo();
-				LinkedList<SSDPServiceInfo> infos = converter.createServiceList((new String(buffer)).getBytes());//buffer);//converter._data.getBytes());//buffer);
-				for(SSDPServiceInfo info:infos) {
-					System.out.println(""+info);
-				}
-			} finally {
-				//close();
+			System.out.println("##"+new String(buffer)+"##");
+			RootDeviceXml2ServiceInfo converter = new RootDeviceXml2ServiceInfo();
+			LinkedList<SSDPServiceInfo> infos = converter.createServiceList((new String(buffer)).getBytes());//buffer);//converter._data.getBytes());//buffer);
+			for(SSDPServiceInfo info:infos) {
+				System.out.println(""+info);
 			}
-		}
-		
+		}		
 	}
 }
 
