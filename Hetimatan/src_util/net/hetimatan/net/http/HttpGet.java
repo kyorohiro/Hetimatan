@@ -1,7 +1,9 @@
 package net.hetimatan.net.http;
 
 import java.io.IOException;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
+import java.util.Set;
 
 import net.hetimatan.io.file.KyoroFile;
 import net.hetimatan.io.file.MarkableFileReader;
@@ -79,6 +81,12 @@ public class HttpGet {
 		mIsPost = true;
 	}
 
+	//</omake>
+	private LinkedHashMap<String,String> mHeaderValue = new LinkedHashMap<>();
+	public void addHeader(String type, String value) {
+		mHeaderValue.put(type, value);
+	}
+	
 	public KyoroSocketEventRunner startTask(KyoroSocketEventRunner runner, EventTask last) {
 		HttpHistory.get().pushMessage(sId+"#startTask"+"\n");
 		mTaskManager.mLast = last;
@@ -97,6 +105,12 @@ public class HttpGet {
 		mCurrentRequest = createGetRequest();
 		mCurrentResponse = null;
 		mCurrentRequest.getUrlBuilder().setHost(mHost).setPath(mPath).setPort(mPort);
+		{
+			Set<String> keys = mHeaderValue.keySet();
+			for(String key: keys) {
+				mCurrentRequest.getUrlBuilder().putHeader(key, mHeaderValue.get(key));
+			}
+		}
 		mCurrentSocket = mCurrentRequest.connect(null);
 		if(mIsPost) {
 			mCurrentRequest.isPostMode(true);

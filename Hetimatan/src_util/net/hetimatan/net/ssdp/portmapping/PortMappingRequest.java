@@ -1,4 +1,4 @@
-package net.hetimatan.net.ssdp.sample;
+package net.hetimatan.net.ssdp.portmapping;
 
 public class PortMappingRequest {
 	public static final String CONTENT_TYPE = "text/xml";
