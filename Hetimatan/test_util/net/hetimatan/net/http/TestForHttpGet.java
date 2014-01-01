@@ -35,7 +35,7 @@ public class TestForHttpGet extends TestCase {
 			httpget.update("127.0.0.1", "/301?mv=http://127.0.0.1:8081", 8080);
 			EventTaskRunner runner = httpget.startTask(null, new CloseRunnerTask(null));
 
-			runner.waitByClose(10000);
+			runner.waitByClose(100000);
 			HttpGetResponse response = httpget.getGetResponse();
 
 			System.out.println("[A]"+new String(CashKyoroFileHelper.newBinary(response.getVF()))+"[A]");

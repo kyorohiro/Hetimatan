@@ -10,7 +10,8 @@ public class WGet {
 
 	public static void main(String[] args) {
 		System.out.println("start");
-
+		args = new String[1];
+		args[0] = "http://www.google.com";
 		if(args.length != 1) {
 			return;
 		}

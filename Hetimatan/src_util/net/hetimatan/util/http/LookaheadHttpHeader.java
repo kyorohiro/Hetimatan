@@ -30,65 +30,75 @@ public class LookaheadHttpHeader {
 		return System.currentTimeMillis()-mStartTime;
 	}
 
+	public static final byte[] FIRST_LF1= {'\r', '\n'};
+	public static final byte[] FIRST_LF2= {'\n'};
+
+	public static final byte[] LF1= {'\r', '\n', '\r', '\n'};
+	public static final byte[] LF2= {'\r', '\n', '\n'};
+	public static final byte[] LF3= {'\n', '\r', '\n'};
+	public static final byte[] LF4= {'\n', '\n'};
+	
+	private boolean match(byte[] buf, int bufLen, byte[] pat, boolean oneshot) {
+		if(bufLen<pat.length) {
+			return false;
+		}
+		boolean ret = false;
+
+		for(int j=0;j<bufLen;j++) {
+			ret = true;
+			for(int i=0;i<pat.length;i++) {
+				if(buf[i+j]!= pat[i]){
+					ret = false;
+					break;
+				}
+			}
+			if(oneshot||ret==true){break;}
+		}
+		return ret;
+	}
+
 	public int readByEndOfHeader(boolean checkCrlf) throws IOException {
 		MarkableReader reader = mCurrentReader;
 		reader.setBlockOn(false);
-		ByteArrayBuilder buffer = EventTaskRunner.getByteArrayBuilder();
-		buffer.setBufferLength(5*1024);
-		buffer.clear();
-		byte[] buf = buffer.getBuffer();
-		int bufLen = buf.length;
-		
-		do {
-			// read buffer
-			mCurrentReader.setBlockOn(false);
-			if(mIsFirst) {reader.seek(mStartPointer);}
-			else {reader.seek(reader.getFilePointer()-4);}
-			int len = reader.read(buf, 0, buf.length);
-			if(len<0) {return EOF;}
-			if(mIsFirst) {
-				if(len==1&&(buf[0]=='\n')){
-					mCurrentReader.seek(mStartPointer+1);
-					return CRLF;
-				} else if(len==2&&buf[0]=='\r'&&buf[1] =='\n') {
-					mCurrentReader.seek(mStartPointer+2);
-					return CRLF;
-				}
-				if(len>4) {
-					mIsFirst = false;
-				} else {
-					if(0>mCurrentReader.read(buf, 0, bufLen)){
-						return EOF;
-					} else {
-						return KEEP;
+
+		ByteArrayBuilder cashBuffer = EventTaskRunner.getByteArrayBuilder();
+		cashBuffer.setBufferLength(5*1024);
+		cashBuffer.clear();
+		byte[] buf = cashBuffer.getBuffer();
+
+		int start = 0;
+		int len = 0;
+		try {
+			reader.pushMark();
+			do {
+				len =reader.read(buf, start, buf.length);
+				if(mIsFirst) {
+					if(match(buf, len, FIRST_LF1, true)){return LookaheadHttpHeader.CRLF;}
+					if(match(buf, len, FIRST_LF2, true)){return LookaheadHttpHeader.CRLF;}
+					if(len >= 2) {
+						mIsFirst = false;
 					}
 				}
-			}
-			for(int i=0;i<len;i++) {
-				if(buf[i]!='\n'&&buf[i]!='\r') {
-					continue;
+				
+				if(match(buf, len, LF1, false)){return LookaheadHttpHeader.CRLF;}
+				if(match(buf, len, LF2, false)){return LookaheadHttpHeader.CRLF;}
+				if(match(buf, len, LF3, false)){return LookaheadHttpHeader.CRLF;}
+				if(match(buf, len, LF4, false)){return LookaheadHttpHeader.CRLF;}			
+				
+				if(reader.isEOF()||len<0) {
+					return LookaheadHttpHeader.EOF;
 				}
-				if(i+1<len&&buf[i] == '\n' &&buf[i+1]=='\n'){
-					mCurrentReader.seek(mCurrentReader.length()-len+i+2);
-					return EOF;
+				else if(len < buf.length) {
+					return LookaheadHttpHeader.KEEP;
 				}
-				if(i+2<len&&buf[i] == '\n' &&buf[i] == '\r' &&buf[i+1]=='\n'){
-					mCurrentReader.seek(mCurrentReader.length()-len+i+3);
-					return EOF;
-				}
-				if(i+2<len&&buf[i] == '\r' &&buf[i] == '\n' &&buf[i+1]=='\n'){
-					mCurrentReader.seek(mCurrentReader.length()-len+i+3);
-					return EOF;
-				}
-				if(i+3<len&&buf[i] == '\r' &&buf[i+1]=='\n'&&buf[i+2] == '\r' &&buf[i+3]=='\n'){
-					mCurrentReader.seek(mCurrentReader.length()-len+i+4);
-					return EOF;
-				}
-			}
-			len = mCurrentReader.read(buf, 0, bufLen);
-			if(len<0) {return EOF;}
-			else if(len == 0) {return KEEP;}
-		} while (true);
+				long next = reader.getFilePointer()-LF1.length;
+				if(next<0) {next=0;}
+				reader.seek(next);
+			} while(true);
+		} finally {
+			reader.backToMark();
+			reader.popMark();
+		}
 	}
 
 	public static boolean readByEndOfHeader(LookaheadHttpHeader headerChunk, MarkableReader currentReader) throws IOException {
