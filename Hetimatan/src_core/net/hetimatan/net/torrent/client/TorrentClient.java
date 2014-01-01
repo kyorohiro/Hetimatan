@@ -40,9 +40,11 @@ public class TorrentClient {
 	 * the first character in the peer-id is PEERID_HEAD
 	 * BEP20
 	 */
+	private static int d = 0;
 	public static String createPeerIdAsPercentEncode() {
 		byte[] peerId = new byte[20]; 
-		Random random = new Random(System.currentTimeMillis());
+		Random random = new Random(System.currentTimeMillis()+d);
+		d++;
 		random.nextBytes(peerId);
 		System.arraycopy(PEERID_HEAD.getBytes(), 0, peerId, 0, 8);
 		PercentEncoder encoder = new PercentEncoder();
