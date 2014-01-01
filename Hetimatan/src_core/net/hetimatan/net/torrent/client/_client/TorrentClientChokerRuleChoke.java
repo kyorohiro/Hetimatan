@@ -34,7 +34,7 @@ public class TorrentClientChokerRuleChoke implements TorrentClientListener {
 		TorrentClientFrontManager manager = client.getTorrentPeerManager();
 		TorrentClientSetting setting = client.getSetting();
 
-		if (manager.numOfFront() < setting.getNumOfUnchoker()) {
+		if (manager.numOfUnchokePeer() < setting.getNumOfUnchoker()) {
 			choke(client);
 		}		
 	}
@@ -61,7 +61,7 @@ public class TorrentClientChokerRuleChoke implements TorrentClientListener {
 			}
 		}
 		
-		for(TorrentClientFront front : cutted) {
+		for(TorrentClientFront front : append) {
 			try {
 				front.sendUncoke();
 			} catch (IOException e) {
@@ -77,6 +77,7 @@ public class TorrentClientChokerRuleChoke implements TorrentClientListener {
 		int num = manager.numOfFront();
 		for(int i=0;i<num;i++) {
 			TorrentClientFront front = manager.getTorrentFront(i);
+			if(front == null) {continue;}
 			TorrentClientFrontTargetInfo targetInfo = front.getTargetInfo();
 			TorrentFrontMyInfo ownInfo = front.getMyInfo();
 			if(TorrentClientFront.FALSE == ownInfo.isChoked()) {
@@ -124,6 +125,7 @@ public class TorrentClientChokerRuleChoke implements TorrentClientListener {
 		Random r = new Random(System.currentTimeMillis());
 		while(unchokeList.size()<setting.getNumOfUnchoker()&&0<chokeList.size()){
 			int next = r.nextInt()%chokeList.size();
+			if(next<0){next*=-1;}
 			TorrentClientFront nf = chokeList.remove(next);
 			unchokeList.add(nf);
 			ret.add(nf);

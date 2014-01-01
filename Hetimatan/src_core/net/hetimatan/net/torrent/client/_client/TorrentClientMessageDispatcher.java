@@ -21,96 +21,96 @@ public class TorrentClientMessageDispatcher {
 
 	public void dispatchTorrentMessage(TorrentClientFront front, TorrentMessage message) throws IOException {
 		front.onReceiveMessage(message);
-		Iterator<WeakReference<TorrentClientListener>>	ite = mObservers.iterator();
-		while(ite.hasNext()) {
-			WeakReference<TorrentClientListener> observerref = ite.next();
+		for(int i=0;i<mObservers.size();i++) {
+			WeakReference<TorrentClientListener> observerref = mObservers.get(i);
 			TorrentClientListener observer = observerref.get();
 			if(null == observerref.get()) {
 				mObservers.remove(observerref);
+				continue;
 			}
 			observer.onReceiveMessage(front, message);
 		}
 	}
 
 	public void dispatchTrackerResponse(TorrentClient client, TrackerClient tracker) throws IOException {
-		Iterator<WeakReference<TorrentClientListener>>	ite = mObservers.iterator();
-		while(ite.hasNext()) {
-			WeakReference<TorrentClientListener> observerref = ite.next();
+		for(int i=0;i<mObservers.size();i++) {
+			WeakReference<TorrentClientListener> observerref = mObservers.get(i);
 			TorrentClientListener observer = observerref.get();
 			if(null == observerref.get()) {
 				mObservers.remove(observerref);
+				continue;
 			}
 			observer.onResponsePeerList(client, tracker);
 		}
 	}
 
 	public void dispatchCloseFront(TorrentClientFront front) throws IOException {
-		Iterator<WeakReference<TorrentClientListener>>	ite = mObservers.iterator();
-		while(ite.hasNext()) {
-			WeakReference<TorrentClientListener> observerref = ite.next();
+		for(int i=0;i<mObservers.size();i++) {
+			WeakReference<TorrentClientListener> observerref = mObservers.get(i);
 			TorrentClientListener observer = observerref.get();
 			if(null == observerref.get()) {
 				mObservers.remove(observerref);
+				continue;
 			}
 			observer.onClose(front);
 		}
 	}
 
 	public void dispatchShakeHand(TorrentClientFront front) throws IOException {
-		Iterator<WeakReference<TorrentClientListener>>	ite = mObservers.iterator();
-		while(ite.hasNext()) {
-			WeakReference<TorrentClientListener> observerref = ite.next();
+		for(int i=0;i<mObservers.size();i++) {
+			WeakReference<TorrentClientListener> observerref = mObservers.get(i);
 			TorrentClientListener observer = observerref.get();
 			if(null == observerref.get()) {
 				mObservers.remove(observerref);
+				continue;
 			}
-			observer.onShakeHand(front);
+			observer.onShakeHand(front);			
 		}
 	}
 
 	public void dispatchConnection(TorrentClientFront front) throws IOException {
-		Iterator<WeakReference<TorrentClientListener>>	ite = mObservers.iterator();
-		while(ite.hasNext()) {
-			WeakReference<TorrentClientListener> observerref = ite.next();
+		for(int i=0;i<mObservers.size();i++) {
+			WeakReference<TorrentClientListener> observerref = mObservers.get(i);
 			TorrentClientListener observer = observerref.get();
 			if(null == observerref.get()) {
 				mObservers.remove(observerref);
+				continue;
 			}
 			observer.onConnection(front);
 		}
 	}
 
 	public void dispatchClose(TorrentClient client) throws IOException {
-		Iterator<WeakReference<TorrentClientListener>>	ite = mObservers.iterator();
-		while(ite.hasNext()) {
-			WeakReference<TorrentClientListener> observerref = ite.next();
+		for(int i=0;i<mObservers.size();i++) {
+			WeakReference<TorrentClientListener> observerref = mObservers.get(i);
 			TorrentClientListener observer = observerref.get();
 			if(null == observerref.get()) {
 				mObservers.remove(observerref);
+				continue;
 			}
 			observer.onClose(client);
 		}
 	}
 	
 	public void dispatchSendTorrentMessage(TorrentClientFront front, TorrentMessage message) throws IOException {
-		Iterator<WeakReference<TorrentClientListener>>	ite = mObservers.iterator();
-		while(ite.hasNext()) {
-			WeakReference<TorrentClientListener> observerref = ite.next();
+		for(int i=0;i<mObservers.size();i++) {
+			WeakReference<TorrentClientListener> observerref = mObservers.get(i);
 			TorrentClientListener observer = observerref.get();
 			if(null == observerref.get()) {
 				mObservers.remove(observerref);
+				continue;
 			}
 			observer.onSendMessage(front, message);
 		}
 	}
 
 	public void dispatchIntervalAction(TorrentClient client) throws IOException {
-		Iterator<WeakReference<TorrentClientListener>>	ite = mObservers.iterator();
-		while(ite.hasNext()) {
-			WeakReference<TorrentClientListener> observerref = ite.next();
+		for(int i=0;i<mObservers.size();i++) {
+			WeakReference<TorrentClientListener> observerref = mObservers.get(i);
 			TorrentClientListener observer = observerref.get();
 			if(null == observerref.get()) {
 				mObservers.remove(observerref);
+				continue;
 			}
 			observer.onInterval(client);
 		}

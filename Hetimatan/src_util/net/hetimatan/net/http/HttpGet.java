@@ -131,7 +131,7 @@ public class HttpGet {
 			CashKyoroFile vf = mCurrentResponse.getVF();
 			byte[] buffer = getBody();
 			vf.read(buffer, 0, buffer.length);
-			System.out.println("@1:"+new String(buffer, 0, mCurrentResponse.getVFOffset()));
+			//System.out.println("@1:"+new String(buffer, 0, mCurrentResponse.getVFOffset()));
 			System.out.println("@2:"+new String(buffer));
 			System.out.println("@3:"+mCurrentResponse.getVFOffset()+","+buffer.length);
 

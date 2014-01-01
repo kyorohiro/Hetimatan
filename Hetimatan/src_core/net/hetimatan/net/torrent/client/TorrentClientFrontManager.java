@@ -27,6 +27,17 @@ public class TorrentClientFrontManager {
 		return ret;
 	}
 
+	public int numOfUnchokePeer() {
+		int ret = 0;
+		for(int i=0;i<numOfFront();i++) {
+			TorrentClientFront front = getTorrentFront(i);
+			if(front == null) {continue;}
+			if(front.getMyInfo().isChoked()== TorrentClientFront.FALSE) {
+				ret+=1;
+			}
+		}
+		return ret;
+	}
 	public boolean addTorrentFront(TorrentClientFront front) throws IOException {
 		return addTorrentFront(front.getPeer(), front);
 	}
@@ -76,6 +87,7 @@ public class TorrentClientFrontManager {
 
 	public TorrentClientFront getTorrentFront(int i) {
 		TrackerPeerInfo key = getFrontPeer(i);
+		System.out.println("##==["+i+"]==##"+key.getHostName()+":"+key.getPort());
 		return getTorrentFront(key);
 	}
 
@@ -83,6 +95,7 @@ public class TorrentClientFrontManager {
 		if(peer == null) {return null;}
 		NPeerInfo info = mFrontList.get(peer);
 		if(info == null) {return null;}
+		System.out.println("##====##"+info.toString());
 		return info.getFront();
 	}
 

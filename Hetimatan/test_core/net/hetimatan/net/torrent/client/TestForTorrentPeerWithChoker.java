@@ -135,7 +135,7 @@ public class TestForTorrentPeerWithChoker extends TestCase {
 		front003.revcShakehand();
 		front004.revcShakehand();
 		front005.revcShakehand();
-
+		//Thread.sleep(3000);
 		//
 		//
 		//
