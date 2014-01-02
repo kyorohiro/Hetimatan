@@ -3,6 +3,8 @@ package net.hetimatan.net.ssdp;
 import java.util.HashMap;
 import java.util.Set;
 
+import sun.util.logging.resources.logging;
+
 public class SSDPServiceInfo {
 	public static final String SERVICE_TYPE = "servicetype";
 	public static final String SERVICE_ID =  "serviceid";
@@ -10,6 +12,15 @@ public class SSDPServiceInfo {
 	public static final String EVENT_SUB_URL = "eventsuburl";
 	public static final String SCPDURL = "scpdurl";
 	
+	private String mLocation = "";
+	public SSDPServiceInfo(String location) {
+		mLocation = location;
+	}
+
+	public String getLocation() {
+		return mLocation;
+	}
+
 	private HashMap<String, String> mMsap = new HashMap<>();
 	public void add(String key, String value) {
 		mMsap.put(key, value);

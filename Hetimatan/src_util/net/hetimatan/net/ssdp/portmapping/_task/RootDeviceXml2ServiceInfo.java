@@ -19,8 +19,8 @@ import org.xml.sax.InputSource;
 
 public class RootDeviceXml2ServiceInfo {
 
-	public SSDPServiceInfo createSSDPServiceInfo(Node serviceNode) {
-		SSDPServiceInfo ret = new SSDPServiceInfo();
+	public SSDPServiceInfo createSSDPServiceInfo(String location, Node serviceNode) {
+		SSDPServiceInfo ret = new SSDPServiceInfo(location);
 
 		if(serviceNode == null) {return ret;}
 		NodeList list = serviceNode.getChildNodes();
@@ -37,7 +37,7 @@ public class RootDeviceXml2ServiceInfo {
 		return ret;
 	}
 
-	public LinkedList<SSDPServiceInfo> createServiceList(byte[] buffer) throws IOException {
+	public LinkedList<SSDPServiceInfo> createServiceList(String location, byte[] buffer) throws IOException {
 		try {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			factory.setNamespaceAware(false);
@@ -57,7 +57,7 @@ public class RootDeviceXml2ServiceInfo {
 				for(int i=0;i<list.getLength();i++) {
 					Node n1 = list.item(i);
 					if(n1.getNodeName().equals("service")) {
-						ret.push(createSSDPServiceInfo(n1));
+						ret.push(createSSDPServiceInfo(location, n1));
 					} else {
 						nod.push(n1);
 					}

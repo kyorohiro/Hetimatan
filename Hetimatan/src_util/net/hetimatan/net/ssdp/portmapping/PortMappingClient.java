@@ -10,6 +10,7 @@ import net.hetimatan.net.ssdp.message.SSDPSearchMessage;
 import net.hetimatan.net.ssdp.message.SSDPStartLine;
 import net.hetimatan.net.ssdp.portmapping._task.WorkerDelPortMapping;
 import net.hetimatan.net.ssdp.portmapping._task.WorkerAddPortMapping;
+import net.hetimatan.net.ssdp.portmapping._task.WorkerGetExternalIpAddress;
 import net.hetimatan.net.ssdp.portmapping._task.WorkerGetRootDevice;
 import net.hetimatan.util.http.HttpRequestHeader;
 
@@ -92,19 +93,21 @@ public class PortMappingClient {
 		}
 	}
 
+	private WorkerGetRootDevice mWorkerGetRootDevice = null; 
 	public void getRootDevice(String location) {
 		try {
-			WorkerGetRootDevice cl = new WorkerGetRootDevice(location, this);
-			cl.startTask(null, null);
+			mWorkerGetRootDevice = new WorkerGetRootDevice(location, this);
+			mWorkerGetRootDevice.startTask(null, null);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
+	private WorkerGetExternalIpAddress mWorkerGetExternalIpAddress = null; 
 	public void getExternalIpAddress(String location) {
 		try {
-			WorkerGetRootDevice cl = new WorkerGetRootDevice(location, this);
-			cl.startTask(null, null);
+			mWorkerGetExternalIpAddress = new WorkerGetExternalIpAddress(location, this);
+			mWorkerGetExternalIpAddress.startTask(null, null);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

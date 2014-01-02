@@ -10,8 +10,10 @@ import net.hetimatan.net.ssdp.portmapping.PortMappingClient;
 
 public class WorkerGetRootDevice extends HttpGet {
 	private WeakReference<PortMappingClient> mClient = null;
+	private String mLocation = null;
 	public WorkerGetRootDevice(String url, PortMappingClient client) throws IOException {
 		super();
+		mLocation = url;
 		update(url);
 		mClient = new WeakReference<PortMappingClient>(client);
 	}
@@ -24,7 +26,7 @@ public class WorkerGetRootDevice extends HttpGet {
 		System.out.println("##"+new String(buffer)+"##");
 
 		RootDeviceXml2ServiceInfo converter = new RootDeviceXml2ServiceInfo();
-		LinkedList<SSDPServiceInfo> infos = converter.createServiceList((new String(buffer)).getBytes());//buffer);//converter._data.getBytes());//buffer);
+		LinkedList<SSDPServiceInfo> infos = converter.createServiceList(mLocation, (new String(buffer)).getBytes());//buffer);//converter._data.getBytes());//buffer);
 		for(SSDPServiceInfo serviceInfo:infos) {
 			{
 				PortMappingClient client = mClient.get();

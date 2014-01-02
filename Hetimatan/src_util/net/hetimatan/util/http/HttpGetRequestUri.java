@@ -62,6 +62,16 @@ public class HttpGetRequestUri extends HttpObject {
 		return mValues.keySet();
 	}
 
+	//
+	// todo
+	public void setPath(String path) {
+		if(path.startsWith("/")) {
+			mPath = path;
+		} else {
+			mPath = "/"+path;
+		}
+	}
+
 	public String getPath() {
 		return mPath;
 	}
@@ -108,6 +118,16 @@ public class HttpGetRequestUri extends HttpObject {
 		}
 	}
 
+	public static HttpGetRequestUri decode(String location) throws IOException {
+		MarkableFileReader reader = null;
+		try {
+			reader = new MarkableFileReader(location.getBytes());
+			HttpGetRequestUri geturi = HttpGetRequestUri.decode(reader);
+			return geturi;
+		} finally {
+			reader.close();
+		}
+	}
 	public static HttpGetRequestUri decode(MarkableReader reader) throws IOException {
 		try {
 			return astarisk(reader);
