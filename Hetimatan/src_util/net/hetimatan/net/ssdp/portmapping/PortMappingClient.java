@@ -2,10 +2,12 @@ package net.hetimatan.net.ssdp.portmapping;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+
 import net.hetimatan.net.ssdp.SSDPClient;
 import net.hetimatan.net.ssdp.SSDPClientListener;
 import net.hetimatan.net.ssdp.message.SSDPMessage;
 import net.hetimatan.net.ssdp.message.SSDPSearchMessage;
+import net.hetimatan.net.ssdp.message.SSDPStartLine;
 import net.hetimatan.net.ssdp.portmapping._task.WorkerDelPortMapping;
 import net.hetimatan.net.ssdp.portmapping._task.WorkerAddPortMapping;
 import net.hetimatan.net.ssdp.portmapping._task.WorkerGetRootDevice;
@@ -39,6 +41,7 @@ public class PortMappingClient {
 
 	public void start() throws IOException {
 		mClient.init(mNicHostName);
+		mClient.addSSDPClientListener(new RObserver(this));
 		mClient.startMessageReceiver();
 	}
 
@@ -48,13 +51,27 @@ public class PortMappingClient {
 				3));
 	}
 
-	public void getRootDevice(SSDPMessage message) {
-		if(!"200".equals(message.getLine().getCode())) {
-			return;
-		}
-		HttpRequestHeader header = message.getHeader("location");
-		if(header == null) { return; }
-		getRootDevice(header.getValue());
+	public boolean getRootDevice(SSDPMessage message) {
+		if(!("200".equals(message.getLine().getCode()))) { 
+			return false;}
+		if(!(SSDPStartLine.TYPE_RESPONSE == message.getLine().getType())) {
+			return false;}
+
+		HttpRequestHeader locationHeader = message.getHeader("location");
+		HttpRequestHeader stHeader = message.getHeader("st");
+
+		if(locationHeader == null|| stHeader == null) {
+			return false;}
+		
+		String location = locationHeader.getValue();
+		String st = stHeader.getValue();
+		System.out.println("<SimplePortMapping><location>"+location+"</location></SimplePortMapping>");
+		System.out.println("<SimplePortMapping><st>"+st+"</st></SimplePortMapping>");
+		if(!st.contains("InternetGatewayDevice:1")) {
+			return false;}
+
+		getRootDevice(location);
+		return true;
 	}
 
 	public void addPortMapping(String location, PortMappingInfo info) {
