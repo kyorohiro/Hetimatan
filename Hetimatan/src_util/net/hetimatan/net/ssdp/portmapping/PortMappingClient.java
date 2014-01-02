@@ -1,81 +1,153 @@
 package net.hetimatan.net.ssdp.portmapping;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.Inet4Address;
-import java.net.Inet6Address;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.MulticastSocket;
-import java.net.NetworkInterface;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.net.SocketAddress;
-import java.net.SocketException;
-import java.util.Enumeration;
+import java.lang.ref.WeakReference;
 import java.util.LinkedList;
+import java.util.Stack;
 
+import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.xpath.XPath;
 
-import com.sun.xml.internal.messaging.saaj.packaging.mime.Header;
-import com.sun.xml.internal.txw2.Document;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 
+import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.net.http.HttpGet;
-import net.hetimatan.net.http.request.HttpGetResponse;
 import net.hetimatan.net.ssdp.SSDPClient;
 import net.hetimatan.net.ssdp.SSDPClientListener;
 import net.hetimatan.net.ssdp.message.SSDPMessage;
 import net.hetimatan.net.ssdp.message.SSDPSearchMessage;
-import net.hetimatan.net.ssdp.portmapping.RootDeviceXml2ServiceInfo.SSDPServiceInfo;
-import net.hetimatan.util.http.HttpRequest;
+import net.hetimatan.net.ssdp.portmapping._task.RootDeviceXml2ServiceInfo;
+import net.hetimatan.net.ssdp.portmapping._task.RootDeviceXml2ServiceInfo.SSDPServiceInfo;
+import net.hetimatan.net.ssdp.portmapping._task.SSDPGetRootDevice;
 import net.hetimatan.util.http.HttpRequestHeader;
 
 public class PortMappingClient {
 
+	private PortMappingClientEventDispatcher mDispatcher = new PortMappingClientEventDispatcher();
+	private SSDPClient mClient = null;
+	private String mNicHostName = null;
 
+	protected PortMappingClient() {
+		mClient = new SSDPClient();
+	}
 
-	public static void connect(ServerSocket socket) throws IOException {
-		socket.bind(new InetSocketAddress(7000));
+	public static PortMappingClient startPortMapping(String nicHostName, PortMappingClientListener listener) throws IOException {
+		PortMappingClient client = new PortMappingClient();
+		client.setLocation(nicHostName);
+		client.setListener(listener);
+		client.start();
+		return client;
+	}
+
+	public void setLocation(String nicHostName) {
+		mNicHostName = nicHostName;
+	}
+
+	public PortMappingClientEventDispatcher getDispatcher() {
+		return mDispatcher;
+	}
+
+	public void start() throws IOException {
+		mClient.init(mNicHostName);
+		mClient.startMessageReceiver();
+	}
+
+	public void searchDevice() throws IOException {
+		mClient.sendMessage(new SSDPSearchMessage(
+				SSDPSearchMessage.UPNP_INTERNET_GATEWAY,
+				3));
+	}
+
+	public void getRootDevice(SSDPMessage message) {
+		if(!"200".equals(message.getLine().getCode())) {
+			return;
+		}
+		HttpRequestHeader header = message.getHeader("location");
+		if(header == null) { return; }
+		getRootDevice(header.getValue());
+	}
+
+	public void getRootDevice(String location) {
+		try {
+			SSDPGetRootDevice cl = new SSDPGetRootDevice(location, this);
+			cl.startTask(null, null);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void getExternalIpAddress(String location) {
+		try {
+			SSDPGetRootDevice cl = new SSDPGetRootDevice(location, this);
+			cl.startTask(null, null);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void stop() {
+		
+	}
+
+	public void setListener(PortMappingClientListener observer) {
+		mDispatcher.addObserver(observer);
 	}
 
 	public static class RObserver implements SSDPClientListener {
-		@Override
-		public void onReceiveSSDPMessage(SSDPClient client, SSDPMessage request) {
-			System.out.println("##\r\n"+request.toString()+"\r\n##");
-			if(!"200".equals(request.getLine().getCode())) {
-				return;
-			}
 
-			HttpRequestHeader header = request.getHeader("location");
-			try {
-				SSDPGetRootDevice cl = new SSDPGetRootDevice(header.getValue());
-				cl.startTask(null, null);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-	}
+		private WeakReference<PortMappingClient> mClient = null;
 
-	public static class SSDPGetRootDevice extends HttpGet {
-		public SSDPGetRootDevice(String url) throws IOException {
-			super();
-			update(url);
+		public RObserver(PortMappingClient client) {
+			mClient = new WeakReference<PortMappingClient>(client);
 		}
 
 		@Override
-		public void recvBody() throws IOException, InterruptedException {
-			super.recvBody();
+		public void onReceiveSSDPMessage(SSDPClient client, SSDPMessage message) {
 
-			byte[] buffer = getBody();
-
-			System.out.println("##"+new String(buffer)+"##");
-			RootDeviceXml2ServiceInfo converter = new RootDeviceXml2ServiceInfo();
-			LinkedList<SSDPServiceInfo> infos = converter.createServiceList((new String(buffer)).getBytes());//buffer);//converter._data.getBytes());//buffer);
-			for(SSDPServiceInfo info:infos) {
-				System.out.println(""+info);
+			PortMappingClient portMapping = mClient.get();
+			if(portMapping != null) {
+				portMapping.getDispatcher().dispatchReceiveSSDPMessage(client, message);
 			}
-		}		
+
+			System.out.println("##\r\n"+message.toString()+"\r\n##");
+
+		}
 	}
+
+
+
+
+
 }
-
+/*
+ * 
+	public static void main(String[] args) {
+		String address = "http://192.168.0.1:2869/upnp/control/WANIPConn1";
+		PortMappingRequest request = new PortMappingRequest();
+		try {
+			HttpGet getter = new HttpGet();
+			{
+				CashKyoroFile body = new CashKyoroFile(request.createBody_GetExternalIpAddress().getBytes());
+				getter.setBody(body);
+			}
+			{
+				getter.addHeader(PortMappingRequest.SOAPACTION_TYPE, PortMappingRequest.SOAPACTION_VALUE_GET_EXTERNAL_IP_ADDRESS);
+			}
+			getter.update(address);
+			CloseRunnerTask close = new CloseRunnerTask(null);
+			KyoroSocketEventRunner runner = getter.startTask(null, close);
+			runner.waitByClose(30000);
+			runner.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch(InterruptedException e) {
+			e.printStackTrace();			
+		} finally {
+			System.out.println("end");
+		}
+	}
+*/
