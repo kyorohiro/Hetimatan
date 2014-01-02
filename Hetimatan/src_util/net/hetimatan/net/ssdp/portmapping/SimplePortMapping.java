@@ -6,18 +6,16 @@ import net.hetimatan.io.file.MarkableFileReader;
 import net.hetimatan.net.ssdp.SSDPClient;
 import net.hetimatan.net.ssdp.SSDPServiceInfo;
 import net.hetimatan.net.ssdp.message.SSDPMessage;
-import net.hetimatan.net.ssdp.message.SSDPStartLine;
 import net.hetimatan.util.http.HttpGetRequestUri;
-import net.hetimatan.util.http.HttpRequestHeader;
 
 //
 // auto portmapping
 // 1. search device 
 //   PortMappingClient.searchDevice();
-// 2. request root device to service list
+// 2. request service list to root device  
 //   PortMappingClient.getRootDevice(message);
-// 3. 
-//
+// 3. request externalIpAddress to router
+//   PortMappingClient.getExternalIpAddress(postUrl);
 public class SimplePortMapping {
 
 	// --------------------------------------------------------------------------
