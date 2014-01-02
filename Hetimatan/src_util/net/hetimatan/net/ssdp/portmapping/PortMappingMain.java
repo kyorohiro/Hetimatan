@@ -5,7 +5,6 @@ import java.net.InetAddress;
 
 import net.hetimatan.net.ssdp.SSDPClient;
 import net.hetimatan.net.ssdp.message.SSDPMessage;
-import net.hetimatan.net.ssdp.portmapping._task.RootDeviceXml2ServiceInfo.SSDPServiceInfo;
 
 public class PortMappingMain {
 	public static void main(String[] args) {

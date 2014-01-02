@@ -6,7 +6,7 @@ import java.util.LinkedList;
 
 import net.hetimatan.net.http.HttpGet;
 import net.hetimatan.net.ssdp.portmapping.PortMappingClient;
-import net.hetimatan.net.ssdp.portmapping._task.RootDeviceXml2ServiceInfo.SSDPServiceInfo;
+import net.hetimatan.net.ssdp.portmapping.SSDPServiceInfo;
 
 public class WorkerGetRootDevice extends HttpGet {
 	private WeakReference<PortMappingClient> mClient = null;

@@ -4,7 +4,6 @@ import java.util.LinkedList;
 
 import net.hetimatan.net.ssdp.SSDPClient;
 import net.hetimatan.net.ssdp.message.SSDPMessage;
-import net.hetimatan.net.ssdp.portmapping._task.RootDeviceXml2ServiceInfo.SSDPServiceInfo;
 
 public class PortMappingClientEventDispatcher {
 	private LinkedList<PortMappingClientListener> mObserverList = new LinkedList<>();

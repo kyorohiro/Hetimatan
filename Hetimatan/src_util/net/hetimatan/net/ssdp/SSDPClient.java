@@ -53,7 +53,7 @@ public class SSDPClient {
 	public void send(byte[] data, int length) throws IOException {
 		DatagramPacket dp = new DatagramPacket(data, length, mReceiveGroup);
 		mReceiveSocket.send(dp);
-		System.out.println("<MESSAGE>"+new String(data,length)+"</MESSAGE>");
+		System.out.println("<MESSAGE>"+new String(data, 0, length)+"</MESSAGE>");
 	}
 
 	public DatagramPacket receive() throws IOException {
@@ -129,17 +129,6 @@ public class SSDPClient {
 				e.printStackTrace();
 			}			
 		}	
-	}
-
-	//
-	// GetData
-	//
-	private KyoroSocketEventRunner mRunner = null;
-	private HttpGet wGet = null;
-	public void startHttpGet(String url) throws IOException {
-		wGet = new HttpGet();
-		wGet.update(url);
-		mRunner = wGet.startTask(null, null);
 	}
 	
 }

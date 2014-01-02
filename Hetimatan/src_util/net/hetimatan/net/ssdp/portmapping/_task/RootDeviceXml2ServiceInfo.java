@@ -2,24 +2,17 @@ package net.hetimatan.net.ssdp.portmapping._task;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Set;
 import java.util.Stack;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
+import net.hetimatan.net.ssdp.portmapping.SSDPServiceInfo;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
 
 
@@ -76,32 +69,6 @@ public class RootDeviceXml2ServiceInfo {
 		}
 	}
 
-	public static class SSDPServiceInfo {
-		public static final String SERVICE_TYPE = "servicetype";
-		public static final String SERVICE_ID =  "serviceid";
-		public static final String CONTROL_URL = "controlurl";
-		public static final String EVENT_SUB_URL = "eventsuburl";
-		public static final String SCPDURL = "scpdurl";
-		
-		private HashMap<String, String> mMsap = new HashMap<>();
-		public void add(String key, String value) {
-			mMsap.put(key, value);
-		}
 
-		public String toString() {
-			Set<String> keys = mMsap.keySet();
-			StringBuilder builder = new StringBuilder();
-			for(String key:keys) {
-				builder.append("#"+key+":"+mMsap.get(key)+"#");
-			}
-			return builder.toString();
-		}
-
-		public String get(String key) {
-			String ret = mMsap.get(key);
-			if(ret == null) {return "";}
-			else {return ret;}
-		}
-	}
 
 }

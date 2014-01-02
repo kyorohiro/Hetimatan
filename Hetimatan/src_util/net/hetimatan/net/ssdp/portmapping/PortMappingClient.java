@@ -1,28 +1,12 @@
 package net.hetimatan.net.ssdp.portmapping;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
-import java.util.LinkedList;
-import java.util.Stack;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
-
-import net.hetimatan.io.filen.CashKyoroFile;
-import net.hetimatan.net.http.HttpGet;
 import net.hetimatan.net.ssdp.SSDPClient;
 import net.hetimatan.net.ssdp.SSDPClientListener;
 import net.hetimatan.net.ssdp.message.SSDPMessage;
 import net.hetimatan.net.ssdp.message.SSDPSearchMessage;
-import net.hetimatan.net.ssdp.portmapping._task.RootDeviceXml2ServiceInfo;
 import net.hetimatan.net.ssdp.portmapping._task.WorkerDelPortMapping;
-import net.hetimatan.net.ssdp.portmapping._task.RootDeviceXml2ServiceInfo.SSDPServiceInfo;
 import net.hetimatan.net.ssdp.portmapping._task.WorkerAddPortMapping;
 import net.hetimatan.net.ssdp.portmapping._task.WorkerGetRootDevice;
 import net.hetimatan.util.http.HttpRequestHeader;
@@ -138,36 +122,4 @@ public class PortMappingClient {
 		}
 	}
 
-
-
-
-
 }
-/*
- * 
-	public static void main(String[] args) {
-		String address = "http://192.168.0.1:2869/upnp/control/WANIPConn1";
-		PortMappingRequest request = new PortMappingRequest();
-		try {
-			HttpGet getter = new HttpGet();
-			{
-				CashKyoroFile body = new CashKyoroFile(request.createBody_GetExternalIpAddress().getBytes());
-				getter.setBody(body);
-			}
-			{
-				getter.addHeader(PortMappingRequest.SOAPACTION_TYPE, PortMappingRequest.SOAPACTION_VALUE_GET_EXTERNAL_IP_ADDRESS);
-			}
-			getter.update(address);
-			CloseRunnerTask close = new CloseRunnerTask(null);
-			KyoroSocketEventRunner runner = getter.startTask(null, close);
-			runner.waitByClose(30000);
-			runner.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch(InterruptedException e) {
-			e.printStackTrace();			
-		} finally {
-			System.out.println("end");
-		}
-	}
-*/

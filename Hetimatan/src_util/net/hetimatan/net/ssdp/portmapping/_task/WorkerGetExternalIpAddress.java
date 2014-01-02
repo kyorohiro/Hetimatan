@@ -3,7 +3,6 @@ package net.hetimatan.net.ssdp.portmapping._task;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
-import java.util.LinkedList;
 import java.util.Stack;
 
 import javax.xml.parsers.DocumentBuilder;
