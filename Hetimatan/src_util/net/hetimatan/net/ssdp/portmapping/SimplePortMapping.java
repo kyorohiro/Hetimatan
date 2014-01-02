@@ -20,6 +20,9 @@ import net.hetimatan.util.http.HttpRequestHeader;
 //
 public class SimplePortMapping {
 
+	// --------------------------------------------------------------------------
+	//
+	// --------------------------------------------------------------------------
 	// todo
 	// weak reference issue
 	// need following property
@@ -35,12 +38,22 @@ public class SimplePortMapping {
 		}
 	}
 
+	// --------------------------------------------------------------------------
+	//
+	// --------------------------------------------------------------------------
+
+
 	private PortMappingClient mClient = null;
 	private String mNicHostName = "";
 	private _Observer mObserver = new _Observer();
+	private String mCurrentExternalIPAddress = "";
 
 	public SimplePortMapping(String nicHostName) {
 		mNicHostName = nicHostName;
+	}
+
+	public String getCurrentExternalIPAddress() {
+		return mCurrentExternalIPAddress;
 	}
 
 	//
@@ -115,6 +128,9 @@ public class SimplePortMapping {
 		@Override
 		public void onGetExternalIPAddress(String address) {
 			System.out.println("######externalIPAddress="+address);
+			if(address != null && address.length() != 0 ) {
+				mCurrentExternalIPAddress = address;
+			}
 		}
 
 		@Override
