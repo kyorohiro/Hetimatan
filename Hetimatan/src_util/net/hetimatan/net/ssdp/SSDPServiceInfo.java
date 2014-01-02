@@ -1,4 +1,4 @@
-package net.hetimatan.net.ssdp.portmapping;
+package net.hetimatan.net.ssdp;
 
 import java.util.HashMap;
 import java.util.Set;

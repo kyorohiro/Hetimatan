@@ -5,8 +5,8 @@ import java.lang.ref.WeakReference;
 import java.util.LinkedList;
 
 import net.hetimatan.net.http.HttpGet;
+import net.hetimatan.net.ssdp.SSDPServiceInfo;
 import net.hetimatan.net.ssdp.portmapping.PortMappingClient;
-import net.hetimatan.net.ssdp.portmapping.SSDPServiceInfo;
 
 public class WorkerGetRootDevice extends HttpGet {
 	private WeakReference<PortMappingClient> mClient = null;

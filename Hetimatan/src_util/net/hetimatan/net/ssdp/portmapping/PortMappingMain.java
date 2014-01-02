@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 
 import net.hetimatan.net.ssdp.SSDPClient;
+import net.hetimatan.net.ssdp.SSDPServiceInfo;
 import net.hetimatan.net.ssdp.message.SSDPMessage;
 
 public class PortMappingMain {

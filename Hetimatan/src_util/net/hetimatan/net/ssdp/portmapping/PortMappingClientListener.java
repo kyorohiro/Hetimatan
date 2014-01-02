@@ -1,6 +1,7 @@
 package net.hetimatan.net.ssdp.portmapping;
 
 import net.hetimatan.net.ssdp.SSDPClient;
+import net.hetimatan.net.ssdp.SSDPServiceInfo;
 import net.hetimatan.net.ssdp.message.SSDPMessage;
 public interface PortMappingClientListener {
 	public void onReceiveSSDPMessage(SSDPClient client, SSDPMessage request);

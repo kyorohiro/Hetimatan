@@ -7,7 +7,8 @@ import java.util.Stack;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import net.hetimatan.net.ssdp.portmapping.SSDPServiceInfo;
+
+import net.hetimatan.net.ssdp.SSDPServiceInfo;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;

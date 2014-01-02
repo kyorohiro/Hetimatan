@@ -3,6 +3,7 @@ package net.hetimatan.net.ssdp.portmapping;
 import java.util.LinkedList;
 
 import net.hetimatan.net.ssdp.SSDPClient;
+import net.hetimatan.net.ssdp.SSDPServiceInfo;
 import net.hetimatan.net.ssdp.message.SSDPMessage;
 
 public class PortMappingClientEventDispatcher {
