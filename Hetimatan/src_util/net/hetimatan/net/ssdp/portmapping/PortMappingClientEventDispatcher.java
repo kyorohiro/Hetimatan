@@ -36,4 +36,16 @@ public class PortMappingClientEventDispatcher {
 			l.onReceiveSSDPMessage(client, message);
 		}
 	}
+
+	public void dispatchAddPortMapping(PortMappingInfo info) {
+		for(PortMappingClientListener l : mObserverList) {
+			l.onAddPortMapping(info);
+		}		
+	}
+	
+	public void dispatchDeletePortMapping(PortMappingInfo info) {
+		for(PortMappingClientListener l : mObserverList) {
+			l.onDeletePortMapping(info);
+		}		
+	}
 }

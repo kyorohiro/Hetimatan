@@ -3,7 +3,7 @@ package net.hetimatan.net.ssdp;
 import java.io.IOException;
 
 import junit.framework.TestCase;
-import net.hetimatan.net.ssdp.portmapping._task.UPNPGetExternalIpAddress;
+import net.hetimatan.net.ssdp.portmapping._task.WorkerGetExternalIpAddress;
 
 public class TestForExternalIPAddress extends TestCase {
 	String data = 
@@ -17,7 +17,7 @@ public class TestForExternalIPAddress extends TestCase {
 	"</SOAP-ENV:Envelope>\r\n";
 
 	public void testExtract() throws IOException {
-		String address = UPNPGetExternalIpAddress.extractIpAddress(data.getBytes());
+		String address = WorkerGetExternalIpAddress.extractIpAddress(data.getBytes());
 		assertEquals("127.0.0.1", address);
 	}
 }

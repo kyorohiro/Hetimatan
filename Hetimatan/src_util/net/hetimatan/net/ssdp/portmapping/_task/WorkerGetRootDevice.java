@@ -8,9 +8,9 @@ import net.hetimatan.net.http.HttpGet;
 import net.hetimatan.net.ssdp.portmapping.PortMappingClient;
 import net.hetimatan.net.ssdp.portmapping._task.RootDeviceXml2ServiceInfo.SSDPServiceInfo;
 
-public class SSDPGetRootDevice extends HttpGet {
+public class WorkerGetRootDevice extends HttpGet {
 	private WeakReference<PortMappingClient> mClient = null;
-	public SSDPGetRootDevice(String url, PortMappingClient client) throws IOException {
+	public WorkerGetRootDevice(String url, PortMappingClient client) throws IOException {
 		super();
 		update(url);
 		mClient = new WeakReference<PortMappingClient>(client);

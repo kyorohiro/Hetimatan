@@ -19,9 +19,9 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
-public class UPNPGetExternalIpAddress extends HttpGet {
+public class WorkerGetExternalIpAddress extends HttpGet {
 	private WeakReference<PortMappingClient> mClient = null;
-	public UPNPGetExternalIpAddress(String location, PortMappingClient client) throws IOException {
+	public WorkerGetExternalIpAddress(String location, PortMappingClient client) throws IOException {
 		super();
 		update(location);
 		PortMappingRequest request = new PortMappingRequest();

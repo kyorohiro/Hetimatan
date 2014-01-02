@@ -38,6 +38,18 @@ public class PortMappingMain {
 			// TODO Auto-generated method stub
 			
 		}
+
+		@Override
+		public void onAddPortMapping(PortMappingInfo info) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onDeletePortMapping(PortMappingInfo info) {
+			// TODO Auto-generated method stub
+			
+		}
 		
 	}
 }

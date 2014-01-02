@@ -52,10 +52,9 @@ public class PortMappingRequest {
 	"  </SOAP-ENV:Body>\r\n"+
 	"</SOAP-ENV:Envelope>\r\n";
 
-	public String createBody_Del(int newExternalPort, int newInternalPort, String newProtocol) {
+	public String createBody_Del(int newExternalPort, String newProtocol) {
 		return TEMPLATE_DEL
 				.replace("@NewExternalPort", "" + newExternalPort)
-				.replace("@NewInternalPort", "" + newInternalPort)
 				.replace("@NewProtocol", "" + newProtocol)
 				;
 	}

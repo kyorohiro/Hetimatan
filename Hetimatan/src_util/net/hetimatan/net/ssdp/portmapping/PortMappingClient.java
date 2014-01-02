@@ -21,8 +21,10 @@ import net.hetimatan.net.ssdp.SSDPClientListener;
 import net.hetimatan.net.ssdp.message.SSDPMessage;
 import net.hetimatan.net.ssdp.message.SSDPSearchMessage;
 import net.hetimatan.net.ssdp.portmapping._task.RootDeviceXml2ServiceInfo;
+import net.hetimatan.net.ssdp.portmapping._task.WorkerDelPortMapping;
 import net.hetimatan.net.ssdp.portmapping._task.RootDeviceXml2ServiceInfo.SSDPServiceInfo;
-import net.hetimatan.net.ssdp.portmapping._task.SSDPGetRootDevice;
+import net.hetimatan.net.ssdp.portmapping._task.WorkerAddPortMapping;
+import net.hetimatan.net.ssdp.portmapping._task.WorkerGetRootDevice;
 import net.hetimatan.util.http.HttpRequestHeader;
 
 public class PortMappingClient {
@@ -71,9 +73,27 @@ public class PortMappingClient {
 		getRootDevice(header.getValue());
 	}
 
+	public void addPortMapping(String location, PortMappingInfo info) {
+		try {
+			WorkerAddPortMapping cl = new WorkerAddPortMapping(this, location, info);
+			cl.startTask(null, null);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void deletePortMapping(String location, PortMappingInfo info) {
+		try {
+			WorkerDelPortMapping cl = new WorkerDelPortMapping(this, location, info);
+			cl.startTask(null, null);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public void getRootDevice(String location) {
 		try {
-			SSDPGetRootDevice cl = new SSDPGetRootDevice(location, this);
+			WorkerGetRootDevice cl = new WorkerGetRootDevice(location, this);
 			cl.startTask(null, null);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -82,7 +102,7 @@ public class PortMappingClient {
 
 	public void getExternalIpAddress(String location) {
 		try {
-			SSDPGetRootDevice cl = new SSDPGetRootDevice(location, this);
+			WorkerGetRootDevice cl = new WorkerGetRootDevice(location, this);
 			cl.startTask(null, null);
 		} catch (IOException e) {
 			e.printStackTrace();
