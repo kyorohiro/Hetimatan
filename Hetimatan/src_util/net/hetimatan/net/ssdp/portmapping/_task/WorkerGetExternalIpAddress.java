@@ -11,7 +11,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.net.http.HttpGet;
 import net.hetimatan.net.ssdp.portmapping.PortMappingClient;
-import net.hetimatan.net.ssdp.portmapping.PortMappingRequest;
+import net.hetimatan.net.ssdp.portmapping.PortMappingRequestTemplate;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -23,13 +23,12 @@ public class WorkerGetExternalIpAddress extends HttpGet {
 	public WorkerGetExternalIpAddress(String location, PortMappingClient client) throws IOException {
 		super();
 		update(location);
-		PortMappingRequest request = new PortMappingRequest();
 		{
-			CashKyoroFile body = new CashKyoroFile(request.createBody_GetExternalIpAddress().getBytes());
+			CashKyoroFile body = new CashKyoroFile(PortMappingRequestTemplate.createBody_GetExternalIpAddress().getBytes());
 			setBody(body);
 		}
 		{
-			addHeader(PortMappingRequest.SOAPACTION_TYPE, PortMappingRequest.SOAPACTION_VALUE_GET_EXTERNAL_IP_ADDRESS);
+			addHeader(PortMappingRequestTemplate.SOAPACTION_TYPE, PortMappingRequestTemplate.SOAPACTION_VALUE_GET_EXTERNAL_IP_ADDRESS);
 		}
 		mClient = new WeakReference<PortMappingClient>(client);
 	}

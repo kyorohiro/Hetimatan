@@ -7,7 +7,7 @@ import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.net.http.HttpGet;
 import net.hetimatan.net.ssdp.portmapping.PortMappingClient;
 import net.hetimatan.net.ssdp.portmapping.PortMappingInfo;
-import net.hetimatan.net.ssdp.portmapping.PortMappingRequest;
+import net.hetimatan.net.ssdp.portmapping.PortMappingRequestTemplate;
 
 public class WorkerDelPortMapping extends HttpGet {
 	private WeakReference<PortMappingClient> mClient = null;
@@ -16,14 +16,13 @@ public class WorkerDelPortMapping extends HttpGet {
 		super();
 		update(location);
 		mInfo = info;
-		PortMappingRequest request = new PortMappingRequest();
 		{
 			CashKyoroFile body = new CashKyoroFile(
-					request.createBody_Del(info.newExternalPort, info.newProtocol).getBytes());
+					PortMappingRequestTemplate.createBody_Del(info.newExternalPort, info.newProtocol).getBytes());
 			setBody(body);
 		}
 		{
-			addHeader(PortMappingRequest.SOAPACTION_TYPE, PortMappingRequest.SOAPACTION_VALUE_DELETE_PORT_MAPPING);
+			addHeader(PortMappingRequestTemplate.SOAPACTION_TYPE, PortMappingRequestTemplate.SOAPACTION_VALUE_DELETE_PORT_MAPPING);
 		}
 		mClient = new WeakReference<PortMappingClient>(client);
 	}

@@ -93,8 +93,8 @@ public class PortMappingClient {
 		}
 	}
 
-	public void stop() {
-		
+	public void close() {
+		mClient.close();
 	}
 
 	public void setListener(PortMappingClientListener observer) {

@@ -1,6 +1,6 @@
 package net.hetimatan.net.ssdp.portmapping;
 
-public class PortMappingRequest {
+public class PortMappingRequestTemplate {
 	public static final String CONTENT_TYPE = "text/xml";
 	public static final String SOAPACTION_TYPE = "SOAPACTION";
 	public static final String SOAPACTION_VALUE_ADD_PORT_MAPPING = "\"urn:schemas-upnp-org:service:WANPPPConnection:1#AddPortMapping\"";
@@ -25,7 +25,7 @@ public class PortMappingRequest {
 	"  </SOAP-ENV:Body>\r\n"+
 	"</SOAP-ENV:Envelope>\r\n";
 
-	public String createBody_Add(int newExternalPort, int newInternalPort, 
+	public static String createBody_Add(int newExternalPort, int newInternalPort, 
 			String newInternalClient, String newProtocol,
 			int newEnabled, int newLeaseDuration,
 			String newPortMappingDescription) {
@@ -52,7 +52,7 @@ public class PortMappingRequest {
 	"  </SOAP-ENV:Body>\r\n"+
 	"</SOAP-ENV:Envelope>\r\n";
 
-	public String createBody_Del(int newExternalPort, String newProtocol) {
+	public static String createBody_Del(int newExternalPort, String newProtocol) {
 		return TEMPLATE_DEL
 				.replace("@NewExternalPort", "" + newExternalPort)
 				.replace("@NewProtocol", "" + newProtocol)
@@ -70,7 +70,7 @@ public class PortMappingRequest {
 	"  </SOAP-ENV:Body>\r\n"+
 	"</SOAP-ENV:Envelope>\r\n";
 
-	public String createBody_GetGebericPort(int newPortMappingIndex) {
+	public static String createBody_GetGebericPort(int newPortMappingIndex) {
 		return TEMPLATE_GET_GENERIC_PORT
 				.replace("@NewPortMappingIndex", "" + newPortMappingIndex)
 				;
@@ -84,7 +84,7 @@ public class PortMappingRequest {
 	"  </SOAP-ENV:Body>\r\n"+
 	"</SOAP-ENV:Envelope>\r\n";
 
-	public String createBody_GetExternalIpAddress() {
+	public static String createBody_GetExternalIpAddress() {
 		return TEMPLATE_GET_EXTERNAL_IP_ADDRESS;
 	}
 

@@ -12,7 +12,7 @@ public class TestPost {
 
 	public static void main(String[] args) {
 		String address = "http://192.168.0.1:2869/upnp/control/WANIPConn1";
-		PortMappingRequest request = new PortMappingRequest();
+		PortMappingRequestTemplate request = new PortMappingRequestTemplate();
 		try {
 			HttpGet getter = new HttpGet();
 			{
@@ -20,7 +20,7 @@ public class TestPost {
 				getter.setBody(body);
 			}
 			{
-				getter.addHeader(PortMappingRequest.SOAPACTION_TYPE, PortMappingRequest.SOAPACTION_VALUE_GET_EXTERNAL_IP_ADDRESS);
+				getter.addHeader(PortMappingRequestTemplate.SOAPACTION_TYPE, PortMappingRequestTemplate.SOAPACTION_VALUE_GET_EXTERNAL_IP_ADDRESS);
 			}
 			getter.update(address);
 			CloseRunnerTask close = new CloseRunnerTask(null);
