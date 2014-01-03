@@ -11,7 +11,7 @@ import net.hetimatan.net.ssdp.message.SSDPStartLine;
 import net.hetimatan.net.ssdp.portmapping._task.WorkerDelPortMapping;
 import net.hetimatan.net.ssdp.portmapping._task.WorkerAddPortMapping;
 import net.hetimatan.net.ssdp.portmapping._task.WorkerGetExternalIpAddress;
-import net.hetimatan.net.ssdp.portmapping._task.WorkerGetRootDevice;
+import net.hetimatan.net.ssdp.portmapping._task.WorkerGetServiceInfoFromRootDevice;
 import net.hetimatan.util.http.HttpRequestHeader;
 
 public class PortMappingClient {
@@ -71,7 +71,7 @@ public class PortMappingClient {
 		if(!st.contains("InternetGatewayDevice:1")) {
 			return false;}
 
-		getRootDevice(location);
+		getServiceInfoFromRootDevice(location);
 		return true;
 	}
 
@@ -93,10 +93,10 @@ public class PortMappingClient {
 		}
 	}
 
-	private WorkerGetRootDevice mWorkerGetRootDevice = null; 
-	public void getRootDevice(String location) {
+	private WorkerGetServiceInfoFromRootDevice mWorkerGetRootDevice = null; 
+	public void getServiceInfoFromRootDevice(String location) {
 		try {
-			mWorkerGetRootDevice = new WorkerGetRootDevice(location, this);
+			mWorkerGetRootDevice = new WorkerGetServiceInfoFromRootDevice(location, this);
 			mWorkerGetRootDevice.startTask(null, null);
 		} catch (IOException e) {
 			e.printStackTrace();
