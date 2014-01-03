@@ -66,4 +66,8 @@ public class KyoroServerSocketImpl extends KyoroServerSocket {
 	public ServerSocketChannel getRawChannel() {
 		return mServerChannel;
 	}
+
+	public String test() {
+		return mServerChannel.socket().getLocalSocketAddress().toString();
+	}
 }

@@ -36,11 +36,21 @@ public class HttpServer {
 	private boolean mMyReqRunner = false;
 	private KyoroServerSocket mServerSocket = null;
 
+	private HttpServerEventDispatcher mObserver = new HttpServerEventDispatcher();
+
+	public HttpServerEventDispatcher getDispatcher() {
+		return mObserver;
+	}
+
 	//
 	// Task Runner
 	//
 	public KyoroSocketEventRunner getEventRunner() {
 		return mRequestRunner;
+	}
+
+	public KyoroServerSocketImpl getServerSocket() {
+		return (KyoroServerSocketImpl)mServerSocket;
 	}
 
 	public boolean isBinded() {
@@ -62,6 +72,7 @@ public class HttpServer {
 		mServerSocket.regist(mRequestRunner.getSelector(), KyoroSelector.ACCEPT);
 		sId = "[httpserver"+mPort+"]";
 		startAcceptTask();
+		mObserver.dispatchOnBoot(this);
 	}
 
 	public void accept() throws IOException {

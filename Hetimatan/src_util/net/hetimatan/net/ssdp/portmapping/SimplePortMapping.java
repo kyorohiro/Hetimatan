@@ -3,6 +3,9 @@ package net.hetimatan.net.ssdp.portmapping;
 import java.io.IOException;
 
 import net.hetimatan.io.file.MarkableFileReader;
+import net.hetimatan.net.http.HttpServer;
+import net.hetimatan.net.http.HttpServerEventDispatcher;
+import net.hetimatan.net.http.HttpServerEventDispatcher.HttpServerListener;
 import net.hetimatan.net.ssdp.SSDPClient;
 import net.hetimatan.net.ssdp.SSDPServiceInfo;
 import net.hetimatan.net.ssdp.message.SSDPMessage;
@@ -24,16 +27,39 @@ public class SimplePortMapping {
 	// todo
 	// weak reference issue
 	// need following property
-	public static SimplePortMapping autoPortMapping = null;
-
+	public static SimplePortMapping sAutoPortMapping = null;
+	public static HttpServer sServer = null;
+	public static int sServerPort = 8081;
+	public static HttpServerListener sObserver = new HttpServerListener() {
+		@Override
+		public void onBoot(HttpServer server) {
+			try {
+				PortMappingInfo info = new PortMappingInfo();
+				info.newExternalPort = sServerPort;
+				info.newProtocol = "TCP";
+				info.newInternalPort = sServerPort;
+				info.newInternalClient = "192.168.0.3";
+				info.newEnabled = 1;
+				info.newPortMappingDescription = "test";
+				info.newLeaseDuration = 60*60; //1hour
+//				info.newInternalClient.
+				
+				sAutoPortMapping = new SimplePortMapping("192.168.0.3", info);
+				sAutoPortMapping.start();
+			} catch (IOException e){e.printStackTrace();}
+		}
+	};
 	// for test
 	public static void main(String[] args) {
-		try {
-			autoPortMapping = new SimplePortMapping("192.168.0.3");
-			autoPortMapping.start();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	//	try {
+			sServer = new HttpServer();
+			sServer.setPort(sServerPort);
+			sServer.getDispatcher().addHttpServerListener(sObserver);
+			sServer.startServer(null);
+
+	//	} catch (IOException e) {
+	//		e.printStackTrace();
+	//	}
 	}
 
 	// --------------------------------------------------------------------------
@@ -45,9 +71,11 @@ public class SimplePortMapping {
 	private String mNicHostName = "";
 	private _Observer mObserver = new _Observer();
 	private String mCurrentExternalIPAddress = "";
+	private PortMappingInfo mInfo = null;
 
-	public SimplePortMapping(String nicHostName) {
+	public SimplePortMapping(String nicHostName, PortMappingInfo info) {
 		mNicHostName = nicHostName;
+		mInfo = info;
 	}
 
 	public String getCurrentExternalIPAddress() {
@@ -120,7 +148,7 @@ public class SimplePortMapping {
 			}
 			System.out.println("######deviceControlUrl="+postUrl);
 			mClient.getExternalIpAddress(postUrl);
-			
+			mClient.addPortMapping(postUrl, mInfo);
 		}
 
 		@Override
@@ -129,14 +157,24 @@ public class SimplePortMapping {
 			if(address != null && address.length() != 0 ) {
 				mCurrentExternalIPAddress = address;
 			}
+			//
+			//
 		}
 
 		@Override
 		public void onAddPortMapping(PortMappingInfo info) {
+			System.out.println("#---------#");
+			System.out.println("#---add------#");
+			System.out.println("#"+info.toString());
+			System.out.println("#---------#");
 		}
 
 		@Override
 		public void onDeletePortMapping(PortMappingInfo info) {
+			System.out.println("#---------#");
+			System.out.println("#---del------#");
+			System.out.println("#"+info.toString());
+			System.out.println("#---------#");
 		}
 		
 	}
