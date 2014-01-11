@@ -113,6 +113,11 @@ public abstract class HttpObject {
 				.parseShort(port, 0, ByteArrayBuilder.BYTEORDER_BIG_ENDIAN);
 	}
 
+	public static int bToPort(byte[] port, int begin) {
+		return ByteArrayBuilder
+				.parseShort(port, begin, ByteArrayBuilder.BYTEORDER_BIG_ENDIAN);
+	}
+
 	public int getType() {
 		return mType;
 	}

@@ -36,6 +36,9 @@ public class EventTaskRunnerImple extends EventTaskRunner {
 
 	public synchronized void pushTask(EventTask task, int timeout) {
 		mDefferTasks.add(new DefferTask(task, timeout));
+		if(mRunner == null|| mWorker == null) {
+			start(null);
+		}
 		kickWorker();
 	}
 

@@ -17,6 +17,7 @@ public class KyoroSocketEventRunner extends EventTaskRunnerImple {
 
 	public KyoroSocketEventRunner() {
 		super();
+		waitIsSelect(true);
 	}
 
 	public KyoroSelector getSelector() {
