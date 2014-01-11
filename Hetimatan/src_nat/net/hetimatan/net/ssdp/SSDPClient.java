@@ -26,15 +26,11 @@ public class SSDPClient {
 	private InetSocketAddress mReceiveGroup = null;
 	private LinkedList<SSDPClientListener> mObserver = new LinkedList<>();
 
-	public NetworkInterface getNetworkInterface(ServerSocket socket) throws SocketException {
-		return NetworkInterface.getByName(socket.getInetAddress().getHostName());
-	}
-
 	public void init(String hostName) throws IOException {
 		mReceiveGroup = new InetSocketAddress(SSDP_ADDRESS, SSDP_PORT);
-		InetAddress ll = InetAddress.getByName(hostName);
-		mReciveNInterface = NetworkInterface.getByInetAddress(ll);
-		mReceiveSocket = new MulticastSocket(new InetSocketAddress(ll, SSDP_PORT));
+		InetAddress nicAddress = InetAddress.getByName(hostName);
+		mReciveNInterface = NetworkInterface.getByInetAddress(nicAddress);
+		mReceiveSocket = new MulticastSocket(new InetSocketAddress(nicAddress, SSDP_PORT));
 		mReceiveSocket.joinGroup(mReceiveGroup, mReciveNInterface);
 	}
 
