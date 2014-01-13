@@ -10,6 +10,9 @@ public class HtunHeader {
 	public static final int BINDING_REQUEST = 0x01;
 	public static final int BINDING_RESPONSE = 0x101;
 	public static final int BINDING_ERROR_RESPONSE = 0x111;
+	public static final int SHARED_SECRET_REQUEST = 0x002;
+	public static final int SHARED_SECRET_RESPONSE = 0x102;
+	public static final int SHARED_SECRET_ERROR_RESPONSE = 0x112;
 
 	public static HtunHeader decode(MarkableFileReader reader) throws IOException {
 		// 2byte zero sign.  
