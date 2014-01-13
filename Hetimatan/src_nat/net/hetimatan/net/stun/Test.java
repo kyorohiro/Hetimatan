@@ -15,8 +15,8 @@ public class Test {
 					HttpObject.address("127.0.0.1", 8081));
 			todoc = new HtunClient(
 					HttpObject.address("127.0.0.1", 8082),
-					HttpObject.address("127.0.0.1", 8080));
-			KyoroSocketEventRunner runner = todo.startTask(null);
+					HttpObject.address("59.157.6.137", 8080));
+			//KyoroSocketEventRunner runner = todo.startTask(null);
 			KyoroSocketEventRunner runnerC = todoc.startTask(null);
 
 		} catch (IOException e) {

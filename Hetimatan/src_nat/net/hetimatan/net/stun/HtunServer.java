@@ -24,7 +24,7 @@ public class HtunServer {
 	}
 
 	public void init() throws IOException {
-		mDatagramSocket.bind(HttpObject.bToPort(mMainIp, 4));
+		mDatagramSocket.bind(mMainIp);
 	}
 
 	public KyoroSocketEventRunner startTask(KyoroSocketEventRunner runner) throws IOException {

@@ -1,6 +1,7 @@
 package net.hetimatan.io.net;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.nio.ByteBuffer;
@@ -22,6 +23,15 @@ public class KyoroDatagramImpl extends KyoroSelectable {
 	@Override
 	public SelectableChannel getRawChannel() {
 		return mChannel;
+	}
+
+	public void bind(byte[] ip) throws IOException {
+		byte[] addr = HttpObject.ip2Address(ip);
+		int port = HttpObject.bToPort(ip, addr.length);
+		InetSocketAddress addrO =
+				new InetSocketAddress(
+						InetAddress.getByAddress(addr), port);		
+		mChannel.socket().bind(addrO);
 	}
 
 	public void bind(int port) throws IOException {

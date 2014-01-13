@@ -103,6 +103,14 @@ public abstract class HttpObject {
 		}
 	}
 
+	public static byte[] ip2Address(byte[] ip) {
+		byte[] ret = new byte[4];
+		for(int i=0;i<4;i++) {
+			ret[i] = ip[i];
+		}
+		return ret;
+	}
+
 	public static byte[] portToB(int port) {
 		return ByteArrayBuilder
 				.parseShort(port, ByteArrayBuilder.BYTEORDER_BIG_ENDIAN);
