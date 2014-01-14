@@ -6,7 +6,7 @@ import net.hetimatan.io.file.KyoroFile;
 import net.hetimatan.io.file.MarkableFileReader;
 import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.io.filen.CashKyoroFileHelper;
-import net.hetimatan.net.stun.message.HtunAttribute.HtunChangeRequest;
+import net.hetimatan.net.stun.message.attribute.HtunChangeRequest;
 import net.hetimatan.util.url.PercentEncoder;
 import junit.framework.TestCase;
 
