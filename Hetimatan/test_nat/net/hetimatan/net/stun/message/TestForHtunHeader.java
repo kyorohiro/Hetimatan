@@ -6,6 +6,8 @@ import net.hetimatan.io.file.MarkableFileReader;
 import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.io.filen.CashKyoroFileHelper;
 import net.hetimatan.net.stun.message.attribute.HtunChangeRequest;
+import net.hetimatan.net.stun.message.attribute.HtunXxxAddress;
+import net.hetimatan.util.http.HttpObject;
 import junit.framework.TestCase;
 
 public class TestForHtunHeader extends TestCase {
@@ -65,6 +67,47 @@ public class TestForHtunHeader extends TestCase {
 			assertEquals(1, exHeader.numOfAttribute());
 			assertEquals(false, ((HtunChangeRequest)exHeader.getHtunAttribute(0)).chagePort());
 			assertEquals(true, ((HtunChangeRequest)exHeader.getHtunAttribute(0)).changeIp());
+			
+			reader.close();
+		}
+	}
+
+	public void testChangeResponseAttribute() throws IOException {
+		byte[] id = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16};
+		HtunHeader header = new HtunHeader(HtunHeader.BINDING_RESPONSE, id);
+		header.addAttribute(new HtunXxxAddress(
+				HtunAttribute.SOURCE_ADDRESS, 0x01,
+				800, HttpObject.aton("127.0.0.1")
+				));
+		
+		// encode test
+		CashKyoroFile output = new CashKyoroFile(1000);
+		header.encode(output.getLastOutput());
+		byte[] buffer = CashKyoroFileHelper.newBinary(output);
+		{
+			byte[] expected = {
+					0x00, 0x00, 
+					0xFF&(HtunHeader.BINDING_RESPONSE>>8), 0xFF&HtunHeader.BINDING_RESPONSE,
+					0x00, 0x0C, // length
+					1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, //id
+					0x00, HtunAttribute.SOURCE_ADDRESS,
+					0x00, 0x08, //length
+					0x00, 0x01, //family
+					0x03, (byte)(0xFF&0x20), //port
+					127, 0, 0, 1
+			};
+			for(int i=0;i<expected.length;i++) {
+				assertEquals("["+i+"]", 0xFF&expected[i], 0xFF&buffer[i]);
+			}
+		}
+		//decode test
+		{//decode
+			MarkableFileReader reader = new MarkableFileReader(buffer);
+			HtunHeader exHeader = HtunHeader.decode(reader);
+			assertEquals(HtunHeader.BINDING_RESPONSE, exHeader.getType());
+			assertEquals(1, exHeader.numOfAttribute());
+			//assertEquals(false, ((HtunChangeRequest)exHeader.getHtunAttribute(0)).chagePort());
+			//assertEquals(true, ((HtunChangeRequest)exHeader.getHtunAttribute(0)).changeIp());
 			
 			reader.close();
 		}

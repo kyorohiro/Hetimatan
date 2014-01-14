@@ -55,7 +55,10 @@ public class HtunXxxAddress extends HtunAttribute {
 	public static HtunXxxAddress decode(MarkableFileReader reader) throws IOException {
 		// 2 byte type 
 		int type = MarkableReaderHelper.readShort(reader, ByteArrayBuilder.BYTEORDER_BIG_ENDIAN);
-		if(type != HtunAttribute.CHANGE_RESUQEST) {
+		if(!(
+				type == HtunAttribute.CHANGE_RESUQEST ||
+				type == HtunAttribute.MAPPED_ADDRESS ||
+				type == HtunAttribute.SOURCE_ADDRESS)) {
 			throw new IOException("bad type =" + type);
 		}
 		// 2byte length

@@ -7,7 +7,9 @@ import com.sun.org.apache.bcel.internal.generic.LLOAD;
 
 import net.hetimatan.io.file.MarkableFileReader;
 import net.hetimatan.io.file.MarkableReaderHelper;
+import net.hetimatan.net.stun.HtunServer;
 import net.hetimatan.net.stun.message.attribute.HtunChangeRequest;
+import net.hetimatan.net.stun.message.attribute.HtunXxxAddress;
 import net.hetimatan.util.io.ByteArrayBuilder;
 
 public class HtunAttribute {
@@ -24,7 +26,7 @@ public class HtunAttribute {
 	public static final int REFLECTED_FROM = 0x0b;
 
 	public void encode(OutputStream output) throws IOException {
-		
+		throw new IOException();
 	}
 
 	public static HtunAttribute decode(MarkableFileReader reader) throws IOException {
@@ -35,6 +37,10 @@ public class HtunAttribute {
 			switch(type) {
 			case HtunAttribute.CHANGE_RESUQEST:
 				return HtunChangeRequest.decode(reader);
+			case HtunAttribute.SOURCE_ADDRESS:
+			case HtunAttribute.CHANGE_ADDRESS:
+			case HtunAttribute.MAPPED_ADDRESS:
+				return HtunXxxAddress.decode(reader);
 			default:
 				throw new IOException();
 			}
