@@ -42,6 +42,14 @@ public class HtunHeader {
 		mAttributes.add(attribute);
 	}
 
+	public HtunAttribute getHtunAttribute(int index) {
+		return mAttributes.get(index);
+	}
+
+	public int numOfAttribute() {
+		return mAttributes.size();
+	}
+
 	public void encode(OutputStream output) throws IOException {
 		// 2byte zero sign 
 		output.write(ByteArrayBuilder.parseShort(0, ByteArrayBuilder.BYTEORDER_BIG_ENDIAN));
@@ -90,7 +98,7 @@ public class HtunHeader {
 		// data
 		int begin = (int)reader.getFilePointer();
 		int end = begin+messageLength;
-		while(end<reader.getFilePointer()) {
+		while(reader.getFilePointer()<end) {
 			header.addAttribute(HtunAttribute.decode(reader));
 		}
 		return header;

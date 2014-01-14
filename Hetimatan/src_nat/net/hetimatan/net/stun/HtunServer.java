@@ -2,8 +2,11 @@ package net.hetimatan.net.stun;
 
 import java.io.IOException;
 
+import net.hetimatan.io.file.MarkableFileReader;
 import net.hetimatan.io.net.KyoroDatagramImpl;
 import net.hetimatan.io.net.KyoroSelector;
+import net.hetimatan.net.stun.message.HtunHeader;
+import net.hetimatan.net.stun.message.attribute.HtunChangeRequest;
 import net.hetimatan.util.event.EventTask;
 import net.hetimatan.util.event.EventTaskRunner;
 import net.hetimatan.util.event.net.KyoroSocketEventRunner;
@@ -47,13 +50,18 @@ public class HtunServer {
 			byte[] ip = mDatagramSocket.receive();
 			byte[] buffer = mDatagramSocket.getByte();
 			System.out.println("##="+new String(buffer));
-			
+
+
+			MarkableFileReader reader = new MarkableFileReader(buffer);
+			HtunHeader header = HtunHeader.decode(reader);
+
 			PercentEncoder encoder = new PercentEncoder();
 			runner.pushTask(new SendTask(
 					ip,
 					(""+encoder.encode(ip)).getBytes()
 					));
 		}
+
 	}
 
 	public class SendTask extends EventTask {

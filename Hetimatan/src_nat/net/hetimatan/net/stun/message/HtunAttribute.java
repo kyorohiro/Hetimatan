@@ -7,6 +7,7 @@ import com.sun.org.apache.bcel.internal.generic.LLOAD;
 
 import net.hetimatan.io.file.MarkableFileReader;
 import net.hetimatan.io.file.MarkableReaderHelper;
+import net.hetimatan.net.stun.message.attribute.HtunChangeRequest;
 import net.hetimatan.util.io.ByteArrayBuilder;
 
 public class HtunAttribute {
@@ -27,10 +28,22 @@ public class HtunAttribute {
 	}
 
 	public static HtunAttribute decode(MarkableFileReader reader) throws IOException {
-		int type = MarkableReaderHelper.readShort(reader, ByteArrayBuilder.BYTEORDER_BIG_ENDIAN);
-		int length = MarkableReaderHelper.readShort(reader, ByteArrayBuilder.BYTEORDER_BIG_ENDIAN);
-		
-		return null;
+		try {
+			reader.pushMark();
+			int type = MarkableReaderHelper.readShort(reader, ByteArrayBuilder.BYTEORDER_BIG_ENDIAN);
+			reader.backToMark();
+			switch(type) {
+			case HtunAttribute.CHANGE_RESUQEST:
+				return HtunChangeRequest.decode(reader);
+			default:
+				throw new IOException();
+			}
+		} catch(IOException e) {
+			reader.backToMark();
+			throw e;
+		} finally {
+			reader.popMark();
+		}
 	}
 
 
