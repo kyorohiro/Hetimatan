@@ -5,6 +5,7 @@ import java.io.IOException;
 import net.hetimatan.io.file.MarkableFileReader;
 import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.io.filen.CashKyoroFileHelper;
+import net.hetimatan.net.stun.HtunServer;
 import net.hetimatan.net.stun.message.attribute.HtunChangeRequest;
 import net.hetimatan.net.stun.message.attribute.HtunXxxAddress;
 import net.hetimatan.util.http.HttpObject;
@@ -106,8 +107,13 @@ public class TestForHtunHeader extends TestCase {
 			HtunHeader exHeader = HtunHeader.decode(reader);
 			assertEquals(HtunHeader.BINDING_RESPONSE, exHeader.getType());
 			assertEquals(1, exHeader.numOfAttribute());
-			//assertEquals(false, ((HtunChangeRequest)exHeader.getHtunAttribute(0)).chagePort());
-			//assertEquals(true, ((HtunChangeRequest)exHeader.getHtunAttribute(0)).changeIp());
+			assertEquals(HtunAttribute.SOURCE_ADDRESS, ((HtunXxxAddress)exHeader.getHtunAttribute(0)).getType());
+			assertEquals(0x01, ((HtunXxxAddress)exHeader.getHtunAttribute(0)).getFamily());
+			assertEquals(800, ((HtunXxxAddress)exHeader.getHtunAttribute(0)).getPort());
+			assertEquals(127, ((HtunXxxAddress)exHeader.getHtunAttribute(0)).getIp()[0]);
+			assertEquals(0, ((HtunXxxAddress)exHeader.getHtunAttribute(0)).getIp()[1]);
+			assertEquals(0, ((HtunXxxAddress)exHeader.getHtunAttribute(0)).getIp()[2]);
+			assertEquals(1, ((HtunXxxAddress)exHeader.getHtunAttribute(0)).getIp()[3]);
 			
 			reader.close();
 		}

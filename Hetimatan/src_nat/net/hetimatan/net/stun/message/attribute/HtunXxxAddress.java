@@ -34,6 +34,18 @@ public class HtunXxxAddress extends HtunAttribute {
 		return mType;
 	}
 
+	public int getFamily() {
+		return mFamily;
+	}
+
+	public int getPort() {
+		return mPort;
+	}
+
+	public byte[] getIp() {
+		return mIp;
+	}
+
 	@Override
 	public void encode(OutputStream output) throws IOException {
 		// 2
