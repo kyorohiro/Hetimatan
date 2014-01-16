@@ -20,18 +20,75 @@ import net.hetimatan.util.url.PercentEncoder;
 public class HtunServer {
 
 	private KyoroSocketEventRunner mRunner = null;
-	private KyoroDatagramImpl mDatagramSocket = null;
+	private KyoroDatagramImpl mMainIp_MainPort= null;
+	private KyoroDatagramImpl mMainIp_SubPort = null;
+	private KyoroDatagramImpl mSubIp_MainPort = null;
+	private KyoroDatagramImpl mSubIp_SubPort = null;
 	private byte[] mMainIp = null;
 	private byte[] mSubIp = null;
+	private int mMainPort = 0;
+	private int mSubPort = 0;
 
-	public HtunServer(byte[] mainIp, byte[] subIp) throws IOException {
-	    mDatagramSocket = new KyoroDatagramImpl();
+	public HtunServer(byte[] mainIp, byte[] subIp, int mainPort, int subPort) throws IOException {
+	    mMainIp_MainPort = new KyoroDatagramImpl();
 	    mMainIp = mainIp;
 	    mSubIp = subIp;
+	    mMainPort = mainPort;
+	    mSubPort = subPort;
 	}
 
 	public void init() throws IOException {
-		mDatagramSocket.bind(mMainIp);
+		{
+			byte[] address = HttpObject.address(HttpObject.ntoa(mMainIp), mMainPort);
+			mMainIp_MainPort.bind(address);
+			mMainIp_MainPort.setMemo(address);
+		}
+		{
+			byte[] address = HttpObject.address(HttpObject.ntoa(mMainIp), mMainPort);
+			mMainIp_SubPort.bind(address);
+			mMainIp_SubPort.setMemo(address);
+		}
+		{
+			byte[] address = HttpObject.address(HttpObject.ntoa(mMainIp), mMainPort);
+			mSubIp_MainPort.bind(address);
+			mSubIp_MainPort.setMemo(address);			
+		}
+		{
+			byte[] address = HttpObject.address(HttpObject.ntoa(mMainIp), mMainPort);
+			mSubIp_SubPort.bind(address);
+			mSubIp_SubPort.setMemo(address);
+		}
+	}
+
+	public void close()  {
+		if(mMainIp_MainPort != null) {
+			try {
+				mMainIp_MainPort.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		if(mMainIp_SubPort != null) {
+			try {
+				mMainIp_SubPort.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		if(mSubIp_MainPort != null) {
+			try {
+				mSubIp_MainPort.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		if(mSubIp_SubPort != null) {
+			try {
+				mSubIp_SubPort.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	public KyoroSocketEventRunner startTask(KyoroSocketEventRunner runner) throws IOException {
@@ -41,8 +98,8 @@ public class HtunServer {
 			mRunner = new KyoroSocketEventRunner();
 		}
 		mRunner.waitIsSelect(true);
-		mDatagramSocket.regist(mRunner.getSelector(), KyoroSelector.READ);
-		mDatagramSocket.setEventTaskAtWrakReference(new ReceiveTask(), KyoroSelector.READ);
+		mMainIp_MainPort.regist(mRunner.getSelector(), KyoroSelector.READ);
+		mMainIp_MainPort.setEventTaskAtWrakReference(new ReceiveTask(), KyoroSelector.READ);
 		mRunner.start(null);
 
 		return mRunner;
@@ -51,8 +108,8 @@ public class HtunServer {
 	public class ReceiveTask extends EventTask {
 		@Override
 		public void action(EventTaskRunner runner) throws Throwable {
-			byte[] ip = mDatagramSocket.receive();
-			byte[] buffer = mDatagramSocket.getByte();
+			byte[] ip = mMainIp_MainPort.receive();
+			byte[] buffer = mMainIp_MainPort.getByte();
 			System.out.println("##="+new String(buffer));
 
 
@@ -70,14 +127,14 @@ public class HtunServer {
 			//
 			// create response
 			KyoroDatagramImpl tmp = null;
-			if(changeIp&&changePort) {
-				tmp = mDatagramSocket;
-			} else if(changeIp&&!changePort) {
-				tmp = mDatagramSocket;
-			} else if(!changeIp&&!changePort) {
-				tmp = mDatagramSocket;				
+			if(!changeIp&&!changePort) {
+				tmp = mMainIp_MainPort;
 			} else if(!changeIp&&changePort) {
-				tmp = mDatagramSocket;				
+				tmp = mMainIp_SubPort;
+			} else if(changeIp&&!changePort) {
+				tmp = mSubIp_MainPort;			
+			} else if(changeIp&&changePort) {
+				tmp = mSubIp_SubPort;
 			}
 
 			//
@@ -92,16 +149,18 @@ public class HtunServer {
 
 			CashKyoroFile output = new CashKyoroFile(1024);
 			response.encode(output.getLastOutput());
-			runner.pushTask(new SendTask(
+			runner.pushTask(new SendTask(tmp,
 					ip, CashKyoroFileHelper.newBinary(output)));
 		}
 
 	}
 
 	public class SendTask extends EventTask {
+		private KyoroDatagramImpl mDatagramSocket = null;
 		byte[] mMessage = null;
 		byte[] mIp = null;
-		public SendTask(byte[] ip, byte[] meesage) {
+		public SendTask(KyoroDatagramImpl socket, byte[] ip, byte[] meesage) {
+			mDatagramSocket = socket;
 			mIp = ip;
 			mMessage = meesage;
 		}

@@ -11,8 +11,9 @@ public class Test {
 	public static void main(String[] args) {
 		try {
 			todo = new HtunServer(
-					HttpObject.address("127.0.0.1", 8080),
-					HttpObject.address("127.0.0.1", 8081));
+					HttpObject.aton("127.0.0.1"),
+					HttpObject.aton("127.0.0.1"), 
+					8080, 8081);
 			todoc = new HtunClient(
 					HttpObject.address("127.0.0.1", 8082),
 					HttpObject.address("59.157.6.137", 8080));
