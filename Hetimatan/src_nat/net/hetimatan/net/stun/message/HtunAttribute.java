@@ -25,6 +25,15 @@ public class HtunAttribute {
 	public static final int UNKNOWN_ATTRIBUTE = 0x0a;
 	public static final int REFLECTED_FROM = 0x0b;
 
+	private int mType = 0;
+	public HtunAttribute(int type) {
+		mType = type;
+	}
+
+	public int getType() {
+		return mType;
+	}
+
 	public void encode(OutputStream output) throws IOException {
 		throw new IOException();
 	}
@@ -49,27 +58,6 @@ public class HtunAttribute {
 			throw e;
 		} finally {
 			reader.popMark();
-		}
-	}
-
-
-	public static class HtunMappedAddress extends HtunAttribute {
-		public static HtunMappedAddress decode(MarkableFileReader reader) throws IOException {
-			// 2byte type
-			int type = MarkableReaderHelper.readInt(reader, ByteArrayBuilder.BYTEORDER_BIG_ENDIAN);
-			// 2byte length 
-			int length = MarkableReaderHelper.readInt(reader, ByteArrayBuilder.BYTEORDER_BIG_ENDIAN);
-			// 1byte family
-			int family = reader.read();
-			// 2byte port
-			int port = MarkableReaderHelper.readShort(reader, ByteArrayBuilder.BYTEORDER_BIG_ENDIAN);
-			// 4 byte ip
-			byte[] ip = new byte[4];
-			ip[0] = (byte)(0xFF&reader.read());
-			ip[1] = (byte)(0xFF&reader.read());
-			ip[2] = (byte)(0xFF&reader.read());
-			ip[3] = (byte)(0xFF&reader.read());
-			return null;
 		}
 	}
 

@@ -46,6 +46,18 @@ public class HtunHeader {
 		return mAttributes.get(index);
 	}
 
+	public HtunAttribute findHtunAttribute(int type) {
+		for(int i=0;i<mAttributes.size();i++) {
+			HtunAttribute attibute =  mAttributes.get(i);
+			if(attibute != null) {
+				if(type == attibute.getType()) {
+					return attibute;
+				};
+			}
+		}
+		return null;
+	}
+
 	public int numOfAttribute() {
 		return mAttributes.size();
 	}

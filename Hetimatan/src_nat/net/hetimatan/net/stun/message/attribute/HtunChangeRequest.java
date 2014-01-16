@@ -17,9 +17,10 @@ public class HtunChangeRequest extends HtunAttribute {
 	private int mStatus = 0;
 
 	public HtunChangeRequest(int status) {
+		super(HtunAttribute.CHANGE_RESUQEST);
 		mStatus = status;
 	}
-
+;
 	public boolean changeIp() {
 		if((mStatus&STATUS_CHANGE_IP) == STATUS_CHANGE_IP) {
 			return true;

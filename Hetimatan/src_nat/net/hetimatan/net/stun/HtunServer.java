@@ -3,10 +3,14 @@ package net.hetimatan.net.stun;
 import java.io.IOException;
 
 import net.hetimatan.io.file.MarkableFileReader;
+import net.hetimatan.io.filen.CashKyoroFile;
+import net.hetimatan.io.filen.CashKyoroFileHelper;
 import net.hetimatan.io.net.KyoroDatagramImpl;
 import net.hetimatan.io.net.KyoroSelector;
+import net.hetimatan.net.stun.message.HtunAttribute;
 import net.hetimatan.net.stun.message.HtunHeader;
 import net.hetimatan.net.stun.message.attribute.HtunChangeRequest;
+import net.hetimatan.net.stun.message.attribute.HtunXxxAddress;
 import net.hetimatan.util.event.EventTask;
 import net.hetimatan.util.event.EventTaskRunner;
 import net.hetimatan.util.event.net.KyoroSocketEventRunner;
@@ -52,14 +56,44 @@ public class HtunServer {
 			System.out.println("##="+new String(buffer));
 
 
+			//
+			// parse message
 			MarkableFileReader reader = new MarkableFileReader(buffer);
 			HtunHeader header = HtunHeader.decode(reader);
+			HtunAttribute changeRequest = header.findHtunAttribute(HtunAttribute.CHANGE_RESUQEST);
+			if(changeRequest == null) {
+				// error response
+			}
+			boolean changePort = ((HtunChangeRequest)changeRequest).chagePort();
+			boolean changeIp = ((HtunChangeRequest)changeRequest).changeIp();
 
-			PercentEncoder encoder = new PercentEncoder();
+			//
+			// create response
+			KyoroDatagramImpl tmp = null;
+			if(changeIp&&changePort) {
+				tmp = mDatagramSocket;
+			} else if(changeIp&&!changePort) {
+				tmp = mDatagramSocket;
+			} else if(!changeIp&&!changePort) {
+				tmp = mDatagramSocket;				
+			} else if(!changeIp&&changePort) {
+				tmp = mDatagramSocket;				
+			}
+
+			//
+			//
+			HtunHeader response = new HtunHeader(HtunHeader.BINDING_RESPONSE, header.getId());
+			response.addAttribute(new HtunXxxAddress(
+					HtunAttribute.MAPPED_ADDRESS, 0x01, ip));
+			response.addAttribute(new HtunXxxAddress(
+					HtunAttribute.SOURCE_ADDRESS, 0x01, (byte[])tmp.getMemo()));
+			response.addAttribute(new HtunXxxAddress(
+					HtunAttribute.CHANGE_ADDRESS, 0x01, (byte[])tmp.getMemo()));
+
+			CashKyoroFile output = new CashKyoroFile(1024);
+			response.encode(output.getLastOutput());
 			runner.pushTask(new SendTask(
-					ip,
-					(""+encoder.encode(ip)).getBytes()
-					));
+					ip, CashKyoroFileHelper.newBinary(output)));
 		}
 
 	}

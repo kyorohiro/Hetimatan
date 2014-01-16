@@ -6,6 +6,7 @@ import java.io.OutputStream;
 import net.hetimatan.io.file.MarkableFileReader;
 import net.hetimatan.io.file.MarkableReaderHelper;
 import net.hetimatan.net.stun.message.HtunAttribute;
+import net.hetimatan.util.http.HttpObject;
 import net.hetimatan.util.io.ByteArrayBuilder;
 
 /**
@@ -16,22 +17,26 @@ import net.hetimatan.util.io.ByteArrayBuilder;
  */
 public class HtunXxxAddress extends HtunAttribute {
 
-	private int mType = 0; 
 	private int mFamily = 0;
 	private int mPort = 0;
 	private byte[] mIp = new byte[4];
 
-	public HtunXxxAddress(int type, int family, int port, byte[] ip) {
-		mType = type;
+	public HtunXxxAddress(int type, int family, byte[] ip) {
+		super(type);
 		mFamily = family;
-		mPort = port;
+		mPort = HttpObject.bToPort(ip, 4);
 		for(int i=0;i<4;i++) {
 			mIp[i] = ip[i];
 		}
 	}
 
-	public int getType() {
-		return mType;
+	public HtunXxxAddress(int type, int family, int port, byte[] ip) {
+		super(type);
+		mFamily = family;
+		mPort = port;
+		for(int i=0;i<4;i++) {
+			mIp[i] = ip[i];
+		}
 	}
 
 	public int getFamily() {
@@ -50,7 +55,7 @@ public class HtunXxxAddress extends HtunAttribute {
 	public void encode(OutputStream output) throws IOException {
 		// 2
 		output.write(ByteArrayBuilder.parseShort(
-				mType, ByteArrayBuilder.BYTEORDER_BIG_ENDIAN));
+				getType(), ByteArrayBuilder.BYTEORDER_BIG_ENDIAN));
 		// 2
 		output.write(ByteArrayBuilder.parseShort(
 				8, ByteArrayBuilder.BYTEORDER_BIG_ENDIAN));
