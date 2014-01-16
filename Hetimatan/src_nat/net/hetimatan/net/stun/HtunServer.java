@@ -145,7 +145,7 @@ public class HtunServer {
 			response.addAttribute(new HtunXxxAddress(
 					HtunAttribute.SOURCE_ADDRESS, 0x01, (byte[])tmp.getMemo()));
 			response.addAttribute(new HtunXxxAddress(
-					HtunAttribute.CHANGE_ADDRESS, 0x01, (byte[])tmp.getMemo()));
+					HtunAttribute.CHANGE_ADDRESS, 0x01, (byte[])mSubIp_SubPort.getMemo()));
 
 			CashKyoroFile output = new CashKyoroFile(1024);
 			response.encode(output.getLastOutput());
