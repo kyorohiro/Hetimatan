@@ -9,7 +9,8 @@ import net.hetimatan.net.stun.message.HtunAttribute;
 import net.hetimatan.util.io.ByteArrayBuilder;
 
 public class HtunChangeRequest extends HtunAttribute {
-	
+
+	public static final int STATUS_NO_CHANGE_PORT_IP = 0x00;
 	public static final int STATUS_CHANGE_PORT = 0x02;
 	public static final int STATUS_CHANGE_IP = 0x04;
 	public static final int STATUS_CHANGE_IP_PORT = 0x06;
