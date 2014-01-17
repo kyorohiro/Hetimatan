@@ -44,17 +44,17 @@ public class HtunServer {
 			mMainIp_MainPort.setMemo(address);
 		}
 		{
-			byte[] address = HttpObject.address(HttpObject.ntoa(mMainIp), mMainPort);
+			byte[] address = HttpObject.address(HttpObject.ntoa(mMainIp), mSubPort);
 			mMainIp_SubPort.bind(address);
 			mMainIp_SubPort.setMemo(address);
 		}
 		{
-			byte[] address = HttpObject.address(HttpObject.ntoa(mMainIp), mMainPort);
+			byte[] address = HttpObject.address(HttpObject.ntoa(mSubIp), mMainPort);
 			mSubIp_MainPort.bind(address);
 			mSubIp_MainPort.setMemo(address);			
 		}
 		{
-			byte[] address = HttpObject.address(HttpObject.ntoa(mMainIp), mMainPort);
+			byte[] address = HttpObject.address(HttpObject.ntoa(mSubIp), mSubPort);
 			mSubIp_SubPort.bind(address);
 			mSubIp_SubPort.setMemo(address);
 		}
@@ -105,52 +105,71 @@ public class HtunServer {
 		return mRunner;
 	}
 
+	public HtunHeader parseMessage(byte[] buffer) throws IOException {
+		MarkableFileReader reader = new MarkableFileReader(buffer);
+		HtunHeader header = HtunHeader.decode(reader);
+		return header;
+	}
+
+	public HtunChangeRequest parseMessage(HtunHeader header) throws IOException {
+		HtunAttribute changeRequest = header.findHtunAttribute(HtunAttribute.CHANGE_RESUQEST);
+		if (changeRequest != null) {
+			return (HtunChangeRequest)changeRequest;
+		} else {
+			return null;
+		}
+	}
+
+	public KyoroDatagramImpl selectSocket(HtunChangeRequest changeRequest) {
+		boolean changePort = changeRequest.chagePort();
+		boolean changeIp = changeRequest.changeIp();
+		KyoroDatagramImpl tmp = null;
+		if(!changeIp&&!changePort) {
+			tmp = mMainIp_MainPort;
+		} else if(!changeIp&&changePort) {
+			tmp = mMainIp_SubPort;
+		} else if(changeIp&&!changePort) {
+			tmp = mSubIp_MainPort;			
+		} else if(changeIp&&changePort) {
+			tmp = mSubIp_SubPort;
+		}
+		return tmp;
+	}
+
+	public byte[] createResponse(HtunHeader header, byte[] mappedIp, KyoroDatagramImpl responseSocket) throws IOException {
+		HtunHeader response = new HtunHeader(HtunHeader.BINDING_RESPONSE, header.getId());
+		response.addAttribute(new HtunXxxAddress(HtunAttribute.MAPPED_ADDRESS, 0x01, mappedIp));
+		response.addAttribute(new HtunXxxAddress(HtunAttribute.SOURCE_ADDRESS, 0x01, (byte[])responseSocket.getMemo()));
+		response.addAttribute(new HtunXxxAddress(HtunAttribute.CHANGE_ADDRESS, 0x01, (byte[])mSubIp_SubPort.getMemo()));
+
+		CashKyoroFile output = new CashKyoroFile(1024);
+		response.encode(output.getLastOutput());
+		return CashKyoroFileHelper.newBinary(output);
+	}
+
 	public class ReceiveTask extends EventTask {
 		@Override
 		public void action(EventTaskRunner runner) throws Throwable {
-			byte[] ip = mMainIp_MainPort.receive();
+			byte[] mappedIp = mMainIp_MainPort.receive();
 			byte[] buffer = mMainIp_MainPort.getByte();
 			System.out.println("##="+new String(buffer));
 
-
-			//
 			// parse message
-			MarkableFileReader reader = new MarkableFileReader(buffer);
-			HtunHeader header = HtunHeader.decode(reader);
-			HtunAttribute changeRequest = header.findHtunAttribute(HtunAttribute.CHANGE_RESUQEST);
+			HtunHeader header = parseMessage(buffer);
+			HtunChangeRequest changeRequest = parseMessage(header);
 			if(changeRequest == null) {
 				// error response
+				return;
 			}
-			boolean changePort = ((HtunChangeRequest)changeRequest).chagePort();
-			boolean changeIp = ((HtunChangeRequest)changeRequest).changeIp();
 
-			//
+			// select response socket
+ 			KyoroDatagramImpl responseSocket = selectSocket(changeRequest);
+
 			// create response
-			KyoroDatagramImpl tmp = null;
-			if(!changeIp&&!changePort) {
-				tmp = mMainIp_MainPort;
-			} else if(!changeIp&&changePort) {
-				tmp = mMainIp_SubPort;
-			} else if(changeIp&&!changePort) {
-				tmp = mSubIp_MainPort;			
-			} else if(changeIp&&changePort) {
-				tmp = mSubIp_SubPort;
-			}
-
-			//
-			//
-			HtunHeader response = new HtunHeader(HtunHeader.BINDING_RESPONSE, header.getId());
-			response.addAttribute(new HtunXxxAddress(
-					HtunAttribute.MAPPED_ADDRESS, 0x01, ip));
-			response.addAttribute(new HtunXxxAddress(
-					HtunAttribute.SOURCE_ADDRESS, 0x01, (byte[])tmp.getMemo()));
-			response.addAttribute(new HtunXxxAddress(
-					HtunAttribute.CHANGE_ADDRESS, 0x01, (byte[])mSubIp_SubPort.getMemo()));
-
-			CashKyoroFile output = new CashKyoroFile(1024);
-			response.encode(output.getLastOutput());
-			runner.pushTask(new SendTask(tmp,
-					ip, CashKyoroFileHelper.newBinary(output)));
+			byte[] responseSource = createResponse(header, mappedIp, responseSocket);
+			
+			// send
+			runner.pushTask(new SendTask(responseSocket, mappedIp, responseSource));
 		}
 
 	}
