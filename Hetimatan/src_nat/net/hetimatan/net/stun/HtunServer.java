@@ -31,6 +31,9 @@ public class HtunServer {
 
 	public HtunServer(byte[] mainIp, byte[] subIp, int mainPort, int subPort) throws IOException {
 	    mMainIp_MainPort = new KyoroDatagramImpl();
+	    mMainIp_SubPort = new KyoroDatagramImpl();
+		mSubIp_MainPort = new KyoroDatagramImpl();
+		mSubIp_SubPort = new KyoroDatagramImpl();
 	    mMainIp = mainIp;
 	    mSubIp = subIp;
 	    mMainPort = mainPort;
