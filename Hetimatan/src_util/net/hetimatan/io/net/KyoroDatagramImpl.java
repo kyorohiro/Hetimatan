@@ -10,7 +10,7 @@ import java.nio.channels.SelectableChannel;
 
 import net.hetimatan.util.http.HttpObject;
 
-public class KyoroDatagramImpl extends KyoroSelectable {
+public class KyoroDatagramImpl extends KyoroDatagram {
 
 	private DatagramChannel mChannel = null;
 	private ByteBuffer mBuffer = ByteBuffer.allocate(8*1024);
@@ -25,6 +25,7 @@ public class KyoroDatagramImpl extends KyoroSelectable {
 		return mChannel;
 	}
 
+	@Override
 	public void bind(byte[] ip) throws IOException {
 		byte[] addr = HttpObject.ip2Address(ip);
 		int port = HttpObject.bToPort(ip, addr.length);
@@ -34,15 +35,18 @@ public class KyoroDatagramImpl extends KyoroSelectable {
 		mChannel.socket().bind(addrO);
 	}
 
+	@Override
 	public void bind(int port) throws IOException {
 		mChannel.socket().bind(new InetSocketAddress(port));
 	}
 
+	@Override
 	public byte[] getByte() {
 		System.out.println("-----"+mBuffer.position());
 		return mBuffer.array();
 	}
 
+	@Override
 	public byte[] receive() throws IOException {
 		mBuffer.position(0);
 //		mBuffer = ByteBuffer.allocate(8192);
@@ -58,10 +62,12 @@ public class KyoroDatagramImpl extends KyoroSelectable {
 		return ret;
 	}
 
+	@Override
 	public int send(byte[] message, byte[] address) throws IOException {
 		return send(message, 0, message.length, address);
 	}
 
+	@Override
 	public int send(byte[] message, int start, int length, byte[] address) throws IOException {
 		InetSocketAddress iad = getInetSocketAddress(address);
 		ByteBuffer buffer = ByteBuffer.allocate(length);
@@ -71,6 +77,7 @@ public class KyoroDatagramImpl extends KyoroSelectable {
 		return ret;
 	}
 
+	@Override
 	public void regist(KyoroSelector selector, int key) throws IOException {
 		mChannel.register(selector.getSelector(), key);
 		selector.putClient(this);
