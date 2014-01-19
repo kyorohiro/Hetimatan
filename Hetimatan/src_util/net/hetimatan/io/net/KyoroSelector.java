@@ -20,30 +20,27 @@ public class KyoroSelector {
 	
 	public static final int CANCEL = -1;
 
-	private Selector mSelector = null;
+	private Selector mRawSelector = null;
 	private boolean mIsClosed = false;
 
 	private WeakHashMap<SelectableChannel, KyoroSelectable> mClientList 
 	= new WeakHashMap<SelectableChannel, KyoroSelectable>();
 
-	private Iterator<SelectionKey>  mCurrentKeyList = null;
-	private SelectionKey mCurrentKey = null;
+	private Iterator<SelectionKey>  mCurrentRawKeyList = null;
+	private SelectionKey mCurrentRawKey = null;
+
 	private KyoroSelectable mCurrentSocket = null;
+	private int mCurrentKey = -1;
 
 	public void putClient(KyoroSelectable s) {
 		mClientList.put(s.getRawChannel(), s);
 	}
 
 	public Selector getSelector() throws IOException {
-		if(mSelector == null&&!mIsClosed) {
-			mSelector = Selector.open();
+		if(mRawSelector == null&&!mIsClosed) {
+			mRawSelector = Selector.open();
 		}
-		return mSelector;
-	}
-
-	public Set<SelectionKey> a() throws IOException {
-		Selector selector = getSelector();
-		return selector.selectedKeys();
+		return mRawSelector;
 	}
 
 	public int select(int timeout) throws IOException {
@@ -62,12 +59,12 @@ public class KyoroSelector {
 	}
 
 	public synchronized void wakeup() {
-		mSelector.wakeup();
+		mRawSelector.wakeup();
 	}
 
 	public void close() throws IOException {
 		mIsClosed = true;
-		Selector s =mSelector;
+		Selector s =mRawSelector;
 		if(s != null) {
 			for(SelectionKey key:s.selectedKeys()) {
 				if(key != null) {
@@ -75,26 +72,28 @@ public class KyoroSelector {
 				}
 			}
 			s.close();
-			mSelector = null;
+			mRawSelector = null;
 		}
 	}
 
 
 	public boolean next() {
-		mCurrentKey = null;
+		mCurrentRawKey = null;
 		mCurrentSocket = null;
+		mCurrentKey = -1;
 
-		if(mCurrentKeyList == null) {
-			mCurrentKeyList = mSelector.selectedKeys().iterator();
+		if(mCurrentRawKeyList == null) {
+			mCurrentRawKeyList = mRawSelector.selectedKeys().iterator();
 		}
-		if (!mCurrentKeyList.hasNext()) {
-			mCurrentKeyList = null;
+		if (!mCurrentRawKeyList.hasNext()) {
+			mCurrentRawKeyList = null;
 			return false;
 		}
-		mCurrentKey = mCurrentKeyList.next();
-		mCurrentKeyList.remove();
-		SelectableChannel channel = mCurrentKey.channel();
+		mCurrentRawKey = mCurrentRawKeyList.next();
+		mCurrentRawKeyList.remove();
+		SelectableChannel channel = mCurrentRawKey.channel();
 		mCurrentSocket = mClientList.get(channel);
+		mCurrentKey = convertKey(mCurrentRawKey);
 		return true;
 	}
 
@@ -103,22 +102,27 @@ public class KyoroSelector {
 	}
 
 
-	public int getkey() {
+	public static  int convertKey(SelectionKey rawKey) {
 		try {
-			if(mCurrentKey.isAcceptable()) {
+			if(rawKey.isAcceptable()) {
 				return KyoroSelector.ACCEPT;
 			}
-			else if(mCurrentKey.isConnectable()) {
+			else if(rawKey.isConnectable()) {
 				return KyoroSelector.CONNECT;
 			}
-			else if(mCurrentKey.isReadable()) {
+			else if(rawKey.isReadable()) {
 				return KyoroSelector.READ;
 			}
-			else if(mCurrentKey.isWritable()) {
+			else if(rawKey.isWritable()) {
 				return KyoroSelector.WRITE;
 			}
 		} catch(CancelledKeyException e) {}
 		return KyoroSelector.CANCEL;
+		
+	}
+
+	public int getkey() {
+		return mCurrentKey;
 	}
 	
 }
