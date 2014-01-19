@@ -14,15 +14,6 @@ public class KyoroDatagramImpl extends KyoroSelectable {
 
 	private DatagramChannel mChannel = null;
 	private ByteBuffer mBuffer = ByteBuffer.allocate(8*1024);
-	private Object mMemo = null;
-
-	public void setMemo(byte[] tmp) {
-		mMemo = tmp;
-	}
-
-	public Object getMemo() {
-		return mMemo;
-	}
 
 	public KyoroDatagramImpl() throws IOException {
 		mChannel = DatagramChannel.open();

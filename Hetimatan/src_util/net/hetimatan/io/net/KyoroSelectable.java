@@ -18,6 +18,15 @@ public abstract class KyoroSelectable {
 	private WeakReference<EventTask> mReadTask = null; 
 	private WeakReference<EventTask> mWriteTask = null; 
 	private WeakReference<EventTask> mConnectTask = null; 
+	private Object mMemo = null;
+
+	public void setMemo(byte[] tmp) {
+		mMemo = tmp;
+	}
+
+	public Object getMemo() {
+		return mMemo;
+	}
 
 	public void setRelative(Object obj) {
 		mRelative = new WeakReference<Object>(obj);
