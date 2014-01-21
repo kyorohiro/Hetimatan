@@ -7,6 +7,7 @@ import java.nio.channels.SelectableChannel;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Set;
 import java.util.WeakHashMap;
 
@@ -33,7 +34,12 @@ public class KyoroSelector {
 	private int mCurrentKey = -1;
 
 	public void putClient(KyoroSelectable s) {
-		mClientList.put(s.getRawChannel(), s);
+		SelectableChannel channel = s.getRawChannel();
+		if(channel != null) {
+			mClientList.put(channel, s);
+		} else {
+			// debug
+		}
 	}
 
 	public Selector getSelector() throws IOException {
@@ -78,6 +84,17 @@ public class KyoroSelector {
 
 
 	public boolean next() {
+		boolean ret = nextFromSelectableChannel();
+		if(ret) {
+			return ret;
+		} else {
+			return nextFromMock();
+		}
+	}
+
+
+
+	private boolean nextFromSelectableChannel() {
 		mCurrentRawKey = null;
 		mCurrentSocket = null;
 		mCurrentKey = -1;
@@ -124,5 +141,35 @@ public class KyoroSelector {
 	public int getkey() {
 		return mCurrentKey;
 	}
-	
+
+
+	//
+	// 
+	//
+	public synchronized void wakeup(KyoroSelectable selectable, int key) {
+		mMock.add(new MockSelectorInfo(selectable, key));
+		mRawSelector.wakeup();
+	}
+
+	private LinkedList<MockSelectorInfo> mMock = new LinkedList<>();
+	public static class MockSelectorInfo {
+		public KyoroSelectable mSelectable = null;
+		public int mKey = 0;
+		public MockSelectorInfo(KyoroSelectable selector, int key) {
+			mSelectable = selector;
+			mKey = key;
+		}
+	}
+	private boolean nextFromMock() {
+		if(mMock.size() >0) {
+			MockSelectorInfo info = mMock.removeFirst();
+			mCurrentSocket = info.mSelectable;
+			mCurrentKey = info.mKey;
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+
 }
