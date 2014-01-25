@@ -1,9 +1,12 @@
 package net.hetimatan.io.net;
 
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.nio.channels.SelectableChannel;
 import java.util.LinkedList;
 import java.util.Stack;
+
+import com.sun.org.apache.bcel.internal.generic.GETSTATIC;
 
 import net.hetimatan.util.io.ByteArrayBuilder;
 
@@ -14,8 +17,17 @@ import net.hetimatan.util.io.ByteArrayBuilder;
 public class KyoroDatagramMock extends KyoroDatagram {
 
 	private Stack<DatagramPacket> mPackets = new Stack<>();
+	private WeakReference<KyoroSelector> mCurrentSelector = null;
 	public void onReceivePacket(byte[] content, byte[] ip) {
 		mPackets.push(new DatagramPacket(content, ip));
+		if(mCurrentSelector == null) {
+			return;
+		}
+		KyoroSelector selector = this.mCurrentSelector.get();
+		if(selector == null) {
+			return;
+		}
+		selector.wakeup(this, KyoroSelector.READ);
 	}
 
 	private byte[] mIp = {0,0,0,0, 0,0};
@@ -94,6 +106,7 @@ public class KyoroDatagramMock extends KyoroDatagram {
 
 	@Override
 	public void regist(KyoroSelector selector, int key) throws IOException {
+		mCurrentSelector = new WeakReference<KyoroSelector>(selector);
 		selector.putClient(this);		
 	}
 

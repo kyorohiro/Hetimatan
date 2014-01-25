@@ -50,11 +50,16 @@ public class KyoroSelector {
 	}
 
 	public int select(int timeout) throws IOException {
+		int ret = selectFromMock_Zero();
+		if(ret != 0) {
+			return ret;
+		}
+
 		Selector selector = getSelector();
 		if(selector == null) {
 			return 0;
 		}
-		int ret = 0;
+		ret = 0;
 	
 		if(timeout == 0) {
 			ret = selector.selectNow();
@@ -91,7 +96,6 @@ public class KyoroSelector {
 			return nextFromMock();
 		}
 	}
-
 
 
 	private boolean nextFromSelectableChannel() {
@@ -171,5 +175,13 @@ public class KyoroSelector {
 		}
 	}
 
+	public int selectFromMock_Zero() {
+		if(mMock.size() >0) {
+			MockSelectorInfo info = mMock.getFirst();
+			return info.mKey;
+		} else {
+			return 0;
+		}
+	}
 
 }

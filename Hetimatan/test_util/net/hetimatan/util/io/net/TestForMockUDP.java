@@ -5,7 +5,6 @@ import java.net.UnknownHostException;
 
 import net.hetimatan.io.net.KyoroDatagramMock;
 import net.hetimatan.io.net.KyoroSelector;
-import net.hetimatan.util.event.net.KyoroSocketEventRunner;
 import net.hetimatan.util.http.HttpObject;
 import junit.framework.TestCase;
 import net.hetimatan.util.test.*;
@@ -41,6 +40,20 @@ public class TestForMockUDP extends TestCase {
 			d2.bind(HttpObject.address("127.0.0.2", 801));
 
 			d1.regist(selector, KyoroSelector.READ);
+			selector.select(0);
+			assertEquals(false, selector.next());
+			
+			d2.send("abc".getBytes(), HttpObject.address("127.0.0.1", 800));
+			selector.select(0);
+			assertEquals(true, selector.next());
+
+			byte[] receiveAddress = d1.receive();
+			byte[] receiveData = d1.getByte();
+			{
+				TestUtil.assertArrayEquals(this, "..", "abc".getBytes(), receiveData);
+				TestUtil.assertArrayEquals(this, "..", HttpObject.address("127.0.0.2", 801), receiveAddress);
+			}
+
 			selector.select(0);
 			assertEquals(false, selector.next());
 		} finally {
