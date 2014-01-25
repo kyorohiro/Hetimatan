@@ -15,6 +15,19 @@ import net.hetimatan.util.io.ByteArrayBuilder;
 // 画面上に表示する
 //
 public class KyoroDatagramMock extends KyoroDatagram {
+	public static final int NIC_TYPE_FULL_CONE = 0;
+	public static final int NIC_TYPE_RESTRICTED = 1;
+	public static final int NIC_TYPE_RESTRICTED_PORT = 2;
+	public static final int NIC_TYPE_SYMMETRIC = 3;
+
+	private int mNatType = 0;
+	public KyoroDatagramMock(int type) {
+		mNatType = type;
+	}
+
+	public int getNatType() {
+		return mNatType;
+	}
 
 	private Stack<DatagramPacket> mPackets = new Stack<>();
 	private WeakReference<KyoroSelector> mCurrentSelector = null;

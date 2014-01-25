@@ -11,8 +11,8 @@ import net.hetimatan.util.test.*;
 public class TestForMockUDP extends TestCase {
 
 	public void testSendReceive() throws UnknownHostException, IOException {
-		KyoroDatagramMock d1 = new KyoroDatagramMock();
-		KyoroDatagramMock d2 = new KyoroDatagramMock();
+		KyoroDatagramMock d1 = new KyoroDatagramMock(KyoroDatagramMock.NIC_TYPE_FULL_CONE);
+		KyoroDatagramMock d2 = new KyoroDatagramMock(KyoroDatagramMock.NIC_TYPE_FULL_CONE);
 		try {
 			d1.bind(HttpObject.address("127.0.0.1", 800));
 			d2.bind(HttpObject.address("127.0.0.2", 801));
@@ -33,8 +33,8 @@ public class TestForMockUDP extends TestCase {
 	public void testSelector() throws UnknownHostException, IOException {
 		KyoroSelector selector = new KyoroSelector();
 		//		KyoroSocketEventRunner runner = new KyoroSocketEventRunner();
-		KyoroDatagramMock d1 = new KyoroDatagramMock();
-		KyoroDatagramMock d2 = new KyoroDatagramMock();
+		KyoroDatagramMock d1 = new KyoroDatagramMock(KyoroDatagramMock.NIC_TYPE_FULL_CONE);
+		KyoroDatagramMock d2 = new KyoroDatagramMock(KyoroDatagramMock.NIC_TYPE_FULL_CONE);
 		try {
 			d1.bind(HttpObject.address("127.0.0.1", 800));
 			d2.bind(HttpObject.address("127.0.0.2", 801));
