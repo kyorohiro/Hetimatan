@@ -11,7 +11,7 @@ import net.hetimatan.util.io.ByteArrayBuilder;
 // test用
 // 画面上に表示する
 //
-public class KyoroDatagramUI extends KyoroDatagram {
+public class KyoroDatagramMock extends KyoroDatagram {
 
 	private Stack<DatagramPacket> mPackets = new Stack<>();
 	public void onReceivePacket(byte[] content, byte[] ip) {
@@ -32,7 +32,7 @@ public class KyoroDatagramUI extends KyoroDatagram {
 		for(int i=0;i<ip.length;i++) {
 			mIp[i] = ip[i];
 		}
-		if( null == DatagramUiMgr.getInstance().find(mIp) ) {
+		if( null != DatagramUiMgr.getInstance().find(mIp) ) {
 			throw new IOException();
 		}
 		DatagramUiMgr.getInstance().bind(this);
@@ -76,9 +76,9 @@ public class KyoroDatagramUI extends KyoroDatagram {
 
 	@Override
 	public int send(byte[] message, byte[] address) throws IOException {
-		KyoroDatagramUI datagram = DatagramUiMgr.getInstance().find(address);
+		KyoroDatagramMock datagram = DatagramUiMgr.getInstance().find(address);
 		if(datagram == null) { throw new IOException();}
-		datagram.onReceivePacket(message, address);
+		datagram.onReceivePacket(message, getIp());
 		return message.length;
 	}
 
@@ -112,7 +112,12 @@ public class KyoroDatagramUI extends KyoroDatagram {
 			}
 		}
 	}
-	
+
+	@Override
+	public void close() throws IOException {
+		DatagramUiMgr.getInstance().close(this);
+		super.close();
+	}
 
 	public static class DatagramUiMgr {
 		private static DatagramUiMgr sInst = null;
@@ -123,16 +128,20 @@ public class KyoroDatagramUI extends KyoroDatagram {
 			return sInst;
 		}
 
-		LinkedList<KyoroDatagramUI> bindedList = new LinkedList<>();
+		LinkedList<KyoroDatagramMock> bindedList = new LinkedList<>();
 		public DatagramUiMgr() {
 		}
 
-		public void bind(KyoroDatagramUI datagram) {
+		public void bind(KyoroDatagramMock datagram) {
 			bindedList.add(datagram);
 		}
 
-		public KyoroDatagramUI find(byte[] ip) {
-			for(KyoroDatagramUI item: bindedList) {
+		public void close(KyoroDatagramMock datagram) {
+			bindedList.remove(datagram);
+		}
+
+		public KyoroDatagramMock find(byte[] ip) {
+			for(KyoroDatagramMock item: bindedList) {
 				if(item == null) {continue;}
 				byte[] itemIp = item.getIp();
 				boolean isEqual = true;
