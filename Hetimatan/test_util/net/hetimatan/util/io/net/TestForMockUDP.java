@@ -17,12 +17,12 @@ public class TestForMockUDP extends TestCase {
 			d1.bind(HttpObject.address("127.0.0.1", 800));
 			d2.bind(HttpObject.address("127.0.0.2", 801));
 
-			d1.send("abc".getBytes(), HttpObject.address("127.0.0.2", 801));
+			d1.send("abc".getBytes(), d2.getMappedIp());
 			byte[] receiveAddress = d2.receive();
 			byte[] receiveData = d2.getByte();
 			{
 				TestUtil.assertArrayEquals(this, "..", "abc".getBytes(), receiveData);
-				TestUtil.assertArrayEquals(this, "..", HttpObject.address("127.0.0.1", 800), receiveAddress);
+				TestUtil.assertArrayEquals(this, "..", d1.getMappedIp(), receiveAddress);
 			}
 		} finally {
 			d1.close();
@@ -43,7 +43,7 @@ public class TestForMockUDP extends TestCase {
 			selector.select(0);
 			assertEquals(false, selector.next());
 			
-			d2.send("abc".getBytes(), HttpObject.address("127.0.0.1", 800));
+			d2.send("abc".getBytes(), d1.getMappedIp());
 			selector.select(0);
 			assertEquals(true, selector.next());
 
@@ -51,7 +51,7 @@ public class TestForMockUDP extends TestCase {
 			byte[] receiveData = d1.getByte();
 			{
 				TestUtil.assertArrayEquals(this, "..", "abc".getBytes(), receiveData);
-				TestUtil.assertArrayEquals(this, "..", HttpObject.address("127.0.0.2", 801), receiveAddress);
+				TestUtil.assertArrayEquals(this, "..", d2.getMappedIp(), receiveAddress);
 			}
 
 			selector.select(0);

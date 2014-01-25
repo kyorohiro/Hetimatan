@@ -8,6 +8,7 @@ import java.util.Stack;
 
 import com.sun.org.apache.bcel.internal.generic.GETSTATIC;
 
+import net.hetimatan.util.http.HttpObject;
 import net.hetimatan.util.io.ByteArrayBuilder;
 
 //
@@ -15,10 +16,11 @@ import net.hetimatan.util.io.ByteArrayBuilder;
 // 画面上に表示する
 //
 public class KyoroDatagramMock extends KyoroDatagram {
-	public static final int NIC_TYPE_FULL_CONE = 0;
-	public static final int NIC_TYPE_RESTRICTED = 1;
-	public static final int NIC_TYPE_RESTRICTED_PORT = 2;
-	public static final int NIC_TYPE_SYMMETRIC = 3;
+	public static final int NIC_TYPE_OPEN_INTERNET = 0;
+	public static final int NIC_TYPE_FULL_CONE = 1;
+	public static final int NIC_TYPE_RESTRICTED = 2;
+	public static final int NIC_TYPE_RESTRICTED_PORT = 3;
+	public static final int NIC_TYPE_SYMMETRIC = 4;
 
 	private int mNatType = 0;
 	public KyoroDatagramMock(int type) {
@@ -43,8 +45,8 @@ public class KyoroDatagramMock extends KyoroDatagram {
 		selector.wakeup(this, KyoroSelector.READ);
 	}
 
-	private byte[] mIp = {0,0,0,0, 0,0};
 	private DatagramPacket mCurrentPacket = null;
+	private LinkedList<MappedAddress> mAddressList = new LinkedList<>();
 
 	@Override
 	public SelectableChannel getRawChannel() {
@@ -54,25 +56,37 @@ public class KyoroDatagramMock extends KyoroDatagram {
 
 	@Override
 	public void bind(byte[] ip) throws IOException {
-		for(int i=0;i<ip.length;i++) {
-			mIp[i] = ip[i];
-		}
-		if( null != DatagramUiMgr.getInstance().find(mIp) ) {
+		MappedAddress pa = new MappedAddress(ip, null); 
+		mAddressList.add(pa);
+		if( null != DatagramUiMgr.getInstance().find(pa.getMappedAd()) ) {
 			throw new IOException();
 		}
 		DatagramUiMgr.getInstance().bind(this);
 	}
 
-	public byte[] getIp() {
-		return mIp;
+	public int numOfMappedAddress() {
+		return mAddressList.size(); 
+	}
+
+	public MappedAddress getMappedAddress(int i) {
+		return mAddressList.get(i);
+	}
+
+	public byte[] getRawIp() {
+		return mAddressList.get(0).getRawAd();
+	}
+
+	public byte[] getMappedIp() {
+		return mAddressList.get(0).getMappedAd();
 	}
 
 	@Override
 	public void bind(int port) throws IOException {
 		byte[] portByte = ByteArrayBuilder.parseInt(port, ByteArrayBuilder.BYTEORDER_BIG_ENDIAN);
-		mIp[4] = portByte[0];
-		mIp[4+1] = portByte[1];
-		if( null == DatagramUiMgr.getInstance().find(mIp) ) {
+		byte[] base = {0,0,0,0, 0,0};
+		base[4] = portByte[0];
+		base[4+1] = portByte[1];
+		if( null == DatagramUiMgr.getInstance().find(base) ) {
 			throw new IOException();
 		}
 		DatagramUiMgr.getInstance().bind(this);
@@ -103,7 +117,7 @@ public class KyoroDatagramMock extends KyoroDatagram {
 	public int send(byte[] message, byte[] address) throws IOException {
 		KyoroDatagramMock datagram = DatagramUiMgr.getInstance().find(address);
 		if(datagram == null) { throw new IOException();}
-		datagram.onReceivePacket(message, getIp());
+		datagram.onReceivePacket(message, getMappedIp());
 		return message.length;
 	}
 
@@ -145,6 +159,42 @@ public class KyoroDatagramMock extends KyoroDatagram {
 		super.close();
 	}
 
+	public static class MappedAddress {
+		public static final int BASE = 0;
+		private static int sNextMapped = BASE;
+		public static LinkedList<MappedAddress> sList = new LinkedList<>(); 
+
+		public MappedAddress(byte[] rawAd, byte[] sendAd) {
+			System.arraycopy(rawAd, 0, mRawAd, 0, 6);
+			if(sendAd != null) {
+				System.arraycopy(sendAd, 0, mSendAd, 0, 6);
+			}
+			{
+				byte[] ad = new byte[6];
+				byte[] r = ByteArrayBuilder.parseInt(sNextMapped, ByteArrayBuilder.BYTEORDER_BIG_ENDIAN);
+				System.arraycopy(r, 0, mMappedAd, 0, 4);
+				sNextMapped++;
+			}
+			sList.add(this);
+		}
+
+		private byte[] mMappedAd = new byte[6];
+		private byte[] mRawAd = new byte[6];
+		private byte[] mSendAd = new byte[6];
+
+		public byte[] getMappedAd() {
+			return mMappedAd;
+		}
+
+		public byte[] getRawAd() {
+			return mRawAd;
+		}
+
+		public byte[] getSendAd() {
+			return mSendAd;
+		}
+	}
+
 	public static class DatagramUiMgr {
 		private static DatagramUiMgr sInst = null;
 		public static DatagramUiMgr getInstance() {
@@ -162,6 +212,7 @@ public class KyoroDatagramMock extends KyoroDatagram {
 			bindedList.add(datagram);
 		}
 
+
 		public void close(KyoroDatagramMock datagram) {
 			bindedList.remove(datagram);
 		}
@@ -169,7 +220,7 @@ public class KyoroDatagramMock extends KyoroDatagram {
 		public KyoroDatagramMock find(byte[] ip) {
 			for(KyoroDatagramMock item: bindedList) {
 				if(item == null) {continue;}
-				byte[] itemIp = item.getIp();
+				byte[] itemIp = item.getMappedIp();
 				boolean isEqual = true;
 				for(int i=0;i<ip.length;i++) {
 					if(itemIp[i] != ip[i]) {
