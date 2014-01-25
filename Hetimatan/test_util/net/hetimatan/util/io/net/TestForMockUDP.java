@@ -61,5 +61,39 @@ public class TestForMockUDP extends TestCase {
 			d2.close();
 		}
 	}
-	
+
+	public void testNatTest() throws UnknownHostException, IOException {
+		KyoroDatagramMock d1 = new KyoroDatagramMock(KyoroDatagramMock.NIC_TYPE_FULL_CONE);
+		KyoroDatagramMock d2 = new KyoroDatagramMock(KyoroDatagramMock.NIC_TYPE_RESTRICTED_PORT);
+		try {
+			d1.bind(HttpObject.address("127.0.0.1", 800));
+			d2.bind(HttpObject.address("127.0.0.2", 801));
+
+			try {
+				d1.send("...".getBytes(), d2.getMappedIp());
+				assertEquals(0, 1);
+			} catch(Exception e) {
+			}
+
+			try {
+				d2.send("....".getBytes(), d1.getMappedIp());
+			} catch(Exception e) {
+			}
+
+			{
+				d1.send("abc".getBytes(), d2.getMappedIp());
+			}
+
+			byte[] receiveAddress = d2.receive();
+			byte[] receiveData = d2.getByte();
+			{
+				TestUtil.assertArrayEquals(this, "..", "abc".getBytes(), receiveData);
+				TestUtil.assertArrayEquals(this, "..", d1.getMappedIp(), receiveAddress);
+			}
+		} finally {
+			d1.close();
+			d2.close();
+		}
+	}
+
 }

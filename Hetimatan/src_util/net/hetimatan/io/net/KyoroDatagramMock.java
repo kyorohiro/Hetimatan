@@ -18,7 +18,7 @@ import net.hetimatan.util.io.ByteArrayBuilder;
 public class KyoroDatagramMock extends KyoroDatagram {
 	public static final int NIC_TYPE_OPEN_INTERNET = 0;
 	public static final int NIC_TYPE_FULL_CONE = 1;
-	public static final int NIC_TYPE_RESTRICTED = 2;
+	public static final int NIC_TYPE_RESTRICTED_ADDRESS = 2;
 	public static final int NIC_TYPE_RESTRICTED_PORT = 3;
 	public static final int NIC_TYPE_SYMMETRIC = 4;
 
@@ -33,7 +33,10 @@ public class KyoroDatagramMock extends KyoroDatagram {
 
 	private Stack<DatagramPacket> mPackets = new Stack<>();
 	private WeakReference<KyoroSelector> mCurrentSelector = null;
-	public void onReceivePacket(byte[] content, byte[] ip) {
+	public void onReceivePacket(byte[] content, byte[] ip) throws IOException {
+		if(!isConnectable(ip)) {
+			throw new IOException("failed connect");
+		}
 		mPackets.push(new DatagramPacket(content, ip));
 		if(mCurrentSelector == null) {
 			return;
@@ -43,6 +46,36 @@ public class KyoroDatagramMock extends KyoroDatagram {
 			return;
 		}
 		selector.wakeup(this, KyoroSelector.READ);
+	}
+
+	public boolean isConnectable(byte[] ip) {
+		boolean ret = false;
+		//
+		// 
+		if (mNatType == KyoroDatagramMock.NIC_TYPE_FULL_CONE) {
+			return true;
+		} else if(mNatType == KyoroDatagramMock.NIC_TYPE_FULL_CONE){
+			return true;
+		} else if(mNatType == KyoroDatagramMock.NIC_TYPE_SYMMETRIC){
+			return true;
+		}
+
+		for(MappedAddress address : mAddressList) {
+			if (mNatType == KyoroDatagramMock.NIC_TYPE_RESTRICTED_ADDRESS) {
+				byte[] sended = address.getSendAd();
+				if(sended != null & 
+				   sended[4] == ip[4] && sended[5] == ip[5]) {
+					return true;
+				}
+			} else if (mNatType == KyoroDatagramMock.NIC_TYPE_RESTRICTED_PORT) {
+				byte[] sended = address.getSendAd();
+				if(sended != null & 
+				   sended[4] == ip[4] && sended[5] == ip[5]) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	private DatagramPacket mCurrentPacket = null;
@@ -118,12 +151,12 @@ public class KyoroDatagramMock extends KyoroDatagram {
 		KyoroDatagramMock datagram = DatagramUiMgr.getInstance().find(address);
 		if(datagram == null) { throw new IOException();}
 		datagram.onReceivePacket(message, getMappedIp());
+		mAddressList.add(new MappedAddress(getRawIp(), address, getMappedIp()));
 		return message.length;
 	}
 
 	@Override
-	public int send(byte[] message, int start, int length, byte[] address)
-			throws IOException {
+	public int send(byte[] message, int start, int length, byte[] address) throws IOException {
 		byte[] ms = new byte[length];
 		for(int i=0;i>length;i++) {
 			ms[i] = message[i+start];
@@ -162,7 +195,18 @@ public class KyoroDatagramMock extends KyoroDatagram {
 	public static class MappedAddress {
 		public static final int BASE = 0;
 		private static int sNextMapped = BASE;
+		private static int sNextPort = 1;
 		public static LinkedList<MappedAddress> sList = new LinkedList<>(); 
+
+		public MappedAddress(byte[] rawAd, byte[] sendAd, byte[] mappedAd) {
+			System.arraycopy(rawAd, 0, mRawAd, 0, 6);
+			if(sendAd != null) {
+				System.arraycopy(sendAd, 0, mSendAd, 0, 6);
+			}
+			System.arraycopy(sendAd, 0, mSendAd, 0, 6);
+			System.arraycopy(mappedAd, 0, mMappedAd, 0, 6);
+			sList.add(this);
+		}
 
 		public MappedAddress(byte[] rawAd, byte[] sendAd) {
 			System.arraycopy(rawAd, 0, mRawAd, 0, 6);
@@ -173,7 +217,10 @@ public class KyoroDatagramMock extends KyoroDatagram {
 				byte[] ad = new byte[6];
 				byte[] r = ByteArrayBuilder.parseInt(sNextMapped, ByteArrayBuilder.BYTEORDER_BIG_ENDIAN);
 				System.arraycopy(r, 0, mMappedAd, 0, 4);
+				byte[] p = ByteArrayBuilder.parseShort(sNextPort, ByteArrayBuilder.BYTEORDER_BIG_ENDIAN);
 				sNextMapped++;
+				System.arraycopy(p, 0, mMappedAd, 4, 2);
+				sNextPort++;sNextMapped %=6000;
 			}
 			sList.add(this);
 		}
