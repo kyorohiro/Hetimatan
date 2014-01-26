@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import net.hetimatan.io.file.KyoroFile;
 import net.hetimatan.io.filen.CashKyoroFile;
-import net.hetimatan.io.net.KyoroSocket;
 import net.hetimatan.net.http.HttpServer;
 import net.hetimatan.net.torrent.tracker._server.TrackerDB;
 import net.hetimatan.net.torrent.tracker._server.TrackerData;
@@ -13,6 +12,7 @@ import net.hetimatan.net.torrent.util.bencode.BenDiction;
 import net.hetimatan.net.torrent.util.bencode.BenObject;
 import net.hetimatan.net.torrent.util.bencode.BenString;
 import net.hetimatan.net.torrent.util.metafile.MetaFile;
+import net.hetimatan.util.event.net.io.KyoroSocket;
 import net.hetimatan.util.http.HttpGetRequestUri;
 import net.hetimatan.util.http.HttpRequestLine;
 import net.hetimatan.util.http.HttpRequest;

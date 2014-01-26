@@ -1,4 +1,4 @@
-package net.hetimatan.io.net;
+package net.hetimatan.util.event.net.mock;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
@@ -8,6 +8,8 @@ import java.util.Stack;
 
 import com.sun.org.apache.bcel.internal.generic.GETSTATIC;
 
+import net.hetimatan.util.event.net.io.KyoroDatagram;
+import net.hetimatan.util.event.net.io.KyoroSelector;
 import net.hetimatan.util.http.HttpObject;
 import net.hetimatan.util.io.ByteArrayBuilder;
 

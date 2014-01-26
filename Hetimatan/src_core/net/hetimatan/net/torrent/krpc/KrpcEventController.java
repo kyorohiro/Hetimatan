@@ -3,7 +3,6 @@ package net.hetimatan.net.torrent.krpc;
 import java.io.IOException;
 
 import net.hetimatan.io.filen.ByteKyoroFile;
-import net.hetimatan.io.net.KyoroDatagramImpl;
 import net.hetimatan.net.torrent.krpc.message.KrpcQuery;
 import net.hetimatan.net.torrent.krpc.message.KrpcResponse;
 import net.hetimatan.net.torrent.krpc.message.QueryFindNode;
@@ -11,6 +10,7 @@ import net.hetimatan.net.torrent.krpc.message.QueryPing;
 import net.hetimatan.net.torrent.krpc.message.ResponsePing;
 import net.hetimatan.net.torrent.util.bencode.BenDiction;
 import net.hetimatan.net.torrent.util.bencode.BenString;
+import net.hetimatan.util.event.net.io.KyoroDatagramImpl;
 
 public class KrpcEventController {
 

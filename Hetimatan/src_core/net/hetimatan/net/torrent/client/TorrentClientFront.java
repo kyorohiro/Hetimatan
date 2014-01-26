@@ -8,8 +8,6 @@ import net.hetimatan.io.file.KyoroFileForKyoroSocket;
 import net.hetimatan.io.file.MarkableFileReader;
 import net.hetimatan.io.file.MarkableReader;
 import net.hetimatan.io.filen.CashKyoroFile;
-import net.hetimatan.io.net.KyoroSelector;
-import net.hetimatan.io.net.KyoroSocket;
 import net.hetimatan.net.torrent.client._front.TorrentFrontMyInfo;
 import net.hetimatan.net.torrent.client._front.TorrentFrontReceiveMessage;
 import net.hetimatan.net.torrent.client._front.TorrentFrontShakeHand;
@@ -28,6 +26,8 @@ import net.hetimatan.net.torrent.client.message.TorrentMessage;
 import net.hetimatan.net.torrent.tracker.TrackerPeerInfo;
 import net.hetimatan.net.torrent.util.piece.PieceInfo;
 import net.hetimatan.util.bitfield.BitField;
+import net.hetimatan.util.event.net.io.KyoroSelector;
+import net.hetimatan.util.event.net.io.KyoroSocket;
 import net.hetimatan.util.log.Log;
 
 /**

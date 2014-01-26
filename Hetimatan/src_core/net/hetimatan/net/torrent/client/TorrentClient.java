@@ -5,11 +5,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 
-import net.hetimatan.io.net.KyoroSelector;
-import net.hetimatan.io.net.KyoroServerSocket;
-import net.hetimatan.io.net.KyoroServerSocketImpl;
-import net.hetimatan.io.net.KyoroSocket;
-import net.hetimatan.io.net.KyoroSocketImpl;
 import net.hetimatan.net.torrent.client._client.TorrentClientGetPeerList;
 import net.hetimatan.net.torrent.client._client.TorrentClientMessageDispatcher;
 import net.hetimatan.net.torrent.client._client.TorrentClientTimeDispatcher;
@@ -24,6 +19,11 @@ import net.hetimatan.net.torrent.util.metafile.MetaFile;
 import net.hetimatan.util.event.EventTask;
 import net.hetimatan.util.event.EventTaskRunner;
 import net.hetimatan.util.event.net.KyoroSocketEventRunner;
+import net.hetimatan.util.event.net.io.KyoroSelector;
+import net.hetimatan.util.event.net.io.KyoroServerSocket;
+import net.hetimatan.util.event.net.io.KyoroServerSocketImpl;
+import net.hetimatan.util.event.net.io.KyoroSocket;
+import net.hetimatan.util.event.net.io.KyoroSocketImpl;
 import net.hetimatan.util.url.PercentEncoder;
 
 /**

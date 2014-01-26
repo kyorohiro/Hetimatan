@@ -1,10 +1,11 @@
 package net.hetimatan.util.event.net;
 
 import java.io.IOException;
-import net.hetimatan.io.net.KyoroSelector;
+
 import net.hetimatan.util.event.EventTask;
 import net.hetimatan.util.event.EventTaskRunner;
 import net.hetimatan.util.event.EventTaskRunnerImple;
+import net.hetimatan.util.event.net.io.KyoroSelector;
 import net.hetimatan.util.log.Log;
 
 

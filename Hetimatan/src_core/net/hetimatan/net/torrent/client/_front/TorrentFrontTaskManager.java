@@ -2,7 +2,6 @@ package net.hetimatan.net.torrent.client._front;
 
 import java.io.IOException;
 
-import net.hetimatan.io.net.KyoroSelector;
 import net.hetimatan.net.torrent.client.TorrentClientFront;
 import net.hetimatan.net.torrent.client.TorrentClient;
 import net.hetimatan.net.torrent.client._front.TorrentFrontReceiveMessage.TorrentFrontReceiverTask;
@@ -17,6 +16,7 @@ import net.hetimatan.net.torrent.client.task.TorrentFrontNotInterestTask;
 import net.hetimatan.net.torrent.client.task.TorrentFrontRequestTask;
 import net.hetimatan.util.event.EventTaskRunner;
 import net.hetimatan.util.event.net.MessageSendTask;
+import net.hetimatan.util.event.net.io.KyoroSelector;
 import net.hetimatan.util.log.Log;
 
 public class TorrentFrontTaskManager {

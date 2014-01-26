@@ -1,9 +1,9 @@
 package net.hetimatan.util.event.net;
 
 import net.hetimatan.io.file.KyoroFile;
-import net.hetimatan.io.net.KyoroSocket;
 import net.hetimatan.util.event.EventTask;
 import net.hetimatan.util.event.EventTaskRunner;
+import net.hetimatan.util.event.net.io.KyoroSocket;
 import net.hetimatan.util.io.ByteArrayBuilder;
 
 /**

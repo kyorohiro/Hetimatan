@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 
 import net.hetimatan.io.file.MarkableReader;
-import net.hetimatan.io.net.KyoroSelector;
-import net.hetimatan.io.net.KyoroSocket;
 import net.hetimatan.net.torrent.client.TorrentClient;
 import net.hetimatan.net.torrent.client.TorrentClientFront;
 import net.hetimatan.net.torrent.client.TorrentHistory;
@@ -13,6 +11,8 @@ import net.hetimatan.net.torrent.client.message.HelperLookAheadShakehand;
 import net.hetimatan.net.torrent.client.message.MessageHandShake;
 import net.hetimatan.util.event.EventTask;
 import net.hetimatan.util.event.EventTaskRunner;
+import net.hetimatan.util.event.net.io.KyoroSelector;
+import net.hetimatan.util.event.net.io.KyoroSocket;
 import net.hetimatan.util.log.Log;
 import net.hetimatan.util.url.PercentEncoder;
 

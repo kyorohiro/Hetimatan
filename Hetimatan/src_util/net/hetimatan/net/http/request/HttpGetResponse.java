@@ -1,10 +1,11 @@
 package net.hetimatan.net.http.request;
 
 import java.io.IOException;
+
 import net.hetimatan.io.file.KyoroFileForKyoroSocket;
 import net.hetimatan.io.file.MarkableFileReader;
 import net.hetimatan.io.filen.CashKyoroFile;
-import net.hetimatan.io.net.KyoroSocket;
+import net.hetimatan.util.event.net.io.KyoroSocket;
 import net.hetimatan.util.http.LookaheadHttpBody;
 import net.hetimatan.util.http.LookaheadHttpHeader;
 import net.hetimatan.util.http.HttpRequestHeader;

@@ -5,8 +5,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import net.hetimatan.io.filen.CashKyoroFile;
-import net.hetimatan.io.net.KyoroSelector;
-import net.hetimatan.io.net.KyoroSocket;
+import net.hetimatan.util.event.net.io.KyoroSelector;
+import net.hetimatan.util.event.net.io.KyoroSocket;
 import net.hetimatan.util.log.Log;
 
 /**

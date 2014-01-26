@@ -5,10 +5,10 @@ import java.io.IOException;
 
 import net.hetimatan.io.file.KyoroFile;
 import net.hetimatan.io.filen.CashKyoroFile;
-import net.hetimatan.io.net.KyoroSelector;
-import net.hetimatan.io.net.KyoroSocket;
-import net.hetimatan.io.net.KyoroSocketImpl;
 import net.hetimatan.util.event.net.MessageSendTask;
+import net.hetimatan.util.event.net.io.KyoroSelector;
+import net.hetimatan.util.event.net.io.KyoroSocket;
+import net.hetimatan.util.event.net.io.KyoroSocketImpl;
 import net.hetimatan.util.http.HttpObject;
 import net.hetimatan.util.http.HttpRequest;
 

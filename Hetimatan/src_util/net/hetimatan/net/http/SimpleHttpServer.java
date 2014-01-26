@@ -10,11 +10,11 @@ import net.hetimatan.io.file.KyoroFileForFiles;
 import net.hetimatan.io.filen.ByteKyoroFile;
 import net.hetimatan.io.filen.CashKyoroFileHelper;
 import net.hetimatan.io.filen.CashKyoroFile;
-import net.hetimatan.io.net.KyoroSocket;
 import net.hetimatan.net.http.HttpServerFront;
 import net.hetimatan.net.http.HttpServer;
 import net.hetimatan.net.torrent.util.piece.PieceInfo;
 import net.hetimatan.net.torrent.util.piece.PieceInfoList;
+import net.hetimatan.util.event.net.io.KyoroSocket;
 import net.hetimatan.util.http.HttpObjectHelper;
 import net.hetimatan.util.http.HttpRequest;
 

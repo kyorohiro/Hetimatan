@@ -3,9 +3,10 @@ package net.hetimatan.net.http;
 import java.io.IOException;
 
 
+
 import net.hetimatan.io.file.KyoroFile;
 import net.hetimatan.io.filen.ByteKyoroFile;
-import net.hetimatan.io.net.KyoroSocket;
+import net.hetimatan.util.event.net.io.KyoroSocket;
 import net.hetimatan.util.http.HttpRequestHeader;
 import net.hetimatan.util.http.HttpRequest;
 import net.hetimatan.util.http.HttpResponse;

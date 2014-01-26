@@ -5,8 +5,6 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Iterator;
 
-import net.hetimatan.io.net.KyoroSocket;
-import net.hetimatan.io.net.KyoroSocketImpl;
 import net.hetimatan.net.torrent.client.TorrentClientFront;
 import net.hetimatan.net.torrent.client.TorrentClient;
 import net.hetimatan.net.torrent.tracker.TrackerClient;
@@ -15,6 +13,8 @@ import net.hetimatan.net.torrent.util.metafile.MetaFile;
 import net.hetimatan.net.torrent.util.metafile.MetaFileCreater;
 import net.hetimatan.util.event.CloseRunnerTask;
 import net.hetimatan.util.event.net.KyoroSocketEventRunner;
+import net.hetimatan.util.event.net.io.KyoroSocket;
+import net.hetimatan.util.event.net.io.KyoroSocketImpl;
 
 //
 //[課題]

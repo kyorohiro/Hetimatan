@@ -4,14 +4,14 @@ import java.io.IOException;
 
 import net.hetimatan.io.file.MarkableFileReader;
 import net.hetimatan.io.filen.ByteKyoroFile;
-import net.hetimatan.io.net.KyoroDatagramImpl;
-import net.hetimatan.io.net.KyoroSelector;
 import net.hetimatan.net.torrent.krpc.message.KrpcQuery;
 import net.hetimatan.net.torrent.krpc.message.KrpcResponse;
 import net.hetimatan.net.torrent.util.bencode.BenDiction;
 import net.hetimatan.util.event.EventTask;
 import net.hetimatan.util.event.EventTaskRunner;
 import net.hetimatan.util.event.net.KyoroSocketEventRunner;
+import net.hetimatan.util.event.net.io.KyoroDatagramImpl;
+import net.hetimatan.util.event.net.io.KyoroSelector;
 import net.hetimatan.util.http.HttpObject;
 import net.hetimatan.util.io.ByteArrayBuilder;
 import net.hetimatan.util.log.Log;
@@ -41,10 +41,10 @@ public class KrpcTracker {
 					return;
 				} catch(IOException e) {
 					mPort++;
-					mReceiver = null;
 				}
 			}
 		}
+		mReceiver = null;
 		throw new IOException();
 	}
 

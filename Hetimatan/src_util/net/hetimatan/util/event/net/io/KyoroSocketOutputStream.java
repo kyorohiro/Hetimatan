@@ -1,4 +1,4 @@
-package net.hetimatan.io.net;
+package net.hetimatan.util.event.net.io;
 
 import java.io.IOException;
 import java.io.OutputStream;

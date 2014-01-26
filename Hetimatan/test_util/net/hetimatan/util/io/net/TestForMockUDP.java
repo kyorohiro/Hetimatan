@@ -3,8 +3,8 @@ package net.hetimatan.util.io.net;
 import java.io.IOException;
 import java.net.UnknownHostException;
 
-import net.hetimatan.io.net.KyoroDatagramMock;
-import net.hetimatan.io.net.KyoroSelector;
+import net.hetimatan.util.event.net.io.KyoroSelector;
+import net.hetimatan.util.event.net.mock.KyoroDatagramMock;
 import net.hetimatan.util.http.HttpObject;
 import junit.framework.TestCase;
 import net.hetimatan.util.test.*;
