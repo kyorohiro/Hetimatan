@@ -1,7 +1,7 @@
 package net.hetimatan.net.torrent.util.piece;
 
-import net.hetimatan.net.torrent.util.piece.PieceInfo;
-import net.hetimatan.net.torrent.util.piece.PieceInfoList;
+import net.hetimatan.net.http.PieceInfo;
+import net.hetimatan.net.http.PieceInfoList;
 import junit.framework.TestCase;
 
 /**

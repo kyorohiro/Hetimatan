@@ -3,14 +3,14 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="sample"/>
 	<classpathentry kind="src" path="book"/>
-	<classpathentry kind="src" path="src_util"/>
-	<classpathentry kind="src" path="test_util"/>
 	<classpathentry kind="src" path="src_core"/>
 	<classpathentry kind="src" path="test_core"/>
 	<classpathentry kind="src" path="src_nat"/>
 	<classpathentry kind="src" path="test_nat"/>
+	<classpathentry kind="src" path="src_ui"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="at.bestsolution.efxclipse.tooling.jdt.core.JAVAFX_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/HetimaUtil"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

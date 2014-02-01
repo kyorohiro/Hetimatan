@@ -10,19 +10,20 @@ import net.hetimatan.net.torrent.krpc.message.QueryPing;
 import net.hetimatan.net.torrent.krpc.message.ResponsePing;
 import net.hetimatan.net.torrent.util.bencode.BenDiction;
 import net.hetimatan.net.torrent.util.bencode.BenString;
+import net.hetimatan.util.event.net.io.KyoroDatagram;
 import net.hetimatan.util.event.net.io.KyoroDatagramImpl;
 
 public class KrpcEventController {
 
 	private String _TODO_mMYID_ = "";
 	private ByteKyoroFile mSendOutput = new ByteKyoroFile();
-	KyoroDatagramImpl mSend = null;
+	private KyoroDatagram mSend = null;
 	public KrpcEventController(KyoroDatagramImpl bootedSocket) {
 		mSend = bootedSocket;
 	}
 
 	public void sendQuery(byte[] address, KrpcQuery query) throws IOException {
-		KyoroDatagramImpl send = mSend;///new KyoroDatagramImpl();
+		KyoroDatagram send = mSend;///new KyoroDatagramImpl();
 		mSendOutput.seek(0);
 		query.encode(mSendOutput.getLastOutput());
 		int len = (int)mSendOutput.length();
@@ -30,7 +31,7 @@ public class KrpcEventController {
 	}
 
 	public void sendResponse(byte[] address, KrpcResponse response) throws IOException {
-		KyoroDatagramImpl send = mSend;//new KyoroDatagramImpl();
+		KyoroDatagram send = mSend;//new KyoroDatagramImpl();
 		mSendOutput.seek(0);
 		response.encode(mSendOutput.getLastOutput());
 		int len = (int)mSendOutput.length();

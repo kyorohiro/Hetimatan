@@ -1,8 +1,8 @@
 package net.hetimatan.net.torrent.client._front;
 
+import net.hetimatan.net.http.PieceInfo;
+import net.hetimatan.net.http.PieceInfoList;
 import net.hetimatan.net.torrent.client.TorrentClientFront;
-import net.hetimatan.net.torrent.util.piece.PieceInfo;
-import net.hetimatan.net.torrent.util.piece.PieceInfoList;
 import net.hetimatan.util.bitfield.BitField;
 
 public class TorrentClientFrontTargetInfo {

@@ -1,7 +1,7 @@
 package net.hetimatan.net.torrent.client;
 
+import net.hetimatan.net.http.PieceInfo;
 import net.hetimatan.net.torrent.client._front.TorrentClientFrontTargetInfo;
-import net.hetimatan.net.torrent.util.piece.PieceInfo;
 import junit.framework.TestCase;
 
 public class TestForTorrentInfo extends TestCase  {

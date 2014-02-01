@@ -11,7 +11,7 @@ import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.net.http.HttpServerFront;
 import net.hetimatan.net.http.HttpHistory;
 import net.hetimatan.net.http.HttpServer;
-import net.hetimatan.net.torrent.util.piece.PieceInfoList;
+import net.hetimatan.net.http.PieceInfoList;
 import net.hetimatan.util.event.net.io.KyoroSocket;
 import net.hetimatan.util.http.HttpObjectHelper;
 import net.hetimatan.util.http.HttpRequest;
