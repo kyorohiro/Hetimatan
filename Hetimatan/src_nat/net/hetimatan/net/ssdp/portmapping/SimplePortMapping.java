@@ -4,8 +4,8 @@ import java.io.IOException;
 
 import net.hetimatan.io.file.MarkableFileReader;
 import net.hetimatan.net.http.HttpServer;
-import net.hetimatan.net.http.HttpServerEventDispatcher;
-import net.hetimatan.net.http.HttpServerEventDispatcher.HttpServerListener;
+import net.hetimatan.net.http.HttpServer.HttpServerEventDispatcher;
+import net.hetimatan.net.http.HttpServer.HttpServerEventDispatcher.HttpServerListener;
 import net.hetimatan.net.ssdp.SSDPClient;
 import net.hetimatan.net.ssdp.SSDPServiceInfo;
 import net.hetimatan.net.ssdp.message.SSDPMessage;
