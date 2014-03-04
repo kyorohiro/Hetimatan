@@ -10,7 +10,7 @@ import net.hetimatan.util.event.net.io.KyoroSocket;
 import net.hetimatan.util.http.HttpRequest;
 import net.hetimatan.util.log.Log;
 
-public class HttpServerResponseCheck extends HttpServer {
+public class HttpServerResponseCheck extends HttpServerTemplate {
 
 	private static HttpServerResponseCheck server = null;
 	private int mResponseNumber = 0;

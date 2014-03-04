@@ -11,13 +11,14 @@ import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.net.http.HttpServerFront;
 import net.hetimatan.net.http.HttpHistory;
 import net.hetimatan.net.http.HttpServer;
+import net.hetimatan.net.http.HttpServerTemplate;
 import net.hetimatan.net.http.PieceInfoList;
 import net.hetimatan.util.event.net.io.KyoroSocket;
 import net.hetimatan.util.http.HttpObjectHelper;
 import net.hetimatan.util.http.HttpRequest;
 import net.hetimatan.util.io.ByteArrayBuilder;
 
-public class MediaServer extends HttpServer {
+public class MediaServer extends HttpServerTemplate {
 
 	private CashKyoroFile mFile = null;
 	public MediaServer() { 

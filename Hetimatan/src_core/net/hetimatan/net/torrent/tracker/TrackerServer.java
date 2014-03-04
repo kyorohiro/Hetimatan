@@ -5,6 +5,7 @@ import java.io.IOException;
 import net.hetimatan.io.file.KyoroFile;
 import net.hetimatan.io.filen.CashKyoroFile;
 import net.hetimatan.net.http.HttpServer;
+import net.hetimatan.net.http.HttpServerTemplate;
 import net.hetimatan.net.torrent.tracker._server.TrackerDB;
 import net.hetimatan.net.torrent.tracker._server.TrackerData;
 import net.hetimatan.net.torrent.tracker._server.TrackerDatam;
@@ -19,7 +20,7 @@ import net.hetimatan.util.http.HttpRequest;
 import net.hetimatan.util.url.PercentEncoder;
 
 
-public class TrackerServer extends HttpServer {
+public class TrackerServer extends HttpServerTemplate {
 
 	public static final int DEFAULT_TRACKER_PORT      = 6969;
 	public static final String MESSAGE_UNMANAGED_DATA = "your ainfo_hash is unmanaged";

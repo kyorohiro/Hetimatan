@@ -13,7 +13,7 @@ import net.hetimatan.util.http.HttpResponse;
 import net.hetimatan.util.io.ByteArrayBuilder;
 import net.hetimatan.util.log.Log;
 
-public class HttpServer3xx extends HttpServer {
+public class HttpServer3xx extends HttpServerTemplate {
 
 	private static HttpServer3xx server = null;
 	public static void main(String[] args) {
